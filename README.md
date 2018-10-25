@@ -16,3 +16,7 @@ g++ *.cpp -o qucs-rflayout
 ```
 ./qucs-rflayout qucs-schematic.sch
 ```
+
+<br>
+
+Work in progress... thomas.lepoix@gmail.com
