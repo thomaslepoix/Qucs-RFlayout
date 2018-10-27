@@ -3,7 +3,7 @@
 #include <regex>
 
 //#include "element.h"
-#include "parser4.h"
+#include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 
 
 //parse files : create objects
-	parser4(tab_all, n_sch, nelem);
+	parser(tab_all, n_sch, nelem);
 
 //print
 /*	cout << endl << "nelem : " << nelem << endl;
