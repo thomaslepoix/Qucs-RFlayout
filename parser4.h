@@ -19,7 +19,7 @@
 #include "mtee.h"
 #include "mvia.h"
 
-Element** parser4(std::ifstream& f_sch, std::ifstream& f_net, int& nelem);
-long double suffix(std::string s_sci, std::string s_eng);
+int parser4(Element**& tab_all, std::string const& n_sch, int& nelem);
+long double suffix(std::string const s_sci, std::string const s_eng);
 
 #endif

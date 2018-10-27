@@ -22,7 +22,7 @@
 #include "mtee.h"
 #include "mvia.h"
 
-int layoutwriter(Element** tab_all, int& nelem, std::string& n_sch, std::string& out_format);
-int write_kicad_pcb(Element** tab_all, int& nelem, std::ofstream& f_out);
+int layoutwriter(Element** const& tab_all, int const& nelem, std::string const& n_sch, std::string const& out_format);
+int write_kicad_pcb(Element** const& tab_all, int const& nelem, std::ofstream& f_out);
 
 #endif

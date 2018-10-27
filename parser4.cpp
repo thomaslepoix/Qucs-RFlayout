@@ -1,17 +1,15 @@
 #include "parser4.h"
 using namespace std;
 
-Element** parser4(ifstream& f_sch, ifstream& f_net, int& nelem) {
+int parser4(Element**& tab_all, string const& n_sch, int& nelem) {
 
 //variables
-//	string n_sch;
-//	string n_net;
+	string n_net;
 	regex r_sch(".sch$");
 	string line;
 	smatch match;
 	int pos;
 	int ielem=0;
-	Element** tab_all;
 
 	string type;
 	string label;
@@ -55,6 +53,47 @@ Element** parser4(ifstream& f_sch, ifstream& f_net, int& nelem) {
 
 
 
+//open schematic
+	cout << endl << "Opening " << n_sch << "... ";
+	ifstream f_sch(n_sch.c_str());		//all_MS.sch
+	if(f_sch) {
+		cout << "OK" << endl;
+	} else {
+		cout << "KO" << endl;
+		return(1);
+		}
+
+//generation netlist
+	cout << endl;
+	if(regex_search(n_sch, r_sch)) {
+		n_net=regex_replace(n_sch, r_sch, ".net");
+		cout << "n_sch : " << n_sch << endl;
+		cout << "n_net : " << n_net << endl;
+	} else {
+		cout << "ERROR : Invalid file format : " << n_sch << endl;
+		return(1);
+		}
+
+	cout << endl << "Generating netlist... ";
+	string net_gen="qucs -n -i "+n_sch+" -o "+n_net;
+	if(system(net_gen.c_str())) {		//OK : exit status 0
+		cout << " KO" << endl;
+		cout << "ERROR : Problem with calling Qucs : " << net_gen << endl;
+		return(2);
+	} else {
+		cout << " OK" << endl;
+		}
+
+//open netlist
+	cout << endl << "Opening " << n_net << "... ";
+	ifstream f_net(n_net.c_str());		//all_MS.net
+	if(f_net) {
+		cout << "OK" << endl;
+	} else {
+		cout << "KO" << endl;
+		return(1);
+		}
+
 //lecture schéma <Components> </Components>
 	cout << endl << "Reading schematic... " << endl;
 	while(getline(f_sch, line)) {
@@ -90,8 +129,8 @@ Element** parser4(ifstream& f_sch, ifstream& f_net, int& nelem) {
 
 			cout << "OK" << endl << "nelem : " << nelem << endl << endl;
 			tab_all=new Element*[nelem];
-			f_sch.seekg(pos);//, pos);
-/**/
+			f_sch.seekg(pos);
+
 //parsing du schema
 			while(getline(f_sch, line)) {
 				cout << line << endl;
@@ -341,11 +380,11 @@ Element** parser4(ifstream& f_sch, ifstream& f_net, int& nelem) {
 			}
 		}
 	cout << "Reading netlist... OK" << endl;
-	return(tab_all);
+	return(0);
 	}
 
 
-long double suffix(string s_sci, string s_eng) {
+long double suffix(string const s_sci, const string s_eng) {
 	regex r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
 	smatch match;
 	long double multiplicator=1;
@@ -393,7 +432,7 @@ long double suffix(string s_sci, string s_eng) {
 		multiplicator/=1000000000000000000;
 		}
 
-	multiplicator*=1000;														//kicad reference unit = mm
+	multiplicator*=1000;	//kicad reference unit = mm
 	return(multiplicator);
 	}
 

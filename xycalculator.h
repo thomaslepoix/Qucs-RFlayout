@@ -18,13 +18,13 @@
 #include "mtee.h"
 #include "mvia.h"
 
-int xycalculator(Element** tab_undone, int& nelem);
-int tab_remove(Element** tab_undone, int& nundone, int& nelem, Element* current);
-bool purgefind(Element** tab_all, int& nelem, Element* current, std::string _net);
-int purgenets(Element** tab_all, int& nelem);
-int activenets(Element* _elem);
-int netmin(Element* _elem);
-int findnext(Element** tab_all, int& nelem, Element* current, int& current_net, Element*& next);
-int xystep(Element* _elem, int _net, long double& xstep, long double& ystep);
+int xycalculator(Element** const& tab_all, int const& nelem);
+int tab_remove(Element** const& tab_undone, int& nundone, int const& nelem, Element* const& current);
+bool purgefind(Element** const& tab_all, int const& nelem, Element* const& current, std::string const _net);
+int purgenets(Element** const& tab_all, int const& nelem);
+int activenets(Element* const& _elem);
+int netmin(Element* const& _elem);
+int findnext(Element** const& tab_all, int const& nelem, Element* const& current, int& current_net, Element*& next);
+int xystep(Element* const& _elem, int const _net, long double& xstep, long double& ystep);
 
 #endif

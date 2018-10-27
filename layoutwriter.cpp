@@ -1,7 +1,7 @@
 #include "layoutwriter.h"
 using namespace std;
 
-int layoutwriter(Element** tab_all, int& nelem, string& n_sch, string& out_format) {
+int layoutwriter(Element** const& tab_all, int const& nelem, string const& n_sch, string const& out_format) {
 
 //variables
 	regex r_sch(".sch$");
@@ -11,18 +11,19 @@ int layoutwriter(Element** tab_all, int& nelem, string& n_sch, string& out_forma
 	cout << endl;
 //	if(regex_search(n_sch, r_sch)) {
 		n_out=regex_replace(n_sch, r_sch, out_format);
-		cout << "n_sch : " << n_sch << endl;
-		cout << "n_out : " << n_out << endl;
+		cout << "Input schematic : " << n_sch << endl;
+		cout << "Output layout : " << n_out << endl;
 //		}
 	ofstream f_out(n_out.c_str());
 
 //write
 	if(out_format==".kicad_pcb") write_kicad_pcb(tab_all, nelem, f_out);
+//	if(out_format==".kicad_mod") write_kicad_mod(tab_all, nelem, f_out);
 
 	return(0);
 	}
 
-int write_kicad_pcb(Element** tab_all, int& nelem, ofstream& f_out) {
+int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out) {
 	string type;
 	signed int s;
 	string s1;

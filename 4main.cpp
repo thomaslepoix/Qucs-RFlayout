@@ -1,21 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-/*
-#include "eqn.h"
-#include "pac.h"
-#include "mcorn.h"
-#include "mcross.h"
-#include "mcoupled.h"
-#include "mgap.h"
-#include "mmbend.h"
-#include "mlin.h"
-#include "mopen.h"
-#include "mrstub.h"
-#include "mstep.h"
-#include "mtee.h"
-#include "mvia.h"
-*/
+
 //#include "element.h"
 #include "parser4.h"
 #include "xycalculator.h"
@@ -23,87 +9,54 @@
 
 using namespace std;
 
+//	USAGE
+//	./qucs-rflayout
+//			-h --help
+//			-v 
+//			-i schematic.sch
+//			-f output_format
+//			-o layout.output_format
+
 int main(int argc, char* argv[]) {
 
 //variables
 	int nelem=0;
-//	int ielem=0;
 	string n_sch;
-	string n_net;
 	string out_format=".kicad_pcb";
-	regex r_sch(".sch$");
 	Element** tab_all;
 
 
 //read arguments
-	cout << endl;
-	cout << "argc = " << argc << endl;
-	for(int i=0; i<argc; i++) {
-		cout << "argv[" << i << "] = " << argv[i] << endl;
-		}
+//	cout << endl;
+//	cout << "argc = " << argc << endl;
+//	for(int i=0; i<argc; i++) {
+//		cout << "argv[" << i << "] = " << argv[i] << endl;
+//		}
 
 //parse arguments
+//optarg
 	cout << endl;
 	if(argc!=2){
-		cout << "Problem with arguments, please read help" << endl << argv[0] << " --help" <<endl;
+		cout << "Problem with arguments, please read help" << endl << argv[0] << " --help" << endl << endl;
 		return(1);
 		}
-	if(string(argv[1])=="--help"){
-		cout << "Usage : " << argv[0] << " /path/to/qucs/schematic.sch" << endl;
+	if(string(argv[1])=="--help" || string(argv[1])=="-h"){
+		cout << "Usage : " << argv[0] << " /path/to/qucs/schematic.sch" << endl << endl;
 		return(0);
 	} else {
 		n_sch=string(argv[1]);
 		}
+//	if verbose
+//		streambuf* buffer;
+//		cout.rdbuf(buffer);
 
-//BEGIN PARSER------------------------------------------------------------------
-//open schematic
-	cout << endl << "Opening " << n_sch << "... ";
-	ifstream f_sch(n_sch.c_str());		//all_MS.sch
-	if(f_sch) {
-		cout << "OK" << endl;
-		//f_sch << "bite cul chatte" << endl;
-	} else {
-		cout << "KO" << endl;
-		return(1);
-		}
 
-//generation netlist
-	cout << endl;
-	if(regex_search(n_sch, r_sch)) {
-		n_net=regex_replace(n_sch, r_sch, ".net");
-		cout << "n_sch : " << n_sch << endl;
-		cout << "n_net : " << n_net << endl;
-	} else {
-		cout << "ERROR : Invalid file format : " << n_sch << endl;
-		return(1);
-		}
-
-	cout << endl << "Generating netlist... ";
-	string net_gen="qucs -n -i "+n_sch+" -o "+n_net;
-	if(system(net_gen.c_str())) {		//OK : exit status 0
-		cout << " KO" << endl;
-		cout << "ERROR : Problem with calling Qucs : " << net_gen << endl;
-		return(2);
-	} else {
-		cout << " OK" << endl;
-		}
-
-//open netlist
-	cout << endl << "Opening " << n_net << "... ";
-	ifstream f_net(n_net.c_str());		//all_MS.net
-	if(f_net) {
-		cout << "OK" << endl;
-	} else {
-		cout << "KO" << endl;
-		return(1);
-		}
 
 //parse files : create objects
-	tab_all=parser4(f_sch, f_net, nelem);
-//END PARSER--------------------------------------------------------------------
+	parser4(tab_all, n_sch, nelem);
 
 //print
-	cout << endl << "nelem : " << nelem << endl;
+/*	cout << endl << "nelem : " << nelem << endl;
 	for(int ielem=0;ielem<nelem;ielem++) {
 		cout << endl;
 		cout << "tab_all[" << ielem << "]->label : " << tab_all[ielem]->getLabel() << endl;
@@ -134,6 +87,7 @@ int main(int argc, char* argv[]) {
 	for(int ielem=0;ielem<nelem;ielem++) {
 		cout << "&tab_all[" << ielem << "] : " << tab_all[ielem] << endl;
 		}
+*/
 
 //algorithm : find xy
 	xycalculator(tab_all, nelem);
@@ -144,23 +98,6 @@ int main(int argc, char* argv[]) {
 		cout << "tab_all[" << ielem << "] Y : " << tab_all[ielem]->getY() << endl;
 		}
 
-
-//	cout << "mm: " << to_string(suffix("", "mm")) << endl;
-/*	cout << endl;
-	long double xstep=0;
-	long double ystep=0;
-	for(int i=0;i<nelem;i++) {
-		cout<<tab_all[i]->getType()<<endl;
-		for(int u=1;u<5;u++) {
-			xstep=0;
-			ystep=0;
-			xystep(tab_all[i], u, xstep, ystep);
-			cout<<"tab_all["<<i<<"] : net"<<u<<"\t| xstep : "<<xstep<<"\t| ystep : "<<ystep<<endl;
-			}
-		cout<<"--------------------------------------------------------------------------------"<<endl;
-		}
-*/
-
 //write layout
 	layoutwriter(tab_all, nelem, n_sch, out_format);
 
@@ -168,10 +105,10 @@ int main(int argc, char* argv[]) {
 	cout << endl;
 	for(int ielem=0;ielem<nelem;ielem++) {
 		delete tab_all[ielem];
-		cout << "tab_all[" << ielem << "] : deleted" << endl;
+//		cout << "tab_all[" << ielem << "] : deleted" << endl;
 		}
 	delete[] tab_all;
-	cout << "tab_all : deleted" << endl;
+//	cout << "tab_all : deleted" << endl;
 
 	return(0);
 }
