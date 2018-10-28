@@ -1,4 +1,4 @@
-#include "parser4.h"
+#include "parser.h"
 using namespace std;
 
 int parser(Element**& tab_all, string const& n_sch, int& nelem) {
@@ -59,8 +59,8 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 	if(f_sch) {
 		cout << "OK" << endl;
 	} else {
-		cout << "KO" << endl;
-		return(1);
+		cerr << "ERROR : Cannot open " << n_sch << endl;
+		exit(1);
 		}
 
 //generation netlist
@@ -70,16 +70,16 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 		cout << "n_sch : " << n_sch << endl;
 		cout << "n_net : " << n_net << endl;
 	} else {
-		cout << "ERROR : Invalid file format : " << n_sch << endl;
-		return(1);
+		cerr << "ERROR : Invalid input format : " << n_sch << endl;
+		exit(1);
 		}
 
 	cout << endl << "Generating netlist... ";
 	string net_gen="qucs -n -i "+n_sch+" -o "+n_net;
 	if(system(net_gen.c_str())) {		//OK : exit status 0
 		cout << " KO" << endl;
-		cout << "ERROR : Problem with calling Qucs : " << net_gen << endl;
-		return(2);
+		cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
+		exit(2);
 	} else {
 		cout << " OK" << endl;
 		}
@@ -91,7 +91,8 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 		cout << "OK" << endl;
 	} else {
 		cout << "KO" << endl;
-		return(1);
+		cerr << "ERROR : Cannot open netlist " << n_net << endl;
+		exit(1);
 		}
 
 //lecture schéma <Components> </Components>
@@ -102,9 +103,8 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 
 //comptage des composants
 			cout << endl << "Counting components... ";
-/**/			pos=f_sch.tellg();
+			pos=f_sch.tellg();
 			while(getline(f_sch, line)) {
-//				cout << line << endl;
 				if(line=="</Components>") {
 					break;
 					}
