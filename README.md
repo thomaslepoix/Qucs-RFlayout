@@ -16,7 +16,7 @@ g++ *.cpp -o qucs-rflayout
 ## Usage
 
 ```
-./qucs-rflayout qucs-schematic.sch
+./qucs-rflayout -i qucs-schematic.sch
 ```
 
 <br>
