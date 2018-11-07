@@ -326,7 +326,7 @@ int write_kicad_mod(Element** const& tab_all, int const& nelem, string const& na
 	long double Wlong;
 	long double Wlong13;
 	long double Wlong24;
-	regex r_pac("^P([0-9]*)$");												//regex group 1
+	regex r_pac("^P([0-9]*)$");													//regex group 1
 
 	f_out << "\
 (module " << name << " (layer F.Cu) (tedit 5BD7B6BE)\n\
