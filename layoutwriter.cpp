@@ -42,8 +42,8 @@ int layoutwriter(Element** const& tab_all, int const& nelem, string const& n_sch
 int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out) {
 	string type;
 	signed int s;
-	string s1;
-	string s2;
+	signed int s1;
+	signed int s2;
 	signed int n;
 	long double Wlong;
 	long double Wlong13;
@@ -171,11 +171,11 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
   )\n\n";
 		} else if(type=="MCROSS") {/////////////////////////////////////////////
 			if(tab_all[i]->getMirrorx()==0) {
-				s1="";
-				s2="-";
+				s1=1;
+				s2=-1;
 			} else if(tab_all[i]->getMirrorx()==1) {
-				s1="-";
-				s2="";
+				s1=-1;
+				s2=1;
 				}
 			Wlong13= (tab_all[i]->getW1()>tab_all[i]->getW3()) ? tab_all[i]->getW1() : tab_all[i]->getW3();
 			Wlong24= (tab_all[i]->getW2()>tab_all[i]->getW4()) ? tab_all[i]->getW2() : tab_all[i]->getW4();
@@ -189,21 +189,21 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
       (effects (font (size 0.25 0.25) (thickness 0.05)))\n\
     )\n\
     (fp_poly (pts \
-(xy " << -Wlong24/2 << " " << s1 << tab_all[i]->getW1()/2 << ") \
-(xy " << -Wlong24/2 << " " << s2 << tab_all[i]->getW1()/2 << ")\n      ";
-			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << -tab_all[i]->getW2()/2 << " " << s2 << tab_all[i]->getW1()/2 << ")\n      ";
+(xy " << -Wlong24/2 << " " << s1*(tab_all[i]->getW1()/2) << ") \
+(xy " << -Wlong24/2 << " " << s2*(tab_all[i]->getW1()/2) << ")\n      ";
+			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << -tab_all[i]->getW2()/2 << " " << s2*(tab_all[i]->getW1()/2) << ")\n      ";
 			f_out << "\
-(xy " << -tab_all[i]->getW2()/2 << " " << s2 << Wlong13/2 << ") \
-(xy " << tab_all[i]->getW2()/2 << " " << s2 << Wlong13/2 << ")\n      ";
-			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << tab_all[i]->getW2()/2 << " " << s2 << tab_all[i]->getW3()/2 << ")\n      ";
+(xy " << -tab_all[i]->getW2()/2 << " " << s2*(Wlong13/2) << ") \
+(xy " << tab_all[i]->getW2()/2 << " " << s2*(Wlong13/2) << ")\n      ";
+			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << tab_all[i]->getW2()/2 << " " << s2*(tab_all[i]->getW3()/2) << ")\n      ";
 			f_out << "\
-(xy " << Wlong24/2 << " " << s2 << tab_all[i]->getW3()/2 << ") \
-(xy " << Wlong24/2 << " " << s1 << tab_all[i]->getW3()/2 << ")\n      ";
-			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << tab_all[i]->getW4()/2 << " " << s1 << tab_all[i]->getW3()/2 << ")\n      ";
+(xy " << Wlong24/2 << " " << s2*(tab_all[i]->getW3()/2) << ") \
+(xy " << Wlong24/2 << " " << s1*(tab_all[i]->getW3()/2) << ")\n      ";
+			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << tab_all[i]->getW4()/2 << " " << s1*(tab_all[i]->getW3()/2) << ")\n      ";
 			f_out << "\
-(xy " << tab_all[i]->getW4()/2 << " " << s1 << Wlong13/2 << ") \
-(xy " << -tab_all[i]->getW4()/2 << " " << s1 << Wlong13/2 << ")\n      ";
-			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << -tab_all[i]->getW4()/2 << " " << s1 << tab_all[i]->getW1()/2 << ")\n      ";
+(xy " << tab_all[i]->getW4()/2 << " " << s1*(Wlong13/2) << ") \
+(xy " << -tab_all[i]->getW4()/2 << " " << s1*(Wlong13/2) << ")\n      ";
+			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << -tab_all[i]->getW4()/2 << " " << s1*(tab_all[i]->getW1()/2) << ")\n      ";
 			f_out << "\
 ) (layer F.Cu) (width 0))\n\
   )\n\n";
@@ -222,11 +222,11 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
   )\n\n";
 		} else if(type=="MMBEND") {/////////////////////////////////////////////
 			if(tab_all[i]->getMirrorx()==0) {
-				s1="";
-				s2="-";
+				s1=1;
+				s2=-1;
 			} else if(tab_all[i]->getMirrorx()==1) {
-				s1="-";
-				s2="";
+				s1=-1;
+				s2=1;
 				}
 			f_out << "\
   (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n\
@@ -238,9 +238,9 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
       (effects (font (size 0.25 0.25) (thickness 0.05)))\n\
     )\n\
     (fp_poly (pts \
-(xy " << tab_all[i]->getW()/2 << " " << s1 << tab_all[i]->getW()/2 << ") \
-(xy " << -tab_all[i]->getW()/2 << " " << s2 << tab_all[i]->getW()/2 << ")\n      \
-(xy " << -tab_all[i]->getW()/2 << " " << s1 << tab_all[i]->getW()/2 << ")) (layer F.Cu) (width 0))\n\
+(xy " << tab_all[i]->getW()/2 << " " << s1*(tab_all[i]->getW()/2) << ") \
+(xy " << -tab_all[i]->getW()/2 << " " << s2*(tab_all[i]->getW()/2) << ")\n      \
+(xy " << -tab_all[i]->getW()/2 << " " << s1*(tab_all[i]->getW()/2) << ")) (layer F.Cu) (width 0))\n\
   )\n\n";
 		} else if(type=="MLIN") {///////////////////////////////////////////////
 			f_out << "\
@@ -281,11 +281,11 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
   )\n\n";
 		} else if(type=="MTEE") {///////////////////////////////////////////////
 			if(tab_all[i]->getMirrorx()==0) {
-				s1="";
-				s2="-";
+				s1=1;
+				s2=-1;
 			} else if(tab_all[i]->getMirrorx()==1) {
-				s1="-";
-				s2="";
+				s1=-1;
+				s2=1;
 				}
 			Wlong= (tab_all[i]->getW1()>tab_all[i]->getW2()) ? tab_all[i]->getW1() : tab_all[i]->getW2();
 			f_out << "\
@@ -298,12 +298,12 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
       (effects (font (size 0.25 0.25) (thickness 0.05)))\n\
     )\n\
     (fp_poly (pts \
-(xy " << -tab_all[i]->getW3()/2 << " " << s2 << tab_all[i]->getW1()/2 << ") \
-(xy 0 " << s2 << tab_all[i]->getW1()/2 << ") \
-(xy 0 " << s2 << tab_all[i]->getW2()/2 << ") \
-(xy " << tab_all[i]->getW3()/2 << " " << s2 << tab_all[i]->getW2()/2 << ")\n      \
-(xy " << tab_all[i]->getW3()/2 << " " << s1 << Wlong/2 << ") \
-(xy " << -tab_all[i]->getW3()/2 << " " << s1 << Wlong/2 << ")) (layer F.Cu) (width 0))\n\
+(xy " << -tab_all[i]->getW3()/2 << " " << s2*(tab_all[i]->getW1()/2) << ") \
+(xy 0 " << s2*(tab_all[i]->getW1()/2) << ") \
+(xy 0 " << s2*(tab_all[i]->getW2()/2) << ") \
+(xy " << tab_all[i]->getW3()/2 << " " << s2*(tab_all[i]->getW2()/2) << ")\n      \
+(xy " << tab_all[i]->getW3()/2 << " " << s1*(Wlong/2) << ") \
+(xy " << -tab_all[i]->getW3()/2 << " " << s1*(Wlong/2) << ")) (layer F.Cu) (width 0))\n\
   )\n\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
 			f_out << "\
@@ -317,6 +317,8 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
 
 int write_kicad_mod(Element** const& tab_all, int const& nelem, string const& name, ofstream& f_out) {
 	string type;
+	string label;
+	smatch match;
 	signed int s;
 	signed int s1;
 	signed int s2;
@@ -324,6 +326,7 @@ int write_kicad_mod(Element** const& tab_all, int const& nelem, string const& na
 	long double Wlong;
 	long double Wlong13;
 	long double Wlong24;
+	regex r_pac("^P([0-9]*)$");												//regex group 1
 
 	f_out << "\
 (module " << name << " (layer F.Cu) (tedit 5BD7B6BE)\n\
@@ -339,7 +342,10 @@ int write_kicad_mod(Element** const& tab_all, int const& nelem, string const& na
 		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
-			//things to do
+			label=tab_all[i]->getLabel();
+			regex_search(label, match, r_pac);
+			f_out << "\
+    (pad \"" << match.str(1) << "\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
 		} else if(type=="MCORN") {//////////////////////////////////////////////
 			f_out << "\
     (pad \"\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getW() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n";

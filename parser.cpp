@@ -52,10 +52,6 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 	regex r_field2("^ ( ([^ ]+)){2}");											//regex group 2
 	regex r_field8("^ ( ([^ ]+)){8}");
 	regex r_field9("^ ( ([^ ]+)){9}");
-//	regex r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"([^\"]*)\"){1}"); 	//regex group 5
-//	regex r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"([^\"]*)\"){1}"); 	//regex group 5
-//	regex r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"([^\"]*)\"){1}");	//regex group 5
-//	regex r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"([^\"]*)\"){1}"); 	//regex group 5
 	regex r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
 	regex r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
 	regex r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
@@ -72,7 +68,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 
 //open schematic
 	cout << endl << "Opening " << n_sch << "... ";
-	ifstream f_sch(n_sch.c_str());		//all_MS.sch
+	ifstream f_sch(n_sch.c_str());
 	if(f_sch) {
 		cout << "OK" << endl;
 	} else {
