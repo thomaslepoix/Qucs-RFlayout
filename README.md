@@ -27,4 +27,11 @@ make
 
 <br>
 
+## Screenshots
+
+![Qucs](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/testqucs.png)
+![Kicad](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/testkicad.png)
+
+<br>
+
 Work in progress... thomas.lepoix@gmail.com
