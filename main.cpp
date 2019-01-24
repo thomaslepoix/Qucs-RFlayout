@@ -99,9 +99,9 @@ int main(int argc, char* argv[]) {
 /**/
 	if(gui) {
 		cerr << "GUI mode" << endl;
-	    QApplication a(argc, argv);
-	    MainWindow w(tab_all, nelem, QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
-	    w.show();
+		QApplication a(argc, argv);
+		MainWindow w(tab_all, nelem, QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
+		w.show();
 		return a.exec();
 		}
 /**/
