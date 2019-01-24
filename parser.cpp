@@ -79,7 +79,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 //generation netlist
 	cout << endl;
 	if(regex_search(n_sch, r_sch)) {
-		n_net=regex_replace(n_sch, r_sch, ".net");
+		n_net=regex_replace(n_sch, r_sch, "\.net");
 		cout << "n_sch : " << n_sch << endl;
 		cout << "n_net : " << n_net << endl;
 	} else {
