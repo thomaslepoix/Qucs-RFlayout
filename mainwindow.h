@@ -23,6 +23,7 @@
 //#include <QString>
 
 #include "parser.h"
+#include "xycalculator.h"
 #include "layoutwriter.h"
 
 #include "eqn.h"

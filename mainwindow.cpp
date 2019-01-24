@@ -60,6 +60,7 @@ void MainWindow::on_pb_read_clicked(void) {
 		nelem=0;
 		}
 	parser(tab_all, n_sch.toStdString(), nelem);
+	xycalculator(tab_all, nelem);
 	}
 
 void MainWindow::on_le_path_in_returnPressed(void) {
@@ -70,6 +71,7 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 		nelem=0;
 		}
 	parser(tab_all, n_sch.toStdString(), nelem);
+	xycalculator(tab_all, nelem);
 	}
 
 void MainWindow::on_cb_format_currentIndexChanged(const QString _out_format) {
