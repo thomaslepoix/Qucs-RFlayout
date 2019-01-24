@@ -1,14 +1,20 @@
 # Qucs-RFlayout
-A tool to print qucs RF schematic (microstrip, coplanar)
+A tool to print qucs RF schematic (microstrip only for now)
 
-`qucs-schematic.sch` -> `kicad-layout.kicad_pcb`
+`qucs-schematic.sch` -> `kicad-layout.kicad_pcb` [OK]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-> `kicad-module.kicad_mod` [Work in progress]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-> `pcb-rnd-layout.lht` [Work in progress]
 
 <br>
 
 ## Build
 
 ```
-g++ *.cpp -o qucs-rflayout
+make
 ```
 
 <br>
@@ -16,7 +22,7 @@ g++ *.cpp -o qucs-rflayout
 ## Usage
 
 ```
-./qucs-rflayout -i qucs-schematic.sch
+./qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
 ```
 
 <br>
