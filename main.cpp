@@ -22,7 +22,7 @@
 #include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
-/**/#include "../gui/mainwindow.h"
+/**/#include "mainwindow.h"
 
 using namespace std;
 
