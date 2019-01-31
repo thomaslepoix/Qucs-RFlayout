@@ -59,6 +59,7 @@ private slots:
     void on_pb_browse_in_clicked(void);
 	void on_pb_browse_out_clicked(void);
 	void on_le_path_out_textChanged(const QString _out_dir);
+	void on_le_path_out_returnPressed(void);
 	void on_pb_write_clicked(void);
 
 private:

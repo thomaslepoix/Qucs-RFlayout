@@ -53,25 +53,33 @@ void MainWindow::on_le_path_in_textChanged(const QString _n_sch) {
 	}
 
 void MainWindow::on_pb_read_clicked(void) {
-	if(nelem!=0) {
-		for(int ielem=0;ielem<nelem;ielem++) {
-			delete tab_all[ielem];
+	if(n_sch=="") {
+		ui->l_debug->setText("ERROR : Nothing to read.");
+	} else {
+		if(nelem!=0) {
+			for(int ielem=0;ielem<nelem;ielem++) {
+				delete tab_all[ielem];
+				}
+			nelem=0;
 			}
-		nelem=0;
+		parser(tab_all, n_sch.toStdString(), nelem);
+		xycalculator(tab_all, nelem);
 		}
-	parser(tab_all, n_sch.toStdString(), nelem);
-	xycalculator(tab_all, nelem);
 	}
 
 void MainWindow::on_le_path_in_returnPressed(void) {
-	if(nelem!=0) {
-		for(int ielem=0;ielem<nelem;ielem++) {
-			delete tab_all[ielem];
+	if(n_sch=="") {
+		ui->l_debug->setText("ERROR : Nothing to read.");
+	} else {
+		if(nelem!=0) {
+			for(int ielem=0;ielem<nelem;ielem++) {
+				delete tab_all[ielem];
+				}
+			nelem=0;
 			}
-		nelem=0;
+		parser(tab_all, n_sch.toStdString(), nelem);
+		xycalculator(tab_all, nelem);
 		}
-	parser(tab_all, n_sch.toStdString(), nelem);
-	xycalculator(tab_all, nelem);
 	}
 
 void MainWindow::on_cb_format_currentIndexChanged(const QString _out_format) {
@@ -85,6 +93,15 @@ void MainWindow::on_pb_browse_out_clicked(void) {
 
 void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	out_dir=_out_dir;
+	}
+
+void MainWindow::on_le_path_out_returnPressed(void) {
+	if(nelem) {
+		layoutwriter(tab_all, nelem, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		ui->l_debug->setText("Write ok.");
+	} else {
+		ui->l_debug->setText("ERROR : Nothing to write.");
+		}
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
