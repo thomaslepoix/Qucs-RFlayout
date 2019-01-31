@@ -1,0 +1,5 @@
+build/*
+*.o
+*.core
+ui_*.h
+moc_*.cpp
