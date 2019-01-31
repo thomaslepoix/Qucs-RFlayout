@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PARSER4_H
-#define PARSER4_H
+#ifndef PARSER_H
+#define PARSER_H
 
 #include <iostream>
 #include <fstream>
@@ -39,4 +39,4 @@
 int parser(Element**& tab_all, std::string const& n_sch, int& nelem);
 long double suffix(std::string const s_sci, std::string const s_eng);
 
-#endif
+#endif // PARSER_H

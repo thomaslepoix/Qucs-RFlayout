@@ -28,7 +28,7 @@ int layoutwriter(Element** const& tab_all, int const& nelem, string const& n_sch
 	string n_out="";
 	string name=regex_replace(n_sch, r_sch, "");
 
-//generation output file
+//generate output file
 	cout << endl;
 	n_out=regex_replace(out_dir, r_empty, "./");
 	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(n_sch,r_basename, "$1") + out_format;

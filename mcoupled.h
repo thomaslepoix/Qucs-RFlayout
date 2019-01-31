@@ -61,5 +61,4 @@ public :
 	short getAlpha(void);
 };
 
-#endif
-
+#endif // MCOUPLED_H

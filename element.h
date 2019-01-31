@@ -66,4 +66,4 @@ public:
 	virtual int setNet4(std::string _net4)=0;
 };
 
-#endif
+#endif // ELEMENT_H

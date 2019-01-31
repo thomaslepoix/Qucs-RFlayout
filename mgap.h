@@ -59,5 +59,4 @@ public :
 	int setNet4(std::string _net4);
 };
 
-#endif
-
+#endif // MGAP_H

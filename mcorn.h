@@ -55,5 +55,4 @@ public :
 	int setNet4(std::string _net4);
 };
 
-#endif
-
+#endif // MCORN_H

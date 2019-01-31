@@ -63,5 +63,4 @@ public :
 	short getAlpha(void);
 };
 
-#endif
-
+#endif // MCROSS_H

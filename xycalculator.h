@@ -44,4 +44,4 @@ int netmin(Element* const& _elem);
 int findnext(Element** const& tab_all, int const& nelem, Element* const& current, int& current_net, Element*& next);
 int xystep(Element* const& _elem, int const _net, long double& xstep, long double& ystep);
 
-#endif
+#endif // XYCALCULATOR_H

@@ -43,4 +43,4 @@ int layoutwriter(Element** const& tab_all, int const& nelem, std::string const& 
 int write_kicad_pcb(Element** const& tab_all, int const& nelem, std::ofstream& f_out);
 int write_kicad_mod(Element** const& tab_all, int const& nelem, std::string const& name, std::ofstream& f_out);
 
-#endif
+#endif // LAYOUTWRITER_H
