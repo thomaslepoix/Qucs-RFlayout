@@ -53,6 +53,7 @@ int main(int argc, char* argv[]) {
 			cout << "Usage: " << argv[0] << " -i FILENAME.sch" << endl
 				<< "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]" << endl
 				<< "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME" << endl
+				<< "       " << argv[0] << " -G" << endl
 				<< endl
 				<< "  -h, --help\tdisplay this help and exit" << endl
 				<< "  -v, --verbose\tverbose mode" << endl

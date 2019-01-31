@@ -76,7 +76,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 		exit(1);
 		}
 
-//generation netlist
+//generate netlist
 	cout << endl;
 	if(regex_search(n_sch, r_sch)) {
 		n_net=regex_replace(n_sch, r_sch, "\.net");
@@ -108,13 +108,13 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 		exit(1);
 		}
 
-//lecture schéma <Components> </Components>
+//read schematic <Components> </Components>
 	cout << endl << "Reading schematic... " << endl;
 	while(getline(f_sch, line)) {
 		if(line=="<Components>") {
 			cout << line << endl;
 
-//comptage des composants
+//count components
 			cout << endl << "Counting components... ";
 			pos=f_sch.tellg();
 			while(getline(f_sch, line)) {
@@ -144,7 +144,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 			tab_all=new Element*[nelem];
 			f_sch.seekg(pos);
 
-//parsing du schema
+//parse schematic
 			while(getline(f_sch, line)) {
 				cout << line << endl;
 				if(line=="</Components>") {
@@ -302,7 +302,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 		}
 	cout << "Reading schematic... OK" << endl;
 
-//lecture netlist
+//read netlist
 	cout << endl << "Reading netlist... " << endl;
 	while(getline(f_net, line)) {
 		if(line=="") {
@@ -398,6 +398,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 
 
 long double suffix(string const s_sci, const string s_eng) {
+//convert suffix into multiplicator
 	regex r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
 	smatch match;
 	long double multiplicator=1;
@@ -445,7 +446,7 @@ long double suffix(string const s_sci, const string s_eng) {
 		multiplicator/=1000000000000000000;
 		}
 
-	multiplicator*=1000;	//kicad reference unit = mm
+	multiplicator*=1000;	//reference unit = mm
 	return(multiplicator);
 	}
 

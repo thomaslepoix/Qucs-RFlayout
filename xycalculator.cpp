@@ -135,6 +135,7 @@ bool purgefind(Element** const& tab_all, int const& nelem, Element* const& curre
 	}
 
 int purgenets(Element** const& tab_all, int const& nelem) {
+//delete unconnected nets
 	for(int i=0;i<nelem;i++) {
 		for(int u=1;u<5;u++) {
 			if(u==1) {
