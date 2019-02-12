@@ -1,5 +1,5 @@
 # Qucs-RFlayout
-A tool to print qucs RF schematic (microstrip only for now)
+A tool to produce layout from qucs RF schematic (microstrip only for now)
 
 `qucs-schematic.sch` -> `kicad-layout.kicad_pcb` [OK]
 
