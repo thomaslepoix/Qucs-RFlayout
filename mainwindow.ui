@@ -7,147 +7,83 @@
     <x>0</x>
     <y>0</y>
     <width>867</width>
-    <height>594</height>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Qucs-RFlayout</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pb_read">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>30</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Read</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="l_debug">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>390</y>
-      <width>361</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabelok</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="le_path_in">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>30</y>
-      <width>491</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_browse_in">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>30</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Browse</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="l_input">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>30</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Input :</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="cb_format">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>90</y>
-      <width>101</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="l_format">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>90</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Format :</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="le_path_out">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>470</y>
-      <width>491</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="l_output">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>470</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Output :</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_browse_out">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>470</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Browse</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_write">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>470</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Write</string>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="l_input">
+      <property name="text">
+       <string>Input :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QPushButton" name="pb_read">
+      <property name="text">
+       <string>Read</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="5">
+     <widget class="QComboBox" name="cb_format"/>
+    </item>
+    <item row="2" column="4" colspan="2">
+     <widget class="QLabel" name="l_debug">
+      <property name="text">
+       <string>TextLabelok</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="l_output">
+      <property name="text">
+       <string>Output :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="le_path_out"/>
+    </item>
+    <item row="1" column="3" colspan="2">
+     <widget class="QLabel" name="l_format">
+      <property name="text">
+       <string>Format :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2" colspan="2">
+     <widget class="QPushButton" name="pb_browse_out">
+      <property name="text">
+       <string>Browse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QPushButton" name="pb_write">
+      <property name="text">
+       <string>Write</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="le_path_in"/>
+    </item>
+    <item row="0" column="2" colspan="2">
+     <widget class="QPushButton" name="pb_browse_in">
+      <property name="text">
+       <string>Browse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2" colspan="2">
+     <widget class="Preview" name="glw_preview" native="true"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -162,6 +98,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Preview</class>
+   <extends>QWidget</extends>
+   <header>preview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

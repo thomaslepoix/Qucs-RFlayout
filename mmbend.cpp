@@ -20,7 +20,7 @@ using namespace std;
 
 Mmbend::Mmbend(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w) :
@@ -29,6 +29,10 @@ Mmbend::Mmbend(string _label,
 	{}
 
 Mmbend::~Mmbend() {
+	}
+
+string Mmbend::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mmbend::getW(void) {
@@ -53,6 +57,40 @@ int Mmbend::setNet2(string _net2) {
 	return(0);
 	}
 
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mmbend::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mmbend::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][_X], tab_p[_n][_Y]) : rotateX(tab_p[_n][_X], tab_p[_n][_Y]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
+int Mmbend::setP(void) {
+	signed short s1;
+	signed short s2;
+	if(m_mirrorx==0) {
+		s1= 1;
+		s2=-1;
+	} else if(m_mirrorx==1) {
+		s1=-1;
+		s2= 1;
+		}
+	tab_p[0][_X]=-m_w/2;
+	tab_p[0][_Y]=s1*m_w/2;
+	tab_p[1][_X]= m_w/2;
+	tab_p[1][_Y]=s1*m_w/2;
+	tab_p[2][_X]=-m_w/2;
+	tab_p[2][_Y]=s2*m_w/2;
+	return(0);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mmbend::getW1(void) {
@@ -92,8 +130,10 @@ string Mmbend::getNet4(void) {
 	return("");
 	}
 int Mmbend::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mmbend::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

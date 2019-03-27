@@ -25,6 +25,7 @@
 #include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
+#include "preview.h"
 
 #include "eqn.h"
 #include "pac.h"
@@ -48,7 +49,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(Element**& tab_all, int& nelem, QString _n_sch, QString out_dir, QString out_format, QWidget* parent=0);
+    explicit MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent=0);
     ~MainWindow();
 
 private slots:
@@ -64,12 +65,14 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-	Element** tab_all;
-	int nelem;
+	std::vector<std::shared_ptr<Element>> tab_all;
+	long double extrem_pos[4]={0.0, 0.0, 0.0, 0.0};
 	QString n_sch;
 	QString out_dir;
 	QString out_format;
 	QString n_out;
+
+	int previewprinter(/*Element**& tab_all, int& nelem*/);
 };
 
 #endif // MAINWINDOW_H

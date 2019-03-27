@@ -20,7 +20,7 @@ using namespace std;
 
 Mcoupled::Mcoupled(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w,
@@ -33,6 +33,10 @@ Mcoupled::Mcoupled(string _label,
 	{}
 
 Mcoupled::~Mcoupled() {
+	}
+
+string Mcoupled::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mcoupled::getW(void) {
@@ -83,6 +87,41 @@ int Mcoupled::setNet4(string _net4) {
 	return(0);
 	}
 
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mcoupled::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mcoupled::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][_X], tab_p[_n][_Y]) : rotateX(tab_p[_n][_X], tab_p[_n][_Y]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
+int Mcoupled::setP(void) {
+	tab_p[0][_X]=-m_l/2;
+	tab_p[0][_Y]= (m_s/2+m_w);
+	tab_p[1][_X]= m_l/2;
+	tab_p[1][_Y]= (m_s/2+m_w);
+	tab_p[2][_X]= m_l/2;
+	tab_p[2][_Y]= m_s/2;
+	tab_p[3][_X]=-m_l/2;
+	tab_p[3][_Y]= m_s/2;
+	tab_p[4][_X]=-m_l/2;
+	tab_p[4][_Y]=-m_s/2;
+	tab_p[5][_X]= m_l/2;
+	tab_p[5][_Y]=-m_s/2;
+	tab_p[6][_X]= m_l/2;
+	tab_p[6][_Y]=-(m_s/2+m_w);
+	tab_p[7][_X]=-m_l/2;
+	tab_p[7][_Y]=-(m_s/2+m_w);
+	return(0);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mcoupled::getW1(void) {

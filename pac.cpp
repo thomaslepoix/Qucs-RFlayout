@@ -20,13 +20,17 @@ using namespace std;
 
 Pac::Pac(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport) :
 	Element(_label, _type, _mirrorx, _r, _nport)
 	{}
 
 Pac::~Pac() {
+	}
+
+string Pac::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 string Pac::getNet1(void) {
@@ -48,6 +52,21 @@ int Pac::setNet2(string _net2) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Pac::getNpoint(void) {
+	return(0);
+	}
+long double Pac::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
+int Pac::setP(void) {
+	return(1);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Pac::getW(void) {
 	return(0);
@@ -89,8 +108,10 @@ string Pac::getNet4(void) {
 	return("");
 	}
 int Pac::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Pac::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

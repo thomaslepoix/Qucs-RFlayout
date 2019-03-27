@@ -18,19 +18,17 @@
 #include "parser.h"
 using namespace std;
 
-int parser(Element**& tab_all, string const& n_sch, int& nelem) {
+int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 
 //variables
 	string n_net;
 	regex r_sch(".sch$");
 	string line;
 	smatch match;
-	int pos;
-	int ielem=0;
 
 	string type;
 	string label;
-	short mirrorx;
+	bool mirrorx;
 	short R;
 	long double L;
 	long double W;
@@ -90,11 +88,11 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 	cout << endl << "Generating netlist... ";
 	string net_gen="qucs -n -i "+n_sch+" -o "+n_net;
 	if(system(net_gen.c_str())) {		//OK : exit status 0
-		cout << " KO" << endl;
+		cout << "KO" << endl;
 		cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
 		exit(2);
 	} else {
-		cout << " OK" << endl;
+		cout << "OK" << endl;
 		}
 
 //open netlist
@@ -113,36 +111,6 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 	while(getline(f_sch, line)) {
 		if(line=="<Components>") {
 			cout << line << endl;
-
-//count components
-			cout << endl << "Counting components... ";
-			pos=f_sch.tellg();
-			while(getline(f_sch, line)) {
-				if(line=="</Components>") {
-					break;
-					}
-				regex_search(line, match, r_field1);
-				type=match.str(1);
-				if(type=="Eqn"
-				||type=="Pac"
-				||type=="MCORN"
-				||type=="MCROSS"
-				||type=="MCOUPLED"
-				||type=="MGAP"
-				||type=="MMBEND"
-				||type=="MLIN"
-				||type=="MOPEN"
-				||type=="MRSTUB"
-				||type=="MSTEP"
-				||type=="MTEE"
-				||type=="MVIA") {
-					nelem++;
-					}
-				}
-
-			cout << "OK" << endl << "nelem : " << nelem << endl << endl;
-			tab_all=new Element*[nelem];
-			f_sch.seekg(pos);
 
 //parse schematic
 			while(getline(f_sch, line)) {
@@ -170,15 +138,15 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 
 				if(type=="Eqn") {
 					//to be complete...
-					tab_all[ielem]=new Eqn(label, type, mirrorx, R, 0);
+					tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R, 0)));
 				} else if(type=="Pac") {
-					tab_all[ielem]=new Pac(label, type, mirrorx, R, 2);
+					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, 2)));
 				} else if(type=="MCORN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
 						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
-					tab_all[ielem]=new Mcorn(label, type, mirrorx, R, 2, W);
+					tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, 2, W)));
 				} else if(type=="MCROSS") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
@@ -196,7 +164,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield18);
 						W4=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 4 : " << W4 << endl;
-					tab_all[ielem]=new Mcross(label, type, mirrorx, R, 4, W1, W2, W3, W4);
+					tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, 4, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
 					//width
 						regex_search(line, match, r_quotedfield12);
@@ -210,7 +178,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield16);
 						S=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tSpace : " << S << endl;
-					tab_all[ielem]=new Mcoupled(label, type, mirrorx, R, 4, W, L, S);
+					tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, 4, W, L, S)));
 				} else if(type=="MGAP") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
@@ -224,13 +192,13 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield16);
 						S=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tSpace : " << S << endl;
-					tab_all[ielem]=new Mgap(label, type, mirrorx, R, 2, W1, W2, S);
+					tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, 2, W1, W2, S)));
 				} else if(type=="MMBEND") {
 					//width
 						regex_search(line, match, r_quotedfield12);
 						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
-					tab_all[ielem]=new Mmbend(label, type, mirrorx, R, 2, W);
+					tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, 2, W)));
 				} else if(type=="MLIN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
@@ -240,13 +208,13 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield14);
 						L=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tLength : " << L << endl;
-					tab_all[ielem]=new Mlin(label, type, mirrorx, R, 2, W, L);
+					tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, 2, W, L)));
 				} else if(type=="MOPEN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
 						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
-					tab_all[ielem]=new Mopen(label, type, mirrorx, R, 1, W);
+					tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, 1, W)));
 				} else if(type=="MRSTUB") {
 					//inner radius
 						regex_search(line, match, r_quotedfield12);
@@ -261,7 +229,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield16);
 						alpha=stoi(match.str(5));
 						cout << "\tAlpha : " << alpha << endl;
-					tab_all[ielem]=new Mrstub(label, type, mirrorx, R, 1, ri, ro, alpha);
+					tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, mirrorx, R, 1, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
@@ -271,7 +239,7 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield14);
 						W2=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 2 : " << W2 << endl;
-					tab_all[ielem]=new Mstep(label, type, mirrorx, R, 2, W1, W2);
+					tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, 2, W1, W2)));
 				} else if(type=="MTEE") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
@@ -285,17 +253,14 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 						regex_search(line, match, r_quotedfield16);
 						W3=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 3 : " << W3 << endl;
-					tab_all[ielem]=new Mtee(label, type, mirrorx, R, 3, W1, W2, W3);
+					tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, 3, W1, W2, W3)));
 				} else if(type=="MVIA") {
 					//diameter
 						regex_search(line, match, r_quotedfield12);
 						D=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
 						cout << "\tDiameter : " << D << endl;
-					tab_all[ielem]=new Mvia(label, type, mirrorx, R, 1, D);
-				} else {
-					ielem--;
+					tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, mirrorx, R, 1, D)));
 					}
-				ielem++;
 				}
 			break;
 			}
@@ -318,81 +283,80 @@ int parser(Element**& tab_all, string const& n_sch, int& nelem) {
 				label=match.str(2);
 				cout << "\tLabel : " << label << endl;
 			//find ielem->label
-				for(ielem=0;ielem<nelem;ielem++) {
-					if(tab_all[ielem]->getLabel()==label) {
-						break;
+				for(shared_ptr<Element> it : tab_all) {
+					if(it->getLabel()==label) {
+						if(type=="Eqn"){
+							//to be complete
+						} else if(type=="MOPEN"
+								||type=="MRSTUB"
+								||type=="MVIA") {
+							//net 1
+								regex_search(line, match, r_net1);
+								net1=match.str(2);
+								cout << "\tNet 1 : " << net1 << endl;
+							it->setNet1(net1);
+						} else if(type=="Pac"
+								||type=="MCORN"
+								||type=="MGAP"
+								||type=="MLIN"
+								||type=="MMBEND"
+								||type=="MSTEP") {
+							//net 1
+								regex_search(line, match, r_net1);
+								net1=match.str(2);
+								cout << "\tNet 1 : " << net1 << endl;
+							//net 2
+								regex_search(line, match, r_net2);
+								net2=match.str(2);
+								cout << "\tNet 2 : " << net2 << endl;
+							it->setNet1(net1);
+							it->setNet2(net2);
+						} else if(type=="MTEE") {
+							//net 1
+								regex_search(line, match, r_net1);
+								net1=match.str(2);
+								cout << "\tNet 1 : " << net1 << endl;
+							//net 2
+								regex_search(line, match, r_net2);
+								net2=match.str(2);
+								cout << "\tNet 2 : " << net2 << endl;
+							//net 3
+								regex_search(line, match, r_net3);
+								net3=match.str(2);
+								cout << "\tNet 3 : " << net3 << endl;
+							it->setNet1(net1);
+							it->setNet2(net2);
+							it->setNet3(net3);
+						} else if(type=="MCOUPLED"
+								||type=="MCROSS") {
+							//net 1
+								regex_search(line, match, r_net1);
+								net1=match.str(2);
+								cout << "\tNet 1 : " << net1 << endl;
+							//net 2
+								regex_search(line, match, r_net2);
+								net2=match.str(2);
+								cout << "\tNet 2 : " << net2 << endl;
+							//net 3
+								regex_search(line, match, r_net3);
+								net3=match.str(2);
+								cout << "\tNet 3 : " << net3 << endl;
+							//net 4
+								regex_search(line, match, r_net4);
+								net4=match.str(2);
+								cout << "\tNet 4 : " << net4 << endl;
+							it->setNet1(net1);
+							it->setNet2(net2);
+							it->setNet3(net3);
+							it->setNet4(net4);
+							}
 						}
-					}
-
-				if(type=="Eqn"){
-					//to be complete
-				} else if(type=="MOPEN"
-						||type=="MRSTUB"
-						||type=="MVIA"){
-					//net 1
-						regex_search(line, match, r_net1);
-						net1=match.str(2);
-						cout << "\tNet 1 : " << net1 << endl;
-					tab_all[ielem]->setNet1(net1);
-				} else if(type=="Pac"
-						||type=="MCORN"
-						||type=="MGAP"
-						||type=="MLIN"
-						||type=="MMBEND"
-						||type=="MSTEP"){
-					//net 1
-						regex_search(line, match, r_net1);
-						net1=match.str(2);
-						cout << "\tNet 1 : " << net1 << endl;
-					//net 2
-						regex_search(line, match, r_net2);
-						net2=match.str(2);
-						cout << "\tNet 2 : " << net2 << endl;
-					tab_all[ielem]->setNet1(net1);
-					tab_all[ielem]->setNet2(net2);
-				} else if(type=="MTEE"){
-					//net 1
-						regex_search(line, match, r_net1);
-						net1=match.str(2);
-						cout << "\tNet 1 : " << net1 << endl;
-					//net 2
-						regex_search(line, match, r_net2);
-						net2=match.str(2);
-						cout << "\tNet 2 : " << net2 << endl;
-					//net 3
-						regex_search(line, match, r_net3);
-						net3=match.str(2);
-						cout << "\tNet 3 : " << net3 << endl;
-					tab_all[ielem]->setNet1(net1);
-					tab_all[ielem]->setNet2(net2);
-					tab_all[ielem]->setNet3(net3);
-				} else if(type=="MCOUPLED"
-						||type=="MCROSS"){
-					//net 1
-						regex_search(line, match, r_net1);
-						net1=match.str(2);
-						cout << "\tNet 1 : " << net1 << endl;
-					//net 2
-						regex_search(line, match, r_net2);
-						net2=match.str(2);
-						cout << "\tNet 2 : " << net2 << endl;
-					//net 3
-						regex_search(line, match, r_net3);
-						net3=match.str(2);
-						cout << "\tNet 3 : " << net3 << endl;
-					//net 4
-						regex_search(line, match, r_net4);
-						net4=match.str(2);
-						cout << "\tNet 4 : " << net4 << endl;
-					tab_all[ielem]->setNet1(net1);
-					tab_all[ielem]->setNet2(net2);
-					tab_all[ielem]->setNet3(net3);
-					tab_all[ielem]->setNet4(net4);
 					}
 				}
 			}
 		}
 	cout << "Reading netlist... OK" << endl;
+	cout << "N elements : " << tab_all.size() << endl;
 	return(0);
 	}
 

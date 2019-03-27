@@ -20,7 +20,7 @@ using namespace std;
 
 Mgap::Mgap(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w1,
@@ -33,6 +33,10 @@ Mgap::Mgap(string _label,
 	{}
 
 Mgap::~Mgap() {
+	}
+
+string Mgap::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mgap::getW1(void) {
@@ -66,6 +70,21 @@ int Mgap::setNet2(string _net2) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mgap::getNpoint(void) {
+	return(0);
+	}
+long double Mgap::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
+int Mgap::setP(void) {
+	return(1);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mgap::getW(void) {
 	return(0);
@@ -98,8 +117,10 @@ string Mgap::getNet4(void) {
 	return("");
 	}
 int Mgap::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mgap::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

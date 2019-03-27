@@ -22,13 +22,15 @@
 
 class Eqn : public Element {
 private :
+	const std::string m_descriptor="equation";
 public :
 	Eqn(std::string _label,
 		std::string _type,
-		short _mirrorx,
+		bool _mirrorx,
 		short _r,
 		short _nport);
 	~Eqn();
+	std::string getDescriptor(void);
 ////////////////////////////////////////////////////////////////////////////////
 	long double getW(void);
 	long double getW1(void);
@@ -49,6 +51,11 @@ public :
 	int setNet2(std::string _net2);
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	int getNpoint(void);
+	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setP(void);
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 };
 
 #endif // EQN_H

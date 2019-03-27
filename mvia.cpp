@@ -20,7 +20,7 @@ using namespace std;
 
 Mvia::Mvia(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _d) :
@@ -29,6 +29,10 @@ Mvia::Mvia(string _label,
 	{}
 
 Mvia::~Mvia() {
+	}
+
+string Mvia::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mvia::getD(void) {
@@ -45,6 +49,21 @@ int Mvia::setNet1(string _net1) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mvia::getNpoint(void) {
+	return(0);
+	}
+long double Mvia::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
+int Mvia::setP(void) {
+	return(1);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mvia::getW(void) {
 	return(0);
@@ -86,11 +105,14 @@ string Mvia::getNet4(void) {
 	return("");
 	}
 int Mvia::setNet2(string _net2) {
+	(void) _net2;
 	return(1);
 	}
 int Mvia::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mvia::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

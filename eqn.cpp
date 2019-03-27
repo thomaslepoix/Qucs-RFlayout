@@ -20,7 +20,7 @@ using namespace std;
 
 Eqn::Eqn(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport) :
 	Element(_label, _type, _mirrorx, _r, _nport)
@@ -29,7 +29,26 @@ Eqn::Eqn(string _label,
 Eqn::~Eqn() {
 	}
 
+string Eqn::getDescriptor(void) {
+	return(m_descriptor);
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Eqn::getNpoint(void) {
+	return(0);
+	}
+long double Eqn::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
+int Eqn::setP(void) {
+	return(1);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Eqn::getW(void) {
 	return(0);
@@ -77,14 +96,18 @@ string Eqn::getNet4(void) {
 	return("");
 	}
 int Eqn::setNet1(string _net1) {
+	(void) _net1;
 	return(1);
 	}
 int Eqn::setNet2(string _net2) {
+	(void) _net2;
 	return(1);
 	}
 int Eqn::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Eqn::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

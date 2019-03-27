@@ -17,32 +17,53 @@
 
 #ifndef ELEMENT_H
 #define ELEMENT_H
+
+#define _USE_MATH_DEFINES
+
+//getP() defines
+#define _X		0
+#define _Y		1
+#define _NOR	0
+#define _R		1
+#define _REL	0
+#define _ABS	1
+//extrem_pos defines
+#define _XMIN	0
+#define _XMAX	1
+#define _YMIN	2
+#define _YMAX	3
+
 #include <string>
+#include <cmath>
+#include <memory>
 
 class Element {
-private:
+protected:
 	std::string m_label;
 	std::string m_type;
-	short m_mirrorx;
+	bool m_mirrorx;
 	short m_r;
 	short m_nport;
 	long double m_x=0.0/0.0;
 	long double m_y=0.0/0.0;
+	long double rotateX(long double _x, long double _y);
+	long double rotateY(long double _x, long double _y);
 public:
 	Element(std::string _label,
 			std::string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport);
 	~Element();
-	Element* prev=NULL;
+	std::shared_ptr<Element> prev=NULL;
 	std::string getLabel(void);
 	std::string getType(void);
-	short getMirrorx(void);
+	bool getMirrorx(void);
 	short getR(void);
 	short getNport(void);
 	long double getX(void);
 	long double getY(void);
+	virtual std::string getDescriptor(void)=0;
 	virtual long double getW(void)=0;
 	virtual long double getW1(void)=0;
 	virtual long double getW2(void)=0;
@@ -64,6 +85,11 @@ public:
 	virtual int setNet2(std::string _net2)=0;
 	virtual int setNet3(std::string _net3)=0;
 	virtual int setNet4(std::string _net4)=0;
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	virtual int getNpoint(void)=0;
+	virtual long double getP(int _n, bool _xy, bool _r, bool _abs)=0;
+	virtual int setP(void)=0;
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 };
 
 #endif // ELEMENT_H

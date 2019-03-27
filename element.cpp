@@ -20,7 +20,7 @@ using namespace std;
 
 Element::Element(string _label,
 				string _type,
-				short _mirrorx,
+				bool _mirrorx,
 				short _r,
 				short _nport) :
 	m_label(_label),
@@ -33,15 +33,15 @@ Element::Element(string _label,
 Element::~Element() {
 	}
 
-std::string Element::getLabel(void) {
+string Element::getLabel(void) {
 	return(m_label);
 	}
 
-std::string Element::getType(void) {
+string Element::getType(void) {
 	return(m_type);
 	}
 
-short Element::getMirrorx(void) {
+bool Element::getMirrorx(void) {
 	return(m_mirrorx);
 	}
 
@@ -69,4 +69,12 @@ int Element::setX(long double _x) {
 int Element::setY(long double _y) {
 	m_y=_y;
 	return(0);
+	}
+
+long double Element::rotateX(long double _x, long double _y) {
+	return(_x*cos((M_PI/180)*m_r)+_y*sin((M_PI/180)*m_r));
+	}
+
+long double Element::rotateY(long double _x, long double _y) {
+	return(-_x*sin((M_PI/180)*m_r)+_y*cos((M_PI/180)*m_r));
 	}

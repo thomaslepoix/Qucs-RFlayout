@@ -22,6 +22,7 @@
 
 class Mgap : public Element {
 private :
+	const std::string m_descriptor="microstrip_gap";
 	long double m_w1;
 	long double m_w2;
 	long double m_s;
@@ -30,13 +31,14 @@ private :
 public :
 	Mgap(std::string _label,
 		std::string _type,
-		short _mirrorx,
+		bool _mirrorx,
 		short _r,
 		short _nport,
 		long double _w1,
 		long double _w2,
 		long double _s);
 	~Mgap();
+	std::string getDescriptor(void);
 	long double getW1(void);
 	long double getW2(void);
 	long double getS(void);
@@ -57,6 +59,11 @@ public :
 	std::string getNet4(void);
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	int getNpoint(void);
+	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setP(void);
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 };
 
 #endif // MGAP_H

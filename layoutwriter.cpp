@@ -18,7 +18,7 @@
 #include "layoutwriter.h"
 using namespace std;
 
-int layoutwriter(Element** const& tab_all, int const& nelem, string const& n_sch, string const& out_dir, string const& out_format) {
+int layoutwriter(vector<shared_ptr<Element>> const& tab_all, string const& n_sch, string const& out_dir, string const& out_format) {
 
 //variables
 	regex r_sch("\.sch$");
@@ -37,21 +37,14 @@ int layoutwriter(Element** const& tab_all, int const& nelem, string const& n_sch
 	ofstream f_out(n_out.c_str());
 
 //write
-	if(out_format==".kicad_pcb") write_kicad_pcb(tab_all, nelem, f_out);
-	if(out_format==".kicad_mod") write_kicad_mod(tab_all, nelem, name, f_out);
+	if(out_format==".kicad_pcb") write_kicad_pcb(tab_all, f_out);
+	if(out_format==".kicad_mod") write_kicad_mod(tab_all, name, f_out);
 
 	return(0);
 	}
 
-int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out) {
+int write_kicad_pcb(vector<shared_ptr<Element>> const& tab_all, ofstream& f_out) {
 	string type;
-	signed int s;
-	signed int s1;
-	signed int s2;
-	signed int n;
-	long double Wlong;
-	long double Wlong13;
-	long double Wlong24;
 
 	f_out << "(kicad_pcb (version 20171130) (host pcbnew 5.0.1-33cea8e~67~ubuntu18.04.1)\n"
 		  << "\n"
@@ -156,147 +149,48 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
 		  << "    (uvia_drill 0.1)\n"
 		  << "  )\n\n";
 
-	for(int i=0;i<nelem;i++) {
-		type=tab_all[i]->getType();
+	for(shared_ptr<Element> it : tab_all) {
+		type=it->getType();
 		if(type=="Eqn" || type=="Pac" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
-		} else if(type=="MCORN") {//////////////////////////////////////////////
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
+		} else if(type=="MCORN"
+				||type=="MCROSS"
+				||type=="MCOUPLED"
+				||type=="MMBEND"
+				||type=="MLIN"
+				||type=="MRSTUB"
+				||type=="MTEE") {///////////////////////////////////////////////
+			f_out << "  (module " << it->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
+				  << "    (at " << it->getX() << " " << it->getY() << " " << it->getR() << ")\n"
+				  << "    (fp_text reference " << it->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
 				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
 				  << "    )\n"
-				  << "    (fp_text value micostrip_corner (at 0 -0.5) (layer F.Fab)\n"
+				  << "    (fp_text value " << it->getDescriptor() << " (at 0 -0.5) (layer F.Fab)\n"
 				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (pad \"\" smd rect (at 0 0 " << tab_all[i]->getR() << ") (size " << tab_all[i]->getW() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n"
-				  << "  )\n\n";
-		} else if(type=="MCROSS") {/////////////////////////////////////////////
-			if(tab_all[i]->getMirrorx()==0) {
-				s1=1;
-				s2=-1;
-			} else if(tab_all[i]->getMirrorx()==1) {
-				s1=-1;
-				s2=1;
+				  << "    )\n";
+			if(type=="MCOUPLED") {//////////////////////////////////////////////
+				f_out << "    (fp_poly (pts\n";
+				for(int i=0;i<it->getNpoint()/2;i++) {
+					f_out << "      (xy " << it->getP(i, _X, _NOR, _REL)
+						  << " "          << it->getP(i, _Y, _NOR, _REL) << ")\n";
+					}
+				f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
+					  << "    (fp_poly (pts\n";
+				for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
+					f_out << "      (xy " << it->getP(i, _X, _NOR, _REL)
+						  << " "          << it->getP(i, _Y, _NOR, _REL) << ")\n";
+					}
+				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
+			} else {////////////////////////////////////////////////////////////
+				f_out << "    (fp_poly (pts\n";
+				for(int i=0;i<it->getNpoint();i++) {
+					f_out << "      (xy " << it->getP(i, _X, _NOR, _REL)
+						  << " "          << it->getP(i, _Y, _NOR, _REL) << ")\n";
+					}
+				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 				}
-			Wlong13= (tab_all[i]->getW1()>tab_all[i]->getW3()) ? tab_all[i]->getW1() : tab_all[i]->getW3();
-			Wlong24= (tab_all[i]->getW2()>tab_all[i]->getW4()) ? tab_all[i]->getW2() : tab_all[i]->getW4();
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_text value micostrip_cross (at 0 -0.5 360) (layer F.Fab)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_poly (pts "
-				  << "(xy " << -Wlong24/2 << " " << s1*(tab_all[i]->getW1()/2) << ") "
-				  << "(xy " << -Wlong24/2 << " " << s2*(tab_all[i]->getW1()/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << -tab_all[i]->getW2()/2 << " " << s2*(tab_all[i]->getW1()/2) << ")\n      ";
-			f_out << "(xy " << -tab_all[i]->getW2()/2 << " " << s2*(Wlong13/2) << ") "
-				  << "(xy " << tab_all[i]->getW2()/2 << " " << s2*(Wlong13/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << tab_all[i]->getW2()/2 << " " << s2*(tab_all[i]->getW3()/2) << ")\n      ";
-			f_out << "(xy " << Wlong24/2 << " " << s2*(tab_all[i]->getW3()/2) << ") "
-				  << "(xy " << Wlong24/2 << " " << s1*(tab_all[i]->getW3()/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << tab_all[i]->getW4()/2 << " " << s1*(tab_all[i]->getW3()/2) << ")\n      ";
-			f_out << "(xy " << tab_all[i]->getW4()/2 << " " << s1*(Wlong13/2) << ") "
-				  << "(xy " << -tab_all[i]->getW4()/2 << " " << s1*(Wlong13/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << -tab_all[i]->getW4()/2 << " " << s1*(tab_all[i]->getW1()/2) << ")\n      ";
-			f_out << ") (layer F.Cu) (width 0))\n"
-				  << "  )\n\n";
-		} else if(type=="MCOUPLED") {///////////////////////////////////////////
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_text value micostrip_line (at 0 -0.5) (layer F.Fab)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (pad \"\" smd rect (at 0 " << (tab_all[i]->getS()/2)+(tab_all[i]->getW()/2) << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getL() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n"
-				  << "    (pad \"\" smd rect (at 0 " << -(tab_all[i]->getS()/2)-(tab_all[i]->getW()/2) << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getL() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n"
-				  << "  )\n\n";
-		} else if(type=="MMBEND") {/////////////////////////////////////////////
-			if(tab_all[i]->getMirrorx()==0) {
-				s1=1;
-				s2=-1;
-			} else if(tab_all[i]->getMirrorx()==1) {
-				s1=-1;
-				s2=1;
-				}
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_text value micostrip_mitered_bend (at 0 -0.5 360) (layer F.Fab)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_poly (pts "
-				  << "(xy " << tab_all[i]->getW()/2 << " " << s1*(tab_all[i]->getW()/2) << ") "
-				  << "(xy " << -tab_all[i]->getW()/2 << " " << s2*(tab_all[i]->getW()/2) << ")\n      "
-				  << "(xy " << -tab_all[i]->getW()/2 << " " << s1*(tab_all[i]->getW()/2) << ")) (layer F.Cu) (width 0))\n"
-				  << "  )\n\n";
-		} else if(type=="MLIN") {///////////////////////////////////////////////
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_text value micostrip_line (at 0 -0.5) (layer F.Fab)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (pad \"\" smd rect (at 0 0 " << tab_all[i]->getR() << ") (size " << tab_all[i]->getL() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n"
-				  << "  )\n\n";
-		} else if(type=="MRSTUB") {/////////////////////////////////////////////
-			n=int(tab_all[i]->getAlpha())/5;
-			if(tab_all[i]->getMirrorx()==0) s=1;
-			if(tab_all[i]->getMirrorx()==1) s=-1;
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_text value micostrip_radial_stub (at 0 -0.5 360) (layer F.Fab)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_poly (pts "
-				  << "(xy " << tab_all[i]->getW()/2 << " 0) "
-				  << "(xy " << -tab_all[i]->getW()/2 << " 0)\n      "
-				  << "(xy " << tab_all[i]->getRo()*sin((M_PI/180)*(-tab_all[i]->getAlpha()/2)) << " " << s*((-tab_all[i]->getRo()*cos((M_PI/180)*(-tab_all[i]->getAlpha()/2)))-tab_all[i]->getL()) << ")\n      ";
-
-			for(int u=-5*n/2;u<=5*n/2;u+=5) {
-				f_out << "(xy " << tab_all[i]->getRo()*sin((M_PI/180)*(u)) << " " <<  s*((-tab_all[i]->getRo()*cos((M_PI/180)*(u)))-tab_all[i]->getL()) << ")\n      ";
-				}
-				f_out << "(xy " << -tab_all[i]->getRo()*sin((M_PI/180)*(-tab_all[i]->getAlpha()/2)) << " " << s*((-tab_all[i]->getRo()*cos((M_PI/180)*(-tab_all[i]->getAlpha()/2)))-tab_all[i]->getL()) << ")) (layer F.Cu) (width 0))\n\
-  )\n\n";
-		} else if(type=="MTEE") {///////////////////////////////////////////////
-			if(tab_all[i]->getMirrorx()==0) {
-				s1=1;
-				s2=-1;
-			} else if(tab_all[i]->getMirrorx()==1) {
-				s1=-1;
-				s2=1;
-				}
-			Wlong= (tab_all[i]->getW1()>tab_all[i]->getW2()) ? tab_all[i]->getW1() : tab_all[i]->getW2();
-			f_out << "  (module " << tab_all[i]->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-				  << "    (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ")\n"
-				  << "    (fp_text reference " << tab_all[i]->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_text value micostrip_tee (at 0 -0.5 360) (layer F.Fab)\n"
-				  << "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
-				  << "    )\n"
-				  << "    (fp_poly (pts "
-				  << "(xy " << -tab_all[i]->getW3()/2 << " " << s2*(tab_all[i]->getW1()/2) << ") "
-				  << "(xy 0 " << s2*(tab_all[i]->getW1()/2) << ") "
-				  << "(xy 0 " << s2*(tab_all[i]->getW2()/2) << ") "
-				  << "(xy " << tab_all[i]->getW3()/2 << " " << s2*(tab_all[i]->getW2()/2) << ")\n      "
-				  << "(xy " << tab_all[i]->getW3()/2 << " " << s1*(Wlong/2) << ") "
-				  << "(xy " << -tab_all[i]->getW3()/2 << " " << s1*(Wlong/2) << ")) (layer F.Cu) (width 0))\n"
-				  << "  )\n\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (via (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << ") (size " << tab_all[i]->getD() << ") (drill " << tab_all[i]->getD() << ") (layers F.Cu B.Cu))\n\n";
+			f_out << "  (via (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers F.Cu B.Cu))\n\n";
 			}
 		}
 
@@ -304,17 +198,10 @@ int write_kicad_pcb(Element** const& tab_all, int const& nelem, ofstream& f_out)
 	return(0);
 	}
 
-int write_kicad_mod(Element** const& tab_all, int const& nelem, string const& name, ofstream& f_out) {
+int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& name, ofstream& f_out) {
 	string type;
 	string label;
 	smatch match;
-	signed int s;
-	signed int s1;
-	signed int s2;
-	signed int n;
-	long double Wlong;
-	long double Wlong13;
-	long double Wlong24;
 	regex r_pac("^P([0-9]*)$");													//regex group 1
 
 	f_out << "(module " << name << " (layer F.Cu) (tedit 5BD7B6BE)\n"
@@ -325,88 +212,41 @@ int write_kicad_mod(Element** const& tab_all, int const& nelem, string const& na
 		  << "    (effects (font (size 1 1) (thickness 0.15)))\n"
 		  << "  )\n";
 
-	for(int i=0;i<nelem;i++) {
-		type=tab_all[i]->getType();
+	for(shared_ptr<Element> it : tab_all) {
+		type=it->getType();
 		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
-			label=tab_all[i]->getLabel();
+			label=it->getLabel();
 			regex_search(label, match, r_pac);
-			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
-		} else if(type=="MCORN") {//////////////////////////////////////////////
-			f_out << "    (pad \"\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getW() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n";
-		} else if(type=="MCROSS") {/////////////////////////////////////////////
-			if(tab_all[i]->getMirrorx()==0) {
-				s1=1;
-				s2=-1;
-			} else if(tab_all[i]->getMirrorx()==1) {
-				s1=-1;
-				s2=1;
+			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX() << " " << it->getY() << " " << it->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
+		} else if(type=="MCORN"
+				||type=="MCROSS"
+				||type=="MMBEND"
+				||type=="MLIN"
+				||type=="MRSTUB"
+				||type=="MTEE") {///////////////////////////////////////////////
+			f_out << "    (fp_poly (pts \n";
+			for(int i=0;i<it->getNpoint();i++) {
+				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
+					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
 				}
-			Wlong13= (tab_all[i]->getW1()>tab_all[i]->getW3()) ? tab_all[i]->getW1() : tab_all[i]->getW3();
-			Wlong24= (tab_all[i]->getW2()>tab_all[i]->getW4()) ? tab_all[i]->getW2() : tab_all[i]->getW4();
-			f_out << "    (fp_poly (pts "
-				  << "(xy " << tab_all[i]->getX()-Wlong24/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW1()/2) << ") "
-				  << "(xy " << tab_all[i]->getX()-Wlong24/2 << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW1()/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << tab_all[i]->getX()-tab_all[i]->getW2()/2 << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW1()/2) << ")\n      ";
-			f_out << "(xy " << tab_all[i]->getX()-tab_all[i]->getW2()/2 << " " << tab_all[i]->getY()+s2*(Wlong13/2) << ") "
-				  << "(xy " << tab_all[i]->getX()+tab_all[i]->getW2()/2 << " " << tab_all[i]->getY()+s2*(Wlong13/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW4()) f_out << "(xy " << tab_all[i]->getX()+tab_all[i]->getW2()/2 << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW3()/2) << ")\n      ";
-			f_out << "(xy " << tab_all[i]->getX()+Wlong24/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW3()/2) << ") "
-				  << "(xy " << tab_all[i]->getX()+Wlong24/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW3()/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW1() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << tab_all[i]->getX()+tab_all[i]->getW4()/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW3()/2) << ")\n      ";
-			f_out << "(xy " << tab_all[i]->getX()+tab_all[i]->getW4()/2 << " " << tab_all[i]->getY()+s1*(Wlong13/2) << ") "
-				  << "(xy " << tab_all[i]->getX()-tab_all[i]->getW4()/2 << " " << tab_all[i]->getY()+s1*(Wlong13/2) << ")\n      ";
-			if(Wlong13==tab_all[i]->getW3() && Wlong24==tab_all[i]->getW2()) f_out << "(xy " << tab_all[i]->getX()-tab_all[i]->getW4()/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW1()/2) << ")\n      ";
-			f_out << ") (layer F.Cu) (width 0))\n";
+			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MCOUPLED") {///////////////////////////////////////////
-			f_out << "    (pad \"\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY()+(tab_all[i]->getS()/2)+(tab_all[i]->getW()/2) << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getL() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n"
-				  << "    (pad \"\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY()-(tab_all[i]->getS()/2)-(tab_all[i]->getW()/2) << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getL() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n";
-		} else if(type=="MMBEND") {/////////////////////////////////////////////
-			if(tab_all[i]->getMirrorx()==0) {
-				s1=1;
-				s2=-1;
-			} else if(tab_all[i]->getMirrorx()==1) {
-				s1=-1;
-				s2=1;
+			f_out << "    (fp_poly (pts \n";
+			for(int i=0;i<it->getNpoint()/2;i++) {
+				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
+					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
 				}
-			f_out << "    (fp_poly (pts "
-				  << "(xy " << tab_all[i]->getX()+tab_all[i]->getW()/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW()/2) << ") "
-				  << "(xy " << tab_all[i]->getX()-tab_all[i]->getW()/2 << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW()/2) << ")\n      "
-				  << "(xy " << tab_all[i]->getX()-tab_all[i]->getW()/2 << " " << tab_all[i]->getY()+s1*(tab_all[i]->getW()/2) << ")) (layer F.Cu) (width 0))\n";
-		} else if(type=="MLIN") {///////////////////////////////////////////////
-			f_out << "    (pad \"\" smd rect (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << " " << tab_all[i]->getR() << ") (size " << tab_all[i]->getL() << " " << tab_all[i]->getW() << ") (layers F.Cu))\n";
-		} else if(type=="MRSTUB") {/////////////////////////////////////////////
-			n=int(tab_all[i]->getAlpha())/5;
-			if(tab_all[i]->getMirrorx()==0) s=1;
-			if(tab_all[i]->getMirrorx()==1) s=-1;
-			f_out << "    (fp_poly (pts "
-				  << "(xy " << tab_all[i]->getX()+tab_all[i]->getW()/2 << " " << tab_all[i]->getY() << ") "
-				  << "(xy " << tab_all[i]->getX()-tab_all[i]->getW()/2 << " " << tab_all[i]->getY() << ")\n      "
-				  << "(xy " << tab_all[i]->getX()+tab_all[i]->getRo()*sin((M_PI/180)*(-tab_all[i]->getAlpha()/2)) << " " << tab_all[i]->getY()+s*((-tab_all[i]->getRo()*cos((M_PI/180)*(-tab_all[i]->getAlpha()/2)))-tab_all[i]->getL()) << ")\n      ";
-
-			for(int u=-5*n/2;u<=5*n/2;u+=5) {
-				f_out << "(xy " << tab_all[i]->getX()+tab_all[i]->getRo()*sin((M_PI/180)*(u)) << " " << tab_all[i]->getY()+s*((-tab_all[i]->getRo()*cos((M_PI/180)*(u)))-tab_all[i]->getL()) << ")\n      ";
+			f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
+				  << "    (fp_poly (pts \n";
+			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
+				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
+					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
 				}
-				f_out << "(xy " << tab_all[i]->getX()-tab_all[i]->getRo()*sin((M_PI/180)*(-tab_all[i]->getAlpha()/2)) << " " << tab_all[i]->getY()+s*((-tab_all[i]->getRo()*cos((M_PI/180)*(-tab_all[i]->getAlpha()/2)))-tab_all[i]->getL()) << ")) (layer F.Cu) (width 0))\n";
-		} else if(type=="MTEE") {///////////////////////////////////////////////
-			if(tab_all[i]->getMirrorx()==0) {
-				s1=1;
-				s2=-1;
-			} else if(tab_all[i]->getMirrorx()==1) {
-				s1=-1;
-				s2=1;
-				}
-			Wlong= (tab_all[i]->getW1()>tab_all[i]->getW2()) ? tab_all[i]->getW1() : tab_all[i]->getW2();
-			f_out << "    (fp_poly (pts "
-				  << "(xy " << tab_all[i]->getX()-tab_all[i]->getW3()/2 << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW1()/2) << ") "
-				  << "(xy " << tab_all[i]->getX() << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW1()/2) << ") "
-				  << "(xy " << tab_all[i]->getX() << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW2()/2) << ") "
-				  << "(xy " << tab_all[i]->getX()+tab_all[i]->getW3()/2 << " " << tab_all[i]->getY()+s2*(tab_all[i]->getW2()/2) << ")\n      "
-				  << "(xy " << tab_all[i]->getX()+tab_all[i]->getW3()/2 << " " << tab_all[i]->getY()+s1*(Wlong/2) << ") "
-				  << "(xy " << tab_all[i]->getX()-tab_all[i]->getW3()/2 << " " << tab_all[i]->getY()+s1*(Wlong/2) << ")) (layer F.Cu) (width 0))\n";
+			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (pad \"\" thru_hole circle (at " << tab_all[i]->getX() << " " << tab_all[i]->getY() << ") (size " << tab_all[i]->getD() << ") (drill " << tab_all[i]->getD() << ") (layers *.Cu))\n";
+			f_out << "  (pad \"\" thru_hole circle (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
 			}
 		}
 

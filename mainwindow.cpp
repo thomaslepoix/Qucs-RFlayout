@@ -17,10 +17,9 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
 
-MainWindow::MainWindow(Element**& _tab_all, int& _nelem, QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
-	tab_all(_tab_all),
-	nelem(_nelem),
+MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
 	n_sch(_n_sch),
 	out_dir(_out_dir),
 	out_format(_out_format),
@@ -33,14 +32,15 @@ MainWindow::MainWindow(Element**& _tab_all, int& _nelem, QString _n_sch, QString
 		ui->cb_format->addItem(tr(".kicad_mod"));
 		ui->cb_format->addItem(tr(".lht"));
 		ui->cb_format->setCurrentIndex(ui->cb_format->findText(_out_format, Qt::MatchExactly));
+//        ui->glw_preview = new Preview(tab_all, nelem, extrem_pos, ui->centralWidget);
+//        ui->glw_preview->setObjectName(QStringLiteral("glw_preview"));
+//		Preview w(tab_all, nelem, extrem_pos);
+//		w.show();
+//std::cerr << "tab_all : " << &tab_all << endl;
 		}
 	
 MainWindow::~MainWindow() {
     delete ui;
-	for(int ielem=0;ielem<nelem;ielem++) {
-		delete tab_all[ielem];
-		}	
-	if(nelem) delete[] tab_all;
 	}
 
 void MainWindow::on_pb_browse_in_clicked(void) {
@@ -56,14 +56,10 @@ void MainWindow::on_pb_read_clicked(void) {
 	if(n_sch=="") {
 		ui->l_debug->setText("ERROR : Nothing to read.");
 	} else {
-		if(nelem!=0) {
-			for(int ielem=0;ielem<nelem;ielem++) {
-				delete tab_all[ielem];
-				}
-			nelem=0;
-			}
-		parser(tab_all, n_sch.toStdString(), nelem);
-		xycalculator(tab_all, nelem);
+		tab_all.clear();
+		parser(tab_all, n_sch.toStdString());
+		xycalculator(tab_all, extrem_pos);
+		previewprinter();
 		}
 	}
 
@@ -71,14 +67,10 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 	if(n_sch=="") {
 		ui->l_debug->setText("ERROR : Nothing to read.");
 	} else {
-		if(nelem!=0) {
-			for(int ielem=0;ielem<nelem;ielem++) {
-				delete tab_all[ielem];
-				}
-			nelem=0;
-			}
-		parser(tab_all, n_sch.toStdString(), nelem);
-		xycalculator(tab_all, nelem);
+		tab_all.clear();
+		parser(tab_all, n_sch.toStdString());
+		xycalculator(tab_all, extrem_pos);
+		previewprinter();
 		}
 	}
 
@@ -96,8 +88,8 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	}
 
 void MainWindow::on_le_path_out_returnPressed(void) {
-	if(nelem) {
-		layoutwriter(tab_all, nelem, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+	if(tab_all.size()) {
+		layoutwriter(tab_all, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		ui->l_debug->setText("Write ok.");
 	} else {
 		ui->l_debug->setText("ERROR : Nothing to write.");
@@ -105,11 +97,37 @@ void MainWindow::on_le_path_out_returnPressed(void) {
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
-	if(nelem) {
-		layoutwriter(tab_all, nelem, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+	if(tab_all.size()) {
+		layoutwriter(tab_all, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		ui->l_debug->setText("Write ok.");
 	} else {
 		ui->l_debug->setText("ERROR : Nothing to write.");
 		}
 	}
+
+int MainWindow::previewprinter(/*Element**& tab_all, int& nelem*/) {
+	ui->glw_preview->rescope(extrem_pos[_XMIN], extrem_pos[_XMAX], extrem_pos[_YMIN], extrem_pos[_YMAX]);
+	for(std::shared_ptr<Element> it : tab_all) {
+		QString type=QString::fromStdString(it->getType());
+		if(type=="MCORN"
+		|| type=="MCROSS"
+		|| type=="MMBEND"
+		|| type=="MLIN"
+		|| type=="MRSTUB"
+		|| type=="MTEE") {
+			long double tab_x[it->getNpoint()];
+			long double tab_y[it->getNpoint()];
+			for(int u=0;u<it->getNpoint();u++) {
+				tab_x[u]=it->getP(u, _X, _R, _ABS);
+				tab_y[u]=it->getP(u, _Y, _R, _ABS);
+				}
+			ui->glw_preview->drawShape(it->getNpoint(), tab_x, tab_y);
+		} else if(type=="MCOUPLED") {
+		
+			}
+		}
+	return(0);
+	}
+
+
 

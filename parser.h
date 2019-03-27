@@ -21,6 +21,8 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <vector>
+#include <memory>
 
 #include "eqn.h"
 #include "pac.h"
@@ -36,7 +38,8 @@
 #include "mtee.h"
 #include "mvia.h"
 
-int parser(Element**& tab_all, std::string const& n_sch, int& nelem);
+//int parser(Element**& tab_all, std::string const& n_sch, int& nelem);
+int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
 long double suffix(std::string const s_sci, std::string const s_eng);
 
 #endif // PARSER_H

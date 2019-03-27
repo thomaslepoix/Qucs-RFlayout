@@ -20,7 +20,7 @@ using namespace std;
 
 Mstep::Mstep(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w1,
@@ -31,6 +31,10 @@ Mstep::Mstep(string _label,
 	{}
 
 Mstep::~Mstep() {
+	}
+
+string Mstep::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mstep::getW1(void) {
@@ -60,6 +64,21 @@ int Mstep::setNet2(string _net2) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mstep::getNpoint(void) {
+	return(0);
+	}
+long double Mstep::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
+int Mstep::setP(void) {
+	return(1);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mstep::getW(void) {
 	return(0);
@@ -95,8 +114,10 @@ string Mstep::getNet4(void) {
 	return("");
 	}
 int Mstep::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mstep::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

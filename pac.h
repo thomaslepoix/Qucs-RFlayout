@@ -22,15 +22,17 @@
 
 class Pac : public Element {
 private :
+	const std::string m_descriptor="ac_port";
 	std::string m_net1;
 	std::string m_net2;
 public :
 	Pac(std::string _label,
 		std::string _type,
-		short _mirrorx,
+		bool _mirrorx,
 		short _r,
 		short _nport);
 	~Pac();
+	std::string getDescriptor(void);
 	std::string getNet1(void);
 	std::string getNet2(void);
 	int setNet1(std::string _net1);
@@ -51,6 +53,11 @@ public :
 	std::string getNet4(void);
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	int getNpoint(void);
+	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setP(void);
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 };
 
 #endif // PAC_H

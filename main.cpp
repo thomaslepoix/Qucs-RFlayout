@@ -16,13 +16,14 @@
  ***************************************************************************/
 
 #include <iostream>
-/**/#include <QApplication>
+#include <vector>
+#include <memory>
+#include <QApplication>
 
-//#include "element.h"
 #include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
-/**/#include "mainwindow.h"
+#include "mainwindow.h"
 
 using namespace std;
 
@@ -40,12 +41,9 @@ int main(int argc, char* argv[]) {
 //variables
 	bool verbose=false;
 	bool gui=false;
-	int nelem=0;
 	string n_sch="";
 	string out_dir="";
 	string out_format=".kicad_pcb";
-	Element** tab_all;
-
 
 //argument parser
 	for(int i=0;i<argc;i++) {
@@ -97,44 +95,66 @@ int main(int argc, char* argv[]) {
 	if(!verbose) {
 		cout.rdbuf(NULL);
 		}
-/**/
+
 	if(gui) {
 		cerr << "GUI mode" << endl;
+//		glutInit(&argc, argv);
 		QApplication a(argc, argv);
-		MainWindow w(tab_all, nelem, QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
+		MainWindow w(QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
 		w.show();
 		return a.exec();
+
+	} else {
+
+		if(n_sch=="") {
+			cerr << "ERROR : Need an input file" << endl;
+			exit(1);
+			}
+
+
+
+	//variables
+		vector<shared_ptr<Element>> tab_all;
+		long double extrem_pos[4]={0.0, 0.0, 0.0, 0.0};
+
+	//parse files : create objects
+		parser(tab_all, n_sch);
+
+	//algorithm : find xy
+		xycalculator(tab_all, extrem_pos);
+
+	//write layout
+		layoutwriter(tab_all, n_sch, out_dir, out_format);
+
+
+
+	//debug
+/*		for(unsigned int i=0;i<tab_all.size();i++) {
+			cout << "tab_all[" << i << "] LABEL : " << tab_all[i]->getLabel() << endl;
+			cout << "tab_all[" << i << "] TYPE : " << tab_all[i]->getType() << endl;
+			cout << "\ttab_all[" << i << "] X : " << tab_all[i]->getX() << endl;
+			cout << "\ttab_all[" << i << "] Y : " << tab_all[i]->getY() << endl;
+			cout << "\ttab_all[" << i << "] MirrorX : " << tab_all[i]->getMirrorx() << endl;
+			cout << "\ttab_all[" << i << "] R : " << tab_all[i]->getR() << endl;
+			cout << "\ttab_all[" << i << "] W : " << tab_all[i]->getW() << endl;
+			cout << "\ttab_all[" << i << "] W1 : " << tab_all[i]->getW1() << endl;
+			cout << "\ttab_all[" << i << "] W2 : " << tab_all[i]->getW2() << endl;
+			cout << "\ttab_all[" << i << "] W3 : " << tab_all[i]->getW3() << endl;
+			cout << "\ttab_all[" << i << "] W4 : " << tab_all[i]->getW4() << endl;
+			cout << "\ttab_all[" << i << "] L : " << tab_all[i]->getL() << endl;
+			cout << "\ttab_all[" << i << "] D : " << tab_all[i]->getD() << endl;
+			cout << "\ttab_all[" << i << "] S : " << tab_all[i]->getS() << endl;
+			cout << "\ttab_all[" << i << "] Ri : " << tab_all[i]->getRi() << endl;
+			cout << "\ttab_all[" << i << "] Ro : " << tab_all[i]->getRo() << endl;
+			cout << "\ttab_all[" << i << "] Alpha : " << tab_all[i]->getAlpha() << endl;
+			cout << "\ttab_all[" << i << "] Nport : " << tab_all[i]->getNport() << endl;
+			cout << "\ttab_all[" << i << "] Net1 : " << tab_all[i]->getNet1() << endl;
+			cout << "\ttab_all[" << i << "] Net2 : " << tab_all[i]->getNet2() << endl;
+			cout << "\ttab_all[" << i << "] Net3 : " << tab_all[i]->getNet3() << endl;
+			cout << "\ttab_all[" << i << "] Net4 : " << tab_all[i]->getNet4() << endl;
+			cout << "\ttab_all[" << i << "] Npoint : " << tab_all[i]->getNpoint() << endl;
+			}
+*/		cout << endl;
 		}
-/**/
-	if(n_sch=="") {
-		cerr << "ERROR : Need an input file" << endl;
-		exit(1);
-		}
-
-
-
-//parse files : create objects
-	parser(tab_all, n_sch, nelem);
-
-//algorithm : find xy
-	xycalculator(tab_all, nelem);
-	cout << endl;
-	for(int ielem=0;ielem<nelem;ielem++) {
-		cout << "tab_all[" << ielem << "] Label : " << tab_all[ielem]->getLabel() << endl;
-		cout << "tab_all[" << ielem << "] X : " << tab_all[ielem]->getX() << endl;
-		cout << "tab_all[" << ielem << "] Y : " << tab_all[ielem]->getY() << endl;
-		}
-
-//write layout
-	layoutwriter(tab_all, nelem, n_sch, out_dir, out_format);
-
-
-
-//objects destruction
-	cout << endl;
-	for(int ielem=0;ielem<nelem;ielem++) {
-		delete tab_all[ielem];
-		}
-	delete[] tab_all;
 	return(0);
 	}

@@ -22,6 +22,7 @@
 
 class Mcross : public Element {
 private :
+	const std::string m_descriptor="microstrip_cross";
 	long double m_w1;
 	long double m_w2;
 	long double m_w3;
@@ -30,10 +31,14 @@ private :
 	std::string m_net2;
 	std::string m_net3;
 	std::string m_net4;
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	int m_npoint=6;
+	long double tab_p[6][2]={};
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 public :
 	Mcross(std::string _label,
 		std::string _type,
-		short _mirrorx,
+		bool _mirrorx,
 		short _r,
 		short _nport,
 		long double _w1,
@@ -41,6 +46,7 @@ public :
 		long double _w3,
 		long double _w4);
 	~Mcross();
+	std::string getDescriptor(void);
 	long double getW1(void);
 	long double getW2(void);
 	long double getW3(void);
@@ -53,6 +59,11 @@ public :
 	int setNet2(std::string _net2);
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	int getNpoint(void);
+	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setP(void);
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 	long double getW(void);
 	long double getL(void);

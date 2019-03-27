@@ -20,7 +20,7 @@ using namespace std;
 
 Mcorn::Mcorn(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w) :
@@ -29,6 +29,10 @@ Mcorn::Mcorn(string _label,
 	{}
 
 Mcorn::~Mcorn() {
+	}
+
+string Mcorn::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mcorn::getW(void) {
@@ -53,6 +57,28 @@ int Mcorn::setNet2(string _net2) {
 	return(0);
 	}
 
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mcorn::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mcorn::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _r;
+	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
+	}
+
+int Mcorn::setP(void) {
+	tab_p[0][_X]=-m_w/2;
+	tab_p[0][_Y]= m_w/2;
+	tab_p[1][_X]= m_w/2;
+	tab_p[1][_Y]= m_w/2;
+	tab_p[2][_X]= m_w/2;
+	tab_p[2][_Y]=-m_w/2;
+	tab_p[3][_X]=-m_w/2;
+	tab_p[3][_Y]=-m_w/2;
+	return(0);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mcorn::getW1(void) {
@@ -92,8 +118,10 @@ string Mcorn::getNet4(void) {
 	return("");
 	}
 int Mcorn::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mcorn::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

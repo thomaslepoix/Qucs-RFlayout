@@ -20,7 +20,7 @@ using namespace std;
 
 Mlin::Mlin(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w,
@@ -31,6 +31,10 @@ Mlin::Mlin(string _label,
 	{}
 
 Mlin::~Mlin() {
+	}
+
+string Mlin::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mlin::getW(void) {
@@ -59,6 +63,33 @@ int Mlin::setNet2(string _net2) {
 	return(0);
 	}
 
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mlin::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mlin::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][_X], tab_p[_n][_Y]) : rotateX(tab_p[_n][_X], tab_p[_n][_Y]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
+int Mlin::setP(void) {
+	tab_p[0][_X]=-m_l/2;
+	tab_p[0][_Y]= m_w/2;
+	tab_p[1][_X]= m_l/2;
+	tab_p[1][_Y]= m_w/2;
+	tab_p[2][_X]= m_l/2;
+	tab_p[2][_Y]=-m_w/2;
+	tab_p[3][_X]=-m_l/2;
+	tab_p[3][_Y]=-m_w/2;
+	return(0);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mlin::getW1(void) {
@@ -95,8 +126,10 @@ string Mlin::getNet4(void) {
 	return("");
 	}
 int Mlin::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mlin::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

@@ -20,7 +20,7 @@ using namespace std;
 
 Mopen::Mopen(string _label,
 			string _type,
-			short _mirrorx,
+			bool _mirrorx,
 			short _r,
 			short _nport,
 			long double _w) :
@@ -29,6 +29,10 @@ Mopen::Mopen(string _label,
 	{}
 
 Mopen::~Mopen() {
+	}
+
+string Mopen::getDescriptor(void) {
+	return(m_descriptor);
 	}
 
 long double Mopen::getW(void) {
@@ -45,6 +49,21 @@ int Mopen::setNet1(string _net1) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+int Mopen::getNpoint(void) {
+	return(0);
+	}
+long double Mopen::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
+int Mopen::setP(void) {
+	return(1);
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mopen::getW1(void) {
 	return(0);
@@ -86,11 +105,14 @@ string Mopen::getNet4(void) {
 	return("");
 	}
 int Mopen::setNet2(string _net2) {
+	(void) _net2;
 	return(1);
 	}
 int Mopen::setNet3(string _net3) {
+	(void) _net3;
 	return(1);
 	}
 int Mopen::setNet4(string _net4) {
+	(void) _net4;
 	return(1);
 	}

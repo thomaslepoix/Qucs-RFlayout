@@ -1,10 +1,11 @@
+#/usr/lib/qt5/bin/qmake
 #-------------------------------------------------
 #
 # Project created by QtCreator 2018-11-16T09:44:12
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -42,7 +43,8 @@ SOURCES += \
         parser.cpp \
         xycalculator.cpp \
         layoutwriter.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        preview.cpp
 
 HEADERS += \
         element.h \
@@ -62,7 +64,10 @@ HEADERS += \
         parser.h \
         xycalculator.h \
         layoutwriter.h \
-        mainwindow.h
+        mainwindow.h \
+        preview.h
 
 FORMS += \
         mainwindow.ui
+
+LIBS += -lglut -lGLU
