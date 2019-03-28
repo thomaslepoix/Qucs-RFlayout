@@ -7,7 +7,7 @@
 //#include <GL/glut.h>
 
 #include <iostream>
-#include "element.h"
+#include "microstrip/element.h"
 
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 //	Q_OBJECT

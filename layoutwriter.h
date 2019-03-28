@@ -25,19 +25,19 @@
 #include <regex>
 #include <cmath>
 
-#include "eqn.h"
-#include "pac.h"
-#include "mcorn.h"
-#include "mcross.h"
-#include "mcoupled.h"
-#include "mgap.h"
-#include "mmbend.h"
-#include "mlin.h"
-#include "mopen.h"
-#include "mrstub.h"
-#include "mstep.h"
-#include "mtee.h"
-#include "mvia.h"
+#include "microstrip/eqn.h"
+#include "microstrip/pac.h"
+#include "microstrip/mcorn.h"
+#include "microstrip/mcross.h"
+#include "microstrip/mcoupled.h"
+#include "microstrip/mgap.h"
+#include "microstrip/mmbend.h"
+#include "microstrip/mlin.h"
+#include "microstrip/mopen.h"
+#include "microstrip/mrstub.h"
+#include "microstrip/mstep.h"
+#include "microstrip/mtee.h"
+#include "microstrip/mvia.h"
 
 int layoutwriter(std::vector<std::shared_ptr<Element>> const& tab_all, std::string const& n_sch, std::string const& out_dir, std::string const& out_format);
 int write_kicad_pcb(std::vector<std::shared_ptr<Element>> const& tab_all, std::ofstream& f_out);

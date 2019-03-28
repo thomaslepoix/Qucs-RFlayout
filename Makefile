@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = qucsrflayout1.0.0
-DISTDIR = /home/hernie/Documents/ESTEI/M2/CPP/Projet1/Code/Gui/Vector/.tmp/qucsrflayout1.0.0
+DISTDIR = /home/hernie/Documents/ESTEI/M2/CPP/Projet1/Code/Gui/Vector/Qucs-RFlayout/.tmp/qucsrflayout1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) -lglut -lGLU -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -51,20 +51,20 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		element.cpp \
-		eqn.cpp \
-		pac.cpp \
-		mcorn.cpp \
-		mcoupled.cpp \
-		mcross.cpp \
-		mgap.cpp \
-		mlin.cpp \
-		mmbend.cpp \
-		mopen.cpp \
-		mrstub.cpp \
-		mstep.cpp \
-		mtee.cpp \
-		mvia.cpp \
+		microstrip/element.cpp \
+		microstrip/eqn.cpp \
+		microstrip/pac.cpp \
+		microstrip/mcorn.cpp \
+		microstrip/mcoupled.cpp \
+		microstrip/mcross.cpp \
+		microstrip/mgap.cpp \
+		microstrip/mlin.cpp \
+		microstrip/mmbend.cpp \
+		microstrip/mopen.cpp \
+		microstrip/mrstub.cpp \
+		microstrip/mstep.cpp \
+		microstrip/mtee.cpp \
+		microstrip/mvia.cpp \
 		parser.cpp \
 		xycalculator.cpp \
 		layoutwriter.cpp \
@@ -184,7 +184,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
-		.qmake.stash \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -203,39 +203,39 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Qucs-RFlayout.pro element.h \
-		eqn.h \
-		pac.h \
-		mcorn.h \
-		mcoupled.h \
-		mcross.h \
-		mgap.h \
-		mlin.h \
-		mmbend.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h \
+		Qucs-RFlayout.pro microstrip/element.h \
+		microstrip/eqn.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcoupled.h \
+		microstrip/mcross.h \
+		microstrip/mgap.h \
+		microstrip/mlin.h \
+		microstrip/mmbend.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h \
 		parser.h \
 		xycalculator.h \
 		layoutwriter.h \
 		mainwindow.h \
 		preview.h main.cpp \
-		element.cpp \
-		eqn.cpp \
-		pac.cpp \
-		mcorn.cpp \
-		mcoupled.cpp \
-		mcross.cpp \
-		mgap.cpp \
-		mlin.cpp \
-		mmbend.cpp \
-		mopen.cpp \
-		mrstub.cpp \
-		mstep.cpp \
-		mtee.cpp \
-		mvia.cpp \
+		microstrip/element.cpp \
+		microstrip/eqn.cpp \
+		microstrip/pac.cpp \
+		microstrip/mcorn.cpp \
+		microstrip/mcoupled.cpp \
+		microstrip/mcross.cpp \
+		microstrip/mgap.cpp \
+		microstrip/mlin.cpp \
+		microstrip/mmbend.cpp \
+		microstrip/mopen.cpp \
+		microstrip/mrstub.cpp \
+		microstrip/mstep.cpp \
+		microstrip/mtee.cpp \
+		microstrip/mvia.cpp \
 		parser.cpp \
 		xycalculator.cpp \
 		layoutwriter.cpp \
@@ -346,7 +346,7 @@ Makefile: Qucs-RFlayout.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
-		.qmake.stash \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -464,7 +464,7 @@ Makefile: Qucs-RFlayout.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
-.qmake.stash:
+../.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -503,8 +503,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents element.h eqn.h pac.h mcorn.h mcoupled.h mcross.h mgap.h mlin.h mmbend.h mopen.h mrstub.h mstep.h mtee.h mvia.h parser.h xycalculator.h layoutwriter.h mainwindow.h preview.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp element.cpp eqn.cpp pac.cpp mcorn.cpp mcoupled.cpp mcross.cpp mgap.cpp mlin.cpp mmbend.cpp mopen.cpp mrstub.cpp mstep.cpp mtee.cpp mvia.cpp parser.cpp xycalculator.cpp layoutwriter.cpp mainwindow.cpp preview.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents microstrip/element.h microstrip/eqn.h microstrip/pac.h microstrip/mcorn.h microstrip/mcoupled.h microstrip/mcross.h microstrip/mgap.h microstrip/mlin.h microstrip/mmbend.h microstrip/mopen.h microstrip/mrstub.h microstrip/mstep.h microstrip/mtee.h microstrip/mvia.h parser.h xycalculator.h layoutwriter.h mainwindow.h preview.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp microstrip/element.cpp microstrip/eqn.cpp microstrip/pac.cpp microstrip/mcorn.cpp microstrip/mcoupled.cpp microstrip/mcross.cpp microstrip/mgap.cpp microstrip/mlin.cpp microstrip/mmbend.cpp microstrip/mopen.cpp microstrip/mrstub.cpp microstrip/mstep.cpp microstrip/mtee.cpp microstrip/mvia.cpp parser.cpp xycalculator.cpp layoutwriter.cpp mainwindow.cpp preview.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -515,7 +515,6 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
-	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -541,27 +540,27 @@ compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: parser.h \
-		eqn.h \
-		element.h \
-		pac.h \
-		mcorn.h \
-		mcross.h \
-		mcoupled.h \
-		mgap.h \
-		mmbend.h \
-		mlin.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h \
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h \
 		xycalculator.h \
 		layoutwriter.h \
 		preview.h \
 		mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/hernie/Documents/ESTEI/M2/CPP/Projet1/Code/Gui/Vector -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/hernie/Documents/ESTEI/M2/CPP/Projet1/Code/Gui/Vector/Qucs-RFlayout -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -571,7 +570,7 @@ compiler_uic_clean:
 ui_mainwindow.h: mainwindow.ui \
 		/usr/lib/qt5/bin/uic \
 		preview.h \
-		element.h
+		microstrip/element.h
 	/usr/lib/qt5/bin/uic mainwindow.ui -o ui_mainwindow.h
 
 compiler_yacc_decl_make_all:
@@ -585,146 +584,148 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 ####### Compile
 
 main.o: main.cpp parser.h \
-		eqn.h \
-		element.h \
-		pac.h \
-		mcorn.h \
-		mcross.h \
-		mcoupled.h \
-		mgap.h \
-		mmbend.h \
-		mlin.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h \
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h \
 		xycalculator.h \
-		layoutwriter.h
+		layoutwriter.h \
+		mainwindow.h \
+		preview.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-element.o: element.cpp element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o element.o element.cpp
+element.o: microstrip/element.cpp microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o element.o microstrip/element.cpp
 
-eqn.o: eqn.cpp eqn.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o eqn.o eqn.cpp
+eqn.o: microstrip/eqn.cpp microstrip/eqn.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o eqn.o microstrip/eqn.cpp
 
-pac.o: pac.cpp pac.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pac.o pac.cpp
+pac.o: microstrip/pac.cpp microstrip/pac.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pac.o microstrip/pac.cpp
 
-mcorn.o: mcorn.cpp mcorn.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mcorn.o mcorn.cpp
+mcorn.o: microstrip/mcorn.cpp microstrip/mcorn.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mcorn.o microstrip/mcorn.cpp
 
-mcoupled.o: mcoupled.cpp mcoupled.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mcoupled.o mcoupled.cpp
+mcoupled.o: microstrip/mcoupled.cpp microstrip/mcoupled.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mcoupled.o microstrip/mcoupled.cpp
 
-mcross.o: mcross.cpp mcross.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mcross.o mcross.cpp
+mcross.o: microstrip/mcross.cpp microstrip/mcross.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mcross.o microstrip/mcross.cpp
 
-mgap.o: mgap.cpp mgap.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mgap.o mgap.cpp
+mgap.o: microstrip/mgap.cpp microstrip/mgap.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mgap.o microstrip/mgap.cpp
 
-mlin.o: mlin.cpp mlin.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mlin.o mlin.cpp
+mlin.o: microstrip/mlin.cpp microstrip/mlin.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mlin.o microstrip/mlin.cpp
 
-mmbend.o: mmbend.cpp mmbend.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mmbend.o mmbend.cpp
+mmbend.o: microstrip/mmbend.cpp microstrip/mmbend.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mmbend.o microstrip/mmbend.cpp
 
-mopen.o: mopen.cpp mopen.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mopen.o mopen.cpp
+mopen.o: microstrip/mopen.cpp microstrip/mopen.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mopen.o microstrip/mopen.cpp
 
-mrstub.o: mrstub.cpp mrstub.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mrstub.o mrstub.cpp
+mrstub.o: microstrip/mrstub.cpp microstrip/mrstub.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mrstub.o microstrip/mrstub.cpp
 
-mstep.o: mstep.cpp mstep.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mstep.o mstep.cpp
+mstep.o: microstrip/mstep.cpp microstrip/mstep.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mstep.o microstrip/mstep.cpp
 
-mtee.o: mtee.cpp mtee.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mtee.o mtee.cpp
+mtee.o: microstrip/mtee.cpp microstrip/mtee.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mtee.o microstrip/mtee.cpp
 
-mvia.o: mvia.cpp mvia.h \
-		element.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mvia.o mvia.cpp
+mvia.o: microstrip/mvia.cpp microstrip/mvia.h \
+		microstrip/element.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mvia.o microstrip/mvia.cpp
 
 parser.o: parser.cpp parser.h \
-		eqn.h \
-		element.h \
-		pac.h \
-		mcorn.h \
-		mcross.h \
-		mcoupled.h \
-		mgap.h \
-		mmbend.h \
-		mlin.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parser.o parser.cpp
 
 xycalculator.o: xycalculator.cpp xycalculator.h \
-		eqn.h \
-		element.h \
-		pac.h \
-		mcorn.h \
-		mcross.h \
-		mcoupled.h \
-		mgap.h \
-		mmbend.h \
-		mlin.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xycalculator.o xycalculator.cpp
 
 layoutwriter.o: layoutwriter.cpp layoutwriter.h \
-		eqn.h \
-		element.h \
-		pac.h \
-		mcorn.h \
-		mcross.h \
-		mcoupled.h \
-		mgap.h \
-		mmbend.h \
-		mlin.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o layoutwriter.o layoutwriter.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		parser.h \
-		eqn.h \
-		element.h \
-		pac.h \
-		mcorn.h \
-		mcross.h \
-		mcoupled.h \
-		mgap.h \
-		mmbend.h \
-		mlin.h \
-		mopen.h \
-		mrstub.h \
-		mstep.h \
-		mtee.h \
-		mvia.h \
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h \
 		xycalculator.h \
 		layoutwriter.h \
 		preview.h \
@@ -732,7 +733,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 preview.o: preview.cpp preview.h \
-		element.h
+		microstrip/element.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o preview.o preview.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

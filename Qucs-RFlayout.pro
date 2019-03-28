@@ -26,20 +26,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        element.cpp \
-        eqn.cpp \
-        pac.cpp \
-        mcorn.cpp \
-        mcoupled.cpp \
-        mcross.cpp \
-        mgap.cpp \
-        mlin.cpp \
-        mmbend.cpp \
-        mopen.cpp \
-        mrstub.cpp \
-        mstep.cpp \
-        mtee.cpp \
-        mvia.cpp \
+        microstrip/element.cpp \
+        microstrip/eqn.cpp \
+        microstrip/pac.cpp \
+        microstrip/mcorn.cpp \
+        microstrip/mcoupled.cpp \
+        microstrip/mcross.cpp \
+        microstrip/mgap.cpp \
+        microstrip/mlin.cpp \
+        microstrip/mmbend.cpp \
+        microstrip/mopen.cpp \
+        microstrip/mrstub.cpp \
+        microstrip/mstep.cpp \
+        microstrip/mtee.cpp \
+        microstrip/mvia.cpp \
         parser.cpp \
         xycalculator.cpp \
         layoutwriter.cpp \
@@ -47,20 +47,20 @@ SOURCES += \
         preview.cpp
 
 HEADERS += \
-        element.h \
-        eqn.h \
-        pac.h \
-        mcorn.h \
-        mcoupled.h \
-        mcross.h \
-        mgap.h \
-        mlin.h \
-        mmbend.h \
-        mopen.h \
-        mrstub.h \
-        mstep.h \
-        mtee.h \
-        mvia.h \
+        microstrip/element.h \
+        microstrip/eqn.h \
+        microstrip/pac.h \
+        microstrip/mcorn.h \
+        microstrip/mcoupled.h \
+        microstrip/mcross.h \
+        microstrip/mgap.h \
+        microstrip/mlin.h \
+        microstrip/mmbend.h \
+        microstrip/mopen.h \
+        microstrip/mrstub.h \
+        microstrip/mstep.h \
+        microstrip/mtee.h \
+        microstrip/mvia.h \
         parser.h \
         xycalculator.h \
         layoutwriter.h \
