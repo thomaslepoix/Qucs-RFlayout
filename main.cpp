@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
 		xycalculator(tab_all, extrem_pos);
 
 	//write layout
-		layoutwriter(tab_all, n_sch, out_dir, out_format);
+		layoutwriter(tab_all, extrem_pos, n_sch, out_dir, out_format);
 
 
 

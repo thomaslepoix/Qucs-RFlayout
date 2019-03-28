@@ -100,6 +100,8 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 		}
 	cout << endl << "Finding positons... DONE" << endl;
 
+
+
 //find points positions & extrems points positions
 	for(shared_ptr<Element> it : tab_all) {
 		it->setP();
@@ -117,6 +119,34 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	cout << "Ymin : " << extrem_pos[_YMIN] << endl;
 	cout << "Ymax : " << extrem_pos[_YMAX] << endl;
 
+//translate shapes in positive quarter
+	for(shared_ptr<Element> it : tab_all) {
+		it->setX(it->getX()-extrem_pos[_XMIN]+1);
+		it->setY(it->getY()-extrem_pos[_YMIN]+1);
+		it->setP();
+		}
+
+//reset extrem_pos
+	for(unsigned char i=0;i<4;i++)
+		extrem_pos[i]=0.0;
+	for(shared_ptr<Element> it : tab_all) {
+		for(int u=0;u<it->getNpoint();u++) {
+			if(it->getP(u, _X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, _X, _R, _ABS);
+			if(it->getP(u, _X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, _X, _R, _ABS);
+			if(it->getP(u, _Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, _Y, _R, _ABS);
+			if(it->getP(u, _Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, _Y, _R, _ABS);
+			}
+		}
+
+	cout << "Translated extrem positions :" << endl;
+	cout << "Xmin : " << extrem_pos[_XMIN] << endl;
+	cout << "Xmax : " << extrem_pos[_XMAX] << endl;
+	cout << "Ymin : " << extrem_pos[_YMIN] << endl;
+	cout << "Ymax : " << extrem_pos[_YMAX] << endl;
+
+
+
+//delete objects inner pointers
 	for(shared_ptr<Element> it : tab_all) {
 		it->prev=NULL;
 		}

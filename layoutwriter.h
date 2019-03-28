@@ -39,8 +39,9 @@
 #include "microstrip/mtee.h"
 #include "microstrip/mvia.h"
 
-int layoutwriter(std::vector<std::shared_ptr<Element>> const& tab_all, std::string const& n_sch, std::string const& out_dir, std::string const& out_format);
+int layoutwriter(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos, std::string const& n_sch, std::string const& out_dir, std::string const& out_format);
 int write_kicad_pcb(std::vector<std::shared_ptr<Element>> const& tab_all, std::ofstream& f_out);
 int write_kicad_mod(std::vector<std::shared_ptr<Element>> const& tab_all, std::string const& name, std::ofstream& f_out);
+int write_lht(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos, std::ofstream& f_out);
 
 #endif // LAYOUTWRITER_H

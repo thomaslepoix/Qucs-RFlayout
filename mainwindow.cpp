@@ -17,7 +17,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <iostream>
+//#include <iostream>
 
 MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
 	n_sch(_n_sch),
@@ -89,7 +89,7 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 
 void MainWindow::on_le_path_out_returnPressed(void) {
 	if(tab_all.size()) {
-		layoutwriter(tab_all, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		layoutwriter(tab_all, extrem_pos, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		ui->l_debug->setText("Write ok.");
 	} else {
 		ui->l_debug->setText("ERROR : Nothing to write.");
@@ -98,7 +98,7 @@ void MainWindow::on_le_path_out_returnPressed(void) {
 
 void MainWindow::on_pb_write_clicked(void) {
 	if(tab_all.size()) {
-		layoutwriter(tab_all, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		layoutwriter(tab_all, extrem_pos, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		ui->l_debug->setText("Write ok.");
 	} else {
 		ui->l_debug->setText("ERROR : Nothing to write.");
