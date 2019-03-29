@@ -27,10 +27,10 @@ private :
 	std::string m_net2;
 public :
 	Pac(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport);
 	~Pac();
 	std::string getDescriptor(void);
 	std::string getNet1(void);

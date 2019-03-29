@@ -33,13 +33,13 @@ private :
 	long double tab_p[m_npoint][2]={};
 public :
 	Mtee(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _w1,
-		long double _w2,
-		long double _w3);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w1,
+			long double _w2,
+			long double _w3);
 	~Mtee();
 	std::string getDescriptor(void);
 	long double getW1(void);

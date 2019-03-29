@@ -27,11 +27,11 @@ private :
 	std::string m_net1;
 public :
 	Mopen(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _w);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w);
 	~Mopen();
 	std::string getDescriptor(void);
 	long double getW(void);

@@ -25,10 +25,10 @@ private :
 	const std::string m_descriptor="equation";
 public :
 	Eqn(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport);
 	~Eqn();
 	std::string getDescriptor(void);
 ////////////////////////////////////////////////////////////////////////////////

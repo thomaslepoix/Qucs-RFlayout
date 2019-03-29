@@ -29,12 +29,12 @@ private :
 	std::string m_net2;
 public :
 	Mstep(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _w1,
-		long double _w2);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w1,
+			long double _w2);
 	~Mstep();
 	std::string getDescriptor(void);
 	long double getW1(void);

@@ -19,10 +19,10 @@
 using namespace std;
 
 Element::Element(string _label,
-				string _type,
-				bool _mirrorx,
-				short _r,
-				short _nport) :
+			string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport) :
 	m_label(_label),
 	m_type(_type),
 	m_mirrorx(_mirrorx),

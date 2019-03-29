@@ -30,13 +30,13 @@ private :
 	std::string m_net2;
 public :
 	Mgap(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _w1,
-		long double _w2,
-		long double _s);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w1,
+			long double _w2,
+			long double _s);
 	~Mgap();
 	std::string getDescriptor(void);
 	long double getW1(void);

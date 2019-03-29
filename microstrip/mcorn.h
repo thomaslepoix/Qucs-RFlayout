@@ -30,11 +30,11 @@ private :
 	long double tab_p[m_npoint][2]={};
 public :
 	Mcorn(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _w);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w);
 	~Mcorn();
 	std::string getDescriptor(void);
 	long double getW(void);

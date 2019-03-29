@@ -27,11 +27,11 @@ private :
 	std::string m_net1;
 public :
 	Mvia(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _d);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _d);
 	~Mvia();
 	std::string getDescriptor(void);
 	long double getD(void);

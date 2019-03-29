@@ -34,13 +34,13 @@ private :
 	long double tab_p[m_npoint][2]={};
 public :
 	Mcoupled(std::string _label,
-		std::string _type,
-		bool _mirrorx,
-		short _r,
-		short _nport,
-		long double _w,
-		long double _l,
-		long double _s);
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w,
+			long double _l,
+			long double _s);
 	~Mcoupled();
 	std::string getDescriptor(void);
 	long double getW(void);
