@@ -29,10 +29,8 @@ private :
 	std::string m_net1;
 	std::string m_net2;
 	std::string m_net3;
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	static const int m_npoint=6;
 	long double tab_p[m_npoint][2]={};
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 public :
 	Mtee(std::string _label,
 		std::string _type,
@@ -50,14 +48,12 @@ public :
 	std::string getNet1(void);
 	std::string getNet2(void);
 	std::string getNet3(void);
+	int getNpoint(void);
+	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
 	int setNet1(std::string _net1);
 	int setNet2(std::string _net2);
 	int setNet3(std::string _net3);
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-	int getNpoint(void);
-	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
 	int setP(void);
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 	long double getW(void);
 	long double getW4(void);

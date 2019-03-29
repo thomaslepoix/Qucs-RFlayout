@@ -79,17 +79,15 @@ public:
 	virtual std::string getNet2(void)=0;
 	virtual std::string getNet3(void)=0;
 	virtual std::string getNet4(void)=0;
+	virtual int getNpoint(void)=0;
+	virtual long double getP(int _n, bool _xy, bool _r, bool _abs)=0;
 	int setX(long double _x);
 	int setY(long double _y);
 	virtual int setNet1(std::string _net1)=0;
 	virtual int setNet2(std::string _net2)=0;
 	virtual int setNet3(std::string _net3)=0;
 	virtual int setNet4(std::string _net4)=0;
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-	virtual int getNpoint(void)=0;
-	virtual long double getP(int _n, bool _xy, bool _r, bool _abs)=0;
 	virtual int setP(void)=0;
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 };
 
 #endif // ELEMENT_H

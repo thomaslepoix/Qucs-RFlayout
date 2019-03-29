@@ -52,21 +52,6 @@ int Pac::setNet2(string _net2) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Pac::getNpoint(void) {
-	return(0);
-	}
-long double Pac::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _n;
-	(void) _xy;
-	(void) _r;
-	(void) _abs;
-	return(1);
-	}
-int Pac::setP(void) {
-	return(1);
-	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Pac::getW(void) {
 	return(0);
@@ -107,11 +92,24 @@ string Pac::getNet3(void) {
 string Pac::getNet4(void) {
 	return("");
 	}
+int Pac::getNpoint(void) {
+	return(0);
+	}
+long double Pac::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
 int Pac::setNet3(string _net3) {
 	(void) _net3;
 	return(1);
 	}
 int Pac::setNet4(string _net4) {
 	(void) _net4;
+	return(1);
+	}
+int Pac::setP(void) {
 	return(1);
 	}

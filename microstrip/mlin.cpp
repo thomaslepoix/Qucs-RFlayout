@@ -53,17 +53,6 @@ string Mlin::getNet2(void) {
 	return(m_net2);
 	}
 
-int Mlin::setNet1(string _net1) {
-	m_net1=_net1;
-	return(0);
-	}
-
-int Mlin::setNet2(string _net2) {
-	m_net2=_net2;
-	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 int Mlin::getNpoint(void) {
 	return(m_npoint);
 	}
@@ -78,6 +67,16 @@ long double Mlin::getP(int _n, bool _xy, bool _r, bool _abs) {
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
+int Mlin::setNet1(string _net1) {
+	m_net1=_net1;
+	return(0);
+	}
+
+int Mlin::setNet2(string _net2) {
+	m_net2=_net2;
+	return(0);
+	}
+
 int Mlin::setP(void) {
 	tab_p[0][_X]=-m_l/2;
 	tab_p[0][_Y]= m_w/2;
@@ -89,7 +88,7 @@ int Mlin::setP(void) {
 	tab_p[3][_Y]=-m_w/2;
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mlin::getW1(void) {

@@ -64,21 +64,6 @@ int Mstep::setNet2(string _net2) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mstep::getNpoint(void) {
-	return(0);
-	}
-long double Mstep::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _n;
-	(void) _xy;
-	(void) _r;
-	(void) _abs;
-	return(1);
-	}
-int Mstep::setP(void) {
-	return(1);
-	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mstep::getW(void) {
 	return(0);
@@ -113,11 +98,24 @@ string Mstep::getNet3(void) {
 string Mstep::getNet4(void) {
 	return("");
 	}
+int Mstep::getNpoint(void) {
+	return(0);
+	}
+long double Mstep::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
 int Mstep::setNet3(string _net3) {
 	(void) _net3;
 	return(1);
 	}
 int Mstep::setNet4(string _net4) {
 	(void) _net4;
+	return(1);
+	}
+int Mstep::setP(void) {
 	return(1);
 	}

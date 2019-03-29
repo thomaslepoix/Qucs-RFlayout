@@ -73,6 +73,20 @@ string Mcross::getNet4(void) {
 	return(m_net4);
 	}
 
+int Mcross::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mcross::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1]) : rotateX(tab_p[_n][0], tab_p[_n][1]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
 int Mcross::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
@@ -91,21 +105,6 @@ int Mcross::setNet3(string _net3) {
 int Mcross::setNet4(string _net4) {
 	m_net4=_net4;
 	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mcross::getNpoint(void) {
-	return(m_npoint);
-	}
-
-long double Mcross::getP(int _n, bool _xy, bool _r, bool _abs) {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1]) : rotateX(tab_p[_n][0], tab_p[_n][1]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
 int Mcross::setP(void) {
@@ -205,7 +204,7 @@ int Mcross::setP(void) {
 		}
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mcross::getW(void) {

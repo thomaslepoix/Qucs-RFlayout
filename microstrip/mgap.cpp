@@ -70,21 +70,6 @@ int Mgap::setNet2(string _net2) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mgap::getNpoint(void) {
-	return(0);
-	}
-long double Mgap::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _n;
-	(void) _xy;
-	(void) _r;
-	(void) _abs;
-	return(1);
-	}
-int Mgap::setP(void) {
-	return(1);
-	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mgap::getW(void) {
 	return(0);
@@ -116,11 +101,24 @@ string Mgap::getNet3(void) {
 string Mgap::getNet4(void) {
 	return("");
 	}
+int Mgap::getNpoint(void) {
+	return(0);
+	}
+long double Mgap::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
 int Mgap::setNet3(string _net3) {
 	(void) _net3;
 	return(1);
 	}
 int Mgap::setNet4(string _net4) {
 	(void) _net4;
+	return(1);
+	}
+int Mgap::setP(void) {
 	return(1);
 	}

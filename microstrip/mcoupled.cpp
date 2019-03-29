@@ -67,6 +67,20 @@ string Mcoupled::getNet4(void) {
 	return(m_net4);
 	}
 
+int Mcoupled::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mcoupled::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][_X], tab_p[_n][_Y]) : rotateX(tab_p[_n][_X], tab_p[_n][_Y]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
 int Mcoupled::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
@@ -85,21 +99,6 @@ int Mcoupled::setNet3(string _net3) {
 int Mcoupled::setNet4(string _net4) {
 	m_net4=_net4;
 	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mcoupled::getNpoint(void) {
-	return(m_npoint);
-	}
-
-long double Mcoupled::getP(int _n, bool _xy, bool _r, bool _abs) {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][_X], tab_p[_n][_Y]) : rotateX(tab_p[_n][_X], tab_p[_n][_Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
 int Mcoupled::setP(void) {
@@ -121,7 +120,7 @@ int Mcoupled::setP(void) {
 	tab_p[7][_Y]=-(m_s/2+m_w);
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mcoupled::getW1(void) {

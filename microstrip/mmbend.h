@@ -26,10 +26,8 @@ private :
 	long double m_w;
 	std::string m_net1;
 	std::string m_net2;
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	static const int m_npoint=3;
 	long double tab_p[m_npoint][2]={};
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 public :
 	Mmbend(std::string _label,
 		std::string _type,
@@ -42,13 +40,11 @@ public :
 	long double getW(void);
 	std::string getNet1(void);
 	std::string getNet2(void);
-	int setNet1(std::string _net1);
-	int setNet2(std::string _net2);
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	int getNpoint(void);
 	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setNet1(std::string _net1);
+	int setNet2(std::string _net2);
 	int setP(void);
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ////////////////////////////////////////////////////////////////////////////////
 	long double getW1(void);
 	long double getW2(void);

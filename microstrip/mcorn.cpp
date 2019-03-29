@@ -47,6 +47,15 @@ string Mcorn::getNet2(void) {
 	return(m_net2);
 	}
 
+int Mcorn::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mcorn::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _r;
+	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
+	}
+
 int Mcorn::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
@@ -55,16 +64,6 @@ int Mcorn::setNet1(string _net1) {
 int Mcorn::setNet2(string _net2) {
 	m_net2=_net2;
 	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mcorn::getNpoint(void) {
-	return(m_npoint);
-	}
-
-long double Mcorn::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _r;
-	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
 	}
 
 int Mcorn::setP(void) {
@@ -78,7 +77,7 @@ int Mcorn::setP(void) {
 	tab_p[3][_Y]=-m_w/2;
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mcorn::getW1(void) {

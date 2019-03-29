@@ -34,21 +34,6 @@ string Eqn::getDescriptor(void) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Eqn::getNpoint(void) {
-	return(0);
-	}
-long double Eqn::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _n;
-	(void) _xy;
-	(void) _r;
-	(void) _abs;
-	return(1);
-	}
-int Eqn::setP(void) {
-	return(1);
-	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Eqn::getW(void) {
 	return(0);
@@ -95,6 +80,16 @@ string Eqn::getNet3(void) {
 string Eqn::getNet4(void) {
 	return("");
 	}
+int Eqn::getNpoint(void) {
+	return(0);
+	}
+long double Eqn::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
 int Eqn::setNet1(string _net1) {
 	(void) _net1;
 	return(1);
@@ -109,5 +104,8 @@ int Eqn::setNet3(string _net3) {
 	}
 int Eqn::setNet4(string _net4) {
 	(void) _net4;
+	return(1);
+	}
+int Eqn::setP(void) {
 	return(1);
 	}

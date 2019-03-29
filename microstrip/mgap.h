@@ -57,13 +57,11 @@ public :
 	short getAlpha(void);
 	std::string getNet3(void);
 	std::string getNet4(void);
-	int setNet3(std::string _net3);
-	int setNet4(std::string _net4);
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	int getNpoint(void);
 	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setNet3(std::string _net3);
+	int setNet4(std::string _net4);
 	int setP(void);
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 };
 
 #endif // MGAP_H

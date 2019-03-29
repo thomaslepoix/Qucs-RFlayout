@@ -49,21 +49,6 @@ int Mvia::setNet1(string _net1) {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mvia::getNpoint(void) {
-	return(0);
-	}
-long double Mvia::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _n;
-	(void) _xy;
-	(void) _r;
-	(void) _abs;
-	return(1);
-	}
-int Mvia::setP(void) {
-	return(1);
-	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 long double Mvia::getW(void) {
 	return(0);
@@ -104,6 +89,16 @@ string Mvia::getNet3(void) {
 string Mvia::getNet4(void) {
 	return("");
 	}
+int Mvia::getNpoint(void) {
+	return(0);
+	}
+long double Mvia::getP(int _n, bool _xy, bool _r, bool _abs) {
+	(void) _n;
+	(void) _xy;
+	(void) _r;
+	(void) _abs;
+	return(1);
+	}
 int Mvia::setNet2(string _net2) {
 	(void) _net2;
 	return(1);
@@ -114,5 +109,8 @@ int Mvia::setNet3(string _net3) {
 	}
 int Mvia::setNet4(string _net4) {
 	(void) _net4;
+	return(1);
+	}
+int Mvia::setP(void) {
 	return(1);
 	}

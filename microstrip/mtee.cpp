@@ -63,6 +63,20 @@ string Mtee::getNet3(void) {
 	return(m_net3);
 	}
 
+int Mtee::getNpoint(void) {
+	return(m_npoint);
+	}
+
+long double Mtee::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1]) : rotateX(tab_p[_n][0], tab_p[_n][1]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
 int Mtee::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
@@ -76,21 +90,6 @@ int Mtee::setNet2(string _net2) {
 int Mtee::setNet3(string _net3) {
 	m_net3=_net3;
 	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-int Mtee::getNpoint(void) {
-	return(m_npoint);
-	}
-
-long double Mtee::getP(int _n, bool _xy, bool _r, bool _abs) {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1]) : rotateX(tab_p[_n][0], tab_p[_n][1]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
 int Mtee::setP(void) {
@@ -118,7 +117,7 @@ int Mtee::setP(void) {
 	tab_p[5][_Y]=s2*m_w1/2;
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mtee::getW(void) {

@@ -47,17 +47,6 @@ string Mmbend::getNet2(void) {
 	return(m_net2);
 	}
 
-int Mmbend::setNet1(string _net1) {
-	m_net1=_net1;
-	return(0);
-	}
-
-int Mmbend::setNet2(string _net2) {
-	m_net2=_net2;
-	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 int Mmbend::getNpoint(void) {
 	return(m_npoint);
 	}
@@ -70,6 +59,16 @@ long double Mmbend::getP(int _n, bool _xy, bool _r, bool _abs) {
 		coord=tab_p[_n][_xy];
 		}
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
+int Mmbend::setNet1(string _net1) {
+	m_net1=_net1;
+	return(0);
+	}
+
+int Mmbend::setNet2(string _net2) {
+	m_net2=_net2;
+	return(0);
 	}
 
 int Mmbend::setP(void) {
@@ -90,7 +89,7 @@ int Mmbend::setP(void) {
 	tab_p[2][_Y]=s2*m_w/2;
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mmbend::getW1(void) {

@@ -65,12 +65,6 @@ string Mrstub::getNet1(void) {
 	return(m_net1);
 	}
 
-int Mrstub::setNet1(string _net1) {
-	m_net1=_net1;
-	return(0);
-	}
-
-//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 int Mrstub::getNpoint(void) {
 	return(m_npoint);
 	}
@@ -83,6 +77,11 @@ long double Mrstub::getP(int _n, bool _xy, bool _r, bool _abs) {
 		coord=tab_p[_n][_xy];
 		}
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
+int Mrstub::setNet1(string _net1) {
+	m_net1=_net1;
+	return(0);
 	}
 
 int Mrstub::setP(void) {
@@ -106,7 +105,7 @@ int Mrstub::setP(void) {
 	tab_p[22][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))-m_l);
 	return(0);
 	}
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ////////////////////////////////////////////////////////////////////////////////
 
 long double Mrstub::getW1(void) {
