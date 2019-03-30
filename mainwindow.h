@@ -72,7 +72,7 @@ private:
 	QString out_format;
 	QString n_out;
 
-	int previewprinter(/*Element**& tab_all, int& nelem*/);
+//	int previewprinter(/*Element**& tab_all, int& nelem*/);
 };
 
 #endif // MAINWINDOW_H

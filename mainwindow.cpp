@@ -32,11 +32,6 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 		ui->cb_format->addItem(tr(".kicad_mod"));
 		ui->cb_format->addItem(tr(".lht"));
 		ui->cb_format->setCurrentIndex(ui->cb_format->findText(_out_format, Qt::MatchExactly));
-//        ui->glw_preview = new Preview(tab_all, nelem, extrem_pos, ui->centralWidget);
-//        ui->glw_preview->setObjectName(QStringLiteral("glw_preview"));
-//		Preview w(tab_all, nelem, extrem_pos);
-//		w.show();
-//std::cerr << "tab_all : " << &tab_all << endl;
 		}
 	
 MainWindow::~MainWindow() {
@@ -59,7 +54,7 @@ void MainWindow::on_pb_read_clicked(void) {
 		tab_all.clear();
 		parser(tab_all, n_sch.toStdString());
 		xycalculator(tab_all, extrem_pos);
-		previewprinter();
+		ui->glw_preview->set(tab_all, extrem_pos);
 		}
 	}
 
@@ -70,7 +65,7 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 		tab_all.clear();
 		parser(tab_all, n_sch.toStdString());
 		xycalculator(tab_all, extrem_pos);
-		previewprinter();
+		ui->glw_preview->set(tab_all, extrem_pos);
 		}
 	}
 
@@ -105,8 +100,15 @@ void MainWindow::on_pb_write_clicked(void) {
 		}
 	}
 
-int MainWindow::previewprinter(/*Element**& tab_all, int& nelem*/) {
-	ui->glw_preview->rescope(extrem_pos[_XMIN], extrem_pos[_XMAX], extrem_pos[_YMIN], extrem_pos[_YMAX]);
+/*	//min 0 max 100 -> -50 +50
+	long double tab_x[3]={-10, 10, -10};
+	long double tab_y[3]={-10, -10, 10};
+	ui->glw_preview->rescope(1.0/50.0);
+	ui->glw_preview->drawShape(3, tab_x, tab_y);
+	}*/
+
+/*int MainWindow::previewprinter() {
+//	ui->glw_preview->rescope(extrem_pos[_XMIN], extrem_pos[_XMAX], extrem_pos[_YMIN], extrem_pos[_YMAX]);
 	for(std::shared_ptr<Element> it : tab_all) {
 		QString type=QString::fromStdString(it->getType());
 		if(type=="MCORN"
@@ -127,7 +129,7 @@ int MainWindow::previewprinter(/*Element**& tab_all, int& nelem*/) {
 			}
 		}
 	return(0);
-	}
+	}*/
 
 
 

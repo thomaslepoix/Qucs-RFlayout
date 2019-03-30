@@ -6,6 +6,8 @@
 #include <QOpenGLFunctions_2_0>
 //#include <GL/glut.h>
 
+#include <vector>
+#include <memory>
 #include <iostream>
 #include "microstrip/element.h"
 
@@ -14,9 +16,8 @@ class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 public :
 	explicit Preview(QWidget *parent=0);
 	~Preview();
-
-	void drawShape(int npoint, long double tab_x[], long double tab_y[]);
-	void rescope(long double& x_min, long double& x_max, long double& y_min, long double& y_max);
+	void set(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos);
+	void resetView(void);
 
 protected:
 	void initializeGL();
@@ -28,6 +29,9 @@ protected:
 
 
 private:
+	void drawAll(void);
+	void drawShape(int npoint, long double tab_x[], long double tab_y[]);
+
 	void drawcube();
 	void drawtriangle();
 
@@ -39,6 +43,11 @@ private:
     int yRot=0;
     int zRot=0;
 	QPoint lastPos;
+
+	std::vector<std::shared_ptr<Element>> tab_all;
+	long double factor=1;
+	long double x_offset=0;
+	long double y_offset=0;
 };
 
 #endif // PREVIEW_H

@@ -1,4 +1,5 @@
 #include "preview.h"
+using namespace std;
 
 Preview::Preview(QWidget* parent) : QGLWidget(parent), QOpenGLFunctions_2_0() {
 	}
@@ -29,13 +30,14 @@ void Preview::paintGL() {
 	glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
 	glLoadIdentity();
-	glScalef(0.1, 0.1, 0.0);
-//	glTranslatef(10.0, 10.0, 0.0);
+	glScalef(0.5, 0.5, 0.5);
+	glTranslatef(0.0, 0.0, 2.0);
     glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
     glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
     glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);
 
-	drawtriangle();
+	drawAll();
+//	drawtriangle();
 	}
 
 void Preview::resizeGL(int width, int height) {
@@ -45,11 +47,11 @@ void Preview::resizeGL(int width, int height) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-/*#ifdef QT_OPENGL_ES_1
-    glOrthof(-2, +2, -2, +2, 1.0, 15.0);
-#else
-    glOrtho(-2, +2, -2, +2, 1.0, 15.0);
-#endif*/
+//#ifdef QT_OPENGL_ES_1
+//    glOrthof(-2, +2, -2, +2, 1.0, 15.0);
+//#else
+    glOrtho(-1, +1, -1, +1, -15.0, 15.0);
+//#endif
     glMatrixMode(GL_MODELVIEW);
 	}
 
@@ -110,13 +112,76 @@ void Preview::mouseMoveEvent(QMouseEvent *event) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Preview::rescope(long double& x_min, long double& x_max, long double& y_min, long double& y_max) {
-//	glTranslatef((x_max-x_min)/2, (y_max-y_min)/2, 0.0);
-//	glScalef(
+void Preview::resetView(void) {
+	xRot=0;
+	yRot=0;
+	zRot=0;
+	updateGL();
+	}
+
+void Preview::set(vector<shared_ptr<Element>> const& _tab_all, long double* const& extrem_pos) {
+	tab_all.clear();
+	tab_all=_tab_all;
+	factor=1/(qMax(extrem_pos[_XMAX], extrem_pos[_YMAX])/2);
+	x_offset=-extrem_pos[_XMAX]/2;
+	y_offset=-extrem_pos[_YMAX]/2;
+	resetView();
+//	updateGL();
+	}
+
+void Preview::drawAll(void) {
+	glScalef(factor, factor, factor);
+	for(shared_ptr<Element> it : tab_all) {
+		QString type=QString::fromStdString(it->getType());
+		if(type=="MCORN"
+		|| type=="MCROSS"
+		|| type=="MMBEND"
+		|| type=="MLIN"
+		|| type=="MRSTUB"
+		|| type=="MTEE") {
+			long double tab_x[it->getNpoint()];
+			long double tab_y[it->getNpoint()];
+			for(int i=0;i<it->getNpoint();i++) {
+	//		for(int i=it->getNpoint()-1;i>=0;i--) {
+				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
+				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
+				}
+			drawShape(it->getNpoint(), tab_x, tab_y);
+			}
+		}
 	}
 
 void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[]) {
-std::cout << std::endl << "===========================================================================SHAPE" << std::endl;
+glClear(GL_STENCIL_BUFFER_BIT);
+glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+glStencilFunc(GL_ALWAYS, 0x1, 0x1);
+glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+//qglColor(Qt::red);
+
+//std::cerr << "npoint : " << npoint << std::endl;
+
+	glBegin(GL_POLYGON);
+		glColor3f(1.0f, 1.0f, 0.0f);
+		for(int i=0;i<npoint;i++) {
+			glVertex3f(tab_x[i], tab_y[i], 0.0f);
+//std::cerr << "tab_x[" << i << "] : " << tab_x[i] << std::endl;
+//std::cerr << "tab_y[" << i << "] : " << tab_y[i] << std::endl;
+			}
+	glEnd();
+
+glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
+glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
+glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+	glBegin(GL_POLYGON);
+		glColor3f(1.0f, 1.0f, 0.0f);
+		for(int i=0;i<npoint;i++) {
+			glVertex3f(tab_x[i], tab_y[i], 0.0f);
+			}
+	glEnd();
+	}
+
+/*std::cout << std::endl << "===========================================================================SHAPE" << std::endl;
 std::cout << "npoint : " << npoint << std::endl;
 
 	glClear(GL_STENCIL_BUFFER_BIT);
@@ -140,10 +205,10 @@ std::cout << "==================================================================
 	glColor3f(0.0f, 1.0f, 0.0f);
 	glBegin(GL_POLYGON);
 		for(int i=0;i<npoint;i++) {
-			glVertex3d(tab_x[i], tab_y[i], 0.0d);
+			glVertex3d(tab_x[i], tab_y[i], 0.0f);
 			}
 	glEnd();
-	}
+	}*/
 
 void Preview::drawtriangle() {
 /*    glBegin(GL_TRIANGLES);
@@ -174,7 +239,7 @@ glStencilFunc(GL_ALWAYS, 0x1, 0x1);
 glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.0f, 1.0f, 0.0f);
+		glColor3f(0.5f, 1.0f, 0.0f);
 		glVertex3f(-1.0f, -1.0f, 0.0f);
 		glVertex3f(1.0f, -1.0f, 0.0f);
 		glVertex3f(1.0f, 1.0f, 0.0f);
@@ -188,7 +253,7 @@ glStencilFunc(GL_EQUAL, 0x1, 0x1);
 glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.0f, 1.0f, 0.0f);
+		glColor3f(0.5f, 1.0f, 0.0f);
 		glVertex3f(-1.0f, -1.0f, 0.0f);
 		glVertex3f(1.0f, -1.0f, 0.0f);
 		glVertex3f(1.0f, 1.0f, 0.0f);
