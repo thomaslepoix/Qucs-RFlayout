@@ -86,7 +86,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		}
 
 	cout << endl << "Generating netlist... ";
-	string net_gen="qucs -n -i "+n_sch+" -o "+n_net;
+	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
 	if(system(net_gen.c_str())) {		//OK : exit status 0
 		cout << "KO" << endl;
 		cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
