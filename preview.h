@@ -26,7 +26,7 @@ protected:
 
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
-
+	void wheelEvent(QWheelEvent *event);
 
 private:
 	void drawAll(void);
@@ -46,6 +46,7 @@ private:
 
 	std::vector<std::shared_ptr<Element>> tab_all;
 	long double factor=1;
+	long double fit_factor=1;
 	long double x_offset=0;
 	long double y_offset=0;
 };

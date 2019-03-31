@@ -41,7 +41,6 @@ void Preview::paintGL() {
 	}
 
 void Preview::resizeGL(int width, int height) {
-//	glViewport(0, 0, width, height);
     int side = qMax(width, height);
     glViewport((width - side) / 2, (height - side) / 2, side, side);
 
@@ -107,8 +106,11 @@ void Preview::mouseMoveEvent(QMouseEvent *event) {
 	lastPos = event->pos();
 	}
 
-//void Preview::mouseScrollEvent(QMouseEvent *event) {
-	
+void Preview::wheelEvent(QWheelEvent *event) {
+	factor+=(long double)event->delta()/240*fit_factor;
+	if(factor<0.0) factor=0.0;
+	updateGL();
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -123,6 +125,7 @@ void Preview::set(vector<shared_ptr<Element>> const& _tab_all, long double* cons
 	tab_all.clear();
 	tab_all=_tab_all;
 	factor=1/(qMax(extrem_pos[_XMAX], extrem_pos[_YMAX])/2);
+	fit_factor=factor;
 	x_offset=-extrem_pos[_XMAX]/2;
 	y_offset=-extrem_pos[_YMAX]/2;
 	resetView();
@@ -142,7 +145,6 @@ void Preview::drawAll(void) {
 			long double tab_x[it->getNpoint()];
 			long double tab_y[it->getNpoint()];
 			for(int i=0;i<it->getNpoint();i++) {
-	//		for(int i=it->getNpoint()-1;i>=0;i--) {
 				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
@@ -152,26 +154,26 @@ void Preview::drawAll(void) {
 	}
 
 void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[]) {
-glClear(GL_STENCIL_BUFFER_BIT);
-glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
-glStencilFunc(GL_ALWAYS, 0x1, 0x1);
-glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
-//qglColor(Qt::red);
+	glClear(GL_STENCIL_BUFFER_BIT);
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+	glStencilFunc(GL_ALWAYS, 0x1, 0x1);
+	glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+//	qglColor(Qt::red);
 
-//std::cerr << "npoint : " << npoint << std::endl;
+//	std::cerr << "npoint : " << npoint << std::endl;
 
 	glBegin(GL_POLYGON);
 		glColor3f(1.0f, 1.0f, 0.0f);
 		for(int i=0;i<npoint;i++) {
 			glVertex3f(tab_x[i], tab_y[i], 0.0f);
-//std::cerr << "tab_x[" << i << "] : " << tab_x[i] << std::endl;
-//std::cerr << "tab_y[" << i << "] : " << tab_y[i] << std::endl;
+//			std::cerr << "tab_x[" << i << "] : " << tab_x[i] << std::endl;
+//			std::cerr << "tab_y[" << i << "] : " << tab_y[i] << std::endl;
 			}
 	glEnd();
 
-glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
-glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
-glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
+	glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
+	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 	glBegin(GL_POLYGON);
 		glColor3f(1.0f, 1.0f, 0.0f);
@@ -180,35 +182,6 @@ glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 			}
 	glEnd();
 	}
-
-/*std::cout << std::endl << "===========================================================================SHAPE" << std::endl;
-std::cout << "npoint : " << npoint << std::endl;
-
-	glClear(GL_STENCIL_BUFFER_BIT);
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
-	glStencilFunc(GL_ALWAYS, 0x1, 0x1);
-	glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
-
-	glBegin(GL_POLYGON);
-		for(int i=0;i<npoint;i++) {
-std::cout << "tab_x[" << i << "] : " << tab_x[i] << std::endl;
-std::cout << "tab_y[" << i << "] : " << tab_y[i] << std::endl;
-			glVertex3d(tab_x[i], tab_y[i], 0.0f);
-			}
-	glEnd();
-std::cout << "================================================================================" << std::endl;
-
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
-	glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glBegin(GL_POLYGON);
-		for(int i=0;i<npoint;i++) {
-			glVertex3d(tab_x[i], tab_y[i], 0.0f);
-			}
-	glEnd();
-	}*/
 
 void Preview::drawtriangle() {
 /*    glBegin(GL_TRIANGLES);
