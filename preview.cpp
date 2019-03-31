@@ -46,11 +46,7 @@ void Preview::resizeGL(int width, int height) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-//#ifdef QT_OPENGL_ES_1
-//    glOrthof(-2, +2, -2, +2, 1.0, 15.0);
-//#else
     glOrtho(-1, +1, -1, +1, -15.0, 15.0);
-//#endif
     glMatrixMode(GL_MODELVIEW);
 	}
 
@@ -106,9 +102,20 @@ void Preview::mouseMoveEvent(QMouseEvent *event) {
 	lastPos = event->pos();
 	}
 
+
+//Qucs		SHIFT _	CTRL +	NONE |	<-
+//kicad		SHIFT |	CTRL _	NONE +
+//pcb-rnd	SHIFT |	CTRL _	NONE +
+//This		SHIFT _	CTRL +	NONE |
 void Preview::wheelEvent(QWheelEvent *event) {
-	factor+=(long double)event->delta()/240*fit_factor;
-	if(factor<0.0) factor=0.0;
+	if(flag_ctrl) {
+		factor+=(long double)event->delta()/240*fit_factor;
+		if(factor<0.0) factor=0.0;
+	} else if(flag_shift) {
+		x_offset-=(long double)event->delta()/240*fit_x_offset;
+	} else {
+		y_offset-=(long double)event->delta()/240*fit_y_offset;
+		}
 	updateGL();
 	}
 
@@ -118,18 +125,19 @@ void Preview::resetView(void) {
 	xRot=0;
 	yRot=0;
 	zRot=0;
+	factor=fit_factor;
+	x_offset=fit_x_offset;
+	y_offset=fit_y_offset;
 	updateGL();
 	}
 
 void Preview::set(vector<shared_ptr<Element>> const& _tab_all, long double* const& extrem_pos) {
 	tab_all.clear();
 	tab_all=_tab_all;
-	factor=1/(qMax(extrem_pos[_XMAX], extrem_pos[_YMAX])/2);
-	fit_factor=factor;
-	x_offset=-extrem_pos[_XMAX]/2;
-	y_offset=-extrem_pos[_YMAX]/2;
+	fit_factor=1/(qMax(extrem_pos[_XMAX], extrem_pos[_YMAX])/2);
+	fit_x_offset=-extrem_pos[_XMAX]/2;
+	fit_y_offset=-extrem_pos[_YMAX]/2;
 	resetView();
-//	updateGL();
 	}
 
 void Preview::drawAll(void) {
@@ -160,14 +168,10 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[]) {
 	glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 //	qglColor(Qt::red);
 
-//	std::cerr << "npoint : " << npoint << std::endl;
-
 	glBegin(GL_POLYGON);
-		glColor3f(1.0f, 1.0f, 0.0f);
+		glColor3f(1.0f, 0.5f, 0.0f);
 		for(int i=0;i<npoint;i++) {
 			glVertex3f(tab_x[i], tab_y[i], 0.0f);
-//			std::cerr << "tab_x[" << i << "] : " << tab_x[i] << std::endl;
-//			std::cerr << "tab_y[" << i << "] : " << tab_y[i] << std::endl;
 			}
 	glEnd();
 
@@ -176,12 +180,14 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[]) {
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 	glBegin(GL_POLYGON);
-		glColor3f(1.0f, 1.0f, 0.0f);
+		glColor3f(1.0f, 0.5f, 0.0f);
 		for(int i=0;i<npoint;i++) {
 			glVertex3f(tab_x[i], tab_y[i], 0.0f);
 			}
 	glEnd();
 	}
+
+////////////////////////////////////////////////////////////////////////////////
 
 void Preview::drawtriangle() {
 /*    glBegin(GL_TRIANGLES);

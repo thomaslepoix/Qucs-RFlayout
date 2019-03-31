@@ -17,7 +17,6 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include <iostream>
 
 MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
 	n_sch(_n_sch),
@@ -100,36 +99,12 @@ void MainWindow::on_pb_write_clicked(void) {
 		}
 	}
 
-/*	//min 0 max 100 -> -50 +50
-	long double tab_x[3]={-10, 10, -10};
-	long double tab_y[3]={-10, -10, 10};
-	ui->glw_preview->rescope(1.0/50.0);
-	ui->glw_preview->drawShape(3, tab_x, tab_y);
-	}*/
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+	if(event->key()==Qt::Key_Control) ui->glw_preview->flag_ctrl=true;
+	if(event->key()==Qt::Key_Shift) ui->glw_preview->flag_shift=true;
+	}
 
-/*int MainWindow::previewprinter() {
-//	ui->glw_preview->rescope(extrem_pos[_XMIN], extrem_pos[_XMAX], extrem_pos[_YMIN], extrem_pos[_YMAX]);
-	for(std::shared_ptr<Element> it : tab_all) {
-		QString type=QString::fromStdString(it->getType());
-		if(type=="MCORN"
-		|| type=="MCROSS"
-		|| type=="MMBEND"
-		|| type=="MLIN"
-		|| type=="MRSTUB"
-		|| type=="MTEE") {
-			long double tab_x[it->getNpoint()];
-			long double tab_y[it->getNpoint()];
-			for(int u=0;u<it->getNpoint();u++) {
-				tab_x[u]=it->getP(u, _X, _R, _ABS);
-				tab_y[u]=it->getP(u, _Y, _R, _ABS);
-				}
-			ui->glw_preview->drawShape(it->getNpoint(), tab_x, tab_y);
-		} else if(type=="MCOUPLED") {
-		
-			}
-		}
-	return(0);
-	}*/
-
-
-
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+	if(event->key()==Qt::Key_Control) ui->glw_preview->flag_ctrl=false;
+	if(event->key()==Qt::Key_Shift) ui->glw_preview->flag_shift=false;
+	}

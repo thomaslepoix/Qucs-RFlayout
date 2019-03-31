@@ -19,6 +19,8 @@ public :
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos);
 	void resetView(void);
 
+	bool flag_ctrl=0;
+	bool flag_shift=0;
 protected:
 	void initializeGL();
 	void paintGL();
@@ -27,6 +29,9 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
+
+//	void keyPressEvent(QKeyEvent *event);
+//	void keyReleaseEvent(QKeyEvent *event);
 
 private:
 	void drawAll(void);
@@ -46,9 +51,12 @@ private:
 
 	std::vector<std::shared_ptr<Element>> tab_all;
 	long double factor=1;
-	long double fit_factor=1;
 	long double x_offset=0;
 	long double y_offset=0;
+	long double fit_factor=1;
+	long double fit_x_offset=0;
+	long double fit_y_offset=0;
+
 };
 
 #endif // PREVIEW_H

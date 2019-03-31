@@ -20,7 +20,6 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
-//#include <QString>
 
 #include "parser.h"
 #include "xycalculator.h"
@@ -62,6 +61,10 @@ private slots:
 	void on_le_path_out_textChanged(const QString _out_dir);
 	void on_le_path_out_returnPressed(void);
 	void on_pb_write_clicked(void);
+
+protected:
+	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 
 private:
     Ui::MainWindow *ui;
