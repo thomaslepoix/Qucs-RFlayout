@@ -36,8 +36,8 @@ public :
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos);
 	void resetView(void);
 
-	bool flag_ctrl=0;
-	bool flag_shift=0;
+	void setFCtrl(bool flag_ctrl);
+	void setFShift(bool _flag_shift);
 protected:
 	void initializeGL();
 	void paintGL();
@@ -74,6 +74,8 @@ private:
 	long double fit_x_offset=0;
 	long double fit_y_offset=0;
 
+	bool flag_ctrl=0;
+	bool flag_shift=0;
 };
 
 #endif // PREVIEW_H

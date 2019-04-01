@@ -100,11 +100,11 @@ void MainWindow::on_pb_write_clicked(void) {
 	}
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-	if(event->key()==Qt::Key_Control) ui->glw_preview->flag_ctrl=true;
-	if(event->key()==Qt::Key_Shift) ui->glw_preview->flag_shift=true;
+	if(event->key()==Qt::Key_Control) ui->glw_preview->setFCtrl(true);
+	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(true);
 	}
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-	if(event->key()==Qt::Key_Control) ui->glw_preview->flag_ctrl=false;
-	if(event->key()==Qt::Key_Shift) ui->glw_preview->flag_shift=false;
+	if(event->key()==Qt::Key_Control) ui->glw_preview->setFCtrl(false);
+	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(false);
 	}

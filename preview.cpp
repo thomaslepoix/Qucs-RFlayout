@@ -138,6 +138,14 @@ void Preview::wheelEvent(QWheelEvent *event) {
 	updateGL();
 	}
 
+void Preview::setFCtrl(bool _flag_ctrl) {
+	flag_ctrl=_flag_ctrl;
+	}
+
+void Preview::setFShift(bool _flag_shift) {
+	flag_shift=_flag_shift;
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void Preview::resetView(void) {
