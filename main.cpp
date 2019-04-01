@@ -20,6 +20,7 @@
 #include <memory>
 #include <QApplication>
 
+#include "version.h"
 #include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
@@ -47,13 +48,14 @@ int main(int argc, char* argv[]) {
 
 //argument parser
 	for(int i=0;i<argc;i++) {
-		if(string(argv[i])=="-h" || string(argv[i])=="--help"){
+		if(string(argv[i])=="-h" || string(argv[i])=="--help") {
 			cout << "Usage: " << argv[0] << " -i FILENAME.sch" << endl
 				<< "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]" << endl
 				<< "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME" << endl
 				<< "       " << argv[0] << " -G" << endl
 				<< endl
 				<< "  -h, --help\tdisplay this help and exit" << endl
+				<< "      --version\tdisplay version information and exit" << endl
 				<< "  -v, --verbose\tverbose mode" << endl
 				<< "  -G\t\tGUI mode (no arguments equals to -G)" << endl
 				<< "  -i FILENAME\tuse file as input schematic" << endl
@@ -63,6 +65,10 @@ int main(int argc, char* argv[]) {
 				<< "\t\t- .kicad_pcb\t: kicad layout (default format)" << endl
 				<< "\t\t- .kicad_mod\t: kicad module" << endl
 				<< "\t\t- .lht\t\t: pcb-rnd layout" << endl;
+			exit(0);
+			}
+		if(string(argv[i])=="--version") {
+			cout << "Qucs-RFlayout " << VERSION << endl;
 			exit(0);
 			}
 		if(string(argv[i])=="-i" && argv[i+1]) {
