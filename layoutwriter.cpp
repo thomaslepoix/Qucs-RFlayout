@@ -227,27 +227,28 @@ int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& na
 				||type=="MLIN"
 				||type=="MRSTUB"
 				||type=="MTEE") {///////////////////////////////////////////////
-			f_out << "    (fp_poly (pts \n";
+			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint();i++) {
 				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
 					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MCOUPLED") {///////////////////////////////////////////
-			f_out << "    (fp_poly (pts \n";
+			f_out << "    (fp_poly (pts\n";
+//f_out << "MCOUPLED" << endl;
 			for(int i=0;i<it->getNpoint()/2;i++) {
 				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
 					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
-				  << "    (fp_poly (pts \n";
+				  << "    (fp_poly (pts\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
 					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (pad \"\" thru_hole circle (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
+			f_out << "  (pad \"\" thru_hole circle (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << " " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
 			}
 		}
 
@@ -356,7 +357,6 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 		int n=0;
 		if(type=="MCORN"
          ||type=="MCROSS"
-//         ||type=="MCOUPLED"
          ||type=="MMBEND"
          ||type=="MLIN"
          ||type=="MRSTUB"
@@ -364,8 +364,40 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
 				  << "        li:geometry {\n"
 				  << "          ta:contour {\n";
-//			if(type=="MCOUPLED") {
 			for(int i=0;i<it->getNpoint();i++) {
+				f_out << "           { "
+					  << it->getP(i, _X, _R, _ABS) << "mm; "
+					  << it->getP(i, _Y, _R, _ABS) << "mm }\n";
+				}
+			f_out << "          }\n"
+				  << "        }\n"
+				  << "\n"
+				  << "        ha:flags {\n"
+				  << "         clearpoly=1\n"
+				  << "        }\n"
+				  << "       }\n";
+			n++;
+		} else if(type=="MCOUPLED") {
+			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+				  << "        li:geometry {\n"
+				  << "          ta:contour {\n";
+			for(int i=0;i<it->getNpoint()/2;i++) {
+				f_out << "           { "
+					  << it->getP(i, _X, _R, _ABS) << "mm; "
+					  << it->getP(i, _Y, _R, _ABS) << "mm }\n";
+				}
+			f_out << "          }\n"
+				  << "        }\n"
+				  << "\n"
+				  << "        ha:flags {\n"
+				  << "         clearpoly=1\n"
+				  << "        }\n"
+				  << "       }\n";
+			n++;
+			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+				  << "        li:geometry {\n"
+				  << "          ta:contour {\n";
+			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				f_out << "           { "
 					  << it->getP(i, _X, _R, _ABS) << "mm; "
 					  << it->getP(i, _Y, _R, _ABS) << "mm }\n";
