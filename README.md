@@ -41,11 +41,12 @@ make
 ### Pcbnew : layout.kicad_pcb
 ![pcbnew_kicad_pcb](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_pcbnew_kicad_pcb.png)
 
-### Pcbnew : layout.kicad_mod
+### Pcbnew : module.kicad_mod
 ![pcbnew_kicad_mod](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_pcbnew_kicad_mod.png)
 
 ### Pcb-rnd : layout.lht
 ![pcb-rnd_lht](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_pcb-rnd_lht.png)
+
 <br>
 
 Work in progress... thomas.lepoix@gmail.com
