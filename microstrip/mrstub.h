@@ -20,6 +20,7 @@
 
 #define _USE_MATH_DEFINES
 
+#include <iostream>
 #include <cmath>
 #include "element.h"
 
@@ -32,7 +33,7 @@ private :
 	long double m_ro;
 	long double m_alpha;
 	std::string m_net1;
-	static const int m_npoint=23;
+	static const int m_npoint=53;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mrstub(std::string _label,

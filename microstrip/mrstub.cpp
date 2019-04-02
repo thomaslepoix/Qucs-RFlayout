@@ -85,8 +85,9 @@ int Mrstub::setNet1(string _net1) {
 	}
 
 int Mrstub::setP(void) {
-	int n=int(m_alpha)/5;
-	int i=3;
+	int div=m_npoint-5;			//-4 fixed points, -1 number -> index
+	long double n=m_alpha/div;
+	long double u=-(m_npoint-2)/2*n+n;
 	signed short s;
 	if(m_mirrorx==0) s= 1;
 	if(m_mirrorx==1) s=-1;
@@ -96,13 +97,13 @@ int Mrstub::setP(void) {
 	tab_p[1][_Y]=0;
 	tab_p[2][_X]= m_ro*sin((M_PI/180)*(-m_alpha/2));
 	tab_p[2][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))-m_l);
-	for(int u=-5*n/2;u<=5*n/2;u+=5) {
+	for(int i=3;i<m_npoint-1;i++) {
 		tab_p[i][_X]=m_ro*sin((M_PI/180)*(u));
 		tab_p[i][_Y]=s*((-m_ro*cos((M_PI/180)*(u)))-m_l);
-		i++;
+		u+=n;
 		}
-	tab_p[22][_X]=-m_ro*sin((M_PI/180)*(-m_alpha/2));
-	tab_p[22][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))-m_l);
+	tab_p[m_npoint-1][_X]=-m_ro*sin((M_PI/180)*(-m_alpha/2));
+	tab_p[m_npoint-1][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))-m_l);
 	return(0);
 	}
 
