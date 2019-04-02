@@ -1,11 +1,11 @@
 <Qucs Schematic 0.0.19>
 <Properties>
-  <View=0,-144,1574,1119,1,26,420>
+  <View=126,28,2045,937,0.80667,0,0>
   <Grid=10,10,1>
-  <DataSet=MStest.dat>
-  <DataDisplay=MStest.dpl>
+  <DataSet=MStest2.dat>
+  <DataDisplay=MStest2.dpl>
   <OpenDisplay=1>
-  <Script=MStest.m>
+  <Script=MStest2.m>
   <RunScript=0>
   <showFrame=0>
   <FrameText0=Titre>
@@ -16,85 +16,97 @@
 <Symbol>
 </Symbol>
 <Components>
-  <SUBST Subst1 1 160 630 -30 24 0 0 "9.8" 1 "1 mm" 1 "35 um" 1 "2e-4" 1 "0.022e-6" 1 "0.15e-6" 1>
-  <Pac P1 1 140 260 18 -26 0 1 "1" 1 "50 Ohm" 1 "0 dBm" 0 "1 GHz" 0 "26.85" 0>
-  <GND * 1 140 290 0 0 0 0>
-  <MLIN MS1 1 210 150 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MSTEP MS3 1 320 150 -26 17 0 0 "Subst1" 1 "1 mm" 1 "2 mm" 1 "Hammerstad" 0 "Kirschning" 0>
-  <MLIN MS2 1 430 150 -26 15 0 0 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS7 1 550 240 15 -26 0 1 "Subst1" 1 "4 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS6 1 710 150 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <Pac P2 1 820 210 18 -26 0 1 "2" 1 "50 Ohm" 1 "0 dBm" 0 "1 GHz" 0 "26.85" 0>
-  <GND * 1 820 260 0 0 0 0>
-  <MLIN MS10 1 820 50 15 -26 0 1 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS9 1 950 150 -26 15 0 0 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MCORN MS13 1 820 -40 -7 -84 0 1 "Subst1" 1 "2 mm" 1>
-  <MCORN MS15 1 1050 150 -26 15 0 3 "Subst1" 1 "2 mm" 1>
-  <MCORN MS14 1 1050 -40 15 -7 0 0 "Subst1" 1 "2 mm" 1>
-  <MLIN MS16 1 970 -40 -26 15 0 0 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS17 1 1050 70 15 -26 0 1 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MTEE MS4 1 550 150 -26 -130 0 0 "Subst1" 1 "2 mm" 1 "1 mm" 1 "4 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0 "showNumbers" 0>
-  <MCROSS MS5 1 820 150 -146 -167 0 0 "Subst1" 1 "1 mm" 1 "2 mm" 1 "2 mm" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0 "showNumbers" 0>
-  <MCROSS MS18 1 550 350 -148 143 0 0 "Subst1" 1 "1 mm" 1 "4 mm" 1 "1 mm" 1 "2 mm" 1 "Hammerstad" 0 "Kirschning" 0 "showNumbers" 0>
-  <MOPEN MS12 1 760 350 -26 15 0 0 "Subst1" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0 "Kirschning" 0>
-  <MOPEN MS21 1 380 350 -12 -84 0 2 "Subst1" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0 "Kirschning" 0>
-  <MRSTUB MS22 1 550 490 -26 46 1 0 "Subst1" 1 "1 mm" 0 "10 mm" 1 "90" 1>
-  <MLIN MS19 1 660 350 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS20 1 460 350 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS25 1 850 540 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MRSTUB MS26 1 760 540 -58 25 0 1 "Subst1" 1 "1 mm" 0 "10 mm" 1 "90" 1>
-  <MMBEND MS28 1 960 540 15 -7 0 0 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS29 1 960 760 -115 -26 0 2 "Subst1" 1 "1 mm" 1>
-  <MLIN MS24 1 1070 760 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MLIN MS23 1 960 650 15 -26 0 1 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MMBEND MS35 1 1180 760 -26 15 0 3 "Subst1" 1 "1 mm" 1>
-  <MLIN MS33 1 1180 650 15 -26 0 1 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MMBEND MS36 1 1180 540 -115 -7 1 2 "Subst1" 1 "1 mm" 1>
-  <MLIN MS31 1 1290 540 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
-  <MRSTUB MS32 1 1380 540 -38 -117 0 3 "Subst1" 1 "1 mm" 0 "10 mm" 1 "90" 1>
-  <MMBEND MS37 1 490 840 15 -7 0 0 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS41 1 820 880 -115 -7 1 2 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS40 1 490 900 -26 15 0 3 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS39 1 430 900 -115 -26 0 2 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS38 1 430 840 -7 -84 0 1 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS42 1 880 880 -26 -84 1 1 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS43 1 820 940 -7 15 1 3 "Subst1" 1 "1 mm" 1>
-  <MMBEND MS44 1 880 940 15 -26 1 0 "Subst1" 1 "1 mm" 1>
+  <MLIN MS25 1 340 130 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MRSTUB MS26 1 250 130 -58 25 0 1 "Subst1" 1 "1 mm" 0 "10 mm" 1 "130" 1>
+  <MMBEND MS27 1 450 130 15 -7 0 0 "Subst1" 1 "1 mm" 1>
+  <MMBEND MS28 1 450 350 -115 -33 0 2 "Subst1" 1 "1 mm" 1>
+  <MLIN MS30 1 450 240 15 -26 0 1 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MMBEND MS31 1 670 350 20 -35 0 3 "Subst1" 1 "1 mm" 1>
+  <MLIN MS32 1 670 240 15 -26 0 1 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MMBEND MS33 1 670 130 -102 -62 1 2 "Subst1" 1 "1 mm" 1>
+  <MLIN MS34 1 780 130 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MRSTUB MS35 1 870 130 1 46 0 3 "Subst1" 1 "1 mm" 0 "10 mm" 1 "60" 1>
+  <MCOUPLED MS36 1 560 380 -26 37 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "1 mm" 1 "Kirschning" 0 "Kirschning" 0 "26.85" 0>
+  <MGAP MS37 1 450 410 -26 15 0 0 "Subst1" 1 "1 mm" 1 "1 mm" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0>
+  <MGAP MS38 1 670 410 -26 15 0 0 "Subst1" 1 "1 mm" 1 "1 mm" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0>
+  <MCOUPLED MS40 1 780 440 -26 37 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "1 mm" 1 "Kirschning" 0 "Kirschning" 0 "26.85" 0>
+  <MCOUPLED MS39 1 340 440 -26 37 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "1 mm" 1 "Kirschning" 0 "Kirschning" 0 "26.85" 0>
+  <GND * 1 860 470 0 0 0 0>
+  <GND * 1 860 410 0 0 0 0>
+  <GND * 1 260 470 0 0 0 0>
+  <Pac P2 1 260 440 -94 -26 1 1 "2" 1 "50 Ohm" 1 "0 dBm" 0 "1 GHz" 0 "26.85" 0>
+  <Pac P1 1 980 530 18 -26 0 1 "1" 1 "50 Ohm" 1 "0 dBm" 0 "1 GHz" 0 "26.85" 0>
+  <GND * 1 980 560 0 0 0 0>
+  <MLIN MS1 1 1050 420 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MSTEP MS2 1 1160 420 -26 17 0 0 "Subst1" 1 "1 mm" 1 "2 mm" 1 "Hammerstad" 0 "Kirschning" 0>
+  <MLIN MS3 1 1270 420 -26 15 0 0 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MLIN MS6 1 1660 320 15 -26 0 1 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MLIN MS7 1 1790 420 -13 -116 0 0 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MCORN MS8 1 1660 230 -42 -84 0 1 "Subst1" 1 "2 mm" 1>
+  <MCORN MS9 1 1890 420 -26 15 0 3 "Subst1" 1 "2 mm" 1>
+  <MLIN MS12 1 1890 340 15 -26 0 1 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MTEE MS13 1 1390 420 -26 -130 0 0 "Subst1" 1 "2 mm" 1 "1 mm" 1 "4 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0 "showNumbers" 0>
+  <MCROSS MS14 1 1660 420 -146 -167 0 0 "Subst1" 1 "1 mm" 1 "2 mm" 1 "2 mm" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0 "showNumbers" 0>
+  <MRSTUB MS18 1 1390 760 -26 46 1 0 "Subst1" 1 "1 mm" 0 "10 mm" 1 "90" 1>
+  <MLIN MS4 1 1390 530 15 -26 0 1 "Subst1" 1 "4 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MCROSS MS15 1 1390 640 -114 21 1 2 "Subst1" 1 "1 mm" 1 "4 mm" 1 "1 mm" 1 "2 mm" 1 "Hammerstad" 0 "Kirschning" 0 "showNumbers" 0>
+  <MLIN MS19 1 1500 640 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MOPEN MS16 1 1600 640 -26 15 0 0 "Subst1" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0 "Kirschning" 0>
+  <MLIN MS20 1 1300 640 -34 -103 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MOPEN MS17 1 1220 640 -77 -87 0 2 "Subst1" 1 "1 mm" 1 "Hammerstad" 0 "Kirschning" 0 "Kirschning" 0>
+  <MLIN MS5 1 1530 420 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MMBEND MS22 1 1890 230 15 -7 0 0 "Subst1" 1 "2 mm" 1>
+  <MMBEND MS23 1 1660 600 -115 -56 0 2 "Subst1" 1 "1 mm" 1>
+  <MLIN MS21 1 1660 510 37 -52 0 1 "Subst1" 1 "1 mm" 1 "5.025 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MLIN MS11 1 1790 230 -36 -105 0 0 "Subst1" 1 "2 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <MLIN MS24 1 1770 600 -26 15 0 0 "Subst1" 1 "1 mm" 1 "10 mm" 1 "Hammerstad" 0 "Kirschning" 0 "26.85" 0>
+  <SUBST Subst1 1 1020 700 -30 24 0 0 "9.8" 1 "1 mm" 1 "35 um" 1 "2e-4" 1 "0.022e-6" 1 "0.15e-6" 1>
+  <MVIA MS41 1 1870 600 20 0 0 0 "Subst1" 1 "1 mm" 1 "26.85" 0>
 </Components>
 <Wires>
-  <140 150 140 230 "" 0 0 0 "">
-  <140 150 180 150 "" 0 0 0 "">
-  <240 150 290 150 "" 0 0 0 "">
-  <350 150 400 150 "" 0 0 0 "">
-  <460 150 520 150 "" 0 0 0 "">
-  <550 180 550 210 "" 0 0 0 "">
-  <580 150 680 150 "" 0 0 0 "">
-  <740 150 790 150 "" 0 0 0 "">
-  <820 240 820 260 "" 0 0 0 "">
-  <820 80 820 120 "" 0 0 0 "">
-  <850 150 920 150 "" 0 0 0 "">
-  <820 -10 820 20 "" 0 0 0 "">
-  <980 150 1020 150 "" 0 0 0 "">
-  <1000 -40 1020 -40 "" 0 0 0 "">
-  <850 -40 940 -40 "" 0 0 0 "">
-  <1050 -10 1050 40 "" 0 0 0 "">
-  <1050 100 1050 120 "" 0 0 0 "">
-  <550 270 550 320 "" 0 0 0 "">
-  <550 380 550 480 "" 0 0 0 "">
-  <690 350 730 350 "" 0 0 0 "">
-  <580 350 630 350 "" 0 0 0 "">
-  <490 350 520 350 "" 0 0 0 "">
-  <410 350 430 350 "" 0 0 0 "">
-  <770 540 820 540 "" 0 0 0 "">
-  <880 540 930 540 "" 0 0 0 "">
-  <990 760 1040 760 "" 0 0 0 "">
-  <960 570 960 620 "" 0 0 0 "">
-  <960 680 960 730 "" 0 0 0 "">
-  <1100 760 1150 760 "" 0 0 0 "">
-  <1180 680 1180 730 "" 0 0 0 "">
-  <1180 570 1180 620 "" 0 0 0 "">
-  <1210 540 1260 540 "" 0 0 0 "">
-  <1320 540 1370 540 "" 0 0 0 "">
+  <260 130 310 130 "" 0 0 0 "">
+  <370 130 420 130 "" 0 0 0 "">
+  <480 350 530 350 "" 0 0 0 "">
+  <450 160 450 210 "" 0 0 0 "">
+  <450 270 450 320 "" 0 0 0 "">
+  <590 350 640 350 "" 0 0 0 "">
+  <670 270 670 320 "" 0 0 0 "">
+  <670 160 670 210 "" 0 0 0 "">
+  <700 130 750 130 "" 0 0 0 "">
+  <810 130 860 130 "" 0 0 0 "">
+  <480 410 530 410 "" 0 0 0 "">
+  <590 410 640 410 "" 0 0 0 "">
+  <700 410 750 410 "" 0 0 0 "">
+  <370 410 420 410 "" 0 0 0 "">
+  <810 470 860 470 "" 0 0 0 "">
+  <810 410 860 410 "" 0 0 0 "">
+  <260 410 310 410 "" 0 0 0 "">
+  <980 420 980 500 "" 0 0 0 "">
+  <980 420 1020 420 "" 0 0 0 "">
+  <1080 420 1130 420 "" 0 0 0 "">
+  <1190 420 1240 420 "" 0 0 0 "">
+  <1300 420 1360 420 "" 0 0 0 "">
+  <1660 350 1660 390 "" 0 0 0 "">
+  <1690 420 1760 420 "" 0 0 0 "">
+  <1820 420 1860 420 "" 0 0 0 "">
+  <1890 370 1890 390 "" 0 0 0 "">
+  <1390 450 1390 500 "" 0 0 0 "">
+  <1390 670 1390 750 "" 0 0 0 "">
+  <1390 560 1390 610 "" 0 0 0 "">
+  <1420 640 1470 640 "" 0 0 0 "">
+  <1530 640 1570 640 "" 0 0 0 "">
+  <1330 640 1360 640 "" 0 0 0 "">
+  <1250 640 1270 640 "" 0 0 0 "">
+  <1560 420 1630 420 "" 0 0 0 "">
+  <1420 420 1500 420 "" 0 0 0 "">
+  <1660 450 1660 480 "" 0 0 0 "">
+  <1660 540 1660 570 "" 0 0 0 "">
+  <1690 600 1740 600 "" 0 0 0 "">
+  <1800 600 1850 600 "" 0 0 0 "">
+  <1660 260 1660 290 "" 0 0 0 "">
+  <1690 230 1760 230 "" 0 0 0 "">
+  <1820 230 1860 230 "" 0 0 0 "">
+  <1890 260 1890 310 "" 0 0 0 "">
 </Wires>
 <Diagrams>
 </Diagrams>
