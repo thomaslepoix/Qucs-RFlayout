@@ -18,6 +18,8 @@
 #ifndef PREVIEW_H
 #define PREVIEW_H
 
+#define _USE_MATH_DEFINES
+
 #include <QtWidgets>
 #include <QGLWidget>
 #include <QOpenGLFunctions_2_0>
@@ -25,7 +27,9 @@
 
 #include <vector>
 #include <memory>
-#include <iostream>
+#include <cmath>
+//#include <iostream>
+
 #include "microstrip/element.h"
 
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {

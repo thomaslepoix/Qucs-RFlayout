@@ -122,6 +122,8 @@ void Preview::mouseMoveEvent(QMouseEvent *event) {
 
 //qucs		SHIFT _	CTRL +	NONE |	<-
 //altium	SHIFT _	CTRL +	NONE |
+//inkscape	SHIFT _	CTRL +	NONE |
+//gimp		SHIFT _	CTRL +	NONE |
 //kicad		SHIFT |	CTRL _	NONE +
 //pcb-rnd	SHIFT |	CTRL _	NONE +
 //openems					NONE +
@@ -197,6 +199,14 @@ void Preview::drawAll(void) {
 				tab_y[i-it->getNpoint()/2]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
 			drawShape(it->getNpoint()/2, tab_x, tab_y);
+		} else if(type=="MVIA") {
+			long double tab_x[60];
+			long double tab_y[60];
+			for(int i=0;i<60;i++) {
+				tab_x[i]=it->getX()+(it->getD()/2*cos((M_PI/180)*6*i)+x_offset);
+				tab_y[i]=-(it->getY()+(it->getD()/2*sin((M_PI/180)*6*i)+y_offset));
+				}
+			drawShape(60, tab_x, tab_y);
 			}
 		}
 	}
@@ -207,9 +217,11 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[]) {
 	glStencilFunc(GL_ALWAYS, 0x1, 0x1);
 	glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 //	qglColor(Qt::red);
+	if(npoint==60) glColor3f(0.0f, 1.0f, 0.0f);		//if via
+	else glColor3f(1.0f, 0.5f, 0.0f);
 
 	glBegin(GL_POLYGON);
-		glColor3f(1.0f, 0.5f, 0.0f);
+//		glColor3f(1.0f, 0.5f, 0.0f);
 		for(int i=0;i<npoint;i++) {
 			glVertex3f(tab_x[i], tab_y[i], 0.0f);
 			}
@@ -220,7 +232,7 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[]) {
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 	glBegin(GL_POLYGON);
-		glColor3f(1.0f, 0.5f, 0.0f);
+//		glColor3f(1.0f, 0.5f, 0.0f);
 		for(int i=0;i<npoint;i++) {
 			glVertex3f(tab_x[i], tab_y[i], 0.0f);
 			}
