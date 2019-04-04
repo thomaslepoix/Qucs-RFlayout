@@ -51,6 +51,7 @@ void MainWindow::on_pb_read_clicked(void) {
 		ui->l_debug->setText("ERROR : Nothing to read.");
 	} else {
 		tab_all.clear();
+		tab_all.shrink_to_fit();
 		parser(tab_all, n_sch.toStdString());
 		xycalculator(tab_all, extrem_pos);
 		ui->glw_preview->set(tab_all, extrem_pos);
@@ -62,6 +63,7 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 		ui->l_debug->setText("ERROR : Nothing to read.");
 	} else {
 		tab_all.clear();
+		tab_all.shrink_to_fit();
 		parser(tab_all, n_sch.toStdString());
 		xycalculator(tab_all, extrem_pos);
 		ui->glw_preview->set(tab_all, extrem_pos);

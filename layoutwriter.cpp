@@ -31,7 +31,7 @@ int layoutwriter(vector<shared_ptr<Element>> const& tab_all, long double* const&
 //generate output file
 	cout << endl;
 	n_out=regex_replace(out_dir, r_empty, "./");
-	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(n_sch,r_basename, "$1") + out_format;
+	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(n_sch, r_basename, "$1") + out_format;
 	cout << "Input schematic : " << n_sch << endl;
 	cout << "Output layout : " << n_out << endl;
 	ofstream f_out(n_out.c_str());
