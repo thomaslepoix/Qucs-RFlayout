@@ -96,14 +96,14 @@ int Mrstub::setP(void) {
 	tab_p[1][_X]=-m_w/2;
 	tab_p[1][_Y]=0;
 	tab_p[2][_X]= m_ro*sin((M_PI/180)*(-m_alpha/2));
-	tab_p[2][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))-m_l);
+	tab_p[2][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
 	for(int i=3;i<m_npoint-1;i++) {
 		tab_p[i][_X]=m_ro*sin((M_PI/180)*(u));
-		tab_p[i][_Y]=s*((-m_ro*cos((M_PI/180)*(u)))-m_l);
+		tab_p[i][_Y]=s*((-m_ro*cos((M_PI/180)*(u)))+m_l);
 		u+=n;
 		}
 	tab_p[m_npoint-1][_X]=-m_ro*sin((M_PI/180)*(-m_alpha/2));
-	tab_p[m_npoint-1][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))-m_l);
+	tab_p[m_npoint-1][_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
 	return(0);
 	}
 
