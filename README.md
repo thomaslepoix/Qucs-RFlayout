@@ -33,19 +33,19 @@ make
 ## Screenshots
 
 ### Qucs : schematic.sch
-![qucs_sch](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_qucs_sch.png)
+![qucs_sch](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_qucs_sch.png)
 
 ### Qucs-RFlayout : preview
-![qucsrflayout_preview](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_qucsrflayout_preview.png)
+![qucsrflayout_preview](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_qucsrflayout_preview.png)
 
 ### Pcbnew : layout.kicad_pcb
-![pcbnew_kicad_pcb](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_pcbnew_kicad_pcb.png)
+![pcbnew_kicad_pcb](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_pcbnew_kicad_pcb.png)
 
 ### Pcbnew : module.kicad_mod
-![pcbnew_kicad_mod](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_pcbnew_kicad_mod.png)
+![pcbnew_kicad_mod](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_pcbnew_kicad_mod.png)
 
 ### Pcb-rnd : layout.lht
-![pcb-rnd_lht](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/bitmaps/test_pcb-rnd_lht.png)
+![pcb-rnd_lht](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_pcb-rnd_lht.png)
 
 <br>
 
