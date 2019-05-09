@@ -164,6 +164,7 @@ int tab_remove(vector<shared_ptr<Element>>& tab_undone, shared_ptr<Element> cons
 	}
 
 bool purgefind(vector<shared_ptr<Element>> const& tab_all, shared_ptr<Element> const& current, string const _net) {
+//check if another element with this net exists
 	for(shared_ptr<Element> it : tab_all) {
 		if(it!=current) {
 			if(it->getNet1()==_net) return(1);

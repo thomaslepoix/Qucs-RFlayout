@@ -46,6 +46,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 	string net3;
 	string net4;
 
+//schematic regex
 	regex r_field1("^  <([a-zA-Z]+)");											//regex group 1
 	regex r_field2("^ ( ([^ ]+)){2}");											//regex group 2
 	regex r_field8("^ ( ([^ ]+)){8}");
@@ -55,6 +56,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 	regex r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
 	regex r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
 
+//netlist regex
 	regex r_type("^([^:]*):");													//regex group 1
 	regex r_label("^([^:]*):([^ ]*)");											//regex group 2
 	regex r_net1("^([^ ]* ){1}_net([0-9]*)");									//regex group 2
