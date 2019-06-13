@@ -14,6 +14,10 @@ A tool to produce layout from qucs RF schematic (microstrip only for now)
 
 <br>
 
+French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2_CPP_Qucs-RFlayout/Qucs-RFlayout.pdf)
+
+<br>
+
 ## Build
 
 ```
