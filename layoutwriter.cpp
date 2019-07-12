@@ -152,7 +152,7 @@ int write_kicad_pcb(vector<shared_ptr<Element>> const& tab_all, ofstream& f_out)
 
 	for(shared_ptr<Element> it : tab_all) {
 		type=it->getType();
-		if(type=="Eqn" || type=="Pac" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+		if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="MCORN"
 				||type=="MCROSS"
@@ -215,7 +215,7 @@ int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& na
 
 	for(shared_ptr<Element> it : tab_all) {
 		type=it->getType();
-		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+		if(type=="Eqn" || tupe=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();
@@ -328,7 +328,7 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 	for(shared_ptr<Element> it : tab_all) {
 		type=it->getType();
 		int n=0;
-		//if(type=="Eqn" || type=="Pac" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
+		//if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
 			//nothing to do
 		if(type=="MVIA") {
 			f_out << "    ha:via." << n << " {"

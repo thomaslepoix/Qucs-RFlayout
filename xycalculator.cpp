@@ -23,7 +23,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 //variables
 	vector<shared_ptr<Element>> tab_undone=tab_all;
 	stack<shared_ptr<Element>> buffer;
-	shared_ptr<Element> current=tab_all[0];
+	shared_ptr<Element> current=tab_undone[0];
 	shared_ptr<Element> next=NULL;
 
 	long double prev_xstep=0;
@@ -63,8 +63,9 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 					cout << "Current label : " << current->getLabel() << endl;
 					}
 				if(current->getX()!=current->getX() || current->getY()!=current->getY()) {
-					current->setX(((long double)(tab_all.size()-tab_undone.size()))*-3);		//set a random position
-					current->setY(((long double)(tab_all.size()-tab_undone.size()))*-3);		//
+					//set a random position
+					current->setX(((long double)(tab_all.size()-tab_undone.size()))*-3);
+					current->setY(((long double)(tab_all.size()-tab_undone.size()))*-3);
 					cout << "Random X : " << current->getX() << endl;
 					cout << "Random Y : " << current->getY() << endl;
 					}
@@ -268,6 +269,7 @@ int xystep(shared_ptr<Element> const& _elem, int const _net, long double& xstep,
 
 	if(type=="Eqn"
 	|| type=="Pac"
+	|| type=="SUBST"
 	|| type=="MOPEN"
 	|| type=="MRSTUB"
 	|| type=="MSTEP"

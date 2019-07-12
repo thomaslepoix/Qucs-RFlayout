@@ -143,6 +143,8 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 					tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R, 0)));
 				} else if(type=="Pac") {
 					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, 2)));
+				} else if(type=="SUBST") {
+					//to be complete...
 				} else if(type=="MCORN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
@@ -287,22 +289,23 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 			//find ielem->label
 				for(shared_ptr<Element> it : tab_all) {
 					if(it->getLabel()==label) {
-						if(type=="Eqn"){
+						if(type=="Eqn"
+						|| type=="SUBST"){
 							//to be complete
 						} else if(type=="MOPEN"
-								||type=="MRSTUB"
-								||type=="MVIA") {
+							   || type=="MRSTUB"
+							   || type=="MVIA") {
 							//net 1
 								regex_search(line, match, r_net1);
 								net1=match.str(2);
 								cout << "\tNet 1 : " << net1 << endl;
 							it->setNet1(net1);
 						} else if(type=="Pac"
-								||type=="MCORN"
-								||type=="MGAP"
-								||type=="MLIN"
-								||type=="MMBEND"
-								||type=="MSTEP") {
+							   || type=="MCORN"
+							   || type=="MGAP"
+							   || type=="MLIN"
+							   || type=="MMBEND"
+							   || type=="MSTEP") {
 							//net 1
 								regex_search(line, match, r_net1);
 								net1=match.str(2);

@@ -23,6 +23,9 @@
 class Pac : public Element {
 private :
 	const std::string m_descriptor="ac_port";
+//	long double m_z;
+//	long double m_p;
+//	long double m_f;
 	std::string m_net1;
 	std::string m_net2;
 public :
@@ -31,6 +34,9 @@ public :
 			bool _mirrorx,
 			short _r,
 			short _nport);
+//			long double _z,
+//			long double _p,
+//			long double _f);
 	~Pac();
 	std::string getDescriptor(void);
 	std::string getNet1(void);
@@ -48,6 +54,9 @@ public :
 	long double getS(void);
 	long double getRi(void);
 	long double getRo(void);
+//	long double getZ(void);
+//	long double getDbm(void);	//m_p
+//	long double getF(void);
 	short getAlpha(void);
 	std::string getNet3(void);
 	std::string getNet4(void);
