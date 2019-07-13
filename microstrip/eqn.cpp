@@ -21,9 +21,8 @@ using namespace std;
 Eqn::Eqn(string _label,
 			string _type,
 			bool _mirrorx,
-			short _r,
-			short _nport) :
-	Element(_label, _type, _mirrorx, _r, _nport)
+			short _r) :
+	Element(_label, _type, _mirrorx, _r, 0, "")
 	{}
 
 Eqn::~Eqn() {
@@ -63,6 +62,33 @@ long double Eqn::getRi(void) {
 	return(0);
 	}
 long double Eqn::getRo(void) {
+	return(0);
+	}
+long double Eqn::getZ(void) {
+	return(0);
+	}
+long double Eqn::getDbm(void) {
+	return(0);
+	}
+long double Eqn::getF(void) {
+	return(0);
+	}
+long double Eqn::getEr(void) {
+	return(0);
+	}
+long double Eqn::getH(void) {
+	return(0);
+	}
+long double Eqn::getT(void) {
+	return(0);
+	}
+long double Eqn::getTand(void) {
+	return(0);
+	}
+long double Eqn::getRho(void) {
+	return(0);
+	}
+short Eqn::getN(void) {
 	return(0);
 	}
 short Eqn::getAlpha(void) {

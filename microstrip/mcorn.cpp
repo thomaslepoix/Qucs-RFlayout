@@ -22,9 +22,9 @@ Mcorn::Mcorn(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 2, _subst),
 	m_w(_w)
 	{}
 
@@ -105,6 +105,33 @@ long double Mcorn::getRi(void) {
 	return(0);
 	}
 long double Mcorn::getRo(void) {
+	return(0);
+	}
+long double Mcorn::getZ(void) {
+	return(0);
+	}
+long double Mcorn::getDbm(void) {
+	return(0);
+	}
+long double Mcorn::getF(void) {
+	return(0);
+	}
+long double Mcorn::getEr(void) {
+	return(0);
+	}
+long double Mcorn::getH(void) {
+	return(0);
+	}
+long double Mcorn::getT(void) {
+	return(0);
+	}
+long double Mcorn::getTand(void) {
+	return(0);
+	}
+long double Mcorn::getRho(void) {
+	return(0);
+	}
+short Mcorn::getN(void) {
 	return(0);
 	}
 short Mcorn::getAlpha(void) {

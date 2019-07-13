@@ -22,9 +22,9 @@ Mopen::Mopen(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 1, _subst),
 	m_w(_w)
 	{}
 
@@ -74,6 +74,33 @@ long double Mopen::getRi(void) {
 	return(0);
 	}
 long double Mopen::getRo(void) {
+	return(0);
+	}
+long double Mopen::getZ(void) {
+	return(0);
+	}
+long double Mopen::getDbm(void) {
+	return(0);
+	}
+long double Mopen::getF(void) {
+	return(0);
+	}
+long double Mopen::getEr(void) {
+	return(0);
+	}
+long double Mopen::getH(void) {
+	return(0);
+	}
+long double Mopen::getT(void) {
+	return(0);
+	}
+long double Mopen::getTand(void) {
+	return(0);
+	}
+long double Mopen::getRho(void) {
+	return(0);
+	}
+short Mopen::getN(void) {
 	return(0);
 	}
 short Mopen::getAlpha(void) {

@@ -215,7 +215,7 @@ int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& na
 
 	for(shared_ptr<Element> it : tab_all) {
 		type=it->getType();
-		if(type=="Eqn" || tupe=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+		if(type=="Eqn" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();

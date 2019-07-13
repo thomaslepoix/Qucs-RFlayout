@@ -44,6 +44,7 @@ protected:
 	bool m_mirrorx;
 	short m_r;
 	short m_nport;
+	std::string m_subst;
 	long double m_x=0.0/0.0;
 	long double m_y=0.0/0.0;
 	long double rotateX(long double _x, long double _y);
@@ -53,7 +54,8 @@ public:
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport);
+			short _nport,
+			std::string _subst);
 	~Element();
 	std::shared_ptr<Element> prev=NULL;
 	std::string getLabel(void);
@@ -61,6 +63,7 @@ public:
 	bool getMirrorx(void);
 	short getR(void);
 	short getNport(void);
+	std::string getSubst(void);
 	long double getX(void);
 	long double getY(void);
 	virtual std::string getDescriptor(void)=0;
@@ -74,6 +77,15 @@ public:
 	virtual long double getS(void)=0;
 	virtual long double getRi(void)=0;
 	virtual long double getRo(void)=0;
+	virtual long double getZ(void)=0;
+	virtual long double getDbm(void)=0;
+	virtual long double getF(void)=0;
+	virtual long double getEr(void)=0;
+	virtual long double getH(void)=0;
+	virtual long double getT(void)=0;
+	virtual long double getTand(void)=0;
+	virtual long double getRho(void)=0;
+	virtual short getN(void)=0;
 	virtual short getAlpha(void)=0;
 	virtual std::string getNet1(void)=0;
 	virtual std::string getNet2(void)=0;

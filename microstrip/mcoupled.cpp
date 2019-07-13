@@ -22,11 +22,11 @@ Mcoupled::Mcoupled(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w,
 			long double _l,
 			long double _s) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 4, _subst),
 	m_w(_w),
 	m_l(_l),
 	m_s(_s)
@@ -142,6 +142,33 @@ long double Mcoupled::getRi(void) {
 	return(0);
 	}
 long double Mcoupled::getRo(void) {
+	return(0);
+	}
+long double Mcoupled::getZ(void) {
+	return(0);
+	}
+long double Mcoupled::getDbm(void) {
+	return(0);
+	}
+long double Mcoupled::getF(void) {
+	return(0);
+	}
+long double Mcoupled::getEr(void) {
+	return(0);
+	}
+long double Mcoupled::getH(void) {
+	return(0);
+	}
+long double Mcoupled::getT(void) {
+	return(0);
+	}
+long double Mcoupled::getTand(void) {
+	return(0);
+	}
+long double Mcoupled::getRho(void) {
+	return(0);
+	}
+short Mcoupled::getN(void) {
 	return(0);
 	}
 short Mcoupled::getAlpha(void) {

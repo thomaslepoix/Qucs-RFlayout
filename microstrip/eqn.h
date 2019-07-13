@@ -27,8 +27,7 @@ public :
 	Eqn(std::string _label,
 			std::string _type,
 			bool _mirrorx,
-			short _r,
-			short _nport);
+			short _r);
 	~Eqn();
 	std::string getDescriptor(void);
 ////////////////////////////////////////////////////////////////////////////////
@@ -42,6 +41,15 @@ public :
 	long double getS(void);
 	long double getRi(void);
 	long double getRo(void);
+	long double getZ(void);
+	long double getDbm(void);
+	long double getF(void);
+	long double getEr(void);
+	long double getH(void);
+	long double getT(void);
+	long double getTand(void);
+	long double getRho(void);
+	short getN(void);
 	short getAlpha(void);
 	std::string getNet1(void);
 	std::string getNet2(void);

@@ -22,11 +22,11 @@ Mrstub::Mrstub(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _ri,
 			long double _ro,
 			short _alpha) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 1, _subst),
 	m_ri(_ri),
 	m_ro(_ro),
 	m_alpha(_alpha){
@@ -125,6 +125,33 @@ long double Mrstub::getD(void) {
 	return(0);
 	}
 long double Mrstub::getS(void) {
+	return(0);
+	}
+long double Mrstub::getZ(void) {
+	return(0);
+	}
+long double Mrstub::getDbm(void) {
+	return(0);
+	}
+long double Mrstub::getF(void) {
+	return(0);
+	}
+long double Mrstub::getEr(void) {
+	return(0);
+	}
+long double Mrstub::getH(void) {
+	return(0);
+	}
+long double Mrstub::getT(void) {
+	return(0);
+	}
+long double Mrstub::getTand(void) {
+	return(0);
+	}
+long double Mrstub::getRho(void) {
+	return(0);
+	}
+short Mrstub::getN(void) {
 	return(0);
 	}
 string Mrstub::getNet2(void) {

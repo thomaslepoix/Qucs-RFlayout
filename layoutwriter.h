@@ -27,6 +27,7 @@
 
 #include "microstrip/eqn.h"
 #include "microstrip/pac.h"
+#include "microstrip/subst.h
 #include "microstrip/mcorn.h"
 #include "microstrip/mcross.h"
 #include "microstrip/mcoupled.h"

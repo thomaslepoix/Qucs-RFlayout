@@ -22,12 +22,12 @@ Mcross::Mcross(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w1,
 			long double _w2,
 			long double _w3,
 			long double _w4) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 4, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_w3(_w3),
@@ -223,6 +223,33 @@ long double Mcross::getRi(void) {
 	return(0);
 	}
 long double Mcross::getRo(void) {
+	return(0);
+	}
+long double Mcross::getZ(void) {
+	return(0);
+	}
+long double Mcross::getDbm(void) {
+	return(0);
+	}
+long double Mcross::getF(void) {
+	return(0);
+	}
+long double Mcross::getEr(void) {
+	return(0);
+	}
+long double Mcross::getH(void) {
+	return(0);
+	}
+long double Mcross::getT(void) {
+	return(0);
+	}
+long double Mcross::getTand(void) {
+	return(0);
+	}
+long double Mcross::getRho(void) {
+	return(0);
+	}
+short Mcross::getN(void) {
 	return(0);
 	}
 short Mcross::getAlpha(void) {

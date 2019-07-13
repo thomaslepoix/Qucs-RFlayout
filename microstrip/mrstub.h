@@ -40,7 +40,7 @@ public :
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			std::string _subst,
 			long double _ri,
 			long double _ro,
 			short _alpha);
@@ -63,6 +63,15 @@ public :
 	long double getW4(void);
 	long double getD(void);
 	long double getS(void);
+	long double getZ(void);
+	long double getDbm(void);
+	long double getF(void);
+	long double getEr(void);
+	long double getH(void);
+	long double getT(void);
+	long double getTand(void);
+	long double getRho(void);
+	short getN(void);
 	std::string getNet2(void);
 	std::string getNet3(void);
 	std::string getNet4(void);

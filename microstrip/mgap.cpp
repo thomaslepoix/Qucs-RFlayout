@@ -22,11 +22,11 @@ Mgap::Mgap(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w1,
 			long double _w2,
 			long double _s) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 2, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_s(_s)
@@ -90,6 +90,33 @@ long double Mgap::getRi(void) {
 	return(0);
 	}
 long double Mgap::getRo(void) {
+	return(0);
+	}
+long double Mgap::getZ(void) {
+	return(0);
+	}
+long double Mgap::getDbm(void) {
+	return(0);
+	}
+long double Mgap::getF(void) {
+	return(0);
+	}
+long double Mgap::getEr(void) {
+	return(0);
+	}
+long double Mgap::getH(void) {
+	return(0);
+	}
+long double Mgap::getT(void) {
+	return(0);
+	}
+long double Mgap::getTand(void) {
+	return(0);
+	}
+long double Mgap::getRho(void) {
+	return(0);
+	}
+short Mgap::getN(void) {
 	return(0);
 	}
 short Mgap::getAlpha(void) {

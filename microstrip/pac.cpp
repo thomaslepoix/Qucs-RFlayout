@@ -22,8 +22,15 @@ Pac::Pac(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport) :
-	Element(_label, _type, _mirrorx, _r, _nport)
+			short _n,
+			long double _z,
+			long double _p,
+			long double _f) :
+	Element(_label, _type, _mirrorx, _r, 2, ""),
+	m_n(_n),
+	m_z(_z),
+	m_p(_p),
+	m_f(_f)
 	{}
 
 Pac::~Pac() {
@@ -31,6 +38,22 @@ Pac::~Pac() {
 
 string Pac::getDescriptor(void) {
 	return(m_descriptor);
+	}
+
+short Pac::getN(void) {
+	return(m_n);
+	}
+
+long double Pac::getZ(void) {
+	return(m_z);
+	}
+
+long double Pac::getDbm(void) {
+	return(m_p);
+	}
+
+long double Pac::getF(void) {
+	return(m_f);
 	}
 
 string Pac::getNet1(void) {
@@ -81,6 +104,21 @@ long double Pac::getRi(void) {
 	return(0);
 	}
 long double Pac::getRo(void) {
+	return(0);
+	}
+long double Pac::getEr(void) {
+	return(0);
+	}
+long double Pac::getH(void) {
+	return(0);
+	}
+long double Pac::getT(void) {
+	return(0);
+	}
+long double Pac::getTand(void) {
+	return(0);
+	}
+long double Pac::getRho(void) {
 	return(0);
 	}
 short Pac::getAlpha(void) {

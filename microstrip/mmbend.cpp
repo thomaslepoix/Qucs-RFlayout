@@ -22,9 +22,9 @@ Mmbend::Mmbend(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 2, _subst),
 	m_w(_w)
 	{}
 
@@ -117,6 +117,33 @@ long double Mmbend::getRi(void) {
 	return(0);
 	}
 long double Mmbend::getRo(void) {
+	return(0);
+	}
+long double Mmbend::getZ(void) {
+	return(0);
+	}
+long double Mmbend::getDbm(void) {
+	return(0);
+	}
+long double Mmbend::getF(void) {
+	return(0);
+	}
+long double Mmbend::getEr(void) {
+	return(0);
+	}
+long double Mmbend::getH(void) {
+	return(0);
+	}
+long double Mmbend::getT(void) {
+	return(0);
+	}
+long double Mmbend::getTand(void) {
+	return(0);
+	}
+long double Mmbend::getRho(void) {
+	return(0);
+	}
+short Mmbend::getN(void) {
 	return(0);
 	}
 short Mmbend::getAlpha(void) {

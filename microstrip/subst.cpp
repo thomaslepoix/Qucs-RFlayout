@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mstep.cpp
+                               subst.cpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,134 +15,141 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mstep.h"
+#include "subst.h"
 using namespace std;
 
-Mstep::Mstep(string _label,
+Subst::Subst(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			string _subst,
-			long double _w1,
-			long double _w2) :
-	Element(_label, _type, _mirrorx, _r, 2, _subst),
-	m_w1(_w1),
-	m_w2(_w2)
+			long double _er,
+			long double _h,
+			long double _t,
+			long double _tand,
+			long double _rho,
+			long double _d) :
+	Element(_label, _type, _mirrorx, _r, 0, ""),
+	m_er(_er),
+	m_h(_h),
+	m_t(_t),
+	m_tand(_tand),
+	m_rho(_rho),
+	m_d(_d)
 	{}
 
-Mstep::~Mstep() {
+Subst::~Subst() {
 	}
 
-string Mstep::getDescriptor(void) {
+string Subst::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
-long double Mstep::getW1(void) {
-	return(m_w1);
+long double Subst::getEr(void){
+	return(m_er);
 	}
 
-long double Mstep::getW2(void) {
-	return(m_w2);
+long double Subst::getH(void){
+	return(m_h);
 	}
 
-string Mstep::getNet1(void) {
-	return(m_net1);
+long double Subst::getT(void){
+	return(m_t);
 	}
 
-string Mstep::getNet2(void) {
-	return(m_net2);
+long double Subst::getTand(void){
+	return(m_tand);
 	}
 
-int Mstep::setNet1(string _net1) {
-	m_net1=_net1;
-	return(0);
+long double Subst::getRho(void){
+	return(m_rho);
 	}
 
-int Mstep::setNet2(string _net2) {
-	m_net2=_net2;
-	return(0);
+long double Subst::getD(void) {
+	return(m_d);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-long double Mstep::getW(void) {
+long double Subst::getW(void) {
 	return(0);
 	}
-long double Mstep::getW3(void) {
+long double Subst::getW1(void) {
 	return(0);
 	}
-long double Mstep::getW4(void) {
+long double Subst::getW2(void) {
 	return(0);
 	}
-long double Mstep::getL(void) {
+long double Subst::getW3(void) {
 	return(0);
 	}
-long double Mstep::getD(void) {
+long double Subst::getW4(void) {
 	return(0);
 	}
-long double Mstep::getS(void) {
+long double Subst::getL(void) {
 	return(0);
 	}
-long double Mstep::getRi(void) {
+long double Subst::getS(void) {
 	return(0);
 	}
-long double Mstep::getRo(void) {
+long double Subst::getRi(void) {
 	return(0);
 	}
-long double Mstep::getZ(void) {
+long double Subst::getRo(void) {
 	return(0);
 	}
-long double Mstep::getDbm(void) {
+long double Subst::getZ(void) {
 	return(0);
 	}
-long double Mstep::getF(void) {
+long double Subst::getDbm(void) {
 	return(0);
 	}
-long double Mstep::getEr(void) {
+long double Subst::getF(void) {
 	return(0);
 	}
-long double Mstep::getH(void) {
+short Subst::getN(void) {
 	return(0);
 	}
-long double Mstep::getT(void) {
+short Subst::getAlpha(void) {
 	return(0);
 	}
-long double Mstep::getTand(void) {
-	return(0);
-	}
-long double Mstep::getRho(void) {
-	return(0);
-	}
-short Mstep::getN(void) {
-	return(0);
-	}
-short Mstep::getAlpha(void) {
-	return(0);
-	}
-string Mstep::getNet3(void) {
+string Subst::getNet1(void) {
 	return("");
 	}
-string Mstep::getNet4(void) {
+string Subst::getNet2(void) {
 	return("");
 	}
-int Mstep::getNpoint(void) {
+string Subst::getNet3(void) {
+	return("");
+	}
+string Subst::getNet4(void) {
+	return("");
+	}
+int Subst::getNpoint(void) {
 	return(0);
 	}
-long double Mstep::getP(int _n, bool _xy, bool _r, bool _abs) {
+long double Subst::getP(int _n, bool _xy, bool _r, bool _abs) {
 	(void) _n;
 	(void) _xy;
 	(void) _r;
 	(void) _abs;
 	return(1);
 	}
-int Mstep::setNet3(string _net3) {
+int Subst::setNet1(string _net1) {
+	(void) _net1;
+	return(1);
+	}
+int Subst::setNet2(string _net2) {
+	(void) _net2;
+	return(1);
+	}
+int Subst::setNet3(string _net3) {
 	(void) _net3;
 	return(1);
 	}
-int Mstep::setNet4(string _net4) {
+int Subst::setNet4(string _net4) {
 	(void) _net4;
 	return(1);
 	}
-int Mstep::setP(void) {
+int Subst::setP(void) {
 	return(1);
 	}

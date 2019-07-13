@@ -29,6 +29,7 @@ SOURCES += \
         microstrip/element.cpp \
         microstrip/eqn.cpp \
         microstrip/pac.cpp \
+        microstrip/subst.cpp \
         microstrip/mcorn.cpp \
         microstrip/mcoupled.cpp \
         microstrip/mcross.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
         microstrip/element.h \
         microstrip/eqn.h \
         microstrip/pac.h \
+        microstrip/subst.h \
         microstrip/mcorn.h \
         microstrip/mcoupled.h \
         microstrip/mcross.h \

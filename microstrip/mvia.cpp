@@ -22,9 +22,9 @@ Mvia::Mvia(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _d) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 1, _subst),
 	m_d(_d)
 	{}
 
@@ -75,6 +75,33 @@ long double Mvia::getRi(void) {
 	return(0);
 	}
 long double Mvia::getRo(void) {
+	return(0);
+	}
+long double Mvia::getZ(void) {
+	return(0);
+	}
+long double Mvia::getDbm(void) {
+	return(0);
+	}
+long double Mvia::getF(void) {
+	return(0);
+	}
+long double Mvia::getEr(void) {
+	return(0);
+	}
+long double Mvia::getH(void) {
+	return(0);
+	}
+long double Mvia::getT(void) {
+	return(0);
+	}
+long double Mvia::getTand(void) {
+	return(0);
+	}
+long double Mvia::getRho(void) {
+	return(0);
+	}
+short Mvia::getN(void) {
 	return(0);
 	}
 short Mvia::getAlpha(void) {

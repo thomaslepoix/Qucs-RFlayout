@@ -22,12 +22,14 @@ Element::Element(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport) :
+			short _nport,
+			string _subst) :
 	m_label(_label),
 	m_type(_type),
 	m_mirrorx(_mirrorx),
 	m_r(_r),
-	m_nport(_nport)
+	m_nport(_nport),
+	m_subst(_subst)
 	{}
 
 Element::~Element() {
@@ -51,6 +53,10 @@ short Element::getR(void) {
 
 short Element::getNport(void) {
 	return(m_nport);
+	}
+
+string Element::getSubst(void) {
+	return(m_subst);
 	}
 
 long double Element::getX(void) {
