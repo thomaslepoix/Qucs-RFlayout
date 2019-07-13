@@ -185,7 +185,7 @@ void Preview::drawAll(void) {
 				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
-			drawShape(it->getNpoint(), tab_x, tab_y, orange);
+			drawShape(it->getNpoint(), tab_x, tab_y, 0.0f, orange);
 		} else if(type=="MCOUPLED") {
 			long double tab_x[it->getNpoint()/2];
 			long double tab_y[it->getNpoint()/2];
@@ -193,12 +193,12 @@ void Preview::drawAll(void) {
 				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
-			drawShape(it->getNpoint()/2, tab_x, tab_y, orange);
+			drawShape(it->getNpoint()/2, tab_x, tab_y, 0.0f, orange);
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				tab_x[i-it->getNpoint()/2]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i-it->getNpoint()/2]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
-			drawShape(it->getNpoint()/2, tab_x, tab_y, orange);
+			drawShape(it->getNpoint()/2, tab_x, tab_y, 0.0f, orange);
 		} else if(type=="MVIA") {
 			long double tab_x[60];
 			long double tab_y[60];
@@ -206,12 +206,12 @@ void Preview::drawAll(void) {
 				tab_x[i]=it->getX()+(it->getD()/2*cos((M_PI/180)*6*i)+x_offset);
 				tab_y[i]=-(it->getY()+(it->getD()/2*sin((M_PI/180)*6*i)+y_offset));
 				}
-			drawShape(60, tab_x, tab_y, green);
+			drawShape(60, tab_x, tab_y, 0.0f, green);
 			}
 		}
 	}
 
-void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color) {
+void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], long double z, enum t_color color) {
 	glClear(GL_STENCIL_BUFFER_BIT);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
 	glStencilFunc(GL_ALWAYS, 0x1, 0x1);
@@ -219,10 +219,11 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], en
 //	qglColor(Qt::red);
 	if(color==green) glColor3f(0.0f, 1.0f, 0.0f);
 	else if(color==orange) glColor3f(1.0f, 0.5f, 0.0f);		//bug? it should be orange
+	else if(color==black) glColor3f(0.0f, 0.0f, 0.0f);
 
 	glBegin(GL_POLYGON);
 		for(int i=0;i<npoint;i++) {
-			glVertex3f(tab_x[i], tab_y[i], 0.0f);
+			glVertex3f(tab_x[i], tab_y[i], z);
 			}
 	glEnd();
 
@@ -232,7 +233,7 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], en
 
 	glBegin(GL_POLYGON);
 		for(int i=0;i<npoint;i++) {
-			glVertex3f(tab_x[i], tab_y[i], 0.0f);
+			glVertex3f(tab_x[i], tab_y[i], z);
 			}
 	glEnd();
 	}

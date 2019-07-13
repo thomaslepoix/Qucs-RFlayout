@@ -54,9 +54,9 @@ protected:
 //	void keyReleaseEvent(QKeyEvent *event);
 
 private:
-	enum t_color{orange, green};
+	enum t_color{orange, green, black};
 	void drawAll(void);
-	void drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color);
+	void drawShape(int npoint, long double tab_x[], long double tab_y[], long double z, enum t_color color);
 
 	void drawcube();
 	void drawtriangle();
