@@ -96,6 +96,8 @@ public:
 	virtual long double getP(int _n, bool _xy, bool _r, bool _abs)=0;
 	int setX(long double _x);
 	int setY(long double _y);
+	virtual int setW(long double _w)=0;
+	virtual int setL(long double _l)=0;
 	virtual int setNet1(std::string _net1)=0;
 	virtual int setNet2(std::string _net2)=0;
 	virtual int setNet3(std::string _net3)=0;

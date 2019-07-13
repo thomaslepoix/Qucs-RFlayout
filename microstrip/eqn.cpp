@@ -116,6 +116,14 @@ long double Eqn::getP(int _n, bool _xy, bool _r, bool _abs) {
 	(void) _abs;
 	return(1);
 	}
+int Eqn::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Eqn::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Eqn::setNet1(string _net1) {
 	(void) _net1;
 	return(1);

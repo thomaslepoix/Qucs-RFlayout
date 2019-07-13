@@ -174,6 +174,14 @@ short Mtee::getAlpha(void) {
 string Mtee::getNet4(void) {
 	return("");
 	}
+int Mtee::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mtee::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mtee::setNet4(string _net4) {
 	(void) _net4;
 	return(1);

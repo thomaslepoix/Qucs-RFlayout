@@ -126,6 +126,14 @@ long double Mvia::getP(int _n, bool _xy, bool _r, bool _abs) {
 	(void) _abs;
 	return(1);
 	}
+int Mvia::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mvia::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mvia::setNet2(string _net2) {
 	(void) _net2;
 	return(1);

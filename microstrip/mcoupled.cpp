@@ -174,3 +174,11 @@ short Mcoupled::getN(void) {
 short Mcoupled::getAlpha(void) {
 	return(0);
 	}
+int Mcoupled::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mcoupled::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}

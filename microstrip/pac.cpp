@@ -140,6 +140,14 @@ long double Pac::getP(int _n, bool _xy, bool _r, bool _abs) {
 	(void) _abs;
 	return(1);
 	}
+int Pac::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Pac::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Pac::setNet3(string _net3) {
 	(void) _net3;
 	return(1);

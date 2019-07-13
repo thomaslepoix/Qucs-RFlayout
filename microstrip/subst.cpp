@@ -44,6 +44,14 @@ string Subst::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+long double Subst::getL(void) {
+	return(m_l);
+	}
+
+long double Subst::getW(void) {
+	return(m_w);
+	}
+
 long double Subst::getEr(void){
 	return(m_er);
 	}
@@ -68,11 +76,44 @@ long double Subst::getD(void) {
 	return(m_d);
 	}
 
-////////////////////////////////////////////////////////////////////////////////
+int Subst::getNpoint(void) {
+	return(m_npoint);
+	}
 
-long double Subst::getW(void) {
+long double Subst::getP(int _n, bool _xy, bool _r, bool _abs) {
+	long double coord;
+	if(_r) {
+		coord= _xy ? rotateY(tab_p[_n][_X], tab_p[_n][_Y]) : rotateX(tab_p[_n][_X], tab_p[_n][_Y]);
+	} else {
+		coord=tab_p[_n][_xy];
+		}
+	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	}
+
+int Subst::setW(long double _w) {
+	m_w=_w;
 	return(0);
 	}
+
+int Subst::setL(long double _l) {
+	m_l=_l;
+	return(0);
+	}
+
+int Subst::setP(void) {
+	tab_p[0][_X]=-m_l/2;
+	tab_p[0][_Y]= m_w/2;
+	tab_p[1][_X]= m_l/2;
+	tab_p[1][_Y]= m_w/2;
+	tab_p[2][_X]= m_l/2;
+	tab_p[2][_Y]=-m_w/2;
+	tab_p[3][_X]=-m_l/2;
+	tab_p[3][_Y]=-m_w/2;
+	return(0);
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
 long double Subst::getW1(void) {
 	return(0);
 	}
@@ -83,9 +124,6 @@ long double Subst::getW3(void) {
 	return(0);
 	}
 long double Subst::getW4(void) {
-	return(0);
-	}
-long double Subst::getL(void) {
 	return(0);
 	}
 long double Subst::getS(void) {
@@ -124,16 +162,6 @@ string Subst::getNet3(void) {
 string Subst::getNet4(void) {
 	return("");
 	}
-int Subst::getNpoint(void) {
-	return(0);
-	}
-long double Subst::getP(int _n, bool _xy, bool _r, bool _abs) {
-	(void) _n;
-	(void) _xy;
-	(void) _r;
-	(void) _abs;
-	return(1);
-	}
 int Subst::setNet1(string _net1) {
 	(void) _net1;
 	return(1);
@@ -148,8 +176,5 @@ int Subst::setNet3(string _net3) {
 	}
 int Subst::setNet4(string _net4) {
 	(void) _net4;
-	return(1);
-	}
-int Subst::setP(void) {
 	return(1);
 	}

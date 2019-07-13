@@ -71,6 +71,8 @@ public :
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
 	int setP(void);
+	int setW(long double _w);
+	int setL(long double _l);
 };
 
 #endif // MGAP_H

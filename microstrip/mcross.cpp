@@ -255,3 +255,11 @@ short Mcross::getN(void) {
 short Mcross::getAlpha(void) {
 	return(0);
 	}
+int Mcross::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mcross::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}

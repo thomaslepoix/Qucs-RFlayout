@@ -155,6 +155,14 @@ string Mmbend::getNet3(void) {
 string Mmbend::getNet4(void) {
 	return("");
 	}
+int Mmbend::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mmbend::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mmbend::setNet3(string _net3) {
 	(void) _net3;
 	return(1);

@@ -73,6 +73,8 @@ public :
 	short getN(void);
 	short getAlpha(void);
 	std::string getNet4(void);
+	int setW(long double _w);
+	int setL(long double _l);
 	int setNet4(std::string _net4);
 };
 

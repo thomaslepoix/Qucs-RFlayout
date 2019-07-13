@@ -66,6 +66,8 @@ public :
 	std::string getNet4(void);
 	int getNpoint(void);
 	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	int setW(long double _w);
+	int setL(long double _l);
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
 	int setP(void);

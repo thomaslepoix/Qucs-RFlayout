@@ -125,6 +125,14 @@ long double Mopen::getP(int _n, bool _xy, bool _r, bool _abs) {
 	(void) _abs;
 	return(1);
 	}
+int Mopen::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mopen::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mopen::setNet2(string _net2) {
 	(void) _net2;
 	return(1);

@@ -151,6 +151,14 @@ string Mlin::getNet3(void) {
 string Mlin::getNet4(void) {
 	return("");
 	}
+int Mlin::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mlin::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mlin::setNet3(string _net3) {
 	(void) _net3;
 	return(1);

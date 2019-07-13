@@ -75,6 +75,8 @@ public :
 	long double getRho(void);
 	short getN(void);
 	short getAlpha(void);
+	int setW(long double _w);
+	int setL(long double _l);
 };
 
 #endif // MCOUPLED_H

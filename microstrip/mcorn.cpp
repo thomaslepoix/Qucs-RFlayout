@@ -143,6 +143,14 @@ string Mcorn::getNet3(void) {
 string Mcorn::getNet4(void) {
 	return("");
 	}
+int Mcorn::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mcorn::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mcorn::setNet3(string _net3) {
 	(void) _net3;
 	return(1);

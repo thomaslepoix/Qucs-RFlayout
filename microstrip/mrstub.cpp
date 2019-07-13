@@ -163,6 +163,14 @@ string Mrstub::getNet3(void) {
 string Mrstub::getNet4(void) {
 	return("");
 	}
+int Mrstub::setW(long double _w) {
+	(void) _w;
+	return(1);
+	}
+int Mrstub::setL(long double _l) {
+	(void) _l;
+	return(1);
+	}
 int Mrstub::setNet2(string _net2) {
 	(void) _net2;
 	return(1);
