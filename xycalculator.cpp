@@ -115,6 +115,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 		}
 
 	cout << endl;
+	cout << "Extrem positions : " << endl;
 	cout << "Xmin : " << extrem_pos[_XMIN] << endl;
 	cout << "Xmax : " << extrem_pos[_XMAX] << endl;
 	cout << "Ymin : " << extrem_pos[_YMIN] << endl;
@@ -122,9 +123,11 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 
 //translate shapes in positive quarter
 	for(shared_ptr<Element> it : tab_all) {
-		it->setX(it->getX()-extrem_pos[_XMIN]+1);
-		it->setY(it->getY()-extrem_pos[_YMIN]+1);
-		it->setP();
+		if(it->getType() != "SUBST") {
+			it->setX(it->getX()-extrem_pos[_XMIN]+1);
+			it->setY(it->getY()-extrem_pos[_YMIN]+1);
+			it->setP();
+			}
 		}
 
 //reset extrem_pos
@@ -145,7 +148,20 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	cout << "Ymin : " << extrem_pos[_YMIN] << endl;
 	cout << "Ymax : " << extrem_pos[_YMAX] << endl;
 
-
+//provisoire: set substrate points
+	for(shared_ptr<Element> it : tab_all) {
+		if(it->getType() == "SUBST") {
+			it->setW(extrem_pos[_XMAX]-extrem_pos[_XMIN]);
+			it->setL(extrem_pos[_YMAX]-extrem_pos[_YMIN]);
+			it->setX(extrem_pos[_XMIN]+it->getW()/2);
+			it->setY(extrem_pos[_YMIN]+it->getL()/2);
+			cout << "it->getW() : " << it->getW() << endl;
+			cout << "it->getL() : " << it->getL() << endl;
+			cout << "it->getX() : " << it->getX() << endl;
+			cout << "it->getY() : " << it->getY() << endl;
+			it->setP();
+			}
+		}
 
 //delete objects inner pointers
 	for(shared_ptr<Element> it : tab_all) {

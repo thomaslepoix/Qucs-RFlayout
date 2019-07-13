@@ -28,6 +28,7 @@
 #include <vector>
 #include <memory>
 #include <cmath>
+#include <iostream>
 
 #include "microstrip/element.h"
 
@@ -55,10 +56,10 @@ protected:
 //	void keyReleaseEvent(QKeyEvent *event);
 
 private:
-	enum t_color{orange, green, black};
+	enum t_color{yellow, orange, green, black, magenta};
 	void drawAll(void);
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], long double z, enum t_color color);
-//	void drawBorder(int npoint, long double tab_x[], long double tab_y[], long double zl, long double zh, enum t_color color);
+	void drawBorder(int npoint, long double tab_x[], long double tab_y[], long double zl, long double zh, enum t_color color);
 
 	void drawcube();
 	void drawtriangle();

@@ -177,22 +177,34 @@ void Preview::drawAll(void) {
 	glScalef(factor, factor, factor);
 	for(shared_ptr<Element> it : tab_all) {
 		QString type=QString::fromStdString(it->getType());
-		if(type=="MCORN"
-		|| type=="MCROSS"
-		|| type=="MMBEND"
-		|| type=="MLIN"
-		|| type=="MRSTUB"
-		|| type=="MTEE") {
+		if(type=="SUBST") {
+			if(flag_3D) {
+				long double tab_x[it->getNpoint()];
+				long double tab_y[it->getNpoint()];
+				for(int i=0;i<it->getNpoint();i++) {
+					tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
+					tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
+					}
+				drawShape(it->getNpoint(), tab_x, tab_y, -0.0f, magenta);
+				drawShape(it->getNpoint(), tab_x, tab_y, -3/*it->getH()*/, magenta);
+				drawBorder(it->getNpoint(), tab_x, tab_y, -3/*it->getH()*/, -0.0f, magenta);
+				}
+		} else if(type=="MCORN"
+			   || type=="MCROSS"
+			   || type=="MMBEND"
+			   || type=="MLIN"
+			   || type=="MRSTUB"
+			   || type=="MTEE") {
 			long double tab_x[it->getNpoint()];
 			long double tab_y[it->getNpoint()];
-//			long double z=flag_3D ? it->subst->getT() : 0.0f;
 			for(int i=0;i<it->getNpoint();i++) {
 				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
-			drawShape(it->getNpoint(), tab_x, tab_y, 0.0f, orange);
+			drawShape(it->getNpoint(), tab_x, tab_y, 0.0f, yellow);
 			if(flag_3D && it->subst.get()) {
-				drawShape(it->getNpoint(), tab_x, tab_y, it->subst->getT(), orange);
+				drawShape(it->getNpoint(), tab_x, tab_y, 2/*it->subst->getT()*/, yellow);
+				drawBorder(it->getNpoint(), tab_x, tab_y, 0.0f, 2/*it->subst->getT()*/, yellow);
 				}
 		} else if(type=="MCOUPLED") {
 			long double tab_x[it->getNpoint()/2];
@@ -201,12 +213,20 @@ void Preview::drawAll(void) {
 				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
-			drawShape(it->getNpoint()/2, tab_x, tab_y, 0.0f, orange);
+			drawShape(it->getNpoint()/2, tab_x, tab_y, 0.0f, yellow);
+			if(flag_3D && it->subst.get()) {
+				drawShape(it->getNpoint()/2, tab_x, tab_y, it->subst->getT(), yellow);
+				drawBorder(it->getNpoint()/2, tab_x, tab_y, 0.0f, it->subst->getT(), yellow);
+				}
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				tab_x[i-it->getNpoint()/2]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i-it->getNpoint()/2]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
-			drawShape(it->getNpoint()/2, tab_x, tab_y, 0.0f, orange);
+			drawShape(it->getNpoint()/2, tab_x, tab_y, 0.0f, yellow);
+			if(flag_3D && it->subst.get()) {
+				drawShape(it->getNpoint()/2, tab_x, tab_y, it->subst->getT(), yellow);
+				drawBorder(it->getNpoint()/2, tab_x, tab_y, 0.0f, it->subst->getT(), yellow);
+				}
 		} else if(type=="MVIA") {
 			long double tab_x[60];
 			long double tab_y[60];
@@ -215,6 +235,10 @@ void Preview::drawAll(void) {
 				tab_y[i]=-(it->getY()+(it->getD()/2*sin((M_PI/180)*6*i)+y_offset));
 				}
 			drawShape(60, tab_x, tab_y, 0.0f, green);
+			if(flag_3D && it->subst.get()) {
+				drawShape(60, tab_x, tab_y, it->subst->getT(), green);
+				drawBorder(60, tab_x, tab_y, 0.0f, it->subst->getT(), green);
+				}
 			}
 		}
 	}
@@ -226,7 +250,9 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], lo
 	glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 //	qglColor(Qt::red);
 	if(color==green) glColor3f(0.0f, 1.0f, 0.0f);
+	else if(color==yellow) glColor3f(1.0f, 1.0f, 0.0f);
 	else if(color==orange) glColor3f(1.0f, 0.5f, 0.0f);		//bug? it should be orange
+	else if(color==magenta) glColor3f(1.0f, 0.0f, 1.0f);
 	else if(color==black) glColor3f(0.0f, 0.0f, 0.0f);
 
 	glBegin(GL_POLYGON);
@@ -244,6 +270,40 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], lo
 			glVertex3f(tab_x[i], tab_y[i], z);
 			}
 	glEnd();
+	}
+
+void Preview::drawBorder(int npoint, long double tab_x[], long double tab_y[], long double zl, long double zh, enum t_color color) {
+	if(color==green) glColor3f(0.0f, 1.0f, 0.0f);
+	else if(color==yellow) glColor3f(1.0f, 1.0f, 0.0f);
+	else if(color==orange) glColor3f(1.0f, 0.5f, 0.0f);		//bug? it should be orange
+	else if(color==magenta) glColor3f(1.0f, 0.0f, 1.0f);
+	else if(color==black) glColor3f(0.0f, 0.0f, 0.0f);
+
+	for(int i=0, u=1; i<npoint; i++, u++) {
+		if(u == npoint) u=0;
+		glClear(GL_STENCIL_BUFFER_BIT);
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+		glStencilFunc(GL_ALWAYS, 0x1, 0x1);
+		glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+
+		glBegin(GL_QUADS);
+			glVertex3f(tab_x[i], tab_y[i], zl);
+			glVertex3f(tab_x[i], tab_y[i], zh);
+			glVertex3f(tab_x[u], tab_y[u], zh);
+			glVertex3f(tab_x[u], tab_y[u], zl);
+		glEnd();
+
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
+		glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+		glBegin(GL_QUADS);
+			glVertex3f(tab_x[i], tab_y[i], zl);
+			glVertex3f(tab_x[i], tab_y[i], zh);
+			glVertex3f(tab_x[u], tab_y[u], zh);
+			glVertex3f(tab_x[u], tab_y[u], zl);
+		glEnd();
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -352,3 +412,4 @@ void Preview::drawcube() {
       glVertex3f(1.0f, -1.0f, -1.0f);
    glEnd();  // End of drawing color-cube
 	}
+
