@@ -39,8 +39,9 @@ public :
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos);
 	void resetView(void);
 
-	void setFCtrl(bool flag_ctrl);
+	void setFCtrl(bool _flag_ctrl);
 	void setFShift(bool _flag_shift);
+	void setF3D(bool _flag_3D);
 protected:
 	void initializeGL();
 	void paintGL();
@@ -57,6 +58,7 @@ private:
 	enum t_color{orange, green, black};
 	void drawAll(void);
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], long double z, enum t_color color);
+//	void drawBorder(int npoint, long double tab_x[], long double tab_y[], long double zl, long double zh, enum t_color color);
 
 	void drawcube();
 	void drawtriangle();
@@ -80,6 +82,7 @@ private:
 
 	bool flag_ctrl=0;
 	bool flag_shift=0;
+	bool flag_3D=1;
 };
 
 #endif // PREVIEW_H

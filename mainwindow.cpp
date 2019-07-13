@@ -34,6 +34,9 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 		}
 	
 MainWindow::~MainWindow() {
+	for(std::shared_ptr<Element> it : tab_all) {
+		it->subst=NULL;
+		}
     delete ui;
 	}
 

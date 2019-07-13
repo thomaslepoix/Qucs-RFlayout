@@ -469,6 +469,28 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		}
 	cout << "Reading netlist... OK" << endl;
 	cout << "N elements : " << tab_all.size() << endl;
+
+//link elements with substrates
+	for(shared_ptr<Element> it : tab_all) {
+		if(it->getType() == "SUBST") {
+			for(shared_ptr<Element> ut : tab_all) {
+				if(ut->getSubst() == it->getLabel()
+				&&(ut->getType() == "MCORN"					//useless block?
+				|| ut->getType() == "MCOUPLED"				//eqn, pac, etc
+				|| ut->getType() == "MCROSS"				//have m_subst ""
+				|| ut->getType() == "MGAP"
+				|| ut->getType() == "MLIN"
+				|| ut->getType() == "MMBEND"
+				|| ut->getType() == "MOPEN"
+				|| ut->getType() == "MRSTUB"
+				|| ut->getType() == "MSTEP"
+				|| ut->getType() == "MTEE"
+				|| ut->getType() == "MVIA")) {
+					ut->subst=it;
+					}
+				}
+			}
+		}
 	return(0);
 	}
 

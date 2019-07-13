@@ -23,6 +23,8 @@
 class Subst : public Element {
 private :
 	const std::string m_descriptor="substrat";
+//	long double m_w;
+//	long double m_l;
 	long double m_er;
 	long double m_h;
 	long double m_t;

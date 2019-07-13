@@ -58,6 +58,7 @@ public:
 			std::string _subst);
 	~Element();
 	std::shared_ptr<Element> prev=NULL;
+	std::shared_ptr<Element> subst=NULL;
 	std::string getLabel(void);
 	std::string getType(void);
 	bool getMirrorx(void);

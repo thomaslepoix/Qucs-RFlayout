@@ -132,7 +132,10 @@ int main(int argc, char* argv[]) {
 	//write layout
 		layoutwriter(tab_all, extrem_pos, n_sch, out_dir, out_format);
 
-
+	//delete objects inner pointers
+		for(shared_ptr<Element> it : tab_all) {
+			it->subst=NULL;
+			}
 
 	//debug
 /*		for(unsigned int i=0;i<tab_all.size();i++) {

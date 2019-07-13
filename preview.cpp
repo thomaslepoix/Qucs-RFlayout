@@ -148,6 +148,10 @@ void Preview::setFShift(bool _flag_shift) {
 	flag_shift=_flag_shift;
 	}
 
+void Preview::setF3D(bool _flag_3D) {
+	flag_3D=_flag_3D;
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void Preview::resetView(void) {
@@ -181,11 +185,15 @@ void Preview::drawAll(void) {
 		|| type=="MTEE") {
 			long double tab_x[it->getNpoint()];
 			long double tab_y[it->getNpoint()];
+//			long double z=flag_3D ? it->subst->getT() : 0.0f;
 			for(int i=0;i<it->getNpoint();i++) {
 				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
 				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
 				}
 			drawShape(it->getNpoint(), tab_x, tab_y, 0.0f, orange);
+			if(flag_3D && it->subst.get()) {
+				drawShape(it->getNpoint(), tab_x, tab_y, it->subst->getT(), orange);
+				}
 		} else if(type=="MCOUPLED") {
 			long double tab_x[it->getNpoint()/2];
 			long double tab_y[it->getNpoint()/2];
