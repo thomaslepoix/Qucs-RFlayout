@@ -151,10 +151,10 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 //provisoire: set substrate points
 	for(shared_ptr<Element> it : tab_all) {
 		if(it->getType() == "SUBST") {
-			it->setW(extrem_pos[_XMAX]-extrem_pos[_XMIN]);
-			it->setL(extrem_pos[_YMAX]-extrem_pos[_YMIN]);
-			it->setX(extrem_pos[_XMIN]+it->getW()/2);
-			it->setY(extrem_pos[_YMIN]+it->getL()/2);
+			it->setL(extrem_pos[_XMAX]-extrem_pos[_XMIN]+2);
+			it->setW(extrem_pos[_YMAX]-extrem_pos[_YMIN]+2);
+			it->setX(extrem_pos[_XMIN]+it->getL()/2);
+			it->setY(extrem_pos[_YMIN]+it->getW()/2);
 			cout << "it->getW() : " << it->getW() << endl;
 			cout << "it->getL() : " << it->getL() << endl;
 			cout << "it->getX() : " << it->getX() << endl;
