@@ -3,7 +3,7 @@
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
-    email                : thomas.lepoix@gmail.com
+    email                : thomas.lepoix@protonmail.ch
  ***************************************************************************/
 
 /***************************************************************************
