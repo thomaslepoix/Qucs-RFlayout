@@ -67,14 +67,14 @@ int Mcorn::setNet2(string _net2) {
 	}
 
 int Mcorn::setP(void) {
-	tab_p[0][_X]=-m_w/2;
-	tab_p[0][_Y]= m_w/2;
-	tab_p[1][_X]= m_w/2;
-	tab_p[1][_Y]= m_w/2;
-	tab_p[2][_X]= m_w/2;
-	tab_p[2][_Y]=-m_w/2;
-	tab_p[3][_X]=-m_w/2;
-	tab_p[3][_Y]=-m_w/2;
+	tab_p[0][EL_X]=-m_w/2;
+	tab_p[0][EL_Y]= m_w/2;
+	tab_p[1][EL_X]= m_w/2;
+	tab_p[1][EL_Y]= m_w/2;
+	tab_p[2][EL_X]= m_w/2;
+	tab_p[2][EL_Y]=-m_w/2;
+	tab_p[3][EL_X]=-m_w/2;
+	tab_p[3][EL_Y]=-m_w/2;
 	return(0);
 	}
 

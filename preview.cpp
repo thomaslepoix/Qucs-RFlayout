@@ -182,21 +182,21 @@ void Preview::drawAll(void) {
 			long double tab_x[it->getNpoint()];
 			long double tab_y[it->getNpoint()];
 			for(int i=0;i<it->getNpoint();i++) {
-				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
-				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
+				tab_x[i]=it->getP(i, EL_X, _R, _ABS)+x_offset;
+				tab_y[i]=-(it->getP(i, EL_Y, _R, _ABS)+y_offset);
 				}
 			drawShape(it->getNpoint(), tab_x, tab_y, orange);
 		} else if(type=="MCOUPLED") {
 			long double tab_x[it->getNpoint()/2];
 			long double tab_y[it->getNpoint()/2];
 			for(int i=0;i<it->getNpoint()/2;i++) {
-				tab_x[i]=it->getP(i, _X, _R, _ABS)+x_offset;
-				tab_y[i]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
+				tab_x[i]=it->getP(i, EL_X, _R, _ABS)+x_offset;
+				tab_y[i]=-(it->getP(i, EL_Y, _R, _ABS)+y_offset);
 				}
 			drawShape(it->getNpoint()/2, tab_x, tab_y, orange);
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-				tab_x[i-it->getNpoint()/2]=it->getP(i, _X, _R, _ABS)+x_offset;
-				tab_y[i-it->getNpoint()/2]=-(it->getP(i, _Y, _R, _ABS)+y_offset);
+				tab_x[i-it->getNpoint()/2]=it->getP(i, EL_X, _R, _ABS)+x_offset;
+				tab_y[i-it->getNpoint()/2]=-(it->getP(i, EL_Y, _R, _ABS)+y_offset);
 				}
 			drawShape(it->getNpoint()/2, tab_x, tab_y, orange);
 		} else if(type=="MVIA") {

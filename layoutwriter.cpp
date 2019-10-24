@@ -172,21 +172,21 @@ int write_kicad_pcb(vector<shared_ptr<Element>> const& tab_all, ofstream& f_out)
 			if(type=="MCOUPLED") {//////////////////////////////////////////////
 				f_out << "    (fp_poly (pts\n";
 				for(int i=0;i<it->getNpoint()/2;i++) {
-					f_out << "      (xy " << it->getP(i, _X, _NOR, _REL)
-						  << " "          << it->getP(i, _Y, _NOR, _REL) << ")\n";
+					f_out << "      (xy " << it->getP(i, EL_X, _NOR, _REL)
+						  << " "          << it->getP(i, EL_Y, _NOR, _REL) << ")\n";
 					}
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
 					  << "    (fp_poly (pts\n";
 				for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-					f_out << "      (xy " << it->getP(i, _X, _NOR, _REL)
-						  << " "          << it->getP(i, _Y, _NOR, _REL) << ")\n";
+					f_out << "      (xy " << it->getP(i, EL_X, _NOR, _REL)
+						  << " "          << it->getP(i, EL_Y, _NOR, _REL) << ")\n";
 					}
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 			} else {////////////////////////////////////////////////////////////
 				f_out << "    (fp_poly (pts\n";
 				for(int i=0;i<it->getNpoint();i++) {
-					f_out << "      (xy " << it->getP(i, _X, _NOR, _REL)
-						  << " "          << it->getP(i, _Y, _NOR, _REL) << ")\n";
+					f_out << "      (xy " << it->getP(i, EL_X, _NOR, _REL)
+						  << " "          << it->getP(i, EL_Y, _NOR, _REL) << ")\n";
 					}
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 				}
@@ -229,22 +229,22 @@ int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& na
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
-					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, EL_X, _R, _ABS)
+					  << " "          << it->getP(i, EL_Y, _R, _ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MCOUPLED") {///////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 //f_out << "MCOUPLED" << endl;
 			for(int i=0;i<it->getNpoint()/2;i++) {
-				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
-					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, EL_X, _R, _ABS)
+					  << " "          << it->getP(i, EL_Y, _R, _ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
 				  << "    (fp_poly (pts\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, _X, _R, _ABS)
-					  << " "          << it->getP(i, _Y, _R, _ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, EL_X, _R, _ABS)
+					  << " "          << it->getP(i, EL_Y, _R, _ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
@@ -366,8 +366,8 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 				  << "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, _X, _R, _ABS) << "mm; "
-					  << it->getP(i, _Y, _R, _ABS) << "mm }\n";
+					  << it->getP(i, EL_X, _R, _ABS) << "mm; "
+					  << it->getP(i, EL_Y, _R, _ABS) << "mm }\n";
 				}
 			f_out << "          }\n"
 				  << "        }\n"
@@ -383,8 +383,8 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 				  << "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint()/2;i++) {
 				f_out << "           { "
-					  << it->getP(i, _X, _R, _ABS) << "mm; "
-					  << it->getP(i, _Y, _R, _ABS) << "mm }\n";
+					  << it->getP(i, EL_X, _R, _ABS) << "mm; "
+					  << it->getP(i, EL_Y, _R, _ABS) << "mm }\n";
 				}
 			f_out << "          }\n"
 				  << "        }\n"
@@ -399,8 +399,8 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 				  << "          ta:contour {\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, _X, _R, _ABS) << "mm; "
-					  << it->getP(i, _Y, _R, _ABS) << "mm }\n";
+					  << it->getP(i, EL_X, _R, _ABS) << "mm; "
+					  << it->getP(i, EL_Y, _R, _ABS) << "mm }\n";
 				}
 			f_out << "          }\n"
 				  << "        }\n"

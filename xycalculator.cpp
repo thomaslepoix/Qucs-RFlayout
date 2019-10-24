@@ -107,10 +107,10 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	for(shared_ptr<Element> it : tab_all) {
 		it->setP();
 		for(int u=0;u<it->getNpoint();u++) {
-			if(it->getP(u, _X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, _X, _R, _ABS);
-			if(it->getP(u, _X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, _X, _R, _ABS);
-			if(it->getP(u, _Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, _Y, _R, _ABS);
-			if(it->getP(u, _Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, _Y, _R, _ABS);
+			if(it->getP(u, EL_X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, EL_X, _R, _ABS);
+			if(it->getP(u, EL_X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, EL_X, _R, _ABS);
+			if(it->getP(u, EL_Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, EL_Y, _R, _ABS);
+			if(it->getP(u, EL_Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, EL_Y, _R, _ABS);
 			}
 		}
 
@@ -132,10 +132,10 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 		extrem_pos[i]=0.0;
 	for(shared_ptr<Element> it : tab_all) {
 		for(int u=0;u<it->getNpoint();u++) {
-			if(it->getP(u, _X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, _X, _R, _ABS);
-			if(it->getP(u, _X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, _X, _R, _ABS);
-			if(it->getP(u, _Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, _Y, _R, _ABS);
-			if(it->getP(u, _Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, _Y, _R, _ABS);
+			if(it->getP(u, EL_X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, EL_X, _R, _ABS);
+			if(it->getP(u, EL_X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, EL_X, _R, _ABS);
+			if(it->getP(u, EL_Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, EL_Y, _R, _ABS);
+			if(it->getP(u, EL_Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, EL_Y, _R, _ABS);
 			}
 		}
 

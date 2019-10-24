@@ -21,8 +21,8 @@
 #define _USE_MATH_DEFINES
 
 //getP() defines
-#define _X		0
-#define _Y		1
+#define EL_X    0
+#define EL_Y	1
 #define _NOR	0
 #define _R		1
 #define _REL	0
