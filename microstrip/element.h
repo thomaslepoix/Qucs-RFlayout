@@ -44,8 +44,8 @@ protected:
 	bool m_mirrorx;
 	short m_r;
 	short m_nport;
-	long double m_x=0.0/0.0;
-	long double m_y=0.0/0.0;
+    long double m_x=NAN;
+    long double m_y=NAN;
 	long double rotateX(long double _x, long double _y);
 	long double rotateY(long double _x, long double _y);
 public:
@@ -55,7 +55,7 @@ public:
 			short _r,
 			short _nport);
 	~Element();
-	std::shared_ptr<Element> prev=NULL;
+    std::shared_ptr<Element> prev=nullptr;
 	std::string getLabel(void);
 	std::string getType(void);
 	bool getMirrorx(void);
