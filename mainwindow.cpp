@@ -38,7 +38,18 @@ MainWindow::~MainWindow() {
 	}
 
 void MainWindow::on_pb_browse_in_clicked(void) {
-	n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), "./", tr("Qucs schematic (*.sch)"));
+    if(this->openfile_path.length() == 0)
+    {
+        this->openfile_path = QDir::currentPath();
+    }
+
+    n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), this->openfile_path, tr("Qucs schematic (*.sch)"));
+
+    if(!n_sch.length())
+        return;
+
+    this->openfile_path = QFileInfo(n_sch).path(); // store path for next time
+
 	ui->le_path_in->setText(n_sch);
 	}
 

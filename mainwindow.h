@@ -74,6 +74,7 @@ private:
 	QString out_dir;
 	QString out_format;
 	QString n_out;
+	QString openfile_path;
 
 //	int previewprinter(/*Element**& tab_all, int& nelem*/);
 };
