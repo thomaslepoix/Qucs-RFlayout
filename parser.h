@@ -38,8 +38,8 @@
 #include "microstrip/mtee.h"
 #include "microstrip/mvia.h"
 
-//int parser(Element**& tab_all, std::string const& n_sch, int& nelem);
 int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
 long double suffix(std::string const s_sci, std::string const s_eng);
+std::string check_void(std::string match, std::string label);
 
 #endif // PARSER_H

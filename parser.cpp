@@ -148,85 +148,86 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 				} else if(type=="MCORN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, 2, W)));
 				} else if(type=="MCROSS") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 2 : " << W2 << endl;
 					//width 3
 						regex_search(line, match, r_quotedfield16);
-						W3=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 3 : " << W3 << endl;
 					//width 4
 						regex_search(line, match, r_quotedfield18);
-						W4=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W4=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 4 : " << W4 << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, 4, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
 					//length
 						regex_search(line, match, r_quotedfield14);
-						L=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tLength : " << L << endl;
 					//space
 						regex_search(line, match, r_quotedfield16);
-						S=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tSpace : " << S << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, 4, W, L, S)));
 				} else if(type=="MGAP") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						string tmp;
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 2 : " << W2 << endl;
 					//space
 						regex_search(line, match, r_quotedfield16);
-						S=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tSpace : " << S << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, 2, W1, W2, S)));
 				} else if(type=="MMBEND") {
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, 2, W)));
 				} else if(type=="MLIN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
 					//length
 						regex_search(line, match, r_quotedfield14);
-						L=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tLength : " << L << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, 2, W, L)));
 				} else if(type=="MOPEN") {
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth : " << W << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, 1, W)));
 				} else if(type=="MRSTUB") {
 					//inner radius
 						regex_search(line, match, r_quotedfield12);
-						ri=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						ri=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tInner radius : " << ri << endl;
 					//outer radius
 						regex_search(line, match, r_quotedfield14);
-						ro=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						ro=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tOuter radius : " << ro << endl;
 					//alpha
 						//no unit
@@ -237,31 +238,31 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 				} else if(type=="MSTEP") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 2 : " << W2 << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, 2, W1, W2)));
 				} else if(type=="MTEE") {
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 2 : " << W2 << endl;
 					//width 3
 						regex_search(line, match, r_quotedfield16);
-						W3=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tWidth 3 : " << W3 << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, 3, W1, W2, W3)));
 				} else if(type=="MVIA") {
 					//diameter
 						regex_search(line, match, r_quotedfield12);
-						D=(stold(match.str(6)))*suffix(match.str(8), match.str(9));
+						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
 						cout << "\tDiameter : " << D << endl;
 					tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, mirrorx, R, 1, D)));
 					}
@@ -419,3 +420,12 @@ long double suffix(string const s_sci, const string s_eng) {
 	return(multiplicator);
 	}
 
+
+string check_void(string match, string label) {
+	if(match=="") {
+		cerr << "WARNING : void field in component " << label << " -> assigned to 0 " << endl;
+		return("0");
+	} else {
+		return(match);
+		}
+	}
