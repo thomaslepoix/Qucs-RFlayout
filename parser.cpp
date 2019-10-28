@@ -93,7 +93,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
     QProcess process_qucs;
     process_qucs.start(QString::fromStdString(net_gen));
     bool res = process_qucs.waitForFinished();
-    if (res == false) {
+    if(res==false || process_qucs.exitCode()) {
         cout << "KO" << endl;
         cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
         exit(2);
