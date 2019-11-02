@@ -41,6 +41,8 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 int tab_remove(std::vector<std::shared_ptr<Element>>& tab_undone, std::shared_ptr<Element> const& current);
 bool purgefind(std::vector<std::shared_ptr<Element>> const& tab_all, std::shared_ptr<Element> const& current, std::string const _net);
 int purgenets(std::vector<std::shared_ptr<Element>> const& tab_all);
+bool checkonenet(std::vector<std::shared_ptr<Element>> const& tab_all, std::string const _net);
+int checkintersection(std::vector<std::shared_ptr<Element>> const& tab_all);
 int activenets(std::shared_ptr<Element> const& _elem);
 int netmin(std::shared_ptr<Element> const& _elem);
 int findnext(std::vector<std::shared_ptr<Element>> const& tab_all, std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);

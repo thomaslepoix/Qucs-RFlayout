@@ -33,6 +33,13 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	int nnets;
 	int current_net=0;
 
+//check geometric coherence of the schematic
+	if(checkintersection(tab_all)) {
+		cerr << "ERROR : A wire is used to connect more than two connection points.\n"
+		        "\tPlease use a component like a tee or a cross to avoid this.\n";
+		exit(3);
+		}
+
 //delete unconnected nets
 	purgenets(tab_all);
 
@@ -180,16 +187,35 @@ bool purgefind(vector<shared_ptr<Element>> const& tab_all, shared_ptr<Element> c
 int purgenets(vector<shared_ptr<Element>> const& tab_all) {
 //delete unconnected nets
 	for(shared_ptr<Element> it : tab_all) {
-		for(unsigned char u=1;u<5;u++) {
-			if(u==1) {
-				if(purgefind(tab_all, it, it->getNet1())==false) it->setNet1("");
-			} else if(u==2) {
-				if(purgefind(tab_all, it, it->getNet2())==false) it->setNet2("");
-			} else if(u==3) {
-				if(purgefind(tab_all, it, it->getNet3())==false) it->setNet3("");
-			} else if(u==4) {
-				if(purgefind(tab_all, it, it->getNet4())==false) it->setNet4("");
-				}
+		if(purgefind(tab_all, it, it->getNet1())==false) it->setNet1("");
+		if(purgefind(tab_all, it, it->getNet2())==false) it->setNet2("");
+		if(purgefind(tab_all, it, it->getNet3())==false) it->setNet3("");
+		if(purgefind(tab_all, it, it->getNet4())==false) it->setNet4("");
+		}
+	return(0);
+	}
+
+bool checkonenet(vector<shared_ptr<Element>> const& tab_all, string const _net) {
+	unsigned int count=0;
+	if(_net!=""){
+		for(shared_ptr<Element> it : tab_all) {
+			if(it->getNet1()==_net) count++;
+			if(it->getNet2()==_net) count++;
+			if(it->getNet3()==_net) count++;
+			if(it->getNet4()==_net) count++;
+			}
+		}
+	return(count>2 ? 1 : 0);
+	}
+
+int checkintersection(vector<shared_ptr<Element>> const& tab_all) {
+//check if there are net intersections : more than 2 times the same net
+	for(shared_ptr<Element> it : tab_all) {
+		for(shared_ptr<Element> ut : tab_all) {
+			if(checkonenet(tab_all, it->getNet1())==true) return(1);
+			if(checkonenet(tab_all, it->getNet2())==true) return(1);
+			if(checkonenet(tab_all, it->getNet3())==true) return(1);
+			if(checkonenet(tab_all, it->getNet4())==true) return(1);
 			}
 		}
 	return(0);
