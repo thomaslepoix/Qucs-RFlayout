@@ -19,13 +19,12 @@
 using namespace std;
 
 int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* extrem_pos) {
-    if(tab_all.size() == 0)
-        return 0;
+
 //variables
 	vector<shared_ptr<Element>> tab_undone=tab_all;
 	stack<shared_ptr<Element>> buffer;
 	shared_ptr<Element> current=tab_undone[0];
-    shared_ptr<Element> next=nullptr;
+	shared_ptr<Element> next=NULL;
 
 	long double prev_xstep=0;
 	long double prev_ystep=0;
@@ -76,32 +75,30 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 				tab_remove(tab_undone, current);
 			} else {
 				buffer.push(current);
-            }
+				}
 			current_net=netmin(current);
 			cout << "Selected net : " << current_net << endl;
 			xystep(current, current_net, prev_xstep, prev_ystep);
 			findnext(tab_all, current, current_net, next);
-            if(next != nullptr) {
-                cout << "Next label : " << next->getLabel() << endl;
-                next->prev=current;
-                current=next;
-                next=nullptr;
-                cout << endl;
-                cout << "Current label : " << current->getLabel() << endl;
-                if(current->getX()!=current->getX() || current->getY()!=current->getY()) {		//if position is -NaN
-                    xystep(current, current_net, current_xstep, current_ystep);
-                    cout << "Previous Xstep : " << prev_xstep << endl;
-                    cout << "Previous Ystep : " << prev_ystep << endl;
-                    cout << "Current Xstep : " << -1*current_xstep << endl;
-                    cout << "Current Ystep : " << -1*current_ystep << endl;
-                    current->setX((current->prev->getX())+(prev_xstep)-(current_xstep));
-                    current->setY((current->prev->getY())+(prev_ystep)-(current_ystep));
-                    cout << "X : " << current->getX() << endl;
-                    cout << "Y : " << current->getY() << endl;
-                }
-            }
-        }
-    }
+			cout << "Next label : " << next->getLabel() << endl;
+			next->prev=current;
+			current=next;
+			next=NULL;
+			cout << endl;
+			cout << "Current label : " << current->getLabel() << endl;
+			if(current->getX()!=current->getX() || current->getY()!=current->getY()) {		//if position is -NaN
+				xystep(current, current_net, current_xstep, current_ystep);
+				cout << "Previous Xstep : " << prev_xstep << endl;
+				cout << "Previous Ystep : " << prev_ystep << endl;
+				cout << "Current Xstep : " << -1*current_xstep << endl;
+				cout << "Current Ystep : " << -1*current_ystep << endl;
+				current->setX((current->prev->getX())+(prev_xstep)-(current_xstep));
+				current->setY((current->prev->getY())+(prev_ystep)-(current_ystep));
+				cout << "X : " << current->getX() << endl;
+				cout << "Y : " << current->getY() << endl;
+				}
+			}
+		}
 	cout << endl << "Finding positons... DONE" << endl;
 
 
