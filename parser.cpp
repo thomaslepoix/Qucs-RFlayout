@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QProcess>
 #include "parser.h"
 using namespace std;
 
@@ -88,14 +89,17 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		}
 
 	cout << endl << "Generating netlist... ";
-	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
-	if(system(net_gen.c_str())) {		//OK : exit status 0
-		cout << "KO" << endl;
-		cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
-		exit(2);
-	} else {
-		cout << "OK" << endl;
-		}
+    string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
+    QProcess process_qucs;
+    process_qucs.start(QString::fromStdString(net_gen));
+    bool res = process_qucs.waitForFinished();
+    if(res==false || process_qucs.exitCode()) {
+        cout << "KO" << endl;
+        cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
+        exit(2);
+    } else {
+        cout << "OK" << endl;
+    }
 
 //open netlist
 	cout << endl << "Opening " << n_net << "... ";

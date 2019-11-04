@@ -127,79 +127,79 @@ int Mcross::setP(void) {
 		// ##
 		// ##
 		m_npoint=4;
-		tab_p[0][_X]=  -Wlong24/2;
-		tab_p[0][_Y]=s1*Wlong13/2;
-		tab_p[1][_X]=   Wlong24/2;
-		tab_p[1][_Y]=s1*Wlong13/2;
-		tab_p[2][_X]=   Wlong24/2;
-		tab_p[2][_Y]=s2*Wlong13/2;
-		tab_p[3][_X]=  -Wlong24/2;
-		tab_p[3][_Y]=s2*Wlong13/2;
+		tab_p[0][EL_X]=  -Wlong24/2;
+		tab_p[0][EL_Y]=s1*Wlong13/2;
+		tab_p[1][EL_X]=   Wlong24/2;
+		tab_p[1][EL_Y]=s1*Wlong13/2;
+		tab_p[2][EL_X]=   Wlong24/2;
+		tab_p[2][EL_Y]=s2*Wlong13/2;
+		tab_p[3][EL_X]=  -Wlong24/2;
+		tab_p[3][EL_Y]=s2*Wlong13/2;
 	} else {
 		if(Wlong13==m_w1 && Wlong24==m_w2) {
 			//shape
 			// ##
 			// #
-			tab_p[0][_X]=  -Wlong24/2;
-			tab_p[0][_Y]=s1*Wlong13/2;
-			tab_p[1][_X]=   Wlong24/2;
-			tab_p[1][_Y]=s1*Wlong13/2;
-			tab_p[2][_X]=   m_w2/2;
-			tab_p[2][_Y]=s2*m_w3/2;
-			tab_p[3][_X]=   m_w4/2;
-			tab_p[3][_Y]=s2*m_w3/2;
-			tab_p[4][_X]=   m_w4/2;
-			tab_p[4][_Y]=s2*m_w1/2;
-			tab_p[5][_X]=  -Wlong24/2;
-			tab_p[5][_Y]=s2*Wlong13/2;
+			tab_p[0][EL_X]=  -Wlong24/2;
+			tab_p[0][EL_Y]=s1*Wlong13/2;
+			tab_p[1][EL_X]=   Wlong24/2;
+			tab_p[1][EL_Y]=s1*Wlong13/2;
+			tab_p[2][EL_X]=   m_w2/2;
+			tab_p[2][EL_Y]=s2*m_w3/2;
+			tab_p[3][EL_X]=   m_w4/2;
+			tab_p[3][EL_Y]=s2*m_w3/2;
+			tab_p[4][EL_X]=   m_w4/2;
+			tab_p[4][EL_Y]=s2*m_w1/2;
+			tab_p[5][EL_X]=  -Wlong24/2;
+			tab_p[5][EL_Y]=s2*Wlong13/2;
 		} else if(Wlong13==m_w1 && Wlong24==m_w4) {
 			//shape
 			// #
 			// ##
-			tab_p[0][_X]=  -Wlong24/2;
-			tab_p[0][_Y]=s1*Wlong13/2;
-			tab_p[1][_X]=   m_w2/2;
-			tab_p[1][_Y]=s1*m_w1/2;
-			tab_p[2][_X]=   m_w2/2;
-			tab_p[2][_Y]=s1*m_w3/2;
-			tab_p[3][_X]=   m_w4/2;
-			tab_p[3][_Y]=s1*m_w3/2;
-			tab_p[4][_X]=   Wlong24/2;
-			tab_p[4][_Y]=s2*Wlong13/2;
-			tab_p[5][_X]=  -Wlong24/2;
-			tab_p[5][_Y]=s2*Wlong13/2;
+			tab_p[0][EL_X]=  -Wlong24/2;
+			tab_p[0][EL_Y]=s1*Wlong13/2;
+			tab_p[1][EL_X]=   m_w2/2;
+			tab_p[1][EL_Y]=s1*m_w1/2;
+			tab_p[2][EL_X]=   m_w2/2;
+			tab_p[2][EL_Y]=s1*m_w3/2;
+			tab_p[3][EL_X]=   m_w4/2;
+			tab_p[3][EL_Y]=s1*m_w3/2;
+			tab_p[4][EL_X]=   Wlong24/2;
+			tab_p[4][EL_Y]=s2*Wlong13/2;
+			tab_p[5][EL_X]=  -Wlong24/2;
+			tab_p[5][EL_Y]=s2*Wlong13/2;
 		} else if(Wlong13==m_w3 && Wlong24==m_w4) {
 			//shape
 			//  #
 			// ##
-			tab_p[0][_X]=  -m_w4/2;
-			tab_p[0][_Y]=s1*m_w1/2;
-			tab_p[1][_X]=  -m_w2/2;
-			tab_p[1][_Y]=s1*m_w1/2;
-			tab_p[2][_X]=  -m_w2/2;
-			tab_p[2][_Y]=s1*m_w3/2;
-			tab_p[3][_X]=   Wlong24/2;
-			tab_p[3][_Y]=s1*Wlong13/2;
-			tab_p[4][_X]=   Wlong24/2;
-			tab_p[4][_Y]=s2*Wlong13/2;
-			tab_p[5][_X]=  -Wlong24/2;
-			tab_p[5][_Y]=s2*Wlong13/2;
+			tab_p[0][EL_X]=  -m_w4/2;
+			tab_p[0][EL_Y]=s1*m_w1/2;
+			tab_p[1][EL_X]=  -m_w2/2;
+			tab_p[1][EL_Y]=s1*m_w1/2;
+			tab_p[2][EL_X]=  -m_w2/2;
+			tab_p[2][EL_Y]=s1*m_w3/2;
+			tab_p[3][EL_X]=   Wlong24/2;
+			tab_p[3][EL_Y]=s1*Wlong13/2;
+			tab_p[4][EL_X]=   Wlong24/2;
+			tab_p[4][EL_Y]=s2*Wlong13/2;
+			tab_p[5][EL_X]=  -Wlong24/2;
+			tab_p[5][EL_Y]=s2*Wlong13/2;
 		} else if(Wlong13==m_w3 && Wlong24==m_w2) {
 			//shape
 			// ##
 			//  #
-			tab_p[0][_X]=  -Wlong24/2;
-			tab_p[0][_Y]=s1*Wlong13/2;
-			tab_p[1][_X]=   Wlong24/2;
-			tab_p[1][_Y]=s1*Wlong13/2;
-			tab_p[2][_X]=   Wlong24/2;
-			tab_p[2][_Y]=s2*Wlong13/2;
-			tab_p[3][_X]=  -m_w4/2;
-			tab_p[3][_Y]=s2*m_w3/2;
-			tab_p[4][_X]=  -m_w4/2;
-			tab_p[4][_Y]=s2*m_w1/2;
-			tab_p[5][_X]=  -m_w2/2;
-			tab_p[5][_Y]=s2*m_w1/2;
+			tab_p[0][EL_X]=  -Wlong24/2;
+			tab_p[0][EL_Y]=s1*Wlong13/2;
+			tab_p[1][EL_X]=   Wlong24/2;
+			tab_p[1][EL_Y]=s1*Wlong13/2;
+			tab_p[2][EL_X]=   Wlong24/2;
+			tab_p[2][EL_Y]=s2*Wlong13/2;
+			tab_p[3][EL_X]=  -m_w4/2;
+			tab_p[3][EL_Y]=s2*m_w3/2;
+			tab_p[4][EL_X]=  -m_w4/2;
+			tab_p[4][EL_Y]=s2*m_w1/2;
+			tab_p[5][EL_X]=  -m_w2/2;
+			tab_p[5][EL_Y]=s2*m_w1/2;
 			}
 		}
 	return(0);
