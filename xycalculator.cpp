@@ -24,7 +24,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	vector<shared_ptr<Element>> tab_undone=tab_all;
 	stack<shared_ptr<Element>> buffer;
 	shared_ptr<Element> current=tab_undone[0];
-	shared_ptr<Element> next=NULL;
+	shared_ptr<Element> next=nullptr;
 
 	long double prev_xstep=0;
 	long double prev_ystep=0;
@@ -90,7 +90,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 			cout << "Next label : " << next->getLabel() << endl;
 			next->prev=current;
 			current=next;
-			next=NULL;
+			next=nullptr;
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
 			if(current->getX()!=current->getX() || current->getY()!=current->getY()) {		//if position is -NaN
@@ -156,7 +156,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 
 //delete objects inner pointers
 	for(shared_ptr<Element> it : tab_all) {
-		it->prev=NULL;
+		it->prev=nullptr;
 		}
 	return(0);
 	}

@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 		}
 
 	if(!verbose) {
-		cout.rdbuf(NULL);
+		cout.rdbuf(nullptr);
 		}
 
 	if(gui) {

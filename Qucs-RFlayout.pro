@@ -70,4 +70,4 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-unix:!macx: LIBS += -lglut -lGLU
+#unix:!macx: LIBS += -lglut -lGLU
