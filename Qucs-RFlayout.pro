@@ -44,7 +44,8 @@ SOURCES += \
         xycalculator.cpp \
         layoutwriter.cpp \
         mainwindow.cpp \
-        preview.cpp
+        preview.cpp \
+        logger.cpp
 
 HEADERS += \
         microstrip/element.h \
@@ -65,7 +66,8 @@ HEADERS += \
         xycalculator.h \
         layoutwriter.h \
         mainwindow.h \
-        preview.h
+        preview.h \
+        logger.h
 
 FORMS += \
         mainwindow.ui

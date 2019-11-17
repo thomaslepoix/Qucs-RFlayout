@@ -21,6 +21,7 @@
 #include <QApplication>
 
 #include "version.h"
+#include "logger.h"
 #include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
@@ -86,7 +87,7 @@ int main(int argc, char* argv[]) {
 			|| string(argv[i])==".lht") {
 				out_format=string(argv[i]);
 			} else {
-				cerr << "ERROR : Invalid output format : " << argv[i] << endl;
+				log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
 				exit(1);
 				}
 			}
@@ -103,17 +104,18 @@ int main(int argc, char* argv[]) {
 		}
 
 	if(gui) {
-		cerr << "GUI mode" << endl;
-//		glutInit(&argc, argv);
+		log_err << "GUI mode\n";
 		QApplication a(argc, argv);
 		MainWindow w(QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
+		log_err.obj=&w;
+		log_err.set_mode(gui);
 		w.show();
 		return a.exec();
 
 	} else {
 
 		if(n_sch=="") {
-			cerr << "ERROR : Need an input file" << endl;
+			log_err << "ERROR : Need an input file\n";
 			exit(1);
 			}
 
@@ -122,16 +124,19 @@ int main(int argc, char* argv[]) {
 	//variables
 		vector<shared_ptr<Element>> tab_all;
 		long double extrem_pos[4]={0.0, 0.0, 0.0, 0.0};
+		int ret;
 
 	//parse files : create objects
-		parser(tab_all, n_sch);
+		ret=parser(tab_all, n_sch);
+		if(ret) exit(ret);
 
 	//algorithm : find xy
-		xycalculator(tab_all, extrem_pos);
+		ret=xycalculator(tab_all, extrem_pos);
+		if(ret) exit(ret);
 
 	//write layout
-		layoutwriter(tab_all, extrem_pos, n_sch, out_dir, out_format);
-
+		ret=layoutwriter(tab_all, extrem_pos, n_sch, out_dir, out_format);
+		if(ret) exit(ret);
 
 
 	//debug

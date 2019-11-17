@@ -23,6 +23,8 @@
 #include <vector>
 #include <memory>
 
+#include "logger.h"
+
 #include "microstrip/eqn.h"
 #include "microstrip/pac.h"
 #include "microstrip/mcorn.h"

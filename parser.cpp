@@ -73,8 +73,8 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 	if(f_sch) {
 		cout << "OK" << endl;
 	} else {
-		cerr << "ERROR : Cannot open " << n_sch << endl;
-		exit(1);
+		log_err << "ERROR : Cannot open " << n_sch << "\n";
+		return(1);
 		}
 
 //generate netlist
@@ -84,19 +84,19 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		cout << "n_sch : " << n_sch << endl;
 		cout << "n_net : " << n_net << endl;
 	} else {
-		cerr << "ERROR : Invalid input format : " << n_sch << endl;
-		exit(1);
+		log_err << "ERROR : Invalid input format : " << n_sch;// << "\n";
+		return(1);
 		}
 
 	cout << endl << "Generating netlist... ";
     string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
     QProcess process_qucs;
     process_qucs.start(QString::fromStdString(net_gen));
-    bool res = process_qucs.waitForFinished();
-    if(res==false || process_qucs.exitCode()) {
+    bool ret = process_qucs.waitForFinished();
+    if(ret==false || process_qucs.exitCode()) {
         cout << "KO" << endl;
-        cerr << "ERROR : Problem with calling Qucs : " << net_gen << endl;
-        exit(2);
+        log_err << "ERROR : Problem with calling Qucs : " << net_gen << "\n";
+        return(2);
     } else {
         cout << "OK" << endl;
     }
@@ -108,8 +108,8 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		cout << "OK" << endl;
 	} else {
 		cout << "KO" << endl;
-		cerr << "ERROR : Cannot open netlist " << n_net << endl;
-		exit(1);
+		log_err << "ERROR : Cannot open netlist " << n_net << "\n";
+		return(1);
 		}
 
 //read schematic <Components> </Components>
@@ -427,7 +427,7 @@ long double suffix(string const s_sci, const string s_eng) {
 
 string check_void(string match, string label) {
 	if(match=="") {
-		cerr << "WARNING : void field in component " << label << " -> assigned to 0 " << endl;
+		log_err << "WARNING : void field in component " << label << " -> assigned to 0\n";
 		return("0");
 	} else {
 		return(match);

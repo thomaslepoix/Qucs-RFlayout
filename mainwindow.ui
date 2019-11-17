@@ -32,13 +32,6 @@
     <item row="1" column="5">
      <widget class="QComboBox" name="cb_format"/>
     </item>
-    <item row="2" column="4" colspan="2">
-     <widget class="QLabel" name="l_debug">
-      <property name="text">
-       <string>TextLabelok</string>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="0">
      <widget class="QLabel" name="l_output">
       <property name="text">
@@ -82,6 +75,10 @@
     </item>
     <item row="1" column="0" rowspan="2" colspan="2">
      <widget class="Preview" name="glw_preview" native="true"/>
+    </item>
+    <item row="2" column="2" colspan="4">
+     <widget class="QTextBrowser" name="tb_log">
+     </widget>
     </item>
    </layout>
   </widget>

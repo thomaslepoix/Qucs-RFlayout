@@ -34,22 +34,25 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 		}
 	
 MainWindow::~MainWindow() {
+	for(std::shared_ptr<Element> it : tab_all) {
+		it->prev=nullptr;
+		}
     delete ui;
 	}
 
 void MainWindow::on_pb_browse_in_clicked(void) {
-    if(this->openfile_path.length() == 0)
-    {
-        this->openfile_path = QDir::currentPath();
-    }
+	if(this->openfile_path.length() == 0) {
+		this->openfile_path = QDir::currentPath();
+		}
 
     n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), this->openfile_path, tr("Qucs schematic (*.sch)"));
 
-    if(!n_sch.length())
+    if(!n_sch.length()) {
+		ui->le_path_in->setText("");
         return;
+		}
 
     this->openfile_path = QFileInfo(n_sch).path(); // store path for next time
-
 	ui->le_path_in->setText(n_sch);
 	}
 
@@ -58,20 +61,22 @@ void MainWindow::on_le_path_in_textChanged(const QString _n_sch) {
 	}
 
 void MainWindow::on_pb_read_clicked(void) {
+	ui->tb_log->clear();
 	if(n_sch=="") {
-		ui->l_debug->setText("ERROR : Nothing to read.");
+		log_err << "ERROR : Nothing to read.\n";
 	} else {
 		tab_all.clear();
 		tab_all.shrink_to_fit();
-		parser(tab_all, n_sch.toStdString());
-		xycalculator(tab_all, extrem_pos);
+		parser(tab_all, n_sch.toStdString())
+		|| xycalculator(tab_all, extrem_pos);
 		ui->glw_preview->set(tab_all, extrem_pos);
 		}
 	}
 
 void MainWindow::on_le_path_in_returnPressed(void) {
+	ui->tb_log->clear();
 	if(n_sch=="") {
-		ui->l_debug->setText("ERROR : Nothing to read.");
+		log_err << "ERROR : Nothing to read.\n";
 	} else {
 		tab_all.clear();
 		tab_all.shrink_to_fit();
@@ -97,18 +102,18 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 void MainWindow::on_le_path_out_returnPressed(void) {
 	if(tab_all.size()) {
 		layoutwriter(tab_all, extrem_pos, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		ui->l_debug->setText("Write ok.");
+		log_err << "Write OK.\n";
 	} else {
-		ui->l_debug->setText("ERROR : Nothing to write.");
+		log_err << "ERROR : Nothing to write.\n";
 		}
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
 	if(tab_all.size()) {
 		layoutwriter(tab_all, extrem_pos, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		ui->l_debug->setText("Write ok.");
+		log_err << "Write OK.\n";
 	} else {
-		ui->l_debug->setText("ERROR : Nothing to write.");
+		log_err << "ERROR : Nothing to write.\n";
 		}
 	}
 
@@ -121,3 +126,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 	if(event->key()==Qt::Key_Control) ui->glw_preview->setFCtrl(false);
 	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(false);
 	}
+
+void operator<<(MainWindow& obj, std::stringstream& in) {
+	obj.ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
+	}
+

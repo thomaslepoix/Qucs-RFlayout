@@ -1,5 +1,5 @@
 /***************************************************************************
-                               parser.h
+                               logger.cpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,33 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PARSER_H
-#define PARSER_H
-
-#include <iostream>
-#include <fstream>
-#include <regex>
-#include <vector>
-#include <memory>
-
 #include "logger.h"
+using namespace std;
 
-#include "microstrip/eqn.h"
-#include "microstrip/pac.h"
-#include "microstrip/mcorn.h"
-#include "microstrip/mcross.h"
-#include "microstrip/mcoupled.h"
-#include "microstrip/mgap.h"
-#include "microstrip/mmbend.h"
-#include "microstrip/mlin.h"
-#include "microstrip/mopen.h"
-#include "microstrip/mrstub.h"
-#include "microstrip/mstep.h"
-#include "microstrip/mtee.h"
-#include "microstrip/mvia.h"
+logger log_err;
 
-int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
-long double suffix(std::string const s_sci, std::string const s_eng);
-std::string check_void(std::string match, std::string label);
+void logger::func_cli(stringstream& in) {
+	cerr << in.str();
+	}
 
-#endif // PARSER_H
+void logger::func_gui(stringstream& in) {
+	*obj << in;
+	}
+
+void logger::print(stringstream& in) {
+	(this->*f)(in);
+	}
+
+logger::logger(void) : f(&logger::func_cli) {
+	}
+
+void logger::set_mode(bool gui) {
+	if(gui) f=&logger::func_gui;
+	else f=&logger::func_cli;
+	}
+

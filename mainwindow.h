@@ -18,9 +18,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <sstream>
 #include <QMainWindow>
 #include <QFileDialog>
 
+#include "logger.h"
 #include "parser.h"
 #include "xycalculator.h"
 #include "layoutwriter.h"
@@ -41,8 +43,8 @@
 #include "microstrip/mvia.h"
 
 namespace Ui {
-	class MainWindow;
-	}
+class MainWindow;
+} // namespace UI
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -50,6 +52,7 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent=0);
     ~MainWindow();
+	friend void operator<<(MainWindow& obj, std::stringstream& in);
 
 private slots:
     void on_pb_read_clicked(void);
@@ -78,5 +81,7 @@ private:
 
 //	int previewprinter(/*Element**& tab_all, int& nelem*/);
 };
+
+void operator<<(MainWindow& obj, std::stringstream& in);
 
 #endif // MAINWINDOW_H

@@ -35,9 +35,9 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 
 //check geometric coherence of the schematic
 	if(checkintersection(tab_all)) {
-		cerr << "ERROR : A wire is used to connect more than two connection points.\n"
-		        "\tPlease use a component like a tee or a cross to avoid this.\n";
-		exit(3);
+		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
+		           "\tPlease use a component like a tee or a cross to avoid this.\n";
+		return(3);
 		}
 
 //delete unconnected nets

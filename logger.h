@@ -1,5 +1,5 @@
 /***************************************************************************
-                               parser.h
+                               logger.h
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,33 +15,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef LOGGER_H
+#define LOGGER_H
 
+#include <sstream>
 #include <iostream>
-#include <fstream>
-#include <regex>
-#include <vector>
-#include <memory>
 
-#include "logger.h"
+// Prefer log_err instead of cerr
+// Do not use std::endl or std::flush with logger objects
 
-#include "microstrip/eqn.h"
-#include "microstrip/pac.h"
-#include "microstrip/mcorn.h"
-#include "microstrip/mcross.h"
-#include "microstrip/mcoupled.h"
-#include "microstrip/mgap.h"
-#include "microstrip/mmbend.h"
-#include "microstrip/mlin.h"
-#include "microstrip/mopen.h"
-#include "microstrip/mrstub.h"
-#include "microstrip/mstep.h"
-#include "microstrip/mtee.h"
-#include "microstrip/mvia.h"
+class MainWindow;
+void operator<<(MainWindow& obj, std::stringstream& in);
 
-int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
-long double suffix(std::string const s_sci, std::string const s_eng);
-std::string check_void(std::string match, std::string label);
+class logger {
+private:
+	typedef void (logger::*func)(std::stringstream&);
+	func f;
 
-#endif // PARSER_H
+	void func_cli(std::stringstream& in);
+	void func_gui(std::stringstream& in);
+
+public:
+	MainWindow* obj=nullptr;
+
+	logger(void);
+	void set_mode(bool gui);
+	void print(std::stringstream& in);
+};
+
+extern logger log_err;
+
+template<typename T>
+logger& operator<<(logger& log, T& in) {
+	std::stringstream ss;
+	ss << in;
+	log.print(ss);
+	return(log);
+	}
+
+#endif // LOGGER_H
