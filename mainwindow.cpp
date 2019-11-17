@@ -61,10 +61,14 @@ void MainWindow::on_le_path_in_textChanged(const QString _n_sch) {
 	}
 
 void MainWindow::on_pb_read_clicked(void) {
+
 	ui->tb_log->clear();
 	if(n_sch=="") {
 		log_err << "ERROR : Nothing to read.\n";
 	} else {
+		for(std::shared_ptr<Element> it : tab_all) {
+			it->prev=nullptr;
+			}
 		tab_all.clear();
 		tab_all.shrink_to_fit();
 		parser(tab_all, n_sch.toStdString())
@@ -78,6 +82,9 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 	if(n_sch=="") {
 		log_err << "ERROR : Nothing to read.\n";
 	} else {
+		for(std::shared_ptr<Element> it : tab_all) {
+			it->prev=nullptr;
+			}
 		tab_all.clear();
 		tab_all.shrink_to_fit();
 		parser(tab_all, n_sch.toStdString());
