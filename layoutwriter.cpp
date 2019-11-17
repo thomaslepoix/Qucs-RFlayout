@@ -21,10 +21,10 @@ using namespace std;
 int layoutwriter(vector<shared_ptr<Element>> const& tab_all, long double* const& extrem_pos, string const& n_sch, string const& out_dir, string const& out_format) {
 
 //variables
-	regex r_sch("\.sch$");
-	regex r_basename("^.*?([^\/]*)\.sch$");
-	regex r_out("(^.*?)\\/?$");
-	regex r_empty("^$");
+	static regex const r_sch("\.sch$");
+	static regex const r_basename("^.*?([^\/]*)\.sch$");
+	static regex const r_out("(^.*?)\\/?$");
+	static regex const r_empty("^$");
 	string n_out="";
 	string name=regex_replace(n_sch, r_sch, "");
 

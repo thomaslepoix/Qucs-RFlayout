@@ -23,7 +23,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 
 //variables
 	string n_net;
-	regex r_sch(".sch$");
+	static regex const r_sch(".sch$");
 	string line;
 	smatch match;
 
@@ -48,22 +48,22 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 	string net4;
 
 //schematic regex
-	regex r_field1("^  <([a-zA-Z]+)");											//regex group 1
-	regex r_field2("^ ( ([^ ]+)){2}");											//regex group 2
-	regex r_field8("^ ( ([^ ]+)){8}");
-	regex r_field9("^ ( ([^ ]+)){9}");
-	regex r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
-	regex r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
-	regex r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
-	regex r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
+	static regex const r_field1("^  <([a-zA-Z]+)");											//regex group 1
+	static regex const r_field2("^ ( ([^ ]+)){2}");											//regex group 2
+	static regex const r_field8("^ ( ([^ ]+)){8}");
+	static regex const r_field9("^ ( ([^ ]+)){9}");
+	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
+	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
+	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
+	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
 
 //netlist regex
-	regex r_type("^([^:]*):");													//regex group 1
-	regex r_label("^([^:]*):([^ ]*)");											//regex group 2
-	regex r_net1("^([^ ]* ){1}_net([0-9]*)");									//regex group 2
-	regex r_net2("^([^ ]* ){2}_net([0-9]*)");									//regex group 2
-	regex r_net3("^([^ ]* ){3}_net([0-9]*)");									//regex group 2
-	regex r_net4("^([^ ]* ){4}_net([0-9]*)");									//regex group 2
+	static regex const r_type("^([^:]*):");													//regex group 1
+	static regex const r_label("^([^:]*):([^ ]*)");											//regex group 2
+	static regex const r_net1("^([^ ]* ){1}_net([0-9]*)");									//regex group 2
+	static regex const r_net2("^([^ ]* ){2}_net([0-9]*)");									//regex group 2
+	static regex const r_net3("^([^ ]* ){3}_net([0-9]*)");									//regex group 2
+	static regex const r_net4("^([^ ]* ){4}_net([0-9]*)");									//regex group 2
 
 
 
@@ -89,17 +89,17 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		}
 
 	cout << endl << "Generating netlist... ";
-    string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
-    QProcess process_qucs;
-    process_qucs.start(QString::fromStdString(net_gen));
-    bool ret = process_qucs.waitForFinished();
-    if(ret==false || process_qucs.exitCode()) {
-        cout << "KO" << endl;
-        log_err << "ERROR : Problem with calling Qucs : " << net_gen << "\n";
-        return(2);
-    } else {
-        cout << "OK" << endl;
-    }
+	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
+	QProcess process_qucs;
+	process_qucs.start(QString::fromStdString(net_gen));
+	bool ret = process_qucs.waitForFinished();
+	if(ret==false || process_qucs.exitCode()) {
+		cout << "KO" << endl;
+		log_err << "ERROR : Problem with calling Qucs : " << net_gen << "\n";
+		return(2);
+	} else {
+		cout << "OK" << endl;
+		}
 
 //open netlist
 	cout << endl << "Opening " << n_net << "... ";
@@ -373,7 +373,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 
 long double suffix(string const s_sci, const string s_eng) {
 //convert suffix into multiplicator
-	regex r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
+	static regex  const r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
 	smatch match;
 	long double multiplicator=1;
 
