@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /***************************************************************************
- *                                                                         *
+ *                                    	                                 *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -22,9 +22,9 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 	n_sch(_n_sch),
 	out_dir(_out_dir),
 	out_format(_out_format),
-    QMainWindow(parent),
-    ui(new Ui::MainWindow) {
-    	ui->setupUi(this);
+	QMainWindow(parent),
+	ui(new Ui::MainWindow) {
+		ui->setupUi(this);
 		ui->le_path_in->setText(n_sch);
 		ui->le_path_out->setText(out_dir);
 		ui->cb_format->addItem(tr(".kicad_pcb"));
@@ -37,7 +37,7 @@ MainWindow::~MainWindow() {
 	for(std::shared_ptr<Element> it : tab_all) {
 		it->prev=nullptr;
 		}
-    delete ui;
+	delete ui;
 	}
 
 void MainWindow::on_pb_browse_in_clicked(void) {
@@ -45,14 +45,14 @@ void MainWindow::on_pb_browse_in_clicked(void) {
 		this->openfile_path = QDir::currentPath();
 		}
 
-    n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), this->openfile_path, tr("Qucs schematic (*.sch)"));
+	n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), this->openfile_path, tr("Qucs schematic (*.sch)"));
 
-    if(!n_sch.length()) {
+	if(!n_sch.length()) {
 		ui->le_path_in->setText("");
-        return;
+		return;
 		}
 
-    this->openfile_path = QFileInfo(n_sch).path(); // store path for next time
+	this->openfile_path = QFileInfo(n_sch).path(); // store path for next time
 	ui->le_path_in->setText(n_sch);
 	}
 

@@ -23,6 +23,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 
 //variables
 	string n_net;
+	string n_tmp;
 	static regex const r_sch(".sch$");
 	string line;
 	smatch match;
@@ -46,6 +47,10 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 	string net2;
 	string net3;
 	string net4;
+
+//qucsstudio regex
+	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$");	//regex group 1
+	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )([\-0-9]+) ([\-0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");	//g1 begin	g2 x	g3 y	g4 end	g5 r
 
 //schematic regex
 	static regex const r_field1("^  <([a-zA-Z]+)");											//regex group 1
@@ -77,6 +82,54 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		return(1);
 		}
 
+//check if qucs or qucsstudio
+	getline(f_sch, line);
+	regex_search(line, match, r_head);
+	if(match.str(1)=="Qucs") {
+		n_tmp=n_sch;
+	} else if(match.str(1)=="QucsStudio") {
+		// QucsStudio does not provide command line to produce netlist
+		// so, as formats are mostly compatible, let's try to replace the
+		// header and use Qucs instead
+		log_err << "WARNING : " << n_sch << " is a QucsStudio schematic, compatibility is not guaranteed\n";
+
+		cout << "Conversion to Qucs format... ";
+		n_tmp=regex_replace(n_sch, r_sch, "\.tmp\.sch");
+		ofstream f_tmp(n_tmp.c_str());
+		if(!f_tmp) {
+			log_err << "ERROR : Cannot open " << n_tmp << "\n";
+			return(1);
+			}
+		f_tmp << "<Qucs Schematic 0.0.0>" << endl;
+		while(getline(f_sch, line)) {
+			// MSTUB -> MRSTUB : wire wrap point is different, excentred by 10
+			if(regex_search(line, match, r_mstub)) {
+				f_tmp << "  <MRSTUB" << match.str(1)
+				      << mstub_shift(EL_X, match.str(2), match.str(5))
+				      << " "
+				      << mstub_shift(EL_Y, match.str(3), match.str(5))
+				      << match.str(4) << endl;
+			} else {
+				f_tmp << line << endl;
+				}
+			}
+		cout << "OK" << endl;
+		
+		f_tmp.close();
+		f_sch.close();
+		cout << "Opening " << n_tmp << "... ";
+		f_sch.open(n_tmp.c_str());
+		if(f_sch) {
+			cout << "OK" << endl;
+		} else {
+			log_err << "ERROR : Cannot open " << n_tmp << "\n";
+			return(1);
+			}
+	} else {
+		log_err << "ERROR : " << n_sch << " appears to be neither a Qucs nor a QucsStudio schematic\n";
+		return(1);
+		}
+
 //generate netlist
 	cout << endl;
 	if(regex_search(n_sch, r_sch)) {
@@ -84,12 +137,12 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 		cout << "n_sch : " << n_sch << endl;
 		cout << "n_net : " << n_net << endl;
 	} else {
-		log_err << "ERROR : Invalid input format : " << n_sch;// << "\n";
+		log_err << "ERROR : Invalid input format : " << n_sch << "\n";
 		return(1);
 		}
 
 	cout << endl << "Generating netlist... ";
-	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
+	string net_gen="qucs -n -i \""+n_tmp+"\" -o \""+n_net+"\"";
 	QProcess process_qucs;
 	process_qucs.start(QString::fromStdString(net_gen));
 	bool ret = process_qucs.waitForFinished();
@@ -131,7 +184,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 				cout << "\tType : " << type << endl;
 			//label
 				regex_search(line, match, r_field2);
-				label=match.str(2);												//regex group 2
+				label=match.str(2);
 				cout << "\tLabel : " << label << endl;
 			//mirrorx
 				regex_search(line, match, r_field8);
@@ -433,3 +486,12 @@ string check_void(string match, string label) {
 		return(match);
 		}
 	}
+
+string mstub_shift(bool const xy, string const str, string const r) {
+	if(r=="0")      return(xy ? to_string(stoi(str)-10) : str);
+	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
+	else if(r=="2") return(xy ? to_string(stoi(str)+10) : str);
+	else if(r=="3") return(xy ? str : to_string(stoi(str)+10));
+	else return(str); //never happend
+	}
+

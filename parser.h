@@ -43,5 +43,6 @@
 int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
 long double suffix(std::string const s_sci, std::string const s_eng);
 std::string check_void(std::string match, std::string label);
+std::string mstub_shift(bool const xy, std::string const str, std::string const r);
 
 #endif // PARSER_H

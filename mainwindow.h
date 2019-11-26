@@ -47,19 +47,19 @@ class MainWindow;
 } // namespace UI
 
 class MainWindow : public QMainWindow {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent=0);
-    ~MainWindow();
+	explicit MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent=0);
+	~MainWindow();
 	friend void operator<<(MainWindow& obj, std::stringstream& in);
 
 private slots:
-    void on_pb_read_clicked(void);
+	void on_pb_read_clicked(void);
 	void on_le_path_in_textChanged(const QString _n_sch);
 	void on_le_path_in_returnPressed(void);
 	void on_cb_format_currentIndexChanged(const QString _out_format);
-    void on_pb_browse_in_clicked(void);
+	void on_pb_browse_in_clicked(void);
 	void on_pb_browse_out_clicked(void);
 	void on_le_path_out_textChanged(const QString _out_dir);
 	void on_le_path_out_returnPressed(void);
@@ -70,7 +70,7 @@ protected:
 	void keyReleaseEvent(QKeyEvent *event);
 
 private:
-    Ui::MainWindow *ui;
+	Ui::MainWindow *ui;
 	std::vector<std::shared_ptr<Element>> tab_all;
 	long double extrem_pos[4]={0.0, 0.0, 0.0, 0.0};
 	QString n_sch;
