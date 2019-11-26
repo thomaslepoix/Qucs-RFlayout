@@ -1,5 +1,5 @@
 # Qucs-RFlayout
-A tool to produce layout from qucs RF schematic (microstrip only for now)
+A tool to produce layouts from Qucs RF schematic (microstrip only for now)
 
 `qucs-schematic.sch` -> `kicad-layout.kicad_pcb` [OK]
 
@@ -11,6 +11,9 @@ A tool to produce layout from qucs RF schematic (microstrip only for now)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 -> `openEMS-script.m` [Work in progress]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-> `gmsh.geo` [ASAP]
 
 <br>
 
@@ -37,19 +40,28 @@ make
 ## Screenshots
 
 ### Qucs : schematic.sch
-![qucs_sch](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_qucs_sch.png)
+![qucs_sch](test/test_qucs_sch.png)
 
 ### Qucs-RFlayout : preview
-![qucsrflayout_preview](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_qucsrflayout_preview.png)
+![qucsrflayout_preview](test/test_qucsrflayout_preview.png)
 
 ### Pcbnew : layout.kicad_pcb
-![pcbnew_kicad_pcb](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_pcbnew_kicad_pcb.png)
+![pcbnew_kicad_pcb](test/test_pcbnew_kicad_pcb.png)
 
 ### Pcbnew : module.kicad_mod
-![pcbnew_kicad_mod](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_pcbnew_kicad_mod.png)
+![pcbnew_kicad_mod](test/test_pcbnew_kicad_mod.png)
 
 ### Pcb-rnd : layout.lht
-![pcb-rnd_lht](https://raw.githubusercontent.com/thomaslepoix/Qucs-RFlayout/master/test/test_pcb-rnd_lht.png)
+![pcb-rnd_lht](test/test_pcb-rnd_lht.png)
+
+<br>
+
+## Limitations
+
+- Microstrip only for now, coplanar waveguide ASAP.
+- Any other component cannot be converted into a geometric shape of metal by this tool.
+- Use one wire to connect only two components ports, use apropriate components to make tees or crosses.
+- Equations are not supported yet, avoid using variables in component fields.
 
 <br>
 
