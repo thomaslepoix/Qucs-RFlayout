@@ -54,7 +54,7 @@ public:
 			bool _mirrorx,
 			short _r,
 			short _nport);
-	~Element();
+	virtual ~Element();
     std::shared_ptr<Element> prev=nullptr;
 	std::string getLabel(void);
 	std::string getType(void);
