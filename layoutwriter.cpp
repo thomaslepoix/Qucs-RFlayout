@@ -20,6 +20,10 @@ using namespace std;
 
 int layoutwriter(vector<shared_ptr<Element>> const& tab_all, long double* const& extrem_pos, string const& n_sch, string const& out_dir, string const& out_format) {
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
+#pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
+
 //variables
 	static regex const r_sch("\.sch$");
 	static regex const r_basename("^.*?([^\/]*)\.sch$");
@@ -27,6 +31,8 @@ int layoutwriter(vector<shared_ptr<Element>> const& tab_all, long double* const&
 	static regex const r_empty("^$");
 	string n_out="";
 	string name=regex_replace(n_sch, r_sch, "");
+
+#pragma GCC diagnostic pop
 
 //generate output file
 	cout << endl;
@@ -2591,3 +2597,4 @@ int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& ex
 		  << "}\n";
 	return(0);
 	}
+

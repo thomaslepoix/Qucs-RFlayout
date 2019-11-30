@@ -19,6 +19,10 @@
 #include "parser.h"
 using namespace std;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
+#pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
+
 int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 
 //variables
@@ -494,4 +498,6 @@ string mstub_shift(bool const xy, string const str, string const r) {
 	else if(r=="3") return(xy ? str : to_string(stoi(str)+10));
 	else return(str); //never happend
 	}
+
+#pragma GCC diagnostic pop
 
