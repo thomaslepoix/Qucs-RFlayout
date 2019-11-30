@@ -24,7 +24,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 //variables
 	string n_net;
 	string n_tmp;
-	static regex const r_sch(".sch$");
+	static regex const r_sch("\.sch$");
 	string line;
 	smatch match;
 
