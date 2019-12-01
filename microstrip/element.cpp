@@ -78,3 +78,97 @@ long double Element::rotateX(long double _x, long double _y) {
 long double Element::rotateY(long double _x, long double _y) {
 	return(-_x*sin((M_PI/180)*m_r)+_y*cos((M_PI/180)*m_r));
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+string Element::getDescriptor(void) {
+	return("");
+	}
+
+long double Element::getW(void) {
+	return(0);
+	}
+
+long double Element::getW1(void) {
+	return(0);
+	}
+
+long double Element::getW2(void) {
+	return(0);
+	}
+
+long double Element::getW3(void) {
+	return(0);
+	}
+
+long double Element::getW4(void) {
+	return(0);
+	}
+
+long double Element::getL(void) {
+	return(0);
+	}
+
+long double Element::getD(void) {
+	return(0);
+	}
+
+long double Element::getS(void) {
+	return(0);
+	}
+
+long double Element::getRi(void) {
+	return(0);
+	}
+
+long double Element::getRo(void) {
+	return(0);
+	}
+
+short Element::getAlpha(void) {
+	return(0);
+	}
+
+string Element::getNet1(void) {
+	return("");
+	}
+
+string Element::getNet2(void) {
+	return("");
+	}
+
+string Element::getNet3(void) {
+	return("");
+	}
+
+string Element::getNet4(void) {
+	return("");
+	}
+
+int Element::getNpoint(void) {
+	return(0);
+	}
+
+long double Element::getP(int /*_n*/, bool /*_xy*/, bool /*_r*/, bool /*_abs*/) {
+	return(0);
+	}
+
+int Element::setNet1(string /*_net1*/) {
+	return(1);
+	}
+
+int Element::setNet2(string /*_net2*/) {
+	return(1);
+	}
+
+int Element::setNet3(string /*_net3*/) {
+	return(1);
+	}
+
+int Element::setNet4(string /*_net4*/) {
+	return(1);
+	}
+
+int Element::setP(void) {
+	return(1);
+	}

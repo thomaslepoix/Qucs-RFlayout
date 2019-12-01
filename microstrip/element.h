@@ -63,31 +63,33 @@ public:
 	short getNport(void);
 	long double getX(void);
 	long double getY(void);
-	virtual std::string getDescriptor(void)=0;
-	virtual long double getW(void)=0;
-	virtual long double getW1(void)=0;
-	virtual long double getW2(void)=0;
-	virtual long double getW3(void)=0;
-	virtual long double getW4(void)=0;
-	virtual long double getL(void)=0;
-	virtual long double getD(void)=0;
-	virtual long double getS(void)=0;
-	virtual long double getRi(void)=0;
-	virtual long double getRo(void)=0;
-	virtual short getAlpha(void)=0;
-	virtual std::string getNet1(void)=0;
-	virtual std::string getNet2(void)=0;
-	virtual std::string getNet3(void)=0;
-	virtual std::string getNet4(void)=0;
-	virtual int getNpoint(void)=0;
-	virtual long double getP(int _n, bool _xy, bool _r, bool _abs)=0;
 	int setX(long double _x);
 	int setY(long double _y);
-	virtual int setNet1(std::string _net1)=0;
-	virtual int setNet2(std::string _net2)=0;
-	virtual int setNet3(std::string _net3)=0;
-	virtual int setNet4(std::string _net4)=0;
-	virtual int setP(void)=0;
+
+	//default functions, to override
+	virtual std::string getDescriptor(void);
+	virtual long double getW(void);
+	virtual long double getW1(void);
+	virtual long double getW2(void);
+	virtual long double getW3(void);
+	virtual long double getW4(void);
+	virtual long double getL(void);
+	virtual long double getD(void);
+	virtual long double getS(void);
+	virtual long double getRi(void);
+	virtual long double getRo(void);
+	virtual short getAlpha(void);
+	virtual std::string getNet1(void);
+	virtual std::string getNet2(void);
+	virtual std::string getNet3(void);
+	virtual std::string getNet4(void);
+	virtual int getNpoint(void);
+	virtual long double getP(int _n, bool _xy, bool _r, bool _abs);
+	virtual int setNet1(std::string _net1);
+	virtual int setNet2(std::string _net2);
+	virtual int setNet3(std::string _net3);
+	virtual int setNet4(std::string _net4);
+	virtual int setP(void);
 };
 
 #endif // ELEMENT_H

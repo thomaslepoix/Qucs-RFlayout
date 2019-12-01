@@ -204,27 +204,3 @@ int Mcross::setP(void) {
 		}
 	return(0);
 	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-long double Mcross::getW(void) {
-	return(0);
-	}
-long double Mcross::getL(void) {
-	return(0);
-	}
-long double Mcross::getD(void) {
-	return(0);
-	}
-long double Mcross::getS(void) {
-	return(0);
-	}
-long double Mcross::getRi(void) {
-	return(0);
-	}
-long double Mcross::getRo(void) {
-	return(0);
-	}
-short Mcross::getAlpha(void) {
-	return(0);
-	}

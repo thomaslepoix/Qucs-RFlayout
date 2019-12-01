@@ -60,14 +60,6 @@ public :
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
 	int setP(void);
-////////////////////////////////////////////////////////////////////////////////
-	long double getW(void);
-	long double getL(void);
-	long double getD(void);
-	long double getS(void);
-	long double getRi(void);
-	long double getRo(void);
-	short getAlpha(void);
 };
 
 #endif // MCROSS_H

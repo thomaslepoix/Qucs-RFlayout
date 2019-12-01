@@ -46,22 +46,6 @@ public :
 	std::string getNet2(void);
 	int setNet1(std::string _net1);
 	int setNet2(std::string _net2);
-////////////////////////////////////////////////////////////////////////////////
-	long double getW(void);
-	long double getW3(void);
-	long double getW4(void);
-	long double getL(void);
-	long double getD(void);
-	long double getRi(void);
-	long double getRo(void);
-	short getAlpha(void);
-	std::string getNet3(void);
-	std::string getNet4(void);
-	int getNpoint(void);
-	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
-	int setNet3(std::string _net3);
-	int setNet4(std::string _net4);
-	int setP(void);
 };
 
 #endif // MGAP_H

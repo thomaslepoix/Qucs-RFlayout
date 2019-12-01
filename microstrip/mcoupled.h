@@ -57,15 +57,6 @@ public :
 	int setNet3(std::string _net3);
 	int setNet4(std::string _net4);
 	int setP(void);
-////////////////////////////////////////////////////////////////////////////////
-	long double getW1(void);
-	long double getW2(void);
-	long double getW3(void);
-	long double getW4(void);
-	long double getD(void);
-	long double getRi(void);
-	long double getRo(void);
-	short getAlpha(void);
 };
 
 #endif // MCOUPLED_H

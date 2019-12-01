@@ -120,30 +120,3 @@ int Mcoupled::setP(void) {
 	tab_p[7][EL_Y]=-(m_s/2+m_w);
 	return(0);
 	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-long double Mcoupled::getW1(void) {
-	return(0);
-	}
-long double Mcoupled::getW2(void) {
-	return(0);
-	}
-long double Mcoupled::getW3(void) {
-	return(0);
-	}
-long double Mcoupled::getW4(void) {
-	return(0);
-	}
-long double Mcoupled::getD(void) {
-	return(0);
-	}
-long double Mcoupled::getRi(void) {
-	return(0);
-	}
-long double Mcoupled::getRo(void) {
-	return(0);
-	}
-short Mcoupled::getAlpha(void) {
-	return(0);
-	}

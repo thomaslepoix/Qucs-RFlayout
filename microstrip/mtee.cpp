@@ -117,37 +117,3 @@ int Mtee::setP(void) {
 	tab_p[5][EL_Y]=s2*m_w1/2;
 	return(0);
 	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-long double Mtee::getW(void) {
-	return(0);
-	}
-long double Mtee::getW4(void) {
-	return(0);
-	}
-long double Mtee::getL(void) {
-	return(0);
-	}
-long double Mtee::getD(void) {
-	return(0);
-	}
-long double Mtee::getS(void) {
-	return(0);
-	}
-long double Mtee::getRi(void) {
-	return(0);
-	}
-long double Mtee::getRo(void) {
-	return(0);
-	}
-short Mtee::getAlpha(void) {
-	return(0);
-	}
-string Mtee::getNet4(void) {
-	return("");
-	}
-int Mtee::setNet4(string _net4) {
-	(void) _net4;
-	return(1);
-	}

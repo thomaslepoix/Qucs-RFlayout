@@ -54,17 +54,6 @@ public :
 	int setNet2(std::string _net2);
 	int setNet3(std::string _net3);
 	int setP(void);
-////////////////////////////////////////////////////////////////////////////////
-	long double getW(void);
-	long double getW4(void);
-	long double getL(void);
-	long double getD(void);
-	long double getS(void);
-	long double getRi(void);
-	long double getRo(void);
-	short getAlpha(void);
-	std::string getNet4(void);
-	int setNet4(std::string _net4);
 };
 
 #endif // MTEE_H
