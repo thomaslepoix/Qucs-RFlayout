@@ -27,20 +27,7 @@
 #include "xycalculator.h"
 #include "layoutwriter.h"
 #include "preview.h"
-
-#include "microstrip/eqn.h"
-#include "microstrip/pac.h"
-#include "microstrip/mcorn.h"
-#include "microstrip/mcross.h"
-#include "microstrip/mcoupled.h"
-#include "microstrip/mgap.h"
-#include "microstrip/mmbend.h"
-#include "microstrip/mlin.h"
-#include "microstrip/mopen.h"
-#include "microstrip/mrstub.h"
-#include "microstrip/mstep.h"
-#include "microstrip/mtee.h"
-#include "microstrip/mvia.h"
+#include "microstrip/microstrip.h"
 
 namespace Ui {
 class MainWindow;

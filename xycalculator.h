@@ -24,20 +24,7 @@
 #include <memory>
 
 #include "logger.h"
-
-#include "microstrip/eqn.h"
-#include "microstrip/pac.h"
-#include "microstrip/mcorn.h"
-#include "microstrip/mcross.h"
-#include "microstrip/mcoupled.h"
-#include "microstrip/mgap.h"
-#include "microstrip/mmbend.h"
-#include "microstrip/mlin.h"
-#include "microstrip/mopen.h"
-#include "microstrip/mrstub.h"
-#include "microstrip/mstep.h"
-#include "microstrip/mtee.h"
-#include "microstrip/mvia.h"
+#include "microstrip/microstrip.h"
 
 int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* extrem_pos);
 int tab_remove(std::vector<std::shared_ptr<Element>>& tab_undone, std::shared_ptr<Element> const& current);

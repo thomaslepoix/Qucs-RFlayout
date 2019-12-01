@@ -1,9 +1,9 @@
 /***************************************************************************
-                               parser.h
+                               microstrip.h
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
-    email                : thomas.lepoix@protonmail.ch
+    email                : thomas.lepoix@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,21 +15,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef MICROSTRIP_H
+#define MICROSTRIP_H
 
-#include <iostream>
-#include <fstream>
-#include <regex>
-#include <vector>
-#include <memory>
+#include "eqn.h"
+#include "pac.h"
+//#include "subst.h"
+#include "mcorn.h"
+#include "mcross.h"
+#include "mcoupled.h"
+#include "mgap.h"
+#include "mmbend.h"
+#include "mlin.h"
+#include "mopen.h"
+#include "mrstub.h"
+#include "mstep.h"
+#include "mtee.h"
+#include "mvia.h"
 
-#include "logger.h"
-#include "microstrip/microstrip.h"
-
-int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
-long double suffix(std::string const s_sci, std::string const s_eng);
-std::string check_void(std::string match, std::string label);
-std::string mstub_shift(bool const xy, std::string const str, std::string const r);
-
-#endif // PARSER_H
+#endif // MICROSTRIP_H
