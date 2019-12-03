@@ -44,9 +44,10 @@ set(QUCS-RF-LAYOUT_SRCS
         microstrip/mstep.cpp
         microstrip/mtee.cpp
         microstrip/mvia.cpp
-        parser.cpp
+        schparser.cpp
         xycalculator.cpp
         layoutwriter.cpp
+        converter.cpp
         mainwindow.cpp
         preview.cpp
         logger.cpp

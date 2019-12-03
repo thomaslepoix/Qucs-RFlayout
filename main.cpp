@@ -22,10 +22,8 @@
 
 #include "version.h"
 #include "logger.h"
-#include "parser.h"
-#include "xycalculator.h"
-#include "layoutwriter.h"
 #include "mainwindow.h"
+#include "converter.h"
 
 using namespace std;
 
@@ -119,53 +117,12 @@ int main(int argc, char* argv[]) {
 			exit(1);
 			}
 
+		Converter converter(n_sch, out_dir, out_format);
 
-
-	//variables
-		vector<shared_ptr<Element>> tab_all;
-		long double extrem_pos[4]={0.0, 0.0, 0.0, 0.0};
-		int ret;
-
-	//parse files : create objects
-		ret=parser(tab_all, n_sch);
+		int ret=converter.run();
 		if(ret) exit(ret);
 
-	//algorithm : find xy
-		ret=xycalculator(tab_all, extrem_pos);
-		if(ret) exit(ret);
-
-	//write layout
-		ret=layoutwriter(tab_all, extrem_pos, n_sch, out_dir, out_format);
-		if(ret) exit(ret);
-
-
-	//debug
-/*		for(unsigned int i=0;i<tab_all.size();i++) {
-			cout << "tab_all[" << i << "] LABEL : " << tab_all[i]->getLabel() << endl;
-			cout << "tab_all[" << i << "] TYPE : " << tab_all[i]->getType() << endl;
-			cout << "\ttab_all[" << i << "] X : " << tab_all[i]->getX() << endl;
-			cout << "\ttab_all[" << i << "] Y : " << tab_all[i]->getY() << endl;
-			cout << "\ttab_all[" << i << "] MirrorX : " << tab_all[i]->getMirrorx() << endl;
-			cout << "\ttab_all[" << i << "] R : " << tab_all[i]->getR() << endl;
-			cout << "\ttab_all[" << i << "] W : " << tab_all[i]->getW() << endl;
-			cout << "\ttab_all[" << i << "] W1 : " << tab_all[i]->getW1() << endl;
-			cout << "\ttab_all[" << i << "] W2 : " << tab_all[i]->getW2() << endl;
-			cout << "\ttab_all[" << i << "] W3 : " << tab_all[i]->getW3() << endl;
-			cout << "\ttab_all[" << i << "] W4 : " << tab_all[i]->getW4() << endl;
-			cout << "\ttab_all[" << i << "] L : " << tab_all[i]->getL() << endl;
-			cout << "\ttab_all[" << i << "] D : " << tab_all[i]->getD() << endl;
-			cout << "\ttab_all[" << i << "] S : " << tab_all[i]->getS() << endl;
-			cout << "\ttab_all[" << i << "] Ri : " << tab_all[i]->getRi() << endl;
-			cout << "\ttab_all[" << i << "] Ro : " << tab_all[i]->getRo() << endl;
-			cout << "\ttab_all[" << i << "] Alpha : " << tab_all[i]->getAlpha() << endl;
-			cout << "\ttab_all[" << i << "] Nport : " << tab_all[i]->getNport() << endl;
-			cout << "\ttab_all[" << i << "] Net1 : " << tab_all[i]->getNet1() << endl;
-			cout << "\ttab_all[" << i << "] Net2 : " << tab_all[i]->getNet2() << endl;
-			cout << "\ttab_all[" << i << "] Net3 : " << tab_all[i]->getNet3() << endl;
-			cout << "\ttab_all[" << i << "] Net4 : " << tab_all[i]->getNet4() << endl;
-			cout << "\ttab_all[" << i << "] Npoint : " << tab_all[i]->getNpoint() << endl;
-			}
-*/		cout << endl;
+		cout << endl;
 		}
 	return(0);
 	}

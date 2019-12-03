@@ -65,9 +65,10 @@ SOURCES       = main.cpp \
 		microstrip/mstep.cpp \
 		microstrip/mtee.cpp \
 		microstrip/mvia.cpp \
-		parser.cpp \
+		schparser.cpp \
 		xycalculator.cpp \
 		layoutwriter.cpp \
+		converter.cpp \
 		mainwindow.cpp \
 		preview.cpp \
 		logger.cpp moc_mainwindow.cpp
@@ -86,9 +87,10 @@ OBJECTS       = main.o \
 		mstep.o \
 		mtee.o \
 		mvia.o \
-		parser.o \
+		schparser.o \
 		xycalculator.o \
 		layoutwriter.o \
+		converter.o \
 		mainwindow.o \
 		preview.o \
 		logger.o \
@@ -258,9 +260,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		microstrip/mstep.h \
 		microstrip/mtee.h \
 		microstrip/mvia.h \
-		parser.h \
+		schparser.h \
 		xycalculator.h \
 		layoutwriter.h \
+		converter.h \
 		mainwindow.h \
 		preview.h \
 		logger.h main.cpp \
@@ -278,9 +281,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		microstrip/mstep.cpp \
 		microstrip/mtee.cpp \
 		microstrip/mvia.cpp \
-		parser.cpp \
+		schparser.cpp \
 		xycalculator.cpp \
 		layoutwriter.cpp \
+		converter.cpp \
 		mainwindow.cpp \
 		preview.cpp \
 		logger.cpp
@@ -624,8 +628,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents microstrip/element.h microstrip/eqn.h microstrip/pac.h microstrip/mcorn.h microstrip/mcoupled.h microstrip/mcross.h microstrip/mgap.h microstrip/mlin.h microstrip/mmbend.h microstrip/mopen.h microstrip/mrstub.h microstrip/mstep.h microstrip/mtee.h microstrip/mvia.h parser.h xycalculator.h layoutwriter.h mainwindow.h preview.h logger.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp microstrip/element.cpp microstrip/eqn.cpp microstrip/pac.cpp microstrip/mcorn.cpp microstrip/mcoupled.cpp microstrip/mcross.cpp microstrip/mgap.cpp microstrip/mlin.cpp microstrip/mmbend.cpp microstrip/mopen.cpp microstrip/mrstub.cpp microstrip/mstep.cpp microstrip/mtee.cpp microstrip/mvia.cpp parser.cpp xycalculator.cpp layoutwriter.cpp mainwindow.cpp preview.cpp logger.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents microstrip/element.h microstrip/eqn.h microstrip/pac.h microstrip/mcorn.h microstrip/mcoupled.h microstrip/mcross.h microstrip/mgap.h microstrip/mlin.h microstrip/mmbend.h microstrip/mopen.h microstrip/mrstub.h microstrip/mstep.h microstrip/mtee.h microstrip/mvia.h schparser.h xycalculator.h layoutwriter.h converter.h mainwindow.h preview.h logger.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp microstrip/element.cpp microstrip/eqn.cpp microstrip/pac.cpp microstrip/mcorn.cpp microstrip/mcoupled.cpp microstrip/mcross.cpp microstrip/mgap.cpp microstrip/mlin.cpp microstrip/mmbend.cpp microstrip/mopen.cpp microstrip/mrstub.cpp microstrip/mstep.cpp microstrip/mtee.cpp microstrip/mvia.cpp schparser.cpp xycalculator.cpp layoutwriter.cpp converter.cpp mainwindow.cpp preview.cpp logger.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -661,7 +665,9 @@ compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: logger.h \
-		parser.h \
+		converter.h \
+		schparser.h \
+		microstrip/microstrip.h \
 		microstrip/eqn.h \
 		microstrip/element.h \
 		microstrip/pac.h \
@@ -707,7 +713,10 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 main.o: main.cpp version.h \
 		logger.h \
-		parser.h \
+		mainwindow.h \
+		converter.h \
+		schparser.h \
+		microstrip/microstrip.h \
 		microstrip/eqn.h \
 		microstrip/element.h \
 		microstrip/pac.h \
@@ -724,7 +733,6 @@ main.o: main.cpp version.h \
 		microstrip/mvia.h \
 		xycalculator.h \
 		layoutwriter.h \
-		mainwindow.h \
 		preview.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
@@ -783,8 +791,9 @@ mvia.o: microstrip/mvia.cpp microstrip/mvia.h \
 		microstrip/element.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mvia.o microstrip/mvia.cpp
 
-parser.o: parser.cpp parser.h \
+schparser.o: schparser.cpp schparser.h \
 		logger.h \
+		microstrip/microstrip.h \
 		microstrip/eqn.h \
 		microstrip/element.h \
 		microstrip/pac.h \
@@ -799,10 +808,11 @@ parser.o: parser.cpp parser.h \
 		microstrip/mstep.h \
 		microstrip/mtee.h \
 		microstrip/mvia.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parser.o parser.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o schparser.o schparser.cpp
 
 xycalculator.o: xycalculator.cpp xycalculator.h \
 		logger.h \
+		microstrip/microstrip.h \
 		microstrip/eqn.h \
 		microstrip/element.h \
 		microstrip/pac.h \
@@ -820,6 +830,7 @@ xycalculator.o: xycalculator.cpp xycalculator.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xycalculator.o xycalculator.cpp
 
 layoutwriter.o: layoutwriter.cpp layoutwriter.h \
+		microstrip/microstrip.h \
 		microstrip/eqn.h \
 		microstrip/element.h \
 		microstrip/pac.h \
@@ -836,9 +847,33 @@ layoutwriter.o: layoutwriter.cpp layoutwriter.h \
 		microstrip/mvia.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o layoutwriter.o layoutwriter.cpp
 
+converter.o: converter.cpp converter.h \
+		schparser.h \
+		logger.h \
+		microstrip/microstrip.h \
+		microstrip/eqn.h \
+		microstrip/element.h \
+		microstrip/pac.h \
+		microstrip/mcorn.h \
+		microstrip/mcross.h \
+		microstrip/mcoupled.h \
+		microstrip/mgap.h \
+		microstrip/mmbend.h \
+		microstrip/mlin.h \
+		microstrip/mopen.h \
+		microstrip/mrstub.h \
+		microstrip/mstep.h \
+		microstrip/mtee.h \
+		microstrip/mvia.h \
+		xycalculator.h \
+		layoutwriter.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o converter.o converter.cpp
+
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		logger.h \
-		parser.h \
+		converter.h \
+		schparser.h \
+		microstrip/microstrip.h \
 		microstrip/eqn.h \
 		microstrip/element.h \
 		microstrip/pac.h \

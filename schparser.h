@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef SCHPARSER_H
+#define SCHPARSER_H
 
 #include <iostream>
 #include <fstream>
@@ -27,9 +27,18 @@
 #include "logger.h"
 #include "microstrip/microstrip.h"
 
-int parser(std::vector<std::shared_ptr<Element>>& tab_all, std::string const& n_sch);
-long double suffix(std::string const s_sci, std::string const s_eng);
-std::string check_void(std::string match, std::string label);
-std::string mstub_shift(bool const xy, std::string const str, std::string const r);
+class SchParser {
+private:
+	std::vector<std::shared_ptr<Element>>& tab_all;
+	std::string const& n_sch;
 
-#endif // PARSER_H
+	long double suffix(std::string const s_sci, std::string const s_eng);
+	std::string check_void(std::string match, std::string label);
+	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
+
+public:
+	SchParser(std::vector<std::shared_ptr<Element>>& _tab_all, std::string const& _n_sch);
+	int run(void);
+};
+
+#endif // SCHPARSER_H

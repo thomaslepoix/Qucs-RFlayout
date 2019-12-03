@@ -16,14 +16,19 @@
  ***************************************************************************/
 
 #include <QProcess>
-#include "parser.h"
+#include "schparser.h"
 using namespace std;
+
+SchParser::SchParser(vector<shared_ptr<Element>>& _tab_all, string const& _n_sch) :
+	tab_all(_tab_all),
+	n_sch(_n_sch)
+	{}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
 #pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
 
-int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
+int SchParser::run(void) {
 
 //variables
 	string n_net;
@@ -428,7 +433,7 @@ int parser(vector<shared_ptr<Element>>& tab_all, string const& n_sch) {
 	}
 
 
-long double suffix(string const s_sci, const string s_eng) {
+long double SchParser::suffix(string const s_sci, const string s_eng) {
 //convert suffix into multiplicator
 	static regex  const r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
 	smatch match;
@@ -482,7 +487,7 @@ long double suffix(string const s_sci, const string s_eng) {
 	}
 
 
-string check_void(string match, string label) {
+string SchParser::check_void(string match, string label) {
 	if(match=="") {
 		log_err << "WARNING : void field in component " << label << " -> assigned to 0\n";
 		return("0");
@@ -491,7 +496,7 @@ string check_void(string match, string label) {
 		}
 	}
 
-string mstub_shift(bool const xy, string const str, string const r) {
+string SchParser::mstub_shift(bool const xy, string const str, string const r) {
 	if(r=="0")      return(xy ? to_string(stoi(str)-10) : str);
 	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
 	else if(r=="2") return(xy ? to_string(stoi(str)+10) : str);

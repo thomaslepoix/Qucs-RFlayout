@@ -25,6 +25,7 @@
 #include <QOpenGLFunctions_2_0>
 //#include <GL/glut.h>
 
+#include <array>
 #include <vector>
 #include <memory>
 #include <cmath>
@@ -36,7 +37,7 @@ class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 public :
 	explicit Preview(QWidget *parent=0);
 	~Preview();
-	void set(std::vector<std::shared_ptr<Element>> const& tab_all, long double* const& extrem_pos);
+	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
 	void resetView(void);
 
 	void setFCtrl(bool flag_ctrl);

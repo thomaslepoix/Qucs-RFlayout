@@ -40,9 +40,10 @@ SOURCES += \
         microstrip/mstep.cpp \
         microstrip/mtee.cpp \
         microstrip/mvia.cpp \
-        parser.cpp \
+        schparser.cpp \
         xycalculator.cpp \
         layoutwriter.cpp \
+        converter.cpp \
         mainwindow.cpp \
         preview.cpp \
         logger.cpp
@@ -62,9 +63,10 @@ HEADERS += \
         microstrip/mstep.h \
         microstrip/mtee.h \
         microstrip/mvia.h \
-        parser.h \
+        schparser.h \
         xycalculator.h \
         layoutwriter.h \
+        converter.h \
         mainwindow.h \
         preview.h \
         logger.h

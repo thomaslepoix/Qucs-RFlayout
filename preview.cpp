@@ -160,7 +160,7 @@ void Preview::resetView(void) {
 	updateGL();
 	}
 
-void Preview::set(vector<shared_ptr<Element>> const& _tab_all, long double* const& extrem_pos) {
+void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& extrem_pos) {
 	tab_all.clear();
 	tab_all=_tab_all;
 	fit_factor=1/(qMax(extrem_pos[_XMAX], extrem_pos[_YMAX])/2);

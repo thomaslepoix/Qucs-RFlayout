@@ -22,28 +22,29 @@
 #include <stack>
 #include <vector>
 #include <memory>
+#include <array>
 
 #include "logger.h"
 #include "microstrip/microstrip.h"
 
-int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* extrem_pos);
-int tab_remove(std::vector<std::shared_ptr<Element>>& tab_undone, std::shared_ptr<Element> const& current);
-bool purgefind(std::vector<std::shared_ptr<Element>> const& tab_all, std::shared_ptr<Element> const& current, std::string const _net);
-int purgenets(std::vector<std::shared_ptr<Element>> const& tab_all);
-bool checkonenet(std::vector<std::shared_ptr<Element>> const& tab_all, std::string const _net);
-int checkintersection(std::vector<std::shared_ptr<Element>> const& tab_all);
-int activenets(std::shared_ptr<Element> const& _elem);
-int netmin(std::shared_ptr<Element> const& _elem);
-int findnext(std::vector<std::shared_ptr<Element>> const& tab_all, std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
-int xystep(std::shared_ptr<Element> const& _elem, int const _net, long double& xstep, long double& ystep);
+class XyCalculator {
+private:
+	std::vector<std::shared_ptr<Element>>& tab_all;
+	std::array<long double, 4>& extrem_pos;
 
-/*
-int tab_remove(Element** const& tab_undone, int& nundone, int const& nelem, Element* const& current);
-bool purgefind(Element** const& tab_all, int const& nelem, Element* const& current, std::string const _net);
-int purgenets(Element** const& tab_all, int const& nelem);
-int activenets(Element* const& _elem);
-int netmin(Element* const& _elem);
-int findnext(Element** const& tab_all, int const& nelem, Element* const& current, int& current_net, Element*& next);
-int xystep(Element* const& _elem, int const _net, long double& xstep, long double& ystep);*/
+	int tab_remove(std::vector<std::shared_ptr<Element>>& tab_undone, std::shared_ptr<Element> const& current);
+	bool purgefind(std::shared_ptr<Element> const& current, std::string const _net);
+	int purgenets(void);
+	bool checkonenet(std::string const _net);
+	int checkintersection(void);
+	int activenets(std::shared_ptr<Element> const& _elem);
+	int netmin(std::shared_ptr<Element> const& _elem);
+	int findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
+	int xystep(std::shared_ptr<Element> const& _elem, int const _net, long double& xstep, long double& ystep);
+
+public:
+	XyCalculator(std::vector<std::shared_ptr<Element>>& _tab_all, std::array<long double, 4>& _extrem_pos);
+	int run(void);
+};
 
 #endif // XYCALCULATOR_H

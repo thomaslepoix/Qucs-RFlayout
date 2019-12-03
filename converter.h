@@ -1,5 +1,5 @@
 /***************************************************************************
-                               layoutwriter.h
+                               converter.h
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,34 +15,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAYOUTWRITER_H
-#define LAYOUTWRITER_H
+#ifndef CONVERTER_H
+#define CONVERTER_H
 
-#define _USE_MATH_DEFINES
-
-#include <iostream>
-#include <fstream>
-#include <regex>
-#include <cmath>
 #include <array>
+#include <memory>
+#include <vector>
 
-#include "microstrip/microstrip.h"
+#include "schparser.h"
+#include "xycalculator.h"
+#include "layoutwriter.h"
 
-class LayoutWriter {
+class Converter {
 private:
-	std::vector<std::shared_ptr<Element>> const& tab_all;
-	std::array<long double, 4> const& extrem_pos;
-	std::string const& n_sch;
-	std::string const& out_dir;
-	std::string const& out_format;
+	SchParser parser;
+	XyCalculator xycalculator;
+	LayoutWriter layoutwriter;
 
-	int write_kicad_pcb(std::ofstream& f_out);
-	int write_kicad_mod(std::string const& name, std::ofstream& f_out);
-	int write_lht(std::ofstream& f_out);
+	std::vector<std::shared_ptr<Element>> tab_all;
+	std::array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
+	std::string n_sch;
+	std::string out_dir;
+	std::string out_format;
 
 public:
-	LayoutWriter(std::vector<std::shared_ptr<Element>> const& _tab_all, std::array<long double, 4> const& _extrem_pos, std::string const& _n_sch, std::string const& _out_dir, std::string const& _out_format);
+	Converter(std::string _n_sch, std::string _out_dir, std::string _out_format);
+	~Converter(void);
+
+	void reset(std::string _n_sch, std::string _out_dir, std::string _out_format);
+	void clear(void);
 	int run(void);
+	int read(void);
+	int write(void);
+	int size(void);
+
+	std::vector<std::shared_ptr<Element>> const& get_tab_all(void);
+	std::array<long double, 4> const& get_extrem_pos(void);
 };
 
-#endif // LAYOUTWRITER_H
+#endif // CONVERTER_H

@@ -18,7 +18,12 @@
 #include "xycalculator.h"
 using namespace std;
 
-int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* extrem_pos) {
+XyCalculator::XyCalculator(vector<shared_ptr<Element>>& _tab_all, array<long double, 4>& _extrem_pos) :
+	tab_all(_tab_all),
+	extrem_pos(_extrem_pos)
+	{}
+
+int XyCalculator::run(void) {
 
 //variables
 	vector<shared_ptr<Element>> tab_undone=tab_all;
@@ -34,14 +39,14 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	int current_net=0;
 
 //check geometric coherence of the schematic
-	if(checkintersection(tab_all)) {
+	if(checkintersection()) {
 		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
 		           "\tPlease use a component like a tee or a cross to avoid this.\n";
 		return(3);
 		}
 
 //delete unconnected nets
-	purgenets(tab_all);
+	purgenets();
 
 //first element
 	current->setX(0);
@@ -86,7 +91,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 			current_net=netmin(current);
 			cout << "Selected net : " << current_net << endl;
 			xystep(current, current_net, prev_xstep, prev_ystep);
-			findnext(tab_all, current, current_net, next);
+			findnext(current, current_net, next);
 			cout << "Next label : " << next->getLabel() << endl;
 			next->prev=current;
 			current=next;
@@ -161,7 +166,7 @@ int xycalculator(std::vector<std::shared_ptr<Element>>& tab_all, long double* ex
 	return(0);
 	}
 
-int tab_remove(vector<shared_ptr<Element>>& tab_undone, shared_ptr<Element> const& current) {
+int XyCalculator::tab_remove(vector<shared_ptr<Element>>& tab_undone, shared_ptr<Element> const& current) {
 	for(unsigned int i=0;i<tab_undone.size();i++) {
 		if(tab_undone[i]==current) {
 			tab_undone.erase(tab_undone.begin()+i);
@@ -171,7 +176,7 @@ int tab_remove(vector<shared_ptr<Element>>& tab_undone, shared_ptr<Element> cons
 	return(0);
 	}
 
-bool purgefind(vector<shared_ptr<Element>> const& tab_all, shared_ptr<Element> const& current, string const _net) {
+bool XyCalculator::purgefind(shared_ptr<Element> const& current, string const _net) {
 //check if another element with this net exists
 	for(shared_ptr<Element> it : tab_all) {
 		if(it!=current) {
@@ -184,18 +189,18 @@ bool purgefind(vector<shared_ptr<Element>> const& tab_all, shared_ptr<Element> c
 	return(0);
 	}
 
-int purgenets(vector<shared_ptr<Element>> const& tab_all) {
+int XyCalculator::purgenets(void) {
 //delete unconnected nets
 	for(shared_ptr<Element> it : tab_all) {
-		if(purgefind(tab_all, it, it->getNet1())==false) it->setNet1("");
-		if(purgefind(tab_all, it, it->getNet2())==false) it->setNet2("");
-		if(purgefind(tab_all, it, it->getNet3())==false) it->setNet3("");
-		if(purgefind(tab_all, it, it->getNet4())==false) it->setNet4("");
+		if(purgefind(it, it->getNet1())==false) it->setNet1("");
+		if(purgefind(it, it->getNet2())==false) it->setNet2("");
+		if(purgefind(it, it->getNet3())==false) it->setNet3("");
+		if(purgefind(it, it->getNet4())==false) it->setNet4("");
 		}
 	return(0);
 	}
 
-bool checkonenet(vector<shared_ptr<Element>> const& tab_all, string const _net) {
+bool XyCalculator::checkonenet(string const _net) {
 	unsigned int count=0;
 	if(_net!=""){
 		for(shared_ptr<Element> it : tab_all) {
@@ -208,20 +213,20 @@ bool checkonenet(vector<shared_ptr<Element>> const& tab_all, string const _net) 
 	return(count>2 ? 1 : 0);
 	}
 
-int checkintersection(vector<shared_ptr<Element>> const& tab_all) {
+int XyCalculator::checkintersection(void) {
 //check if there are net intersections : more than 2 times the same net
 	for(shared_ptr<Element> it : tab_all) {
 		for(shared_ptr<Element> ut : tab_all) {
-			if(checkonenet(tab_all, it->getNet1())==true) return(1);
-			if(checkonenet(tab_all, it->getNet2())==true) return(1);
-			if(checkonenet(tab_all, it->getNet3())==true) return(1);
-			if(checkonenet(tab_all, it->getNet4())==true) return(1);
+			if(checkonenet(it->getNet1())==true) return(1);
+			if(checkonenet(it->getNet2())==true) return(1);
+			if(checkonenet(it->getNet3())==true) return(1);
+			if(checkonenet(it->getNet4())==true) return(1);
 			}
 		}
 	return(0);
 	}
 
-int activenets(shared_ptr<Element> const& _elem) {
+int XyCalculator::activenets(shared_ptr<Element> const& _elem) {
 	int nlinks=0;
 	if(_elem->getNet1()!="") nlinks++;
 	if(_elem->getNet2()!="") nlinks++;
@@ -230,7 +235,7 @@ int activenets(shared_ptr<Element> const& _elem) {
 	return(nlinks);
 	}
 
-int netmin(shared_ptr<Element> const& _elem) {
+int XyCalculator::netmin(shared_ptr<Element> const& _elem) {
 	if(_elem->getNet1()!="") return(1);
 	if(_elem->getNet2()!="") return(2);
 	if(_elem->getNet3()!="") return(3);
@@ -238,7 +243,7 @@ int netmin(shared_ptr<Element> const& _elem) {
 	return(0);
 	}
 
-int findnext(vector<shared_ptr<Element>> const& tab_all, shared_ptr<Element> const& current, int& current_net, shared_ptr<Element>& next) {
+int XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net, shared_ptr<Element>& next) {
 //find next element and delete link
 	string _net="";
 	if(current_net==1) {
@@ -286,7 +291,7 @@ int findnext(vector<shared_ptr<Element>> const& tab_all, shared_ptr<Element> con
 	return(0);
 	}
 
-int xystep(shared_ptr<Element> const& _elem, int const _net, long double& xstep, long double& ystep) {
+int XyCalculator::xystep(shared_ptr<Element> const& _elem, int const _net, long double& xstep, long double& ystep) {
 //step from center to port
 	string type=_elem->getType();
 	long double Wlong=0;

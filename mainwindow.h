@@ -23,15 +23,13 @@
 #include <QFileDialog>
 
 #include "logger.h"
-#include "parser.h"
-#include "xycalculator.h"
-#include "layoutwriter.h"
+#include "converter.h"
 #include "preview.h"
 #include "microstrip/microstrip.h"
 
 namespace Ui {
 class MainWindow;
-} // namespace UI
+} // namespace Ui
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -58,15 +56,13 @@ protected:
 
 private:
 	Ui::MainWindow *ui;
-	std::vector<std::shared_ptr<Element>> tab_all;
-	long double extrem_pos[4]={0.0, 0.0, 0.0, 0.0};
+	Converter converter;
+
 	QString n_sch;
 	QString out_dir;
 	QString out_format;
 	QString n_out;
 	QString openfile_path;
-
-//	int previewprinter(/*Element**& tab_all, int& nelem*/);
 };
 
 void operator<<(MainWindow& obj, std::stringstream& in);

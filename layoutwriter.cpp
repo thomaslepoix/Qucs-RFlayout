@@ -18,7 +18,15 @@
 #include "layoutwriter.h"
 using namespace std;
 
-int layoutwriter(vector<shared_ptr<Element>> const& tab_all, long double* const& extrem_pos, string const& n_sch, string const& out_dir, string const& out_format) {
+LayoutWriter::LayoutWriter(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& _extrem_pos, string const& _n_sch, string const& _out_dir, string const& _out_format) :
+	tab_all(_tab_all),
+	extrem_pos(_extrem_pos),
+	n_sch(_n_sch),
+	out_dir(_out_dir),
+	out_format(_out_format)
+	{}
+
+int LayoutWriter::run(void) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
@@ -43,14 +51,14 @@ int layoutwriter(vector<shared_ptr<Element>> const& tab_all, long double* const&
 	ofstream f_out(n_out.c_str());
 
 //write
-	if(out_format==".kicad_pcb") write_kicad_pcb(tab_all, f_out);
-	if(out_format==".kicad_mod") write_kicad_mod(tab_all, name, f_out);
-	if(out_format==".lht") write_lht(tab_all, extrem_pos, f_out);
+	if(out_format==".kicad_pcb") write_kicad_pcb(f_out);
+	if(out_format==".kicad_mod") write_kicad_mod(name, f_out);
+	if(out_format==".lht") write_lht(f_out);
 
 	return(0);
 	}
 
-int write_kicad_pcb(vector<shared_ptr<Element>> const& tab_all, ofstream& f_out) {
+int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 	string type;
 
 	f_out << "(kicad_pcb (version 20171130) (host pcbnew 5.0.1-33cea8e~67~ubuntu18.04.1)\n"
@@ -205,7 +213,7 @@ int write_kicad_pcb(vector<shared_ptr<Element>> const& tab_all, ofstream& f_out)
 	return(0);
 	}
 
-int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& name, ofstream& f_out) {
+int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 	string type;
 	string label;
 	smatch match;
@@ -262,7 +270,7 @@ int write_kicad_mod(vector<shared_ptr<Element>> const& tab_all, string const& na
 	return(0);
 	}
 
-int write_lht(vector<shared_ptr<Element>> const& tab_all, long double* const& extrem_pos, ofstream& f_out) {
+int LayoutWriter::write_lht(ofstream& f_out) {
 	string type;
 
 	f_out << "ha:pcb-rnd-board-v4 {\n"

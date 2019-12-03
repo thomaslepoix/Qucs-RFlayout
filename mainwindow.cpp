@@ -21,6 +21,7 @@
 MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
+	converter(_n_sch.toStdString(), _out_dir.toStdString(), _out_format.toStdString()),
 	n_sch(_n_sch),
 	out_dir(_out_dir),
 	out_format(_out_format) {
@@ -34,9 +35,6 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 		}
 	
 MainWindow::~MainWindow() {
-	for(std::shared_ptr<Element> it : tab_all) {
-		it->prev=nullptr;
-		}
 	delete ui;
 	}
 
@@ -66,14 +64,10 @@ void MainWindow::on_pb_read_clicked(void) {
 	if(n_sch=="") {
 		log_err << "ERROR : Nothing to read.\n";
 	} else {
-		for(std::shared_ptr<Element> it : tab_all) {
-			it->prev=nullptr;
-			}
-		tab_all.clear();
-		tab_all.shrink_to_fit();
-		parser(tab_all, n_sch.toStdString())
-		|| xycalculator(tab_all, extrem_pos);
-		ui->glw_preview->set(tab_all, extrem_pos);
+		converter.clear();
+		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		converter.read();
+		ui->glw_preview->set(converter.get_tab_all(), converter.get_extrem_pos());
 		}
 	}
 
@@ -82,14 +76,10 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 	if(n_sch=="") {
 		log_err << "ERROR : Nothing to read.\n";
 	} else {
-		for(std::shared_ptr<Element> it : tab_all) {
-			it->prev=nullptr;
-			}
-		tab_all.clear();
-		tab_all.shrink_to_fit();
-		parser(tab_all, n_sch.toStdString());
-		xycalculator(tab_all, extrem_pos);
-		ui->glw_preview->set(tab_all, extrem_pos);
+		converter.clear();
+		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		converter.read();
+		ui->glw_preview->set(converter.get_tab_all(), converter.get_extrem_pos());
 		}
 	}
 
@@ -107,8 +97,9 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	}
 
 void MainWindow::on_le_path_out_returnPressed(void) {
-	if(tab_all.size()) {
-		layoutwriter(tab_all, extrem_pos, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+	if(converter.size()) {
+		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		converter.write();
 		log_err << "Write OK.\n";
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
@@ -116,8 +107,9 @@ void MainWindow::on_le_path_out_returnPressed(void) {
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
-	if(tab_all.size()) {
-		layoutwriter(tab_all, extrem_pos, n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+	if(converter.size()) {
+		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		converter.write();
 		log_err << "Write OK.\n";
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
