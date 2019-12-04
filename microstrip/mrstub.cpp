@@ -88,9 +88,8 @@ int Mrstub::setP(void) {
 	int div=m_npoint-5;			//-4 fixed points, -1 number -> index
 	long double n=m_alpha/div;
 	long double u=-(m_npoint-2)/2*n+n;
-	signed short s;
-	if(m_mirrorx==0) s= 1;
-	if(m_mirrorx==1) s=-1;
+	signed short s= m_mirrorx ? -1 : 1;
+
 	tab_p[0][EL_X]= m_w/2;
 	tab_p[0][EL_Y]=0;
 	tab_p[1][EL_X]=-m_w/2;

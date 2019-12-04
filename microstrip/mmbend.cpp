@@ -72,20 +72,20 @@ int Mmbend::setNet2(string _net2) {
 	}
 
 int Mmbend::setP(void) {
-	signed short s1;
-	signed short s2;
-	if(m_mirrorx==0) {
-		s1= 1;
-		s2=-1;
-	} else if(m_mirrorx==1) {
+	signed short s1; //= m_mirror ? -1 :  1;
+	signed short s2; //= m_mirror ?  1 : -1;
+	if(m_mirrorx) {
 		s1=-1;
 		s2= 1;
+	} else {
+		s1= 1;
+		s2=-1;
 		}
-	tab_p[0][EL_X]=-m_w/2;
+	tab_p[0][EL_X]=  -m_w/2;
 	tab_p[0][EL_Y]=s1*m_w/2;
-	tab_p[1][EL_X]= m_w/2;
+	tab_p[1][EL_X]=   m_w/2;
 	tab_p[1][EL_Y]=s1*m_w/2;
-	tab_p[2][EL_X]=-m_w/2;
+	tab_p[2][EL_X]=  -m_w/2;
 	tab_p[2][EL_Y]=s2*m_w/2;
 	return(0);
 	}

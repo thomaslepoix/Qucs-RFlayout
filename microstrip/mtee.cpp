@@ -93,15 +93,15 @@ int Mtee::setNet3(string _net3) {
 	}
 
 int Mtee::setP(void) {
-	signed short s1;
-	signed short s2;
+	signed short s1; //= m_mirror ? -1 :  1;
+	signed short s2; //= m_mirror ?  1 : -1;
 	long double Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
-	if(m_mirrorx==0) {
-		s1=1;
-		s2=-1;
-	} else if(m_mirrorx==1) {
+	if(m_mirrorx) {
 		s1=-1;
-		s2=1;
+		s2= 1;
+	} else {
+		s1= 1;
+		s2=-1;
 		}
 	tab_p[0][EL_X]=-m_w3/2;
 	tab_p[0][EL_Y]=s1*Wlong/2;
