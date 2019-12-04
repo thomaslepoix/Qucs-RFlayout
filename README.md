@@ -62,6 +62,7 @@ make
 - Any other component cannot be converted into a geometric shape of metal by this tool.
 - Use one wire to connect only two components ports, use apropriate components to make tees or crosses.
 - Equations are not supported yet, avoid using variables in component fields.
+- QucsStudio schematics are supported but it is closed source and there are some incompatibilities so please prefer using Qucs.
 
 <br>
 
