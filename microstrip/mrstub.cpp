@@ -72,8 +72,8 @@ int Mrstub::getNpoint(void) {
 long double Mrstub::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y])
-		           : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);
+		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}
@@ -91,18 +91,18 @@ int Mrstub::setP(void) {
 	long double u=-(m_npoint-2)/2*n+n;
 	signed short s= m_mirrorx ? -1 : 1;
 
-	tab_p[0][EL_X]= m_w/2;
-	tab_p[0][EL_Y]=0;
-	tab_p[1][EL_X]=-m_w/2;
-	tab_p[1][EL_Y]=0;
-	tab_p[2][EL_X]= m_ro*sin((M_PI/180)*(-m_alpha/2));
-	tab_p[2][EL_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
+	tab_p[0][X]= m_w/2;
+	tab_p[0][Y]=0;
+	tab_p[1][X]=-m_w/2;
+	tab_p[1][Y]=0;
+	tab_p[2][X]= m_ro*sin((M_PI/180)*(-m_alpha/2));
+	tab_p[2][Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
 	for(int i=3;i<m_npoint-1;i++) {
-		tab_p[i][EL_X]=m_ro*sin((M_PI/180)*(u));
-		tab_p[i][EL_Y]=s*((-m_ro*cos((M_PI/180)*(u)))+m_l);
+		tab_p[i][X]=m_ro*sin((M_PI/180)*(u));
+		tab_p[i][Y]=s*((-m_ro*cos((M_PI/180)*(u)))+m_l);
 		u+=n;
 		}
-	tab_p[m_npoint-1][EL_X]=-m_ro*sin((M_PI/180)*(-m_alpha/2));
-	tab_p[m_npoint-1][EL_Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
+	tab_p[m_npoint-1][X]=-m_ro*sin((M_PI/180)*(-m_alpha/2));
+	tab_p[m_npoint-1][Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
 	return(0);
 	}

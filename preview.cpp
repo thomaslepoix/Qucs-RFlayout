@@ -163,9 +163,9 @@ void Preview::resetView(void) {
 void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& extrem_pos) {
 	tab_all.clear();
 	tab_all=_tab_all;
-	fit_factor=1/(qMax(extrem_pos[_XMAX], extrem_pos[_YMAX])/2);
-	fit_x_offset=-extrem_pos[_XMAX]/2;
-	fit_y_offset=-extrem_pos[_YMAX]/2;
+	fit_factor=1/(qMax(extrem_pos[XMAX], extrem_pos[YMAX])/2);
+	fit_x_offset=-extrem_pos[XMAX]/2;
+	fit_y_offset=-extrem_pos[YMAX]/2;
 	resetView();
 	}
 
@@ -182,21 +182,21 @@ void Preview::drawAll(void) {
 			long double tab_x[it->getNpoint()];
 			long double tab_y[it->getNpoint()];
 			for(int i=0;i<it->getNpoint();i++) {
-				tab_x[i]=it->getP(i, EL_X, _R, _ABS)+x_offset;
-				tab_y[i]=-(it->getP(i, EL_Y, _R, _ABS)+y_offset);
+				tab_x[i]=it->getP(i, X, R, ABS)+x_offset;
+				tab_y[i]=-(it->getP(i, Y, R, ABS)+y_offset);
 				}
 			drawShape(it->getNpoint(), tab_x, tab_y, orange);
 		} else if(type=="MCOUPLED") {
 			long double tab_x[it->getNpoint()/2];
 			long double tab_y[it->getNpoint()/2];
 			for(int i=0;i<it->getNpoint()/2;i++) {
-				tab_x[i]=it->getP(i, EL_X, _R, _ABS)+x_offset;
-				tab_y[i]=-(it->getP(i, EL_Y, _R, _ABS)+y_offset);
+				tab_x[i]=it->getP(i, X, R, ABS)+x_offset;
+				tab_y[i]=-(it->getP(i, Y, R, ABS)+y_offset);
 				}
 			drawShape(it->getNpoint()/2, tab_x, tab_y, orange);
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-				tab_x[i-it->getNpoint()/2]=it->getP(i, EL_X, _R, _ABS)+x_offset;
-				tab_y[i-it->getNpoint()/2]=-(it->getP(i, EL_Y, _R, _ABS)+y_offset);
+				tab_x[i-it->getNpoint()/2]=it->getP(i, X, R, ABS)+x_offset;
+				tab_y[i-it->getNpoint()/2]=-(it->getP(i, Y, R, ABS)+y_offset);
 				}
 			drawShape(it->getNpoint()/2, tab_x, tab_y, orange);
 		} else if(type=="MVIA") {

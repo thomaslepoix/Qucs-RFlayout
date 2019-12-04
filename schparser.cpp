@@ -114,9 +114,9 @@ int SchParser::run(void) {
 			// MSTUB -> MRSTUB : wire wrap point is different, excentred by 10
 			if(regex_search(line, match, r_mstub)) {
 				f_tmp << "  <MRSTUB" << match.str(1)
-				      << mstub_shift(EL_X, match.str(2), match.str(5))
+				      << mstub_shift(X, match.str(2), match.str(5))
 				      << " "
-				      << mstub_shift(EL_Y, match.str(3), match.str(5))
+				      << mstub_shift(Y, match.str(3), match.str(5))
 				      << match.str(4) << endl;
 			} else {
 				f_tmp << line << endl;

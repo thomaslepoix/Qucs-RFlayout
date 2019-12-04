@@ -80,8 +80,8 @@ int Mcross::getNpoint(void) {
 long double Mcross::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y])
-		           : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);
+		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}
@@ -128,79 +128,79 @@ int Mcross::setP(void) {
 		// ##
 		// ##
 		m_npoint=4;
-		tab_p[0][EL_X]=  -Wlong24/2;
-		tab_p[0][EL_Y]=s1*Wlong13/2;
-		tab_p[1][EL_X]=   Wlong24/2;
-		tab_p[1][EL_Y]=s1*Wlong13/2;
-		tab_p[2][EL_X]=   Wlong24/2;
-		tab_p[2][EL_Y]=s2*Wlong13/2;
-		tab_p[3][EL_X]=  -Wlong24/2;
-		tab_p[3][EL_Y]=s2*Wlong13/2;
+		tab_p[0][X]=  -Wlong24/2;
+		tab_p[0][Y]=s1*Wlong13/2;
+		tab_p[1][X]=   Wlong24/2;
+		tab_p[1][Y]=s1*Wlong13/2;
+		tab_p[2][X]=   Wlong24/2;
+		tab_p[2][Y]=s2*Wlong13/2;
+		tab_p[3][X]=  -Wlong24/2;
+		tab_p[3][Y]=s2*Wlong13/2;
 	} else {
 		if(Wlong13==m_w1 && Wlong24==m_w2) {
 			//shape
 			// ##
 			// #
-			tab_p[0][EL_X]=  -Wlong24/2;
-			tab_p[0][EL_Y]=s1*Wlong13/2;
-			tab_p[1][EL_X]=   Wlong24/2;
-			tab_p[1][EL_Y]=s1*Wlong13/2;
-			tab_p[2][EL_X]=   m_w2/2;
-			tab_p[2][EL_Y]=s2*m_w3/2;
-			tab_p[3][EL_X]=   m_w4/2;
-			tab_p[3][EL_Y]=s2*m_w3/2;
-			tab_p[4][EL_X]=   m_w4/2;
-			tab_p[4][EL_Y]=s2*m_w1/2;
-			tab_p[5][EL_X]=  -Wlong24/2;
-			tab_p[5][EL_Y]=s2*Wlong13/2;
+			tab_p[0][X]=  -Wlong24/2;
+			tab_p[0][Y]=s1*Wlong13/2;
+			tab_p[1][X]=   Wlong24/2;
+			tab_p[1][Y]=s1*Wlong13/2;
+			tab_p[2][X]=   m_w2/2;
+			tab_p[2][Y]=s2*m_w3/2;
+			tab_p[3][X]=   m_w4/2;
+			tab_p[3][Y]=s2*m_w3/2;
+			tab_p[4][X]=   m_w4/2;
+			tab_p[4][Y]=s2*m_w1/2;
+			tab_p[5][X]=  -Wlong24/2;
+			tab_p[5][Y]=s2*Wlong13/2;
 		} else if(Wlong13==m_w1 && Wlong24==m_w4) {
 			//shape
 			// #
 			// ##
-			tab_p[0][EL_X]=  -Wlong24/2;
-			tab_p[0][EL_Y]=s1*Wlong13/2;
-			tab_p[1][EL_X]=   m_w2/2;
-			tab_p[1][EL_Y]=s1*m_w1/2;
-			tab_p[2][EL_X]=   m_w2/2;
-			tab_p[2][EL_Y]=s1*m_w3/2;
-			tab_p[3][EL_X]=   m_w4/2;
-			tab_p[3][EL_Y]=s1*m_w3/2;
-			tab_p[4][EL_X]=   Wlong24/2;
-			tab_p[4][EL_Y]=s2*Wlong13/2;
-			tab_p[5][EL_X]=  -Wlong24/2;
-			tab_p[5][EL_Y]=s2*Wlong13/2;
+			tab_p[0][X]=  -Wlong24/2;
+			tab_p[0][Y]=s1*Wlong13/2;
+			tab_p[1][X]=   m_w2/2;
+			tab_p[1][Y]=s1*m_w1/2;
+			tab_p[2][X]=   m_w2/2;
+			tab_p[2][Y]=s1*m_w3/2;
+			tab_p[3][X]=   m_w4/2;
+			tab_p[3][Y]=s1*m_w3/2;
+			tab_p[4][X]=   Wlong24/2;
+			tab_p[4][Y]=s2*Wlong13/2;
+			tab_p[5][X]=  -Wlong24/2;
+			tab_p[5][Y]=s2*Wlong13/2;
 		} else if(Wlong13==m_w3 && Wlong24==m_w4) {
 			//shape
 			//  #
 			// ##
-			tab_p[0][EL_X]=  -m_w4/2;
-			tab_p[0][EL_Y]=s1*m_w1/2;
-			tab_p[1][EL_X]=  -m_w2/2;
-			tab_p[1][EL_Y]=s1*m_w1/2;
-			tab_p[2][EL_X]=  -m_w2/2;
-			tab_p[2][EL_Y]=s1*m_w3/2;
-			tab_p[3][EL_X]=   Wlong24/2;
-			tab_p[3][EL_Y]=s1*Wlong13/2;
-			tab_p[4][EL_X]=   Wlong24/2;
-			tab_p[4][EL_Y]=s2*Wlong13/2;
-			tab_p[5][EL_X]=  -Wlong24/2;
-			tab_p[5][EL_Y]=s2*Wlong13/2;
+			tab_p[0][X]=  -m_w4/2;
+			tab_p[0][Y]=s1*m_w1/2;
+			tab_p[1][X]=  -m_w2/2;
+			tab_p[1][Y]=s1*m_w1/2;
+			tab_p[2][X]=  -m_w2/2;
+			tab_p[2][Y]=s1*m_w3/2;
+			tab_p[3][X]=   Wlong24/2;
+			tab_p[3][Y]=s1*Wlong13/2;
+			tab_p[4][X]=   Wlong24/2;
+			tab_p[4][Y]=s2*Wlong13/2;
+			tab_p[5][X]=  -Wlong24/2;
+			tab_p[5][Y]=s2*Wlong13/2;
 		} else if(Wlong13==m_w3 && Wlong24==m_w2) {
 			//shape
 			// ##
 			//  #
-			tab_p[0][EL_X]=  -Wlong24/2;
-			tab_p[0][EL_Y]=s1*Wlong13/2;
-			tab_p[1][EL_X]=   Wlong24/2;
-			tab_p[1][EL_Y]=s1*Wlong13/2;
-			tab_p[2][EL_X]=   Wlong24/2;
-			tab_p[2][EL_Y]=s2*Wlong13/2;
-			tab_p[3][EL_X]=  -m_w4/2;
-			tab_p[3][EL_Y]=s2*m_w3/2;
-			tab_p[4][EL_X]=  -m_w4/2;
-			tab_p[4][EL_Y]=s2*m_w1/2;
-			tab_p[5][EL_X]=  -m_w2/2;
-			tab_p[5][EL_Y]=s2*m_w1/2;
+			tab_p[0][X]=  -Wlong24/2;
+			tab_p[0][Y]=s1*Wlong13/2;
+			tab_p[1][X]=   Wlong24/2;
+			tab_p[1][Y]=s1*Wlong13/2;
+			tab_p[2][X]=   Wlong24/2;
+			tab_p[2][Y]=s2*Wlong13/2;
+			tab_p[3][X]=  -m_w4/2;
+			tab_p[3][Y]=s2*m_w3/2;
+			tab_p[4][X]=  -m_w4/2;
+			tab_p[4][Y]=s2*m_w1/2;
+			tab_p[5][X]=  -m_w2/2;
+			tab_p[5][Y]=s2*m_w1/2;
 			}
 		}
 	return(0);

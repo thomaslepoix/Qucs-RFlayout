@@ -74,8 +74,8 @@ int Mcoupled::getNpoint(void) {
 long double Mcoupled::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y])
-		           : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);
+		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}
@@ -103,21 +103,21 @@ int Mcoupled::setNet4(string _net4) {
 	}
 
 int Mcoupled::setP(void) {
-	tab_p[0][EL_X]=-m_l/2;
-	tab_p[0][EL_Y]= (m_s/2+m_w);
-	tab_p[1][EL_X]= m_l/2;
-	tab_p[1][EL_Y]= (m_s/2+m_w);
-	tab_p[2][EL_X]= m_l/2;
-	tab_p[2][EL_Y]= m_s/2;
-	tab_p[3][EL_X]=-m_l/2;
-	tab_p[3][EL_Y]= m_s/2;
-	tab_p[4][EL_X]=-m_l/2;
-	tab_p[4][EL_Y]=-m_s/2;
-	tab_p[5][EL_X]= m_l/2;
-	tab_p[5][EL_Y]=-m_s/2;
-	tab_p[6][EL_X]= m_l/2;
-	tab_p[6][EL_Y]=-(m_s/2+m_w);
-	tab_p[7][EL_X]=-m_l/2;
-	tab_p[7][EL_Y]=-(m_s/2+m_w);
+	tab_p[0][X]=-m_l/2;
+	tab_p[0][Y]= (m_s/2+m_w);
+	tab_p[1][X]= m_l/2;
+	tab_p[1][Y]= (m_s/2+m_w);
+	tab_p[2][X]= m_l/2;
+	tab_p[2][Y]= m_s/2;
+	tab_p[3][X]=-m_l/2;
+	tab_p[3][Y]= m_s/2;
+	tab_p[4][X]=-m_l/2;
+	tab_p[4][Y]=-m_s/2;
+	tab_p[5][X]= m_l/2;
+	tab_p[5][Y]=-m_s/2;
+	tab_p[6][X]= m_l/2;
+	tab_p[6][Y]=-(m_s/2+m_w);
+	tab_p[7][X]=-m_l/2;
+	tab_p[7][Y]=-(m_s/2+m_w);
 	return(0);
 	}

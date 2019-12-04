@@ -54,8 +54,8 @@ int Mmbend::getNpoint(void) {
 long double Mmbend::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y])
-		           : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);
+		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}
@@ -82,11 +82,11 @@ int Mmbend::setP(void) {
 		s1= 1;
 		s2=-1;
 		}
-	tab_p[0][EL_X]=  -m_w/2;
-	tab_p[0][EL_Y]=s1*m_w/2;
-	tab_p[1][EL_X]=   m_w/2;
-	tab_p[1][EL_Y]=s1*m_w/2;
-	tab_p[2][EL_X]=  -m_w/2;
-	tab_p[2][EL_Y]=s2*m_w/2;
+	tab_p[0][X]=  -m_w/2;
+	tab_p[0][Y]=s1*m_w/2;
+	tab_p[1][X]=   m_w/2;
+	tab_p[1][Y]=s1*m_w/2;
+	tab_p[2][X]=  -m_w/2;
+	tab_p[2][Y]=s2*m_w/2;
 	return(0);
 	}

@@ -186,21 +186,21 @@ int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 			if(type=="MCOUPLED") {//////////////////////////////////////////////
 				f_out << "    (fp_poly (pts\n";
 				for(int i=0;i<it->getNpoint()/2;i++) {
-					f_out << "      (xy " << it->getP(i, EL_X, _NOR, _REL)
-						  << " "          << it->getP(i, EL_Y, _NOR, _REL) << ")\n";
+					f_out << "      (xy " << it->getP(i, X, NOR, REL)
+						  << " "          << it->getP(i, Y, NOR, REL) << ")\n";
 					}
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
 					  << "    (fp_poly (pts\n";
 				for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-					f_out << "      (xy " << it->getP(i, EL_X, _NOR, _REL)
-						  << " "          << it->getP(i, EL_Y, _NOR, _REL) << ")\n";
+					f_out << "      (xy " << it->getP(i, X, NOR, REL)
+						  << " "          << it->getP(i, Y, NOR, REL) << ")\n";
 					}
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 			} else {////////////////////////////////////////////////////////////
 				f_out << "    (fp_poly (pts\n";
 				for(int i=0;i<it->getNpoint();i++) {
-					f_out << "      (xy " << it->getP(i, EL_X, _NOR, _REL)
-						  << " "          << it->getP(i, EL_Y, _NOR, _REL) << ")\n";
+					f_out << "      (xy " << it->getP(i, X, NOR, REL)
+						  << " "          << it->getP(i, Y, NOR, REL) << ")\n";
 					}
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 				}
@@ -243,22 +243,22 @@ int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, EL_X, _R, _ABS)
-					  << " "          << it->getP(i, EL_Y, _R, _ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)
+					  << " "          << it->getP(i, Y, R, ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MCOUPLED") {///////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 //f_out << "MCOUPLED" << endl;
 			for(int i=0;i<it->getNpoint()/2;i++) {
-				f_out << "      (xy " << it->getP(i, EL_X, _R, _ABS)
-					  << " "          << it->getP(i, EL_Y, _R, _ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)
+					  << " "          << it->getP(i, Y, R, ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
 				  << "    (fp_poly (pts\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, EL_X, _R, _ABS)
-					  << " "          << it->getP(i, EL_Y, _R, _ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)
+					  << " "          << it->getP(i, Y, R, ABS) << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
@@ -309,8 +309,8 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 		  << " ha:meta {\n"
 		  << "   ha:size {\n"
 		  << "    thermal_scale = 0.500000\n"
-		  << "    x = " << extrem_pos[_XMAX]+2 << "mm\n"
-		  << "    y = " << extrem_pos[_YMAX]+2 << "mm\n"
+		  << "    x = " << extrem_pos[XMAX]+2 << "mm\n"
+		  << "    y = " << extrem_pos[YMAX]+2 << "mm\n"
 		  << "    isle_area_nm2 = 200000000.000000\n"
 		  << "   }\n"
 		  << "   ha:cursor {\n"
@@ -380,8 +380,8 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 				  << "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, EL_X, _R, _ABS) << "mm; "
-					  << it->getP(i, EL_Y, _R, _ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS) << "mm; "
+					  << it->getP(i, Y, R, ABS) << "mm }\n";
 				}
 			f_out << "          }\n"
 				  << "        }\n"
@@ -397,8 +397,8 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 				  << "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint()/2;i++) {
 				f_out << "           { "
-					  << it->getP(i, EL_X, _R, _ABS) << "mm; "
-					  << it->getP(i, EL_Y, _R, _ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS) << "mm; "
+					  << it->getP(i, Y, R, ABS) << "mm }\n";
 				}
 			f_out << "          }\n"
 				  << "        }\n"
@@ -413,8 +413,8 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 				  << "          ta:contour {\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, EL_X, _R, _ABS) << "mm; "
-					  << it->getP(i, EL_Y, _R, _ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS) << "mm; "
+					  << it->getP(i, Y, R, ABS) << "mm }\n";
 				}
 			f_out << "          }\n"
 				  << "        }\n"

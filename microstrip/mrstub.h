@@ -53,7 +53,7 @@ public :
 	short getAlpha(void);
 	std::string getNet1(void);
 	int getNpoint(void);
-	long double getP(int _n, axis_t _xy, orientation_t _r=_NOR, origin_t _abs=_REL);
+	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL);
 	int setNet1(std::string _net1);
 	int setP(void);
 };

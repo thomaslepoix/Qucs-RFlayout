@@ -20,10 +20,10 @@
 
 #define _USE_MATH_DEFINES
 
-enum axis_t {EL_X, EL_Y};				// x axis / y axis
-enum orientation_t {_NOR, _R};			// no rotation / rotation
-enum origin_t {_REL, _ABS};				// relative / absolute
-enum {_XMIN, _XMAX, _YMIN, _YMAX};		// extrem_pos index
+enum axis_t {X, Y};				// x axis / y axis
+enum orientation_t {NOR, R};			// no rotation / rotation
+enum origin_t {REL, ABS};				// relative / absolute
+enum {XMIN, XMAX, YMIN, YMAX};		// extrem_pos index
 
 #include <string>
 #include <cmath>

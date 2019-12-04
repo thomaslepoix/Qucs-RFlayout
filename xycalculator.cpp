@@ -119,23 +119,23 @@ int XyCalculator::run(void) {
 	for(shared_ptr<Element> it : tab_all) {
 		it->setP();
 		for(int u=0;u<it->getNpoint();u++) {
-			if(it->getP(u, EL_X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, EL_X, _R, _ABS);
-			if(it->getP(u, EL_X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, EL_X, _R, _ABS);
-			if(it->getP(u, EL_Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, EL_Y, _R, _ABS);
-			if(it->getP(u, EL_Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, EL_Y, _R, _ABS);
+			if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
+			if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
+			if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
+			if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
 			}
 		}
 
 	cout << endl;
-	cout << "Xmin : " << extrem_pos[_XMIN] << endl;
-	cout << "Xmax : " << extrem_pos[_XMAX] << endl;
-	cout << "Ymin : " << extrem_pos[_YMIN] << endl;
-	cout << "Ymax : " << extrem_pos[_YMAX] << endl;
+	cout << "Xmin : " << extrem_pos[XMIN] << endl;
+	cout << "Xmax : " << extrem_pos[XMAX] << endl;
+	cout << "Ymin : " << extrem_pos[YMIN] << endl;
+	cout << "Ymax : " << extrem_pos[YMAX] << endl;
 
 //translate shapes in positive quarter
 	for(shared_ptr<Element> it : tab_all) {
-		it->setX(it->getX()-extrem_pos[_XMIN]+1);
-		it->setY(it->getY()-extrem_pos[_YMIN]+1);
+		it->setX(it->getX()-extrem_pos[XMIN]+1);
+		it->setY(it->getY()-extrem_pos[YMIN]+1);
 		it->setP();
 		}
 
@@ -144,18 +144,18 @@ int XyCalculator::run(void) {
 		extrem_pos[i]=0.0;
 	for(shared_ptr<Element> it : tab_all) {
 		for(int u=0;u<it->getNpoint();u++) {
-			if(it->getP(u, EL_X, _R, _ABS)<extrem_pos[_XMIN]) extrem_pos[_XMIN]=it->getP(u, EL_X, _R, _ABS);
-			if(it->getP(u, EL_X, _R, _ABS)>extrem_pos[_XMAX]) extrem_pos[_XMAX]=it->getP(u, EL_X, _R, _ABS);
-			if(it->getP(u, EL_Y, _R, _ABS)<extrem_pos[_YMIN]) extrem_pos[_YMIN]=it->getP(u, EL_Y, _R, _ABS);
-			if(it->getP(u, EL_Y, _R, _ABS)>extrem_pos[_YMAX]) extrem_pos[_YMAX]=it->getP(u, EL_Y, _R, _ABS);
+			if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
+			if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
+			if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
+			if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
 			}
 		}
 
 	cout << "Translated extrem positions :" << endl;
-	cout << "Xmin : " << extrem_pos[_XMIN] << endl;
-	cout << "Xmax : " << extrem_pos[_XMAX] << endl;
-	cout << "Ymin : " << extrem_pos[_YMIN] << endl;
-	cout << "Ymax : " << extrem_pos[_YMAX] << endl;
+	cout << "Xmin : " << extrem_pos[XMIN] << endl;
+	cout << "Xmax : " << extrem_pos[XMAX] << endl;
+	cout << "Ymin : " << extrem_pos[YMIN] << endl;
+	cout << "Ymax : " << extrem_pos[YMAX] << endl;
 
 
 
