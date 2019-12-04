@@ -51,7 +51,7 @@ int Mcorn::getNpoint(void) {
 	return(m_npoint);
 	}
 
-long double Mcorn::getP(int _n, bool _xy, bool _r, bool _abs) {
+long double Mcorn::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	(void) _r;
 	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
 	}

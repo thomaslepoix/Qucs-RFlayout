@@ -20,18 +20,10 @@
 
 #define _USE_MATH_DEFINES
 
-//getP() defines
-#define EL_X    0
-#define EL_Y	1
-#define _NOR	0
-#define _R		1
-#define _REL	0
-#define _ABS	1
-//extrem_pos defines
-#define _XMIN	0
-#define _XMAX	1
-#define _YMIN	2
-#define _YMAX	3
+enum axis_t {EL_X, EL_Y};				// x axis / y axis
+enum orientation_t {_NOR, _R};			// no rotation / rotation
+enum origin_t {_REL, _ABS};				// relative / absolute
+enum {_XMIN, _XMAX, _YMIN, _YMAX};		// extrem_pos index
 
 #include <string>
 #include <cmath>
@@ -84,7 +76,7 @@ public:
 	virtual std::string getNet3(void);
 	virtual std::string getNet4(void);
 	virtual int getNpoint(void);
-	virtual long double getP(int _n, bool _xy, bool _r, bool _abs);
+	virtual long double getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs);
 	virtual int setNet1(std::string _net1);
 	virtual int setNet2(std::string _net2);
 	virtual int setNet3(std::string _net3);

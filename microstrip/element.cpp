@@ -149,7 +149,7 @@ int Element::getNpoint(void) {
 	return(0);
 	}
 
-long double Element::getP(int /*_n*/, bool /*_xy*/, bool /*_r*/, bool /*_abs*/) {
+long double Element::getP(int /*_n*/, axis_t /*_xy*/, orientation_t /*_r*/, origin_t /*_abs*/) {
 	return(0);
 	}
 

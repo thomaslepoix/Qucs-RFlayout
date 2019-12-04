@@ -51,7 +51,7 @@ int Mmbend::getNpoint(void) {
 	return(m_npoint);
 	}
 
-long double Mmbend::getP(int _n, bool _xy, bool _r, bool _abs) {
+long double Mmbend::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y]) : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);

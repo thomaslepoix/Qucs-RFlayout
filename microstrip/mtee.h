@@ -49,7 +49,7 @@ public :
 	std::string getNet2(void);
 	std::string getNet3(void);
 	int getNpoint(void);
-	long double getP(int _n, bool _xy, bool _r=_NOR, bool _abs=_REL);
+	long double getP(int _n, axis_t _xy, orientation_t _r=_NOR, origin_t _abs=_REL);
 	int setNet1(std::string _net1);
 	int setNet2(std::string _net2);
 	int setNet3(std::string _net3);
