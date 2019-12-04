@@ -60,7 +60,8 @@ int Mlin::getNpoint(void) {
 long double Mlin::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y]) : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);
+		coord= _xy ? rotateY(tab_p[_n][EL_X], tab_p[_n][EL_Y])
+		           : rotateX(tab_p[_n][EL_X], tab_p[_n][EL_Y]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}

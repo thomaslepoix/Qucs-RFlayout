@@ -70,7 +70,8 @@ int Mtee::getNpoint(void) {
 long double Mtee::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1]) : rotateX(tab_p[_n][0], tab_p[_n][1]);
+		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1])
+		           : rotateX(tab_p[_n][0], tab_p[_n][1]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}
