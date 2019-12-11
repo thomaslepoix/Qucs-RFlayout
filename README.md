@@ -23,8 +23,16 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 ## Build
 
-```
-make
+```sh
+Qucs-RFlayout $
+
+    mkdir build && cd build
+
+    qmake ..        # Using qmake
+                    # OR
+    cmake ..        # Using cmake
+
+    make
 ```
 
 <br>
