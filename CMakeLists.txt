@@ -16,6 +16,7 @@ find_package(OpenGL REQUIRED)
 #find_program(CMAKE_CXX_CLANG_TIDY NAMES clang-tidy)
 
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
@@ -28,61 +29,61 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
 add_definitions(${QT_DEPRECATED_WARNINGS})
 
 set(QUCS-RF-LAYOUT_SRCS
-        main.cpp
-        microstrip/element.cpp
-        microstrip/eqn.cpp
-        microstrip/pac.cpp
-#		microstrip/subst.cpp
-        microstrip/mcorn.cpp
-        microstrip/mcoupled.cpp
-        microstrip/mcross.cpp
-        microstrip/mgap.cpp
-        microstrip/mlin.cpp
-        microstrip/mmbend.cpp
-        microstrip/mopen.cpp
-        microstrip/mrstub.cpp
-        microstrip/mstep.cpp
-        microstrip/mtee.cpp
-        microstrip/mvia.cpp
-        schparser.cpp
-        xycalculator.cpp
-        layoutwriter.cpp
-        converter.cpp
-        mainwindow.cpp
-        preview.cpp
-        logger.cpp
+        src/main.cpp
+        src/microstrip/element.cpp
+        src/microstrip/eqn.cpp
+        src/microstrip/pac.cpp
+#		srcmicrostrip/subst.cpp
+        src/microstrip/mcorn.cpp
+        src/microstrip/mcoupled.cpp
+        src/microstrip/mcross.cpp
+        src/microstrip/mgap.cpp
+        src/microstrip/mlin.cpp
+        src/microstrip/mmbend.cpp
+        src/microstrip/mopen.cpp
+        src/microstrip/mrstub.cpp
+        src/microstrip/mstep.cpp
+        src/microstrip/mtee.cpp
+        src/microstrip/mvia.cpp
+        src/schparser.cpp
+        src/xycalculator.cpp
+        src/layoutwriter.cpp
+        src/converter.cpp
+        src/mainwindow.cpp
+        src/preview.cpp
+        src/logger.cpp
 )
 
 #set(QUCS-RF-LAYOUT_HDRS
-#        microstrip/element.h
-#        microstrip/eqn.h
-#        microstrip/pac.h
-#        microstrip/subst.h
-#        microstrip/mcorn.h
-#        microstrip/mcoupled.h
-#        microstrip/mcross.h
-#        microstrip/mgap.h
-#        microstrip/mlin.h
-#        microstrip/mmbend.h
-#        microstrip/mopen.h
-#        microstrip/mrstub.h
-#        microstrip/mstep.h
-#        microstrip/mtee.h
-#        microstrip/mvia.h
-#        parser.h
-#        xycalculator.h
-#        layoutwriter.h
-#        mainwindow.h
-#        preview.h
+#        src/microstrip/element.h
+#        src/microstrip/eqn.h
+#        src/microstrip/pac.h
+#        src/microstrip/subst.h
+#        src/microstrip/mcorn.h
+#        src/microstrip/mcoupled.h
+#        src/microstrip/mcross.h
+#        src/microstrip/mgap.h
+#        src/microstrip/mlin.h
+#        src/microstrip/mmbend.h
+#        src/microstrip/mopen.h
+#        src/microstrip/mrstub.h
+#        src/microstrip/mstep.h
+#        src/microstrip/mtee.h
+#        src/microstrip/mvia.h
+#        src/parser.h
+#        src/xycalculator.h
+#        src/layoutwriter.h
+#        src/mainwindow.h
+#        src/preview.h
 #)
 
 set(QUCS-RF-LAYOUT_UIS
-        mainwindow.ui
+        src/mainwindow.ui
 )
 
-qt5_wrap_ui(QUCS-RF-LAYOUT_UI_HDRS ${QUCS-RF-LAYOUT_UIS})
+include_directories("src")
 
-add_executable(qucsrflayout ${QUCS-RF-LAYOUT_SRCS} ${QUCS-RF-LAYOUT_UI_HDRS})
+add_executable(qucsrflayout ${QUCS-RF-LAYOUT_SRCS})
 
 qt5_use_modules(qucsrflayout Core Gui OpenGL)
 

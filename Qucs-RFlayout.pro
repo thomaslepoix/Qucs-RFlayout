@@ -7,9 +7,9 @@
 
 QT       += core gui opengl
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 
-TARGET = build/qucsrflayout
+TARGET = $$PWD/bin/qucsrflayout
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,52 +25,56 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        microstrip/element.cpp \
-        microstrip/eqn.cpp \
-        microstrip/pac.cpp \
-        microstrip/mcorn.cpp \
-        microstrip/mcoupled.cpp \
-        microstrip/mcross.cpp \
-        microstrip/mgap.cpp \
-        microstrip/mlin.cpp \
-        microstrip/mmbend.cpp \
-        microstrip/mopen.cpp \
-        microstrip/mrstub.cpp \
-        microstrip/mstep.cpp \
-        microstrip/mtee.cpp \
-        microstrip/mvia.cpp \
-        schparser.cpp \
-        xycalculator.cpp \
-        layoutwriter.cpp \
-        converter.cpp \
-        mainwindow.cpp \
-        preview.cpp \
-        logger.cpp
+        $$PWD/src/main.cpp \
+        $$PWD/src/microstrip/element.cpp \
+        $$PWD/src/microstrip/eqn.cpp \
+        $$PWD/src/microstrip/pac.cpp \
+        $$PWD/src/microstrip/mcorn.cpp \
+        $$PWD/src/microstrip/mcoupled.cpp \
+        $$PWD/src/microstrip/mcross.cpp \
+        $$PWD/src/microstrip/mgap.cpp \
+        $$PWD/src/microstrip/mlin.cpp \
+        $$PWD/src/microstrip/mmbend.cpp \
+        $$PWD/src/microstrip/mopen.cpp \
+        $$PWD/src/microstrip/mrstub.cpp \
+        $$PWD/src/microstrip/mstep.cpp \
+        $$PWD/src/microstrip/mtee.cpp \
+        $$PWD/src/microstrip/mvia.cpp \
+        $$PWD/src/schparser.cpp \
+        $$PWD/src/xycalculator.cpp \
+        $$PWD/src/layoutwriter.cpp \
+        $$PWD/src/converter.cpp \
+        $$PWD/src/mainwindow.cpp \
+        $$PWD/src/preview.cpp \
+        $$PWD/src/logger.cpp
 
 HEADERS += \
-        microstrip/element.h \
-        microstrip/eqn.h \
-        microstrip/pac.h \
-        microstrip/mcorn.h \
-        microstrip/mcoupled.h \
-        microstrip/mcross.h \
-        microstrip/mgap.h \
-        microstrip/mlin.h \
-        microstrip/mmbend.h \
-        microstrip/mopen.h \
-        microstrip/mrstub.h \
-        microstrip/mstep.h \
-        microstrip/mtee.h \
-        microstrip/mvia.h \
-        schparser.h \
-        xycalculator.h \
-        layoutwriter.h \
-        converter.h \
-        mainwindow.h \
-        preview.h \
-        logger.h
+        $$PWD/src/microstrip/element.h \
+        $$PWD/src/microstrip/eqn.h \
+        $$PWD/src/microstrip/pac.h \
+        $$PWD/src/microstrip/mcorn.h \
+        $$PWD/src/microstrip/mcoupled.h \
+        $$PWD/src/microstrip/mcross.h \
+        $$PWD/src/microstrip/mgap.h \
+        $$PWD/src/microstrip/mlin.h \
+        $$PWD/src/microstrip/mmbend.h \
+        $$PWD/src/microstrip/mopen.h \
+        $$PWD/src/microstrip/mrstub.h \
+        $$PWD/src/microstrip/mstep.h \
+        $$PWD/src/microstrip/mtee.h \
+        $$PWD/src/microstrip/mvia.h \
+        $$PWD/src/schparser.h \
+        $$PWD/src/xycalculator.h \
+        $$PWD/src/layoutwriter.h \
+        $$PWD/src/converter.h \
+        $$PWD/src/mainwindow.h \
+        $$PWD/src/preview.h \
+        $$PWD/src/logger.h
 
 FORMS += \
-        mainwindow.ui
+        $$PWD/src/mainwindow.ui
 
+INCLUDEPATH += \
+        $$PWD/src
+
+#CONFIG += object_parallel_to_source
