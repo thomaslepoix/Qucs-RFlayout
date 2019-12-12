@@ -9,7 +9,7 @@ QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 
-TARGET = $$PWD/bin/qucsrflayout
+TARGET = $$PWD/out/qucsrflayout
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use

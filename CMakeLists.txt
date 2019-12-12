@@ -1,94 +1,157 @@
-project(qucsrflayout CXX)
-cmake_minimum_required(VERSION 3.0)
-cmake_policy(VERSION 3.0)
+cmake_minimum_required( VERSION 2.8 )
+cmake_policy( VERSION 3.10 )
+project( qucsrflayout CXX )
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5OpenGL REQUIRED)
-find_package(OpenGL REQUIRED)
+set( CMAKE_MODULE_PATH
+	${CMAKE_MODULE_PATH}
+	"${CMAKE_SOURCE_DIR}/cmake"
+	)
 
-#find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
-#list(APPEND CMAKE_CXX_CPPCHECK
+include( ClangFormat )
+include( Package )
+
+find_package( Qt5Core    REQUIRED )
+find_package( Qt5Widgets REQUIRED )
+find_package( Qt5Gui     REQUIRED )
+find_package( Qt5OpenGL  REQUIRED )
+find_package( OpenGL     REQUIRED )
+
+#find_program( CMAKE_CXX_CPPCHECK NAMES cppcheck )
+#list( APPEND CMAKE_CXX_CPPCHECK
 #	"--enable=all"
 #	"--force"
 #	)
-#find_program(CMAKE_CXX_CLANG_TIDY NAMES clang-tidy)
+#find_program( CMAKE_CXX_CLANG_TIDY NAMES clang-tidy )
+#set( CMAKE_CXX_CPPCHECK "cppcheck")
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set( CMAKE_AUTOMOC ON )
+set( CMAKE_AUTOUIC ON )
+set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
+#########################################################################SOURCES
 
-#set(CMAKE_CXX_CPPCHECK "cppcheck")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
+set( QUCS-RF-LAYOUT_SRCS
+	"${CMAKE_SOURCE_DIR}/src/main.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/element.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.cpp"
+#	"${CMAKE_SOURCE_DIR}/srcmicrostrip/subst.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mcorn.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mcoupled.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mcross.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mgap.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mlin.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mmbend.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mopen.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mrstub.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mstep.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mtee.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mvia.cpp"
+	"${CMAKE_SOURCE_DIR}/src/schparser.cpp"
+	"${CMAKE_SOURCE_DIR}/src/xycalculator.cpp"
+	"${CMAKE_SOURCE_DIR}/src/layoutwriter.cpp"
+	"${CMAKE_SOURCE_DIR}/src/converter.cpp"
+	"${CMAKE_SOURCE_DIR}/src/mainwindow.cpp"
+	"${CMAKE_SOURCE_DIR}/src/preview.cpp"
+	"${CMAKE_SOURCE_DIR}/src/logger.cpp"
+	)
 
-add_definitions(${QT_DEPRECATED_WARNINGS})
+set( QUCS-RF-LAYOUT_HDRS
+	"${CMAKE_SOURCE_DIR}/src/microstrip/element.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.h"
+#	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mcorn.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mcoupled.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mcross.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mgap.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mlin.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mmbend.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mopen.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mrstub.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mstep.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mtee.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/mvia.h"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/microstrip.h"
+	"${CMAKE_SOURCE_DIR}/src/schparser.h"
+	"${CMAKE_SOURCE_DIR}/src/xycalculator.h"
+	"${CMAKE_SOURCE_DIR}/src/layoutwriter.h"
+	"${CMAKE_SOURCE_DIR}/src/converter.h"
+	"${CMAKE_SOURCE_DIR}/src/mainwindow.h"
+	"${CMAKE_SOURCE_DIR}/src/preview.h"
+	"${CMAKE_SOURCE_DIR}/src/logger.h"
+	)
 
-set(QUCS-RF-LAYOUT_SRCS
-        src/main.cpp
-        src/microstrip/element.cpp
-        src/microstrip/eqn.cpp
-        src/microstrip/pac.cpp
-#		srcmicrostrip/subst.cpp
-        src/microstrip/mcorn.cpp
-        src/microstrip/mcoupled.cpp
-        src/microstrip/mcross.cpp
-        src/microstrip/mgap.cpp
-        src/microstrip/mlin.cpp
-        src/microstrip/mmbend.cpp
-        src/microstrip/mopen.cpp
-        src/microstrip/mrstub.cpp
-        src/microstrip/mstep.cpp
-        src/microstrip/mtee.cpp
-        src/microstrip/mvia.cpp
-        src/schparser.cpp
-        src/xycalculator.cpp
-        src/layoutwriter.cpp
-        src/converter.cpp
-        src/mainwindow.cpp
-        src/preview.cpp
-        src/logger.cpp
-)
+##########################################################################TARGET
 
-#set(QUCS-RF-LAYOUT_HDRS
-#        src/microstrip/element.h
-#        src/microstrip/eqn.h
-#        src/microstrip/pac.h
-#        src/microstrip/subst.h
-#        src/microstrip/mcorn.h
-#        src/microstrip/mcoupled.h
-#        src/microstrip/mcross.h
-#        src/microstrip/mgap.h
-#        src/microstrip/mlin.h
-#        src/microstrip/mmbend.h
-#        src/microstrip/mopen.h
-#        src/microstrip/mrstub.h
-#        src/microstrip/mstep.h
-#        src/microstrip/mtee.h
-#        src/microstrip/mvia.h
-#        src/parser.h
-#        src/xycalculator.h
-#        src/layoutwriter.h
-#        src/mainwindow.h
-#        src/preview.h
-#)
+add_executable( ${PROJECT_NAME} ${QUCS-RF-LAYOUT_SRCS} )
+#[[ CMAKE 3.12
+add_executable( ${PROJECT_NAME} )
+target_sources( ${PROJECT_NAME}
+	PRIVATE
+	${QUCS-RF-LAYOUT_SRCS}
+	)
+#]]
 
-set(QUCS-RF-LAYOUT_UIS
-        src/mainwindow.ui
-)
+target_compile_definitions( ${PROJECT_NAME}
+	PRIVATE
+	${QT_DEPRECATED_WARNINGS}
+	)
 
-include_directories("src")
+target_compile_features( ${PROJECT_NAME}
+	PRIVATE
+	cxx_std_11
+	)
 
-add_executable(qucsrflayout ${QUCS-RF-LAYOUT_SRCS})
+target_compile_options( ${PROJECT_NAME}
+	PRIVATE
+	$<$<CONFIG:Debug>:-Wall>
+	$<$<CONFIG:Debug>:-Wextra>
+	$<$<CONFIG:Debug>:-fexceptions>
+	)
 
-qt5_use_modules(qucsrflayout Core Gui OpenGL)
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+	"${CMAKE_SOURCE_DIR}/src"
+	)
 
-set(EXECUTABLE_OUTPUT_PATH "../bin")
+qt5_use_modules( ${PROJECT_NAME}
+	Core
+	Gui
+	OpenGL
+	)
 
-# man pages
-install(FILES qucsrflayout.1.cmake.in DESTINATION share/man/man1)
+set_target_properties( ${PROJECT_NAME} PROPERTIES
+	OUTPUT_NAME "qucsrflayout"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
+	)
+
+#########################################################################INSTALL
+
+set( QUCS_URL "https://sf.net/p/qucs" )
+set( QUCS_BUGREPORT "qucs-bugs@lists.sourceforge.net" )
+
+configure_file(
+	"${CMAKE_SOURCE_DIR}/doc/qucsrflayout.1.cmake.in"
+	"${CMAKE_SOURCE_DIR}/out/qucsrflayout.1"
+	)
+
+#[[ man pages
+install(
+	FILES "${CMAKE_SOURCE_DIR}/qucsrflayout.1.cmake.in"
+	DESTINATION "${CMAKE_SOURCE_DIR}/out"
+#	DESTINATION "share/man/man1"
+	)
+#]]
+###########################################################################TOOLS
+
+add_target_format(
+	${QUCS-RF-LAYOUT_SRCS}
+	${QUCS-RF-LAYOUT_HDRS}
+	)
+
+add_target_dist(
+	"${CMAKE_SOURCE_DIR}/build/*"
+	"${CMAKE_SOURCE_DIR}/out/${PROJECT_NAME}.src.tar.*"
+	)
 
