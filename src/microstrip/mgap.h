@@ -22,7 +22,7 @@
 
 class Mgap final : public Element {
 private :
-	const std::string m_descriptor="microstrip_gap";
+	std::string const m_descriptor="microstrip_gap";
 	long double m_w1;
 	long double m_w2;
 	long double m_s;

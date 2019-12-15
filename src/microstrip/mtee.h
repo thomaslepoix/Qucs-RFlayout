@@ -22,14 +22,14 @@
 
 class Mtee final : public Element {
 private :
-	const std::string m_descriptor="microstrip_tee";
+	std::string const m_descriptor="microstrip_tee";
 	long double m_w1;
 	long double m_w2;
 	long double m_w3;
 	std::string m_net1;
 	std::string m_net2;
 	std::string m_net3;
-	static const int m_npoint=6;
+	static int const m_npoint=6;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mtee(std::string _label,

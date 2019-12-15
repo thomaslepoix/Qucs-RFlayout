@@ -22,7 +22,7 @@
 
 class Pac final : public Element {
 private :
-	const std::string m_descriptor="ac_port";
+	std::string const m_descriptor="ac_port";
 //	long double m_z;
 //	long double m_p;
 //	long double m_f;

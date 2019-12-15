@@ -22,7 +22,7 @@
 
 class Mcoupled final : public Element {
 private :
-	const std::string m_descriptor="microstrip_coupled_lines";
+	std::string const m_descriptor="microstrip_coupled_lines";
 	long double m_w;
 	long double m_l;
 	long double m_s;
@@ -30,7 +30,7 @@ private :
 	std::string m_net2;
 	std::string m_net3;
 	std::string m_net4;
-	static const int m_npoint=8;
+	static int const m_npoint=8;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mcoupled(std::string _label,

@@ -22,7 +22,7 @@
 
 class Mcross final : public Element {
 private :
-	const std::string m_descriptor="microstrip_cross";
+	std::string const m_descriptor="microstrip_cross";
 	long double m_w1;
 	long double m_w2;
 	long double m_w3;

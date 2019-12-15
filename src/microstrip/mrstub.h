@@ -26,14 +26,14 @@
 
 class Mrstub final : public Element {
 private :
-	const std::string m_descriptor="microstrip_radial_stub";
+	std::string const m_descriptor="microstrip_radial_stub";
 	long double m_w;
 	long double m_l;
 	long double m_ri;
 	long double m_ro;
 	long double m_alpha;
 	std::string m_net1;
-	static const int m_npoint=53;
+	static int const m_npoint=53;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mrstub(std::string _label,

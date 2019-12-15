@@ -22,11 +22,11 @@
 
 class Mcorn final : public Element {
 private :
-	const std::string m_descriptor="microstrip_corner";
+	std::string const m_descriptor="microstrip_corner";
 	long double m_w;
 	std::string m_net1;
 	std::string m_net2;
-	static const int m_npoint=4;
+	static int const m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mcorn(std::string _label,

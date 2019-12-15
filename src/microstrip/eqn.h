@@ -22,7 +22,7 @@
 
 class Eqn final : public Element {
 private :
-	const std::string m_descriptor="equation";
+	std::string const m_descriptor="equation";
 public :
 	Eqn(std::string _label,
 			std::string _type,

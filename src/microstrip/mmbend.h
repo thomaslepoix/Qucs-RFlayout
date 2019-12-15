@@ -22,11 +22,11 @@
 
 class Mmbend final : public Element {
 private :
-	const std::string m_descriptor="microstrip_mittered_bend";
+	std::string const m_descriptor="microstrip_mittered_bend";
 	long double m_w;
 	std::string m_net1;
 	std::string m_net2;
-	static const int m_npoint=3;
+	static int const m_npoint=3;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mmbend(std::string _label,

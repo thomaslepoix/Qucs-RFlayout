@@ -22,7 +22,7 @@
 
 class Mvia final : public Element {
 private :
-	const std::string m_descriptor="microstrip_via";
+	std::string const m_descriptor="microstrip_via";
 	long double m_d;
 	std::string m_net1;
 public :

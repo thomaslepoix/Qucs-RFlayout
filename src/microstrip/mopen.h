@@ -22,7 +22,7 @@
 
 class Mopen final : public Element {
 private :
-	const std::string m_descriptor="microstrip_open";
+	std::string const m_descriptor="microstrip_open";
 	long double m_w;
 	std::string m_net1;
 public :
