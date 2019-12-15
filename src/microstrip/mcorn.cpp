@@ -76,3 +76,71 @@ int Mcorn::setP(void) {
 	tab_p[3][Y]=-m_w/2;
 	return(0);
 	}
+
+void Mcorn::getStep(int const _net, long double& xstep, long double& ystep) {
+	if(m_mirrorx==0 && m_r==0) {
+		if(_net==1) {
+			xstep= - m_w/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= + m_w/2;
+			}
+	} else if(m_mirrorx==0 && m_r==90) {
+		if(_net==1) {
+			xstep=0;
+			ystep= + m_w/2;
+		} else if(_net==2) {
+			xstep= + m_w/2;
+			ystep=0;
+			}
+	} else if(m_mirrorx==0 && m_r==180) {
+		if(_net==1) {
+			xstep= + m_w/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= - m_w/2;
+			}
+	} else if(m_mirrorx==0 && m_r==270) {
+		if(_net==1) {
+			xstep=0;
+			ystep= - m_w/2;
+		} else if(_net==2) {
+			xstep= - m_w/2;
+			ystep=0;
+			}
+	} else if(m_mirrorx==1 && m_r==0) {
+		if(_net==1) {
+			xstep= - m_w/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= - m_w/2;
+			}
+	} else if(m_mirrorx==1 && m_r==90) {
+		if(_net==1) {
+			xstep=0;
+			ystep= + m_w/2;
+		} else if(_net==2) {
+			xstep= - m_w/2;
+			ystep=0;
+			}
+	} else if(m_mirrorx==1 && m_r==180) {
+		if(_net==1) {
+			xstep= + m_w/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= + m_w/2;
+			}
+	} else if(m_mirrorx==1 && m_r==270) {
+		if(_net==1) {
+			xstep=0;
+			ystep= - m_w/2;
+		} else if(_net==2) {
+			xstep= + m_w/2;
+			ystep=0;
+			}
+		}
+	}

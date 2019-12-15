@@ -45,6 +45,7 @@ public :
 	std::string getNet2(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
 	int setP(void) override;

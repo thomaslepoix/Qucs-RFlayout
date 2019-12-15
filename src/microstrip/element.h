@@ -77,6 +77,7 @@ public:
 	virtual std::string getNet4(void);
 	virtual int getNpoint(void);
 	virtual long double getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs);
+	virtual void getStep(int const _net, long double& xstep, long double& ystep);
 	virtual int setNet1(std::string _net1);
 	virtual int setNet2(std::string _net2);
 	virtual int setNet3(std::string _net3);

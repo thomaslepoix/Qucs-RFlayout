@@ -68,3 +68,39 @@ int Mgap::setNet2(string _net2) {
 	m_net2=_net2;
 	return(0);
 	}
+
+void Mgap::getStep(int const _net, long double& xstep, long double& ystep) {
+	if(m_r==0) {
+		if(_net==1) {
+			xstep= - m_s/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep= + m_s/2;
+			ystep=0;
+			}
+	} else if(m_r==90) {
+		if(_net==1) {
+			xstep=0;
+			ystep= + m_s/2;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= - m_s/2;
+			}
+	} else if(m_r==180) {
+		if(_net==1) {
+			xstep= + m_s/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep= - m_s/2;
+			ystep=0;
+			}
+	} else if(m_r==270) {
+		if(_net==1) {
+			xstep=0;
+			ystep= - m_s/2;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= + m_s/2;
+			}
+		}
+	}

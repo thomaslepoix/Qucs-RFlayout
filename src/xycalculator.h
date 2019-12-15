@@ -40,7 +40,6 @@ private:
 	int activenets(std::shared_ptr<Element> const& _elem);
 	int netmin(std::shared_ptr<Element> const& _elem);
 	int findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
-	int xystep(std::shared_ptr<Element> const& _elem, int const _net, long double& xstep, long double& ystep);
 
 public:
 	XyCalculator(std::vector<std::shared_ptr<Element>>& _tab_all, std::array<long double, 4>& _extrem_pos);

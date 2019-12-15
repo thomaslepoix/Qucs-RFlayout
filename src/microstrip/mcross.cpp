@@ -205,3 +205,152 @@ int Mcross::setP(void) {
 		}
 	return(0);
 	}
+
+void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
+	long double Wlong=0;
+	if(m_mirrorx==0 && m_r==0) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= - (Wlong)/2;
+			ystep=0;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= - (Wlong)/2;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= + (Wlong)/2;
+			ystep=0;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= + (Wlong)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==90) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= + (Wlong)/2;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep= - (Wlong)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= - (Wlong)/2;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			ystep=0;
+			xstep= + (Wlong)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==180) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= + (Wlong)/2;
+			ystep=0;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= + (Wlong)/2;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= - (Wlong)/2;
+			ystep=0;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= - (Wlong)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==270) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= - (Wlong)/2;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep= + (Wlong)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= + (Wlong)/2;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			ystep=0;
+			xstep= - (Wlong)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==0) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= - (Wlong)/2;
+			ystep=0;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= + (Wlong)/2;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= + (Wlong)/2;
+			ystep=0;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= - (Wlong)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==90) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= + (Wlong)/2;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep= + (Wlong)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= - (Wlong)/2;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			ystep=0;
+			xstep= - (Wlong)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==180) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= + (Wlong)/2;
+			ystep=0;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= - (Wlong)/2;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep= - (Wlong)/2;
+			ystep=0;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep=0;
+			ystep= + (Wlong)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==270) {
+		if(_net==1) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= - (Wlong)/2;
+		} else if(_net==2) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			xstep= - (Wlong)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w2>m_w4) ? m_w2 : m_w4;
+			xstep=0;
+			ystep= + (Wlong)/2;
+		} else if(_net==4) {
+			Wlong= (m_w1>m_w3) ? m_w1 : m_w3;
+			ystep=0;
+			xstep= + (Wlong)/2;
+			}
+		}
+	}

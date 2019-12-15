@@ -118,3 +118,104 @@ int Mtee::setP(void) {
 	tab_p[5][Y]=s2*m_w1/2;
 	return(0);
 	}
+
+void Mtee::getStep(int const _net, long double& xstep, long double& ystep) {
+	long double Wlong=0;
+	if(m_mirrorx==0 && m_r==0) {
+		if(_net==1) {
+			xstep= - (m_w3)/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep= + (m_w3)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep=0;
+			ystep= + (Wlong)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==90) {
+		if(_net==1) {
+			xstep=0;
+			ystep= + (m_w3)/2;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= - (m_w3)/2;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep= + (Wlong)/2;
+			ystep=0;
+			}
+	} else if(m_mirrorx==0 && m_r==180) {
+		if(_net==1) {
+			xstep= + (m_w3)/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep= - (m_w3)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep=0;
+			ystep= - (Wlong)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==270) {
+		if(_net==1) {
+			xstep=0;
+			ystep= - (m_w3)/2;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= + (m_w3)/2;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep= - (Wlong)/2;
+			ystep=0;
+			}
+	} else if(m_mirrorx==1 && m_r==0) {
+		if(_net==1) {
+			xstep= - (m_w3)/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep= + (m_w3)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep=0;
+			ystep= - (Wlong)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==90) {
+		if(_net==1) {
+			xstep=0;
+			ystep= + (m_w3)/2;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= - (m_w3)/2;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep= - (Wlong)/2;
+			ystep=0;
+			}
+	} else if(m_mirrorx==1 && m_r==180) {
+		if(_net==1) {
+			xstep= + (m_w3)/2;
+			ystep=0;
+		} else if(_net==2) {
+			xstep= - (m_w3)/2;
+			ystep=0;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep=0;
+			ystep= + (Wlong)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==270) {
+		if(_net==1) {
+			xstep=0;
+			ystep= - (m_w3)/2;
+		} else if(_net==2) {
+			xstep=0;
+			ystep= + (m_w3)/2;
+		} else if(_net==3) {
+			Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+			xstep= + (Wlong)/2;
+			ystep=0;
+			}
+		}
+	}

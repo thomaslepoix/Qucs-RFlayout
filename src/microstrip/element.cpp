@@ -153,6 +153,11 @@ long double Element::getP(int /*_n*/, axis_t /*_xy*/, orientation_t /*_r*/, orig
 	return(0);
 	}
 
+void Element::getStep(int const /*_net*/, long double& xstep, long double& ystep) {
+	xstep=0;
+	ystep=0;
+	}
+
 int Element::setNet1(string /*_net1*/) {
 	return(1);
 	}

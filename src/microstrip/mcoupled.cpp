@@ -121,3 +121,119 @@ int Mcoupled::setP(void) {
 	tab_p[7][Y]=-(m_s/2+m_w);
 	return(0);
 	}
+
+void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) {
+	if(m_mirrorx==0 && m_r==0) {
+		if(_net==1) {
+			xstep= - m_l/2;
+			ystep= - (m_w+m_s)/2;
+		} else if(_net==2) {
+			xstep= + m_l/2;
+			ystep= - (m_w+m_s)/2;
+		} else if(_net==3) {
+			xstep= + m_l/2;
+			ystep= + (m_w+m_s)/2;
+		} else if(_net==4) {
+			xstep= - m_l/2;
+			ystep= + (m_w+m_s)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==90) {
+		if(_net==1) {
+			xstep= - (m_w+m_s)/2;
+			ystep= + m_l/2;
+		} else if(_net==2) {
+			xstep= - (m_w+m_s)/2;
+			ystep= - m_l/2;
+		} else if(_net==3) {
+			xstep= + (m_w+m_s)/2;
+			ystep= - m_l/2;
+		} else if(_net==4) {
+			xstep= + (m_w+m_s)/2;
+			ystep= + m_l/2;
+			}
+	} else if(m_mirrorx==0 && m_r==180) {
+		if(_net==1) {
+			xstep= + m_l/2;
+			ystep= + (m_w+m_s)/2;
+		} else if(_net==2) {
+			xstep= - m_l/2;
+			ystep= + (m_w+m_s)/2;
+		} else if(_net==3) {
+			xstep= - m_l/2;
+			ystep= - (m_w+m_s)/2;
+		} else if(_net==4) {
+			xstep= + m_l/2;
+			ystep= - (m_w+m_s)/2;
+			}
+	} else if(m_mirrorx==0 && m_r==270) {
+		if(_net==1) {
+			xstep= + (m_w+m_s)/2;
+			ystep= - m_l/2;
+		} else if(_net==2) {
+			xstep= + (m_w+m_s)/2;
+			ystep= + m_l/2;
+		} else if(_net==3) {
+			xstep= - (m_w+m_s)/2;
+			ystep= + m_l/2;
+		} else if(_net==4) {
+			xstep= - (m_w+m_s)/2;
+			ystep= - m_l/2;
+			}
+	} else if(m_mirrorx==1 && m_r==0) {
+		if(_net==1) {
+			xstep= - m_l/2;
+			ystep= + (m_w+m_s)/2;
+		} else if(_net==2) {
+			xstep= + m_l/2;
+			ystep= + (m_w+m_s)/2;
+		} else if(_net==3) {
+			xstep= + m_l/2;
+			ystep= - (m_w+m_s)/2;
+		} else if(_net==4) {
+			xstep= - m_l/2;
+			ystep= - (m_w+m_s)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==90) {
+		if(_net==1) {
+			xstep= + (m_w+m_s)/2;
+			ystep= + m_l/2;
+		} else if(_net==2) {
+			xstep= + (m_w+m_s)/2;
+			ystep= - m_l/2;
+		} else if(_net==3) {
+			xstep= - (m_w+m_s)/2;
+			ystep= - m_l/2;
+		} else if(_net==4) {
+			xstep= - (m_w+m_s)/2;
+			ystep= + m_l/2;
+			}
+	} else if(m_mirrorx==1 && m_r==180) {
+		if(_net==1) {
+			xstep= + m_l/2;
+			ystep= - (m_w+m_s)/2;
+		} else if(_net==2) {
+			xstep= - m_l/2;
+			ystep= - (m_w+m_s)/2;
+		} else if(_net==3) {
+			xstep= - m_l/2;
+			ystep= + (m_w+m_s)/2;
+		} else if(_net==4) {
+			xstep= + m_l/2;
+			ystep= + (m_w+m_s)/2;
+			}
+	} else if(m_mirrorx==1 && m_r==270) {
+		if(_net==1) {
+			xstep= - (m_w+m_s)/2;
+			ystep= - m_l/2;
+		} else if(_net==2) {
+			xstep= - (m_w+m_s)/2;
+			ystep= + m_l/2;
+		} else if(_net==3) {
+			xstep= + (m_w+m_s)/2;
+			ystep= + m_l/2;
+		} else if(_net==4) {
+			xstep= + (m_w+m_s)/2;
+			ystep= - m_l/2;
+			}
+		}
+	}
