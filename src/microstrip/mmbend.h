@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Mmbend : public Element {
+class Mmbend final : public Element {
 private :
 	const std::string m_descriptor="microstrip_mittered_bend";
 	long double m_w;
@@ -36,15 +36,15 @@ public :
 			short _nport,
 			long double _w);
 	~Mmbend();
-	std::string getDescriptor(void);
-	long double getW(void);
-	std::string getNet1(void);
-	std::string getNet2(void);
-	int getNpoint(void);
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL);
-	int setNet1(std::string _net1);
-	int setNet2(std::string _net2);
-	int setP(void);
+	std::string getDescriptor(void) override;
+	long double getW(void) override;
+	std::string getNet1(void) override;
+	std::string getNet2(void) override;
+	int getNpoint(void) override;
+	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	int setNet1(std::string _net1) override;
+	int setNet2(std::string _net2) override;
+	int setP(void) override;
 };
 
 #endif // MMBEND_H

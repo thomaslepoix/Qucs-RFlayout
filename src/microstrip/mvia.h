@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Mvia : public Element {
+class Mvia final : public Element {
 private :
 	const std::string m_descriptor="microstrip_via";
 	long double m_d;
@@ -33,10 +33,10 @@ public :
 			short _nport,
 			long double _d);
 	~Mvia();
-	std::string getDescriptor(void);
-	long double getD(void);
-	std::string getNet1(void);
-	int setNet1(std::string _net1);
+	std::string getDescriptor(void) override;
+	long double getD(void) override;
+	std::string getNet1(void) override;
+	int setNet1(std::string _net1) override;
 };
 
 #endif // MVIA_H

@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Mopen : public Element {
+class Mopen final : public Element {
 private :
 	const std::string m_descriptor="microstrip_open";
 	long double m_w;
@@ -33,10 +33,10 @@ public :
 			short _nport,
 			long double _w);
 	~Mopen();
-	std::string getDescriptor(void);
-	long double getW(void);
-	std::string getNet1(void);
-	int setNet1(std::string _net1);
+	std::string getDescriptor(void) override;
+	long double getW(void) override;
+	std::string getNet1(void) override;
+	int setNet1(std::string _net1) override;
 };
 
 #endif // MOPEN_H

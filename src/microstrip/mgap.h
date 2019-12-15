@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Mgap : public Element {
+class Mgap final : public Element {
 private :
 	const std::string m_descriptor="microstrip_gap";
 	long double m_w1;
@@ -38,14 +38,14 @@ public :
 			long double _w2,
 			long double _s);
 	~Mgap();
-	std::string getDescriptor(void);
-	long double getW1(void);
-	long double getW2(void);
-	long double getS(void);
-	std::string getNet1(void);
-	std::string getNet2(void);
-	int setNet1(std::string _net1);
-	int setNet2(std::string _net2);
+	std::string getDescriptor(void) override;
+	long double getW1(void) override;
+	long double getW2(void) override;
+	long double getS(void) override;
+	std::string getNet1(void) override;
+	std::string getNet2(void) override;
+	int setNet1(std::string _net1) override;
+	int setNet2(std::string _net2) override;
 };
 
 #endif // MGAP_H

@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Eqn : public Element {
+class Eqn final : public Element {
 private :
 	const std::string m_descriptor="equation";
 public :
@@ -30,7 +30,7 @@ public :
 			short _r,
 			short _nport);
 	~Eqn();
-	std::string getDescriptor(void);
+	std::string getDescriptor(void) override;
 };
 
 #endif // EQN_H

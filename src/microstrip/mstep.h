@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Mstep : public Element {
+class Mstep final : public Element {
 private :
 	const std::string m_descriptor="microstrip_step";
 	long double m_w1;
@@ -36,13 +36,13 @@ public :
 			long double _w1,
 			long double _w2);
 	~Mstep();
-	std::string getDescriptor(void);
-	long double getW1(void);
-	long double getW2(void);
-	std::string getNet1(void);
-	std::string getNet2(void);
-	int setNet1(std::string _net1);
-	int setNet2(std::string _net2);
+	std::string getDescriptor(void) override;
+	long double getW1(void) override;
+	long double getW2(void) override;
+	std::string getNet1(void) override;
+	std::string getNet2(void) override;
+	int setNet1(std::string _net1) override;
+	int setNet2(std::string _net2) override;
 };
 
 #endif // MSTEP_H

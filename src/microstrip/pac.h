@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-class Pac : public Element {
+class Pac final : public Element {
 private :
 	const std::string m_descriptor="ac_port";
 //	long double m_z;
@@ -38,14 +38,14 @@ public :
 //			long double _p,
 //			long double _f);
 	~Pac();
-	std::string getDescriptor(void);
-	std::string getNet1(void);
-	std::string getNet2(void);
-	int setNet1(std::string _net1);
-	int setNet2(std::string _net2);
-//	long double getZ(void);
-//	long double getDbm(void);	//m_p
-//	long double getF(void);
+	std::string getDescriptor(void) override;
+	std::string getNet1(void) override;
+	std::string getNet2(void) override;
+	int setNet1(std::string _net1) override;
+	int setNet2(std::string _net2) override;
+//	long double getZ(void) override;
+//	long double getDbm(void) override;	//m_p
+//	long double getF(void) override;
 };
 
 #endif // PAC_H
