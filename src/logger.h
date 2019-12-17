@@ -32,15 +32,18 @@ private:
 	typedef void (logger::*func)(std::stringstream&);
 	func f;
 
+	template<typename T>
+	friend logger& operator<<(logger& log, T& in);
+
 	void func_cli(std::stringstream& in);
 	void func_gui(std::stringstream& in);
+	void print(std::stringstream& in);
 
 public:
 	MainWindow* obj=nullptr;
 
 	logger(void);
 	void set_mode(bool gui);
-	void print(std::stringstream& in);
 };
 
 extern logger log_err;
