@@ -27,6 +27,10 @@
 #include "logger.h"
 #include "microstrip/microstrip.h"
 
+#ifdef QRFL_UNITTEST
+#define private public
+#endif // QRFL_UNITTEST
+
 class SchParser {
 private:
 	std::vector<std::shared_ptr<Element>>& tab_all;
@@ -41,4 +45,5 @@ public:
 	int run(void);
 };
 
+#undef private
 #endif // SCHPARSER_H

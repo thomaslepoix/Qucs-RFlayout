@@ -36,6 +36,10 @@ using namespace std;
 //			-o output/directory
 //			-G gui
 
+#ifdef QRFL_UNITTEST
+#define main not_main
+#endif // QRFL_UNITTEST
+
 int main(int argc, char* argv[]) {
 
 //variables
@@ -126,3 +130,5 @@ int main(int argc, char* argv[]) {
 		}
 	return(0);
 	}
+
+#undef main

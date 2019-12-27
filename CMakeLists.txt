@@ -8,6 +8,7 @@ set( CMAKE_MODULE_PATH
 	)
 
 include( ClangFormat )
+include( FixedShell )
 include( Package )
 
 find_package( Qt5Core    REQUIRED )
@@ -154,4 +155,6 @@ add_target_dist(
 	"${CMAKE_SOURCE_DIR}/build/*"
 	"${CMAKE_SOURCE_DIR}/out/${PROJECT_NAME}.src.tar.*"
 	)
+
+add_subdirectory( "${CMAKE_SOURCE_DIR}/test" )
 
