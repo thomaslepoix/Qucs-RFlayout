@@ -34,11 +34,11 @@ int LayoutWriter::run(void) {
 
 //variables
 	static regex const r_sch("\.sch$");
-	static regex const r_basename("^.*?([^\/]*)\.sch$");
+	static regex const r_basename("^.*?([^\/]*)\.sch$");                        // g1 basename
 	static regex const r_out("(^.*?)\\/?$");
 	static regex const r_empty("^$");
 	string n_out="";
-	string name=regex_replace(n_sch, r_sch, "");
+	string name=regex_replace(regex_replace(n_sch, r_basename, "$1"), r_sch, "");
 
 #pragma GCC diagnostic pop
 
