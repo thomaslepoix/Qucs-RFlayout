@@ -1,21 +1,26 @@
+#########################################################################PROJECT
 cmake_minimum_required( VERSION 2.8 )
 cmake_policy( VERSION 3.10 )
-project( qucsrflayout CXX )
+
+project( qucsrflayout
+	LANGUAGES CXX
+	VERSION 0.1.1
+	DESCRIPTION "A tool to produce layout from qucs RF schematics (microstrip only for now)"
+#	HOMEPAGE_URL "https://github.com/thomaslepoix/Qucs-RFlayout"
+	)
 
 set( CMAKE_MODULE_PATH
 	${CMAKE_MODULE_PATH}
 	"${CMAKE_SOURCE_DIR}/cmake"
 	)
 
+if( NOT CMAKE_BUILD_TYPE )
+	set( CMAKE_BUILD_TYPE "Release" )
+endif( NOT CMAKE_BUILD_TYPE )
+message( STATUS "Build type: ${CMAKE_BUILD_TYPE}" )
+
 include( ClangFormat )
 include( FixedShell )
-include( Package )
-
-find_package( Qt5Core    REQUIRED )
-find_package( Qt5Widgets REQUIRED )
-find_package( Qt5Gui     REQUIRED )
-find_package( Qt5OpenGL  REQUIRED )
-find_package( OpenGL     REQUIRED )
 
 #find_program( CMAKE_CXX_CPPCHECK NAMES cppcheck )
 #list( APPEND CMAKE_CXX_CPPCHECK
@@ -24,6 +29,14 @@ find_package( OpenGL     REQUIRED )
 #	)
 #find_program( CMAKE_CXX_CLANG_TIDY NAMES clang-tidy )
 #set( CMAKE_CXX_CPPCHECK "cppcheck")
+
+#######################################################################EXTERNALS
+
+find_package( Qt5Core    REQUIRED )
+find_package( Qt5Widgets REQUIRED )
+find_package( Qt5Gui     REQUIRED )
+find_package( Qt5OpenGL  REQUIRED )
+find_package( OpenGL     REQUIRED )
 
 set( CMAKE_AUTOMOC ON )
 set( CMAKE_AUTOUIC ON )
@@ -127,23 +140,12 @@ set_target_properties( ${PROJECT_NAME} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
 	)
 
-#########################################################################INSTALL
-
-set( QUCS_URL "https://sf.net/p/qucs" )
-set( QUCS_BUGREPORT "qucs-bugs@lists.sourceforge.net" )
-
-configure_file(
-	"${CMAKE_SOURCE_DIR}/doc/qucsrflayout.1.cmake.in"
-	"${CMAKE_SOURCE_DIR}/out/qucsrflayout.1"
-	)
-
-#[[ man pages
 install(
-	FILES "${CMAKE_SOURCE_DIR}/qucsrflayout.1.cmake.in"
-	DESTINATION "${CMAKE_SOURCE_DIR}/out"
-#	DESTINATION "share/man/man1"
+	TARGETS ${PROJECT_NAME}
+	CONFIGURATIONS Release
+	RUNTIME DESTINATION "bin" #"${CMAKE_INSTALL_BINDIR}"
 	)
-#]]
+
 ###########################################################################TOOLS
 
 add_target_format(
@@ -151,10 +153,7 @@ add_target_format(
 	${QUCS-RF-LAYOUT_HDRS}
 	)
 
-add_target_dist(
-	"${CMAKE_SOURCE_DIR}/build/*"
-	"${CMAKE_SOURCE_DIR}/out/${PROJECT_NAME}.src.tar.*"
-	)
-
+add_subdirectory( "${CMAKE_SOURCE_DIR}/doc" )
 add_subdirectory( "${CMAKE_SOURCE_DIR}/test" )
+add_subdirectory( "${CMAKE_SOURCE_DIR}/pack" )
 

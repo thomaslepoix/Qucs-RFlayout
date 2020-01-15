@@ -47,7 +47,7 @@ qt5_use_modules( unittest
 
 set_target_properties( unittest PROPERTIES
 	OUTPUT_NAME "unittest_qucsrflayout"
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
+#	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
 	)
 
 #######################################################################RUN_TESTS

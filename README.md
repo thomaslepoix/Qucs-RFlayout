@@ -21,18 +21,36 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 <br>
 
-## Build
+## Build & Install
+
+- With CMake :
 
 ```sh
 Qucs-RFlayout $
 
     mkdir build && cd build
 
-    qmake ..        # Using qmake
-                    # OR
-    cmake ..        # Using cmake
-
+    cmake ..
     make
+
+    # Prefered way : use your packet manager
+    make package
+    sudo apt-get install ./qucsrflayout_*.deb
+
+    # Classic way : install manually
+    make install
+```
+
+- Or if you don't have CMake, you can use QMake (incomplete installation) :
+
+```sh
+Qucs-RFlayout $
+
+    mkdir build && cd build
+
+    qmake ..
+    make
+    make install
 ```
 
 <br>
