@@ -21,6 +21,25 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 <br>
 
+## Screenshots
+
+### Qucs : schematic.sch
+![qucs_sch](test/test_qucs_sch.png)
+
+### Qucs-RFlayout : preview
+![qucsrflayout_preview](test/test_qucsrflayout_preview.png)
+
+### Pcbnew : layout.kicad_pcb
+![pcbnew_kicad_pcb](test/test_pcbnew_kicad_pcb.png)
+
+### Pcbnew : module.kicad_mod
+![pcbnew_kicad_mod](test/test_pcbnew_kicad_mod.png)
+
+### Pcb-rnd : layout.lht
+![pcb-rnd_lht](test/test_pcb-rnd_lht.png)
+
+<br>
+
 ## Build & Install
 
 - With CMake :
@@ -38,10 +57,10 @@ Qucs-RFlayout $
     sudo apt-get install ./qucsrflayout_*.deb
 
     # Classic way : install manually
-    make install
+    sudo make install
 ```
 
-- Or if you don't have CMake, you can use QMake (incomplete installation) :
+- Or if you don't have CMake, you can use QMake :
 
 ```sh
 Qucs-RFlayout $
@@ -50,7 +69,7 @@ Qucs-RFlayout $
 
     qmake ..
     make
-    make install
+    sudo make install
 ```
 
 <br>
@@ -58,27 +77,8 @@ Qucs-RFlayout $
 ## Usage
 
 ```
-./qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
+qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
 ```
-
-<br>
-
-## Screenshots
-
-### Qucs : schematic.sch
-![qucs_sch](test/test_qucs_sch.png)
-
-### Qucs-RFlayout : preview
-![qucsrflayout_preview](test/test_qucsrflayout_preview.png)
-
-### Pcbnew : layout.kicad_pcb
-![pcbnew_kicad_pcb](test/test_pcbnew_kicad_pcb.png)
-
-### Pcbnew : module.kicad_mod
-![pcbnew_kicad_mod](test/test_pcbnew_kicad_mod.png)
-
-### Pcb-rnd : layout.lht
-![pcb-rnd_lht](test/test_pcb-rnd_lht.png)
 
 <br>
 
