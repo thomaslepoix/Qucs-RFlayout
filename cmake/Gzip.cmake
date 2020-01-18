@@ -1,10 +1,12 @@
-# INCLUDE : include( Package )
+# INCLUDE : include( Gzip )
 # COMMAND : compress_gz( -9 ${INPUT_FILE} ${OUTPUT_FILE} )
 ################################################################################
 
 find_program( GZIP gzip )
 
 if( GZIP )
+
+	message( STATUS "Found gzip: ${GZIP}" )
 
 	# It is not possible to add a dependency to target 'all'
 	# Run hard-coded 'make gzip' when 'make install' is invoked
