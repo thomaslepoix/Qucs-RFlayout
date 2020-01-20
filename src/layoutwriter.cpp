@@ -26,7 +26,7 @@ LayoutWriter::LayoutWriter(vector<shared_ptr<Element>> const& _tab_all, array<lo
 	out_format(_out_format)
 	{}
 
-int LayoutWriter::run(void) {
+int LayoutWriter::run(string* out_name) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
@@ -54,6 +54,7 @@ int LayoutWriter::run(void) {
 	if(out_format==".kicad_pcb") write_kicad_pcb(f_out);
 	if(out_format==".kicad_mod") write_kicad_mod(name, f_out);
 	if(out_format==".lht") write_lht(f_out);
+	if(out_name) *out_name=n_out;
 
 	return(0);
 	}

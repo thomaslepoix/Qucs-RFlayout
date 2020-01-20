@@ -42,7 +42,7 @@ private:
 
 public:
 	LayoutWriter(std::vector<std::shared_ptr<Element>> const& _tab_all, std::array<long double, 4> const& _extrem_pos, std::string const& _n_sch, std::string const& _out_dir, std::string const& _out_format);
-	int run(void);
+	int run(std::string* out_name=nullptr);
 };
 
 #endif // LAYOUTWRITER_H

@@ -97,20 +97,22 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	}
 
 void MainWindow::on_le_path_out_returnPressed(void) {
+	std::string out_name;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		converter.write();
-		log_err << "Write OK.\n";
+		converter.write(out_name);
+		log_err << "Write OK : " << out_name <<"\n";
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
 		}
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
+	std::string out_name;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		converter.write();
-		log_err << "Write OK.\n";
+		converter.write(out_name);
+		log_err << "Write OK : " << out_name <<"\n";
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
 		}

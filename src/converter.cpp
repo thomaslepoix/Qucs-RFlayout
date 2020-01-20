@@ -70,8 +70,8 @@ int Converter::read(void) {
 	return(0);
 	}
 
-int Converter::write(void) {
-	return(layoutwriter.run());
+int Converter::write(string& out_name) {
+	return(layoutwriter.run(&out_name));
 	}
 
 int Converter::size(void) {
