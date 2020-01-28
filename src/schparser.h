@@ -35,14 +35,17 @@ class SchParser {
 private:
 	std::vector<std::shared_ptr<Element>>& tab_all;
 	std::string const& n_sch;
+	std::vector<std::string> unprintables;
 
 	long double suffix(std::string const s_sci, std::string const s_eng);
 	std::string check_void(std::string match, std::string label);
 	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
+	void warn_unprintable(void);
 
 public:
 	SchParser(std::vector<std::shared_ptr<Element>>& _tab_all, std::string const& _n_sch);
 	int run(void);
+	void clear(void);
 };
 
 #undef private

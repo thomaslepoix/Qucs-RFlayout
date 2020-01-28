@@ -24,6 +24,10 @@ SchParser::SchParser(vector<shared_ptr<Element>>& _tab_all, string const& _n_sch
 	n_sch(_n_sch)
 	{}
 
+void SchParser::clear(void) {
+	unprintables.clear();
+	}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
 #pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
@@ -204,7 +208,22 @@ int SchParser::run(void) {
 				R=90*stoi(match.str(2));
 				cout << "\tRotation : " << R << endl;
 
-				if(type=="Eqn") {
+				if(type=="TLIN"
+				|| type=="TAPEREDLINE"
+				|| type=="TLIN4P"
+				|| type=="CTLIN"
+				|| type=="TWIST"
+				|| type=="COAX"
+				|| type=="RLCG"
+				|| type=="BOND"
+				|| type=="CIRCLINE"
+				|| type=="RECTLINE") {
+					bool absent=true;
+					for(string element : unprintables) {
+						if(element==type) absent=false;
+						}
+					if(absent) unprintables.push_back(type);
+				} else if(type=="Eqn") {
 					//to be complete...
 					tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R, 0)));
 				} else if(type=="Pac") {
@@ -429,9 +448,20 @@ int SchParser::run(void) {
 		}
 	cout << "Reading netlist... OK" << endl;
 	cout << "N elements : " << tab_all.size() << endl;
+	warn_unprintable();
 	return(0);
 	}
 
+void SchParser::warn_unprintable(void) {
+	if(unprintables.size()) {
+		log_err << "WARNING : Schematic contains some unprintable transmission lines";
+		for(string element : unprintables) {
+			log_err << " " << element;
+			if(element!=unprintables.back()) log_err << ",";
+			}
+		log_err << " -> Ignored\n";
+		}
+	}
 
 long double SchParser::suffix(string const s_sci, const string s_eng) {
 //convert suffix into multiplicator
@@ -489,7 +519,7 @@ long double SchParser::suffix(string const s_sci, const string s_eng) {
 
 string SchParser::check_void(string match, string label) {
 	if(match=="") {
-		log_err << "WARNING : void field in component " << label << " -> assigned to 0\n";
+		log_err << "WARNING : Void field in component " << label << " -> Assigned to 0\n";
 		return("0");
 	} else {
 		return(match);
