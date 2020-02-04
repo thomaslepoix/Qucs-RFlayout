@@ -42,7 +42,7 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 ## Build & Install
 
-- With CMake :
+- With CMake (You must use a modern version >= 3.11) :
 
 ```sh
 Qucs-RFlayout $
@@ -54,7 +54,8 @@ Qucs-RFlayout $
 
     # Prefered way : use your packet manager
     make package
-    sudo apt-get install ./qucsrflayout_*.deb
+    sudo apt-get install ./qucsrflayout_*.deb    # Debian
+    sudo dnf install ./qucsrflayout-*.rpm        # Fedora
 
     # Classic way : install manually
     sudo make install

@@ -19,7 +19,6 @@ compress_gz( -9
 install(
 	FILES "${CMAKE_BINARY_DIR}/doc/qucsrflayout.1.gz"
 	CONFIGURATIONS Release
-	TYPE MAN
 	DESTINATION "share/man/man1" #"${CMAKE_INSTALL_MANDIR}"
 	)
 

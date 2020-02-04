@@ -1,6 +1,6 @@
 #########################################################################PROJECT
 cmake_minimum_required( VERSION 2.8 )
-cmake_policy( VERSION 3.10 )
+cmake_policy( VERSION 3.11 )
 
 project( qucsrflayout
 	LANGUAGES CXX
@@ -19,7 +19,6 @@ if( NOT CMAKE_BUILD_TYPE )
 endif( NOT CMAKE_BUILD_TYPE )
 message( STATUS "Build type: ${CMAKE_BUILD_TYPE}" )
 
-include( ClangFormat )
 include( FixedShell )
 
 #find_program( CMAKE_CXX_CPPCHECK NAMES cppcheck )
@@ -29,6 +28,16 @@ include( FixedShell )
 #	)
 #find_program( CMAKE_CXX_CLANG_TIDY NAMES clang-tidy )
 #set( CMAKE_CXX_CPPCHECK "cppcheck")
+
+set( CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
+	OWNER_READ
+	OWNER_WRITE
+	OWNER_EXECUTE
+	GROUP_READ
+	GROUP_EXECUTE
+	WORLD_READ
+	WORLD_EXECUTE
+	)
 
 #######################################################################EXTERNALS
 
@@ -147,11 +156,6 @@ install(
 	)
 
 ###########################################################################TOOLS
-
-add_target_format(
-	${QUCS-RF-LAYOUT_SRCS}
-	${QUCS-RF-LAYOUT_HDRS}
-	)
 
 add_subdirectory( "${CMAKE_SOURCE_DIR}/doc" )
 add_subdirectory( "${CMAKE_SOURCE_DIR}/test" )
