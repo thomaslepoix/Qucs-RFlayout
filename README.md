@@ -24,19 +24,19 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 ## Screenshots
 
 ### Qucs : schematic.sch
-![qucs_sch](test/test_qucs_sch.png)
+![qucs_sch](res/test_qucs_sch.png)
 
 ### Qucs-RFlayout : preview
-![qucsrflayout_preview](test/test_qucsrflayout_preview.png)
+![qucsrflayout_preview](res/test_qucsrflayout_preview.png)
 
 ### Pcbnew : layout.kicad_pcb
-![pcbnew_kicad_pcb](test/test_pcbnew_kicad_pcb.png)
+![pcbnew_kicad_pcb](res/test_pcbnew_kicad_pcb.png)
 
 ### Pcbnew : module.kicad_mod
-![pcbnew_kicad_mod](test/test_pcbnew_kicad_mod.png)
+![pcbnew_kicad_mod](res/test_pcbnew_kicad_mod.png)
 
 ### Pcb-rnd : layout.lht
-![pcb-rnd_lht](test/test_pcb-rnd_lht.png)
+![pcb-rnd_lht](res/test_pcb-rnd_lht.png)
 
 <br>
 
