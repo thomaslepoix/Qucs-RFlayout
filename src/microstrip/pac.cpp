@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "pac.h"
+#include "pac.hpp"
 using namespace std;
 
 Pac::Pac(string _label,

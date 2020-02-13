@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mlin.h"
+#include "mlin.hpp"
 using namespace std;
 
 Mlin::Mlin(string _label,

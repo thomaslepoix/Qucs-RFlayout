@@ -1,5 +1,5 @@
 /***************************************************************************
-                               version.h
+                               layoutwriter.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,6 +15,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef VERSION
-#define	VERSION	0.1
-#endif // VERSION
+#ifndef LAYOUTWRITER_HPP
+#define LAYOUTWRITER_HPP
+
+#define _USE_MATH_DEFINES
+
+#include <iostream>
+#include <fstream>
+#include <regex>
+#include <cmath>
+#include <array>
+
+#include "microstrip/microstrip.hpp"
+
+class LayoutWriter {
+private:
+	std::vector<std::shared_ptr<Element>> const& tab_all;
+	std::array<long double, 4> const& extrem_pos;
+	std::string const& n_sch;
+	std::string const& out_dir;
+	std::string const& out_format;
+
+	int write_kicad_pcb(std::ofstream& f_out);
+	int write_kicad_mod(std::string const& name, std::ofstream& f_out);
+	int write_lht(std::ofstream& f_out);
+
+public:
+	LayoutWriter(std::vector<std::shared_ptr<Element>> const& _tab_all, std::array<long double, 4> const& _extrem_pos, std::string const& _n_sch, std::string const& _out_dir, std::string const& _out_format);
+	int run(std::string* out_name=nullptr);
+};
+
+#endif // LAYOUTWRITER_HPP

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "preview.h"
+#include "preview.hpp"
 using namespace std;
 
 Preview::Preview(QWidget* parent) : QGLWidget(parent), QOpenGLFunctions_2_0() {
@@ -238,6 +238,7 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], en
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+#ifdef DEADCODE
 
 void Preview::drawtriangle() {
 /*    glBegin(GL_TRIANGLES);
@@ -343,3 +344,5 @@ void Preview::drawcube() {
       glVertex3f(1.0f, -1.0f, -1.0f);
    glEnd();  // End of drawing color-cube
 	}
+
+#endif DEADCODE

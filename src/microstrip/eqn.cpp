@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "eqn.h"
+#include "eqn.hpp"
 using namespace std;
 
 Eqn::Eqn(string _label,

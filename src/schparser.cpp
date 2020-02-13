@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include <QProcess>
-#include "schparser.h"
+#include "schparser.hpp"
 using namespace std;
 
 SchParser::SchParser(vector<shared_ptr<Element>>& _tab_all, string const& _n_sch) :

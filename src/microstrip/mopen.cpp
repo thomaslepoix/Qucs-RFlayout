@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mopen.h"
+#include "mopen.hpp"
 using namespace std;
 
 Mopen::Mopen(string _label,

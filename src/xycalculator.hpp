@@ -1,5 +1,5 @@
 /***************************************************************************
-                               xycalculator.h
+                               xycalculator.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYCALCULATOR_H
-#define XYCALCULATOR_H
+#ifndef XYCALCULATOR_HPP
+#define XYCALCULATOR_HPP
 
 #include <iostream>
 #include <stack>
@@ -24,8 +24,8 @@
 #include <memory>
 #include <array>
 
-#include "logger.h"
-#include "microstrip/microstrip.h"
+#include "logger.hpp"
+#include "microstrip/microstrip.hpp"
 
 class XyCalculator {
 private:
@@ -46,4 +46,4 @@ public:
 	int run(void);
 };
 
-#endif // XYCALCULATOR_H
+#endif // XYCALCULATOR_HPP

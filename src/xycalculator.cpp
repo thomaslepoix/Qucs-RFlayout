@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "xycalculator.h"
+#include "xycalculator.hpp"
 using namespace std;
 
 XyCalculator::XyCalculator(vector<shared_ptr<Element>>& _tab_all, array<long double, 4>& _extrem_pos) :

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mcross.h"
+#include "mcross.hpp"
 using namespace std;
 
 Mcross::Mcross(string _label,

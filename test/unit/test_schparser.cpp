@@ -1,7 +1,7 @@
 // g++ ../test/unit/test{,_schparser}.cpp ../src/schparser.cpp -I../src/ -I~/testcatch/ -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/x86_64-linux-gnu/qt5/ -fPIC -o test
 
 #include <catch.hpp>
-#include "schparser.h"
+#include "schparser.hpp"
 using namespace std;
 
 SCENARIO("", "[schparser]") {

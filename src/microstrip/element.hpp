@@ -1,5 +1,5 @@
 /***************************************************************************
-                               element.h
+                               element.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ELEMENT_H
-#define ELEMENT_H
+#ifndef ELEMENT_HPP
+#define ELEMENT_HPP
 
 #define _USE_MATH_DEFINES
 
@@ -85,4 +85,4 @@ public:
 	virtual int setP(void);
 };
 
-#endif // ELEMENT_H
+#endif // ELEMENT_HPP

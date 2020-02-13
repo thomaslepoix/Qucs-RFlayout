@@ -1,5 +1,5 @@
 /***************************************************************************
-                               logger.h
+                               mvia.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,45 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef MVIA_HPP
+#define MVIA_HPP
 
-#include <sstream>
-#include <iostream>
+#include "element.hpp"
 
-// Prefer log_err instead of cerr
-// Do not use std::endl or std::flush with logger objects
-
-class MainWindow;
-void operator<<(MainWindow& obj, std::stringstream& in);
-
-class logger {
-private:
-	typedef void (logger::*func)(std::stringstream&);
-	func f;
-
-	template<typename T>
-	friend logger& operator<<(logger& log, T& in);
-
-	void func_cli(std::stringstream& in);
-	void func_gui(std::stringstream& in);
-	void print(std::stringstream& in);
-
-public:
-	MainWindow* obj=nullptr;
-
-	logger(void);
-	void set_mode(bool gui);
+class Mvia final : public Element {
+private :
+	std::string const m_descriptor="microstrip_via";
+	long double m_d;
+	std::string m_net1;
+public :
+	Mvia(std::string _label,
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _d);
+	~Mvia();
+	std::string getDescriptor(void) override;
+	long double getD(void) override;
+	std::string getNet1(void) override;
+	int setNet1(std::string _net1) override;
 };
 
-extern logger log_err;
-
-template<typename T>
-logger& operator<<(logger& log, T& in) {
-	std::stringstream ss;
-	ss << in;
-	log.print(ss);
-	return(log);
-	}
-
-#endif // LOGGER_H
+#endif // MVIA_HPP

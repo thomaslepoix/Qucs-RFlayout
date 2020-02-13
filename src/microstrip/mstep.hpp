@@ -1,5 +1,5 @@
 /***************************************************************************
-                               layoutwriter.h
+                               mstep.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,34 +15,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAYOUTWRITER_H
-#define LAYOUTWRITER_H
+#ifndef MSTEP_HPP
+#define MSTEP_HPP
 
-#define _USE_MATH_DEFINES
+#include "element.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <regex>
-#include <cmath>
-#include <array>
-
-#include "microstrip/microstrip.h"
-
-class LayoutWriter {
-private:
-	std::vector<std::shared_ptr<Element>> const& tab_all;
-	std::array<long double, 4> const& extrem_pos;
-	std::string const& n_sch;
-	std::string const& out_dir;
-	std::string const& out_format;
-
-	int write_kicad_pcb(std::ofstream& f_out);
-	int write_kicad_mod(std::string const& name, std::ofstream& f_out);
-	int write_lht(std::ofstream& f_out);
-
-public:
-	LayoutWriter(std::vector<std::shared_ptr<Element>> const& _tab_all, std::array<long double, 4> const& _extrem_pos, std::string const& _n_sch, std::string const& _out_dir, std::string const& _out_format);
-	int run(std::string* out_name=nullptr);
+class Mstep final : public Element {
+private :
+	std::string const m_descriptor="microstrip_step";
+	long double m_w1;
+	long double m_w2;
+	std::string m_net1;
+	std::string m_net2;
+public :
+	Mstep(std::string _label,
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w1,
+			long double _w2);
+	~Mstep();
+	std::string getDescriptor(void) override;
+	long double getW1(void) override;
+	long double getW2(void) override;
+	std::string getNet1(void) override;
+	std::string getNet2(void) override;
+	int setNet1(std::string _net1) override;
+	int setNet2(std::string _net2) override;
 };
 
-#endif // LAYOUTWRITER_H
+#endif // MSTEP_HPP

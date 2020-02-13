@@ -1,5 +1,5 @@
 /***************************************************************************
-                               pac.h
+                               mgap.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,37 +15,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PAC_H
-#define PAC_H
+#ifndef MGAP_HPP
+#define MGAP_HPP
 
-#include "element.h"
+#include "element.hpp"
 
-class Pac final : public Element {
+class Mgap final : public Element {
 private :
-	std::string const m_descriptor="ac_port";
-//	long double m_z;
-//	long double m_p;
-//	long double m_f;
+	std::string const m_descriptor="microstrip_gap";
+	long double m_w1;
+	long double m_w2;
+	long double m_s;
 	std::string m_net1;
 	std::string m_net2;
 public :
-	Pac(std::string _label,
+	Mgap(std::string _label,
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport);
-//			long double _z,
-//			long double _p,
-//			long double _f);
-	~Pac();
+			short _nport,
+			long double _w1,
+			long double _w2,
+			long double _s);
+	~Mgap();
 	std::string getDescriptor(void) override;
+	long double getW1(void) override;
+	long double getW2(void) override;
+	long double getS(void) override;
 	std::string getNet1(void) override;
 	std::string getNet2(void) override;
+	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
-//	long double getZ(void) override;
-//	long double getDbm(void) override;	//m_p
-//	long double getF(void) override;
 };
 
-#endif // PAC_H
+#endif // MGAP_HPP

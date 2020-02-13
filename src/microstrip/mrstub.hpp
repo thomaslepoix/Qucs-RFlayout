@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mtee.h
+                               mrstub.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,46 +15,47 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MTEE_H
-#define MTEE_H
+#ifndef MRSTUB_HPP
+#define MRSTUB_HPP
 
-#include "element.h"
+#define _USE_MATH_DEFINES
 
-class Mtee final : public Element {
+//#include <iostream>
+#include <cmath>
+#include "element.hpp"
+
+class Mrstub final : public Element {
 private :
-	std::string const m_descriptor="microstrip_tee";
-	long double m_w1;
-	long double m_w2;
-	long double m_w3;
+	std::string const m_descriptor="microstrip_radial_stub";
+	long double m_w;
+	long double m_l;
+	long double m_ri;
+	long double m_ro;
+	long double m_alpha;
 	std::string m_net1;
-	std::string m_net2;
-	std::string m_net3;
-	static int const m_npoint=6;
+	static int const m_npoint=53;
 	long double tab_p[m_npoint][2]={};
 public :
-	Mtee(std::string _label,
+	Mrstub(std::string _label,
 			std::string _type,
 			bool _mirrorx,
 			short _r,
 			short _nport,
-			long double _w1,
-			long double _w2,
-			long double _w3);
-	~Mtee();
+			long double _ri,
+			long double _ro,
+			short _alpha);
+	~Mrstub();
 	std::string getDescriptor(void) override;
-	long double getW1(void) override;
-	long double getW2(void) override;
-	long double getW3(void) override;
+	long double getW(void) override;
+	long double getL(void) override;
+	long double getRi(void) override;
+	long double getRo(void) override;
+	short getAlpha(void) override;
 	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	std::string getNet3(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
-	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
-	int setNet3(std::string _net3) override;
 	int setP(void) override;
 };
 
-#endif // MTEE_H
+#endif // MRSTUB_HPP

@@ -1,5 +1,5 @@
 /***************************************************************************
-                               converter.h
+                               pac.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,42 +15,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CONVERTER_H
-#define CONVERTER_H
+#ifndef PAC_HPP
+#define PAC_HPP
 
-#include <array>
-#include <memory>
-#include <vector>
+#include "element.hpp"
 
-#include "schparser.h"
-#include "xycalculator.h"
-#include "layoutwriter.h"
-
-class Converter {
-private:
-	SchParser parser;
-	XyCalculator xycalculator;
-	LayoutWriter layoutwriter;
-
-	std::vector<std::shared_ptr<Element>> tab_all;
-	std::array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
-	std::string n_sch;
-	std::string out_dir;
-	std::string out_format;
-
-public:
-	Converter(std::string _n_sch, std::string _out_dir, std::string _out_format);
-	~Converter(void);
-
-	void reset(std::string _n_sch, std::string _out_dir, std::string _out_format);
-	void clear(void);
-	int run(void);
-	int read(void);
-	int write(std::string& out_name);
-	int size(void);
-
-	std::vector<std::shared_ptr<Element>> const& get_tab_all(void);
-	std::array<long double, 4> const& get_extrem_pos(void);
+class Pac final : public Element {
+private :
+	std::string const m_descriptor="ac_port";
+//	long double m_z;
+//	long double m_p;
+//	long double m_f;
+	std::string m_net1;
+	std::string m_net2;
+public :
+	Pac(std::string _label,
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport);
+//			long double _z,
+//			long double _p,
+//			long double _f);
+	~Pac();
+	std::string getDescriptor(void) override;
+	std::string getNet1(void) override;
+	std::string getNet2(void) override;
+	int setNet1(std::string _net1) override;
+	int setNet2(std::string _net2) override;
+//	long double getZ(void) override;
+//	long double getDbm(void) override;	//m_p
+//	long double getF(void) override;
 };
 
-#endif // CONVERTER_H
+#endif // PAC_HPP

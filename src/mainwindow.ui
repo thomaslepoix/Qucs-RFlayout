@@ -99,7 +99,7 @@
   <customwidget>
    <class>Preview</class>
    <extends>QWidget</extends>
-   <header>preview.h</header>
+   <header>preview.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

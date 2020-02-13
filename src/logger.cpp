@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "logger.h"
+#include "logger.hpp"
 using namespace std;
 
 logger log_err;

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mtee.h"
+#include "mtee.hpp"
 using namespace std;
 
 Mtee::Mtee(string _label,

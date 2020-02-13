@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mcross.h
+                               mlin.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,52 +15,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MCROSS_H
-#define MCROSS_H
+#ifndef MLIN_HPP
+#define MLIN_HPP
 
-#include "element.h"
+#include "element.hpp"
 
-class Mcross final : public Element {
+class Mlin final : public Element {
 private :
-	std::string const m_descriptor="microstrip_cross";
-	long double m_w1;
-	long double m_w2;
-	long double m_w3;
-	long double m_w4;
+	std::string const m_descriptor="microstrip_line";
+	long double m_w;
+	long double m_l;
 	std::string m_net1;
 	std::string m_net2;
-	std::string m_net3;
-	std::string m_net4;
-	int m_npoint=6;
-	long double tab_p[6][2]={};
+	static int const m_npoint=4;
+	long double tab_p[m_npoint][2]={};
 public :
-	Mcross(std::string _label,
+	Mlin(std::string _label,
 			std::string _type,
 			bool _mirrorx,
 			short _r,
 			short _nport,
-			long double _w1,
-			long double _w2,
-			long double _w3,
-			long double _w4);
-	~Mcross();
+			long double _w,
+			long double _l);
+	~Mlin();
 	std::string getDescriptor(void) override;
-	long double getW1(void) override;
-	long double getW2(void) override;
-	long double getW3(void) override;
-	long double getW4(void) override;
+	long double getW(void) override;
+	long double getL(void) override;
 	std::string getNet1(void) override;
 	std::string getNet2(void) override;
-	std::string getNet3(void) override;
-	std::string getNet4(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
-	int setNet3(std::string _net3) override;
-	int setNet4(std::string _net4) override;
 	int setP(void) override;
 };
 
-#endif // MCROSS_H
+#endif // MLIN_HPP

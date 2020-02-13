@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mmbend.h
+                               converter.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,37 +15,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MMBEND_H
-#define MMBEND_H
+#ifndef CONVERTER_HPP
+#define CONVERTER_HPP
 
-#include "element.h"
+#include <array>
+#include <memory>
+#include <vector>
 
-class Mmbend final : public Element {
-private :
-	std::string const m_descriptor="microstrip_mittered_bend";
-	long double m_w;
-	std::string m_net1;
-	std::string m_net2;
-	static int const m_npoint=3;
-	long double tab_p[m_npoint][2]={};
-public :
-	Mmbend(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			short _nport,
-			long double _w);
-	~Mmbend();
-	std::string getDescriptor(void) override;
-	long double getW(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	int getNpoint(void) override;
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
-	void getStep(int const _net, long double& xstep, long double& ystep) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
-	int setP(void) override;
+#include "schparser.hpp"
+#include "xycalculator.hpp"
+#include "layoutwriter.hpp"
+
+class Converter {
+private:
+	SchParser parser;
+	XyCalculator xycalculator;
+	LayoutWriter layoutwriter;
+
+	std::vector<std::shared_ptr<Element>> tab_all;
+	std::array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
+	std::string n_sch;
+	std::string out_dir;
+	std::string out_format;
+
+public:
+	Converter(std::string _n_sch, std::string _out_dir, std::string _out_format);
+	~Converter(void);
+
+	void reset(std::string _n_sch, std::string _out_dir, std::string _out_format);
+	void clear(void);
+	int run(void);
+	int read(void);
+	int write(std::string& out_name);
+	int size(void);
+
+	std::vector<std::shared_ptr<Element>> const& get_tab_all(void);
+	std::array<long double, 4> const& get_extrem_pos(void);
 };
 
-#endif // MMBEND_H
+#endif // CONVERTER_HPP

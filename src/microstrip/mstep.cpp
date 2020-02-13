@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mstep.h"
+#include "mstep.hpp"
 using namespace std;
 
 Mstep::Mstep(string _label,

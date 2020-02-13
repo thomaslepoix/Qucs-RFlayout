@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mvia.h"
+#include "mvia.hpp"
 using namespace std;
 
 Mvia::Mvia(string _label,

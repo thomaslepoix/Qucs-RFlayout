@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mcorn.h
+                               logger.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,37 +15,45 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MCORN_H
-#define MCORN_H
+#ifndef LOGGER_HPP
+#define LOGGER_HPP
 
-#include "element.h"
+#include <sstream>
+#include <iostream>
 
-class Mcorn final : public Element {
-private :
-	std::string const m_descriptor="microstrip_corner";
-	long double m_w;
-	std::string m_net1;
-	std::string m_net2;
-	static int const m_npoint=4;
-	long double tab_p[m_npoint][2]={};
-public :
-	Mcorn(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			short _nport,
-			long double _w);
-	~Mcorn();
-	std::string getDescriptor(void) override;
-	long double getW(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	int getNpoint(void) override;
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
-	void getStep(int const _net, long double& xstep, long double& ystep) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
-	int setP(void) override;
+// Prefer log_err instead of cerr
+// Do not use std::endl or std::flush with logger objects
+
+class MainWindow;
+void operator<<(MainWindow& obj, std::stringstream& in);
+
+class logger {
+private:
+	typedef void (logger::*func)(std::stringstream&);
+	func f;
+
+	template<typename T>
+	friend logger& operator<<(logger& log, T& in);
+
+	void func_cli(std::stringstream& in);
+	void func_gui(std::stringstream& in);
+	void print(std::stringstream& in);
+
+public:
+	MainWindow* obj=nullptr;
+
+	logger(void);
+	void set_mode(bool gui);
 };
 
-#endif // MCORN_H
+extern logger log_err;
+
+template<typename T>
+logger& operator<<(logger& log, T& in) {
+	std::stringstream ss;
+	ss << in;
+	log.print(ss);
+	return(log);
+	}
+
+#endif // LOGGER_HPP

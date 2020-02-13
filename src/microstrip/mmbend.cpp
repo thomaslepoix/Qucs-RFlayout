@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mmbend.h"
+#include "mmbend.hpp"
 using namespace std;
 
 Mmbend::Mmbend(string _label,

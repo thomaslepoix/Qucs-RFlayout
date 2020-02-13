@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mgap.h"
+#include "mgap.hpp"
 using namespace std;
 
 Mgap::Mgap(string _label,

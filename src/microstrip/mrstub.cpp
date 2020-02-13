@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mrstub.h"
+#include "mrstub.hpp"
 using namespace std;
 
 Mrstub::Mrstub(string _label,

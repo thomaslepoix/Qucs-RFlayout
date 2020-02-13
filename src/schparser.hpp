@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mstep.h
+                               parser.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,34 +15,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MSTEP_H
-#define MSTEP_H
+#ifndef SCHPARSER_HPP
+#define SCHPARSER_HPP
 
-#include "element.h"
+#include <iostream>
+#include <fstream>
+#include <regex>
+#include <vector>
+#include <memory>
 
-class Mstep final : public Element {
-private :
-	std::string const m_descriptor="microstrip_step";
-	long double m_w1;
-	long double m_w2;
-	std::string m_net1;
-	std::string m_net2;
-public :
-	Mstep(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			short _nport,
-			long double _w1,
-			long double _w2);
-	~Mstep();
-	std::string getDescriptor(void) override;
-	long double getW1(void) override;
-	long double getW2(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
+#include "logger.hpp"
+#include "microstrip/microstrip.hpp"
+
+#ifdef QRFL_UNITTEST
+#define private public
+#endif // QRFL_UNITTEST
+
+class SchParser {
+private:
+	std::vector<std::shared_ptr<Element>>& tab_all;
+	std::string const& n_sch;
+	std::vector<std::string> unprintables;
+
+	long double suffix(std::string const s_sci, std::string const s_eng);
+	std::string check_void(std::string match, std::string label);
+	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
+	void warn_unprintable(void);
+
+public:
+	SchParser(std::vector<std::shared_ptr<Element>>& _tab_all, std::string const& _n_sch);
+	int run(void);
+	void clear(void);
 };
 
-#endif // MSTEP_H
+#ifdef QRFL_UNITTEST
+#undef private
+#endif // QRFL_UNITTEST
+
+#endif // SCHPARSER_HPP

@@ -1,5 +1,5 @@
 /***************************************************************************
-                               preview.h
+                               preview.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PREVIEW_H
-#define PREVIEW_H
+#ifndef PREVIEW_HPP
+#define PREVIEW_HPP
 
 #define _USE_MATH_DEFINES
 
@@ -30,7 +30,7 @@
 #include <memory>
 #include <cmath>
 
-#include "microstrip/element.h"
+#include "microstrip/element.hpp"
 
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 //	Q_OBJECT
@@ -83,4 +83,4 @@ private:
 	bool flag_shift=0;
 };
 
-#endif // PREVIEW_H
+#endif // PREVIEW_HPP

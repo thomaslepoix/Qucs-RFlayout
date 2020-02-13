@@ -1,5 +1,5 @@
 /***************************************************************************
-                               parser.h
+                               mopen.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,38 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SCHPARSER_H
-#define SCHPARSER_H
+#ifndef MOPEN_HPP
+#define MOPEN_HPP
 
-#include <iostream>
-#include <fstream>
-#include <regex>
-#include <vector>
-#include <memory>
+#include "element.hpp"
 
-#include "logger.h"
-#include "microstrip/microstrip.h"
-
-#ifdef QRFL_UNITTEST
-#define private public
-#endif // QRFL_UNITTEST
-
-class SchParser {
-private:
-	std::vector<std::shared_ptr<Element>>& tab_all;
-	std::string const& n_sch;
-	std::vector<std::string> unprintables;
-
-	long double suffix(std::string const s_sci, std::string const s_eng);
-	std::string check_void(std::string match, std::string label);
-	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
-	void warn_unprintable(void);
-
-public:
-	SchParser(std::vector<std::shared_ptr<Element>>& _tab_all, std::string const& _n_sch);
-	int run(void);
-	void clear(void);
+class Mopen final : public Element {
+private :
+	std::string const m_descriptor="microstrip_open";
+	long double m_w;
+	std::string m_net1;
+public :
+	Mopen(std::string _label,
+			std::string _type,
+			bool _mirrorx,
+			short _r,
+			short _nport,
+			long double _w);
+	~Mopen();
+	std::string getDescriptor(void) override;
+	long double getW(void) override;
+	std::string getNet1(void) override;
+	int setNet1(std::string _net1) override;
 };
 
-#undef private
-#endif // SCHPARSER_H
+#endif // MOPEN_HPP

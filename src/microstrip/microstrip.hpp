@@ -1,9 +1,9 @@
 /***************************************************************************
-                               eqn.h
+                               microstrip.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
-    email                : thomas.lepoix@protonmail.ch
+    email                : thomas.lepoix@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,22 +15,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EQN_H
-#define EQN_H
+#ifndef MICROSTRIP_HPP
+#define MICROSTRIP_HPP
 
-#include "element.h"
+#include "eqn.hpp"
+#include "pac.hpp"
+//#include "subst.hpp"
+#include "mcorn.hpp"
+#include "mcross.hpp"
+#include "mcoupled.hpp"
+#include "mgap.hpp"
+#include "mmbend.hpp"
+#include "mlin.hpp"
+#include "mopen.hpp"
+#include "mrstub.hpp"
+#include "mstep.hpp"
+#include "mtee.hpp"
+#include "mvia.hpp"
 
-class Eqn final : public Element {
-private :
-	std::string const m_descriptor="equation";
-public :
-	Eqn(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			short _nport);
-	~Eqn();
-	std::string getDescriptor(void) override;
-};
-
-#endif // EQN_H
+#endif // MICROSTRIP_HPP

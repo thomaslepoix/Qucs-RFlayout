@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mcorn.h"
+#include "mcorn.hpp"
 using namespace std;
 
 Mcorn::Mcorn(string _label,

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "converter.h"
+#include "converter.hpp"
 using namespace std;
 
 Converter::Converter(string _n_sch, string _out_dir, string _out_format) :

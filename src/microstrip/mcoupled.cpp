@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mcoupled.h"
+#include "mcoupled.hpp"
 using namespace std;
 
 Mcoupled::Mcoupled(string _label,

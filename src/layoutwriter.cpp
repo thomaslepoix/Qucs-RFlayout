@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "layoutwriter.h"
+#include "layoutwriter.hpp"
 using namespace std;
 
 LayoutWriter::LayoutWriter(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& _extrem_pos, string const& _n_sch, string const& _out_dir, string const& _out_format) :

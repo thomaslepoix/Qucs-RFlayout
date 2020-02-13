@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mcoupled.h
+                               mmbend.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,49 +15,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MCOUPLED_H
-#define MCOUPLED_H
+#ifndef MMBEND_HPP
+#define MMBEND_HPP
 
-#include "element.h"
+#include "element.hpp"
 
-class Mcoupled final : public Element {
+class Mmbend final : public Element {
 private :
-	std::string const m_descriptor="microstrip_coupled_lines";
+	std::string const m_descriptor="microstrip_mittered_bend";
 	long double m_w;
-	long double m_l;
-	long double m_s;
 	std::string m_net1;
 	std::string m_net2;
-	std::string m_net3;
-	std::string m_net4;
-	static int const m_npoint=8;
+	static int const m_npoint=3;
 	long double tab_p[m_npoint][2]={};
 public :
-	Mcoupled(std::string _label,
+	Mmbend(std::string _label,
 			std::string _type,
 			bool _mirrorx,
 			short _r,
 			short _nport,
-			long double _w,
-			long double _l,
-			long double _s);
-	~Mcoupled();
+			long double _w);
+	~Mmbend();
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
-	long double getL(void) override;
-	long double getS(void) override;
 	std::string getNet1(void) override;
 	std::string getNet2(void) override;
-	std::string getNet3(void) override;
-	std::string getNet4(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
-	int setNet3(std::string _net3) override;
-	int setNet4(std::string _net4) override;
 	int setP(void) override;
 };
 
-#endif // MCOUPLED_H
+#endif // MMBEND_HPP

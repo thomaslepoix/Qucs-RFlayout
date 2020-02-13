@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mainwindow.h
+                               mainwindow.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,17 +15,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
 
 #include <sstream>
 #include <QMainWindow>
 #include <QFileDialog>
 
-#include "logger.h"
-#include "converter.h"
-#include "preview.h"
-#include "microstrip/microstrip.h"
+#include "logger.hpp"
+#include "converter.hpp"
+#include "preview.hpp"
+#include "microstrip/microstrip.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -67,4 +67,4 @@ private:
 
 void operator<<(MainWindow& obj, std::stringstream& in);
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_HPP

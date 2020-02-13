@@ -20,10 +20,10 @@
 #include <memory>
 #include <QApplication>
 
-#include "version.h"
-#include "logger.h"
-#include "mainwindow.h"
-#include "converter.h"
+#include "version.hpp"
+#include "logger.hpp"
+#include "mainwindow.hpp"
+#include "converter.hpp"
 
 using namespace std;
 
@@ -131,4 +131,6 @@ int main(int argc, char* argv[]) {
 	return(0);
 	}
 
+#ifdef QRFL_UNITTEST
 #undef main
+#endif // QRFL_UNITTEST
