@@ -1,4 +1,5 @@
-build/*
+build/
+out/
 *.o
 *.core
 ui_*.h
