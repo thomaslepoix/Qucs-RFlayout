@@ -1,7 +1,7 @@
 #set( CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/out" )
 
 if( UNIX AND NOT APPLE )
-	set( CPACK_GENERATOR TGZ TBZ2 TXZ DEB )
+	set( CPACK_GENERATOR TXZ DEB )
 	find_program( RPMBUILD rpmbuild )
 	if( RPMBUILD )
 		message( STATUS "Found rpmbuild: ${RPMBUILD}" )

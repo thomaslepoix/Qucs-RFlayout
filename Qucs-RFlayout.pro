@@ -80,7 +80,7 @@ INCLUDEPATH += \
 	$$PWD/src
 
 DEFINES += \
-	QRFL_VERSION=\\\"0.1.1\\\"
+	QRFL_VERSION=\\\"1.0.0\\\"
 
 target.path = $$PREFIX/bin
 INSTALLS += target
