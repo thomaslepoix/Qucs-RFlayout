@@ -345,4 +345,4 @@ void Preview::drawcube() {
    glEnd();  // End of drawing color-cube
 	}
 
-#endif DEADCODE
+#endif // DEADCODE

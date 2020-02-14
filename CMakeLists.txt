@@ -119,6 +119,7 @@ target_sources( ${PROJECT_NAME}
 target_compile_definitions( ${PROJECT_NAME}
 	PRIVATE
 	${QT_DEPRECATED_WARNINGS}
+	QRFL_VERSION="${PROJECT_VERSION}"
 	)
 
 target_compile_features( ${PROJECT_NAME}

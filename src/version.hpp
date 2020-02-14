@@ -16,5 +16,5 @@
  ***************************************************************************/
 
 #ifndef VERSION
-#define	VERSION	"0.1.1"
+#define	VERSION	QRFL_VERSION
 #endif // VERSION

@@ -51,33 +51,36 @@ SOURCES += \
 	$$PWD/src/logger.cpp
 
 HEADERS += \
-	$$PWD/src/microstrip/element.h \
-	$$PWD/src/microstrip/eqn.h \
-	$$PWD/src/microstrip/pac.h \
-	$$PWD/src/microstrip/mcorn.h \
-	$$PWD/src/microstrip/mcoupled.h \
-	$$PWD/src/microstrip/mcross.h \
-	$$PWD/src/microstrip/mgap.h \
-	$$PWD/src/microstrip/mlin.h \
-	$$PWD/src/microstrip/mmbend.h \
-	$$PWD/src/microstrip/mopen.h \
-	$$PWD/src/microstrip/mrstub.h \
-	$$PWD/src/microstrip/mstep.h \
-	$$PWD/src/microstrip/mtee.h \
-	$$PWD/src/microstrip/mvia.h \
-	$$PWD/src/schparser.h \
-	$$PWD/src/xycalculator.h \
-	$$PWD/src/layoutwriter.h \
-	$$PWD/src/converter.h \
-	$$PWD/src/mainwindow.h \
-	$$PWD/src/preview.h \
-	$$PWD/src/logger.h
+	$$PWD/src/microstrip/element.hpp \
+	$$PWD/src/microstrip/eqn.hpp \
+	$$PWD/src/microstrip/pac.hpp \
+	$$PWD/src/microstrip/mcorn.hpp \
+	$$PWD/src/microstrip/mcoupled.hpp \
+	$$PWD/src/microstrip/mcross.hpp \
+	$$PWD/src/microstrip/mgap.hpp \
+	$$PWD/src/microstrip/mlin.hpp \
+	$$PWD/src/microstrip/mmbend.hpp \
+	$$PWD/src/microstrip/mopen.hpp \
+	$$PWD/src/microstrip/mrstub.hpp \
+	$$PWD/src/microstrip/mstep.hpp \
+	$$PWD/src/microstrip/mtee.hpp \
+	$$PWD/src/microstrip/mvia.hpp \
+	$$PWD/src/schparser.hpp \
+	$$PWD/src/xycalculator.hpp \
+	$$PWD/src/layoutwriter.hpp \
+	$$PWD/src/converter.hpp \
+	$$PWD/src/mainwindow.hpp \
+	$$PWD/src/preview.hpp \
+	$$PWD/src/logger.hpp
 
 FORMS += \
 	$$PWD/src/mainwindow.ui
 
 INCLUDEPATH += \
 	$$PWD/src
+
+DEFINES += \
+	QRFL_VERSION=\\\"0.1.1\\\"
 
 target.path = $$PREFIX/bin
 INSTALLS += target
