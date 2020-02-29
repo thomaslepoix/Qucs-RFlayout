@@ -1,0 +1,21 @@
+# Qucs-RFlayout $ sudo docker build -f pack/Dockerfile.unix . -t qucsrflayout:unix
+# Qucs-RFlayout $ sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:unix
+
+FROM debian:buster
+
+RUN apt update \
+	&& apt install --yes \
+		build-essential \
+		git \
+		cmake \
+		rpm \
+		qt5-default
+
+WORKDIR /workdir/Qucs-RFlayout/build/out
+WORKDIR /workdir/Qucs-RFlayout/build/unix
+
+CMD cmake ../.. \
+	&& make \
+	&& make package \
+	&& cp -r out ..
+

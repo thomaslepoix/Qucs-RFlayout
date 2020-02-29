@@ -1,0 +1,25 @@
+# Qucs-RFlayout $ sudo docker build -f pack/Dockerfile.win32 . -t qucsrflayout:win32
+# Qucs-RFlayout $ sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:win32
+
+FROM burningdaylight/docker-mingw-qt5
+
+WORKDIR /usr/local/src
+
+# Install peldd as winqdeploy (buggy) replacement
+RUN	pacman -S --noconfirm boost \
+	&& git clone https://github.com/gsauthof/pe-util --recurse-submodules \
+	&& mkdir pe-util/build && cd pe-util/build \
+	&& cmake .. \
+	&& make \
+	&& make install \
+	&& mkdir /usr/x86_64-w64-mingw32/sys-root \
+	&& ln -s /usr/x86_64-w64-mingw32 /usr/x86_64-w64-mingw32/sys-root/mingw
+
+WORKDIR /workdir/Qucs-RFlayout/build/out
+WORKDIR /workdir/Qucs-RFlayout/build/win32
+
+CMD x86_64-w64-mingw32-cmake ../.. \
+	&& make \
+	&& make package \
+	&& cp -r out ..
+

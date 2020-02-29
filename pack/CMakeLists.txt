@@ -1,4 +1,3 @@
-#set( CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/out" )
 
 if( UNIX AND NOT APPLE )
 	set( CPACK_GENERATOR TXZ DEB )
@@ -11,6 +10,11 @@ if( UNIX AND NOT APPLE )
 	endif( RPMBUILD )
 endif( UNIX AND NOT APPLE )
 
+if( WIN32 )
+	set( CPACK_GENERATOR ZIP )
+endif( WIN32 )
+
+set( CPACK_OUTPUT_FILE_PREFIX "${CMAKE_BINARY_DIR}/out" )
 set( CPACK_STRIP_FILES "bin/qucsrflayout" )
 
 set( CPACK_PACKAGE_NAME    "qucsrflayout" )

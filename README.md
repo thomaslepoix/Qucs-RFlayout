@@ -40,7 +40,17 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 <br>
 
-## Build & Install
+## Binary installation
+
+- Binary packages are available for both Linux and Windows, just checkout [releases](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
+
+- [Qucs](https://github.com/Qucs/qucs) is needed (even if you want to convert QucsStudio files), be sure it is installed and accessible from your `PATH` variable.
+
+<br>
+
+## Build from sources
+
+### Linux
 
 - With CMake (You must use a modern version >= 3.11) :
 
@@ -61,7 +71,7 @@ Qucs-RFlayout $
     sudo make install
 ```
 
-- Or if you don't have CMake, you can use QMake :
+- Or if you don't have CMake, you can use QMake (deprecated) :
 
 ```sh
 Qucs-RFlayout $
@@ -73,11 +83,37 @@ Qucs-RFlayout $
     sudo make install
 ```
 
+### Windows
+
+- No build instructions available but it should work the regular way (CMake is prefered). You can also refer to binary installation or to the release process (cross compilation from Linux).
+
+<br>
+
+## Release process (from Linux)
+
+- Windows release process is based on cross compilation within an Arch Linux container (because Arch provides several libraries for MinGW, like Qt, Boost, etc. that most other distributions does not provide).
+
+- Unix releases process is wrapped in another container.
+
+```sh
+Qucs-RFlayout $
+
+    sudo docker build -f pack/Dockerfile.unix . -t qucsrflayout:unix
+    sudo docker build -f pack/Dockerfile.win32 . -t qucsrflayout:win32
+
+    sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:unix
+    sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:win32
+    sudo chown -R `id -un` build
+    sudo chgrp -R `id -gn` build
+
+    ls build/out
+```
+
 <br>
 
 ## Usage
 
-```
+```sh
 qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
 ```
 
