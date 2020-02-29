@@ -1,12 +1,13 @@
 # Qucs-RFlayout $ sudo docker build -f pack/Dockerfile.unix . -t qucsrflayout:unix
 # Qucs-RFlayout $ sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:unix
 
-FROM debian:buster
+FROM debian:buster-slim
 
 RUN apt update \
 	&& apt install --yes \
 		build-essential \
 		git \
+		file \
 		cmake \
 		rpm \
 		qt5-default
