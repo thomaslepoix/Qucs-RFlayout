@@ -29,7 +29,6 @@ matrix:
       addons:
       env: BUILD_SYSTEM=qmake
 
-
 addons:
   apt:
     packages:
