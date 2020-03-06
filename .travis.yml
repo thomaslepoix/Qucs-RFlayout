@@ -37,23 +37,12 @@ addons:
     - rpm
 
 script:
-  - if [[ "${BUILD_SYSTEM}" = "cmake" ]] 
-    then
-      ${BUILD_SYSTEM} --version
-      ${CXX} --version
-      echo CXXFLAGS=${CXXFLAGS}
-      mkdir build && cd build
-      cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-      make
-      make package
-    fi
-  - if [[ "${BUILD_SYSTEM}" = "qmake" ]] 
-    then
-      ${BUILD_SYSTEM} --version
-      ${CXX} --version
-      echo CXXFLAGS=${CXXFLAGS}
-      mkdir build && cd build
-      qmake ..
-      make
-    fi
+  - ${BUILD_SYSTEM} --version
+  - ${CXX} --version
+  - echo CXXFLAGS=${CXXFLAGS}
+  - mkdir build && cd build
+  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  - [[ "${BUILD_SYSTEM}" = "qmake" ]] && qmake ..
+  - make
+  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && make package
 
