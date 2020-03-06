@@ -21,8 +21,11 @@ matrix:
       addons:
       env: BUILD_TYPE=Release
 
-install:
-  - if [[ "${COMPILER_VER}" != "" ]]; then export CXX=${CXX}-${COMPILER_VER}; fi
+addons:
+  apt:
+    packages:
+    - qt5-default
+    - rpm
 
 script:
   - cmake --version
