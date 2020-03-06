@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 sudo: false
 language: cpp
 
@@ -7,32 +7,43 @@ matrix:
     - os: linux
       compiler: g++
       addons:
-      env: BUILD_TYPE=Debug
+      env: BUILD_SYSTEM=cmake BUILD_TYPE=Debug
     - os: linux
       compiler: g++
       addons:
-      env: BUILD_TYPE=Release
+      env: BUILD_SYSTEM=cmake BUILD_TYPE=Release
     - os: linux
       compiler: clang++
       addons:
-      env: BUILD_TYPE=Debug
+      env: BUILD_SYSTEM=cmake BUILD_TYPE=Debug
     - os: linux
       compiler: clang++
       addons:
-      env: BUILD_TYPE=Release
+      env: BUILD_SYSTEM=cmake BUILD_TYPE=Release
+    - os: linux
+      compiler: g++
+      addons:
+      env: BUILD_SYSTEM=qmake
+    - os: linux
+      compiler: clang++
+      addons:
+      env: BUILD_SYSTEM=qmake
+
 
 addons:
   apt:
     packages:
     - qt5-default
+    - libqt5opengl5-dev
     - rpm
 
 script:
-  - cmake --version
+  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && cmake --version
+  - [[ "${BUILD_SYSTEM}" = "qmake" ]] && qmake --version
   - ${CXX} --version
   - echo CXXFLAGS=${CXXFLAGS}
   - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  - [[ "${BUILD_SYSTEM}" = "qmake" ]] && qmake ..
   - make
-  - make package
-
+  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && make package
