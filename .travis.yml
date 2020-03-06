@@ -31,9 +31,8 @@ script:
   - cmake --version
   - ${CXX} --version
   - echo CXXFLAGS=${CXXFLAGS}
-  - |
-    mkdir build && cd build && \
-    cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} .. && \
-    make && \
-    make package
+  - mkdir build && cd build
+  - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  - make
+  - make package
 
