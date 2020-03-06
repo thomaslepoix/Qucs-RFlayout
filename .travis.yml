@@ -41,8 +41,11 @@ script:
   - ${CXX} --version
   - echo CXXFLAGS=${CXXFLAGS}
   - mkdir build && cd build
-  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-  - [[ "${BUILD_SYSTEM}" = "qmake" ]] && qmake ..
+  - if [[ "${BUILD_SYSTEM}" == "cmake" ]] ; then
+      cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} .. ;
+    elif [[ "${BUILD_SYSTEM}" == "qmake" ]] ; then
+      qmake .. ;
+    fi
   - make
-  - [[ "${BUILD_SYSTEM}" = "cmake" ]] && make package
+  - if [[ "${BUILD_SYSTEM}" == "cmake" ]] ; then make package ; fi
 
