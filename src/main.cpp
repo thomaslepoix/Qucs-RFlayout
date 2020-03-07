@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
 		}
 
 	if(gui) {
-		log_err << "GUI mode\n";
+		cout << "GUI mode\n";
 		QApplication a(argc, argv);
 		MainWindow w(QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
 		log_err.obj=&w;

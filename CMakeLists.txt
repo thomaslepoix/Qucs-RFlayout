@@ -122,7 +122,9 @@ set( QUCS-RF-LAYOUT_HDRS
 
 ##########################################################################TARGET
 
-add_executable( ${PROJECT_NAME} ${QUCS-RF-LAYOUT_SRCS} )
+add_executable( ${PROJECT_NAME} WIN32
+	${QUCS-RF-LAYOUT_SRCS}
+	)
 #[[ CMAKE 3.12
 add_executable( ${PROJECT_NAME} )
 target_sources( ${PROJECT_NAME}
