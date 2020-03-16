@@ -22,11 +22,11 @@ Mtee::Mtee(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w1,
 			long double _w2,
 			long double _w3) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 3, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_w3(_w3)

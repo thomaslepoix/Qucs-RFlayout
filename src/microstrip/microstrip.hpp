@@ -20,7 +20,7 @@
 
 #include "eqn.hpp"
 #include "pac.hpp"
-//#include "subst.hpp"
+#include "subst.hpp"
 #include "mcorn.hpp"
 #include "mcross.hpp"
 #include "mcoupled.hpp"

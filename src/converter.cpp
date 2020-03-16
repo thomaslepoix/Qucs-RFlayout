@@ -46,6 +46,7 @@ void Converter::clear(void) {
 	tab_all.clear();
 	tab_all.shrink_to_fit();
 	parser.clear();
+	xycalculator.clear();
 	}
 
 int Converter::run(void) {

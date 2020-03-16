@@ -22,11 +22,11 @@ Mrstub::Mrstub(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _ri,
 			long double _ro,
 			short _alpha) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _mirrorx, _r, 1, _subst),
 	m_ri(_ri),
 	m_ro(_ro),
 	m_alpha(_alpha){

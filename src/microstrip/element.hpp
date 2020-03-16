@@ -20,10 +20,10 @@
 
 #define _USE_MATH_DEFINES
 
-enum axis_t {X, Y};				// x axis / y axis
-enum orientation_t {NOR, R};			// no rotation / rotation
-enum origin_t {REL, ABS};				// relative / absolute
-enum {XMIN, XMAX, YMIN, YMAX};		// extrem_pos index
+enum axis_t {X, Y};            // x axis / y axis
+enum orientation_t {NOR, R};   // no rotation / rotation
+enum origin_t {REL, ABS};      // relative / absolute
+enum {XMIN, XMAX, YMIN, YMAX}; // extrem_pos index
 
 #include <string>
 #include <cmath>
@@ -36,6 +36,7 @@ protected:
 	bool m_mirrorx;
 	short m_r;
 	short m_nport;
+	std::string m_subst;
     long double m_x=NAN;
     long double m_y=NAN;
 	long double rotateX(long double _x, long double _y);
@@ -45,7 +46,8 @@ public:
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport);
+			short _nport,
+			std::string _subst);
 	virtual ~Element();
 	std::shared_ptr<Element> prev=nullptr;
 	std::string getLabel(void);
@@ -53,6 +55,7 @@ public:
 	bool getMirrorx(void);
 	short getR(void);
 	short getNport(void);
+	std::string getSubst(void);
 	long double getX(void);
 	long double getY(void);
 	int setX(long double _x);
@@ -70,6 +73,15 @@ public:
 	virtual long double getS(void);
 	virtual long double getRi(void);
 	virtual long double getRo(void);
+	virtual long double getZ(void);
+	virtual long double getDbm(void);
+	virtual long double getF(void);
+	virtual long double getEr(void);
+	virtual long double getH(void);
+	virtual long double getT(void);
+	virtual long double getTand(void);
+	virtual long double getRho(void);
+	virtual short getN(void);
 	virtual short getAlpha(void);
 	virtual std::string getNet1(void);
 	virtual std::string getNet2(void);
@@ -78,6 +90,8 @@ public:
 	virtual int getNpoint(void);
 	virtual long double getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs);
 	virtual void getStep(int const _net, long double& xstep, long double& ystep);
+	virtual int setW(long double _w);
+	virtual int setL(long double _l);
 	virtual int setNet1(std::string _net1);
 	virtual int setNet2(std::string _net2);
 	virtual int setNet3(std::string _net3);

@@ -44,6 +44,7 @@ private:
 public:
 	XyCalculator(std::vector<std::shared_ptr<Element>>& _tab_all, std::array<long double, 4>& _extrem_pos);
 	int run(void);
+	void clear(void);
 };
 
 #endif // XYCALCULATOR_HPP

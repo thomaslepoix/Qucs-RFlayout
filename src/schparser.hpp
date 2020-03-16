@@ -37,7 +37,7 @@ private:
 	std::string const& n_sch;
 	std::vector<std::string> unprintables;
 
-	long double suffix(std::string const s_sci, std::string const s_eng);
+	long double suffix(std::string const s_sci, std::string const s_eng, bool is_length);
 	std::string check_void(std::string match, std::string label);
 	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
 	void warn_unprintable(void);

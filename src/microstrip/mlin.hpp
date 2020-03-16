@@ -34,7 +34,7 @@ public :
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			std::string _subst,
 			long double _w,
 			long double _l);
 	~Mlin();

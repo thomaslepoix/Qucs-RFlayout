@@ -31,6 +31,7 @@ SOURCES += \
 	$$PWD/src/microstrip/element.cpp \
 	$$PWD/src/microstrip/eqn.cpp \
 	$$PWD/src/microstrip/pac.cpp \
+	$$PWD/src/microstrip/subst.cpp \
 	$$PWD/src/microstrip/mcorn.cpp \
 	$$PWD/src/microstrip/mcoupled.cpp \
 	$$PWD/src/microstrip/mcross.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
 	$$PWD/src/microstrip/element.hpp \
 	$$PWD/src/microstrip/eqn.hpp \
 	$$PWD/src/microstrip/pac.hpp \
+	$$PWD/src/microstrip/subst.hpp \
 	$$PWD/src/microstrip/mcorn.hpp \
 	$$PWD/src/microstrip/mcoupled.hpp \
 	$$PWD/src/microstrip/mcross.hpp \

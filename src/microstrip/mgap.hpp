@@ -33,7 +33,7 @@ public :
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			std::string _subst,
 			long double _w1,
 			long double _w2,
 			long double _s);

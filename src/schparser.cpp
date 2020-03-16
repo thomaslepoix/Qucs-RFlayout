@@ -45,6 +45,7 @@ int SchParser::run(void) {
 	string label;
 	bool mirrorx;
 	short R;
+	string subst;
 	long double L;
 	long double W;
 	long double W1;
@@ -55,6 +56,15 @@ int SchParser::run(void) {
 	long double D;
 	long double ri;
 	long double ro;
+	long double Z;
+	long double P;
+	long double F;
+	long double er;
+	long double H;
+	long double T;
+	long double tand;
+	long double rho;
+	short N;
 	short alpha;
 	string net1;
 	string net2;
@@ -62,18 +72,24 @@ int SchParser::run(void) {
 	string net4;
 
 //qucsstudio regex
-	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$");	//regex group 1
-	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )([\-0-9]+) ([\-0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");	//g1 begin	g2 x	g3 y	g4 end	g5 r
+	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$");    //regex group 1
+	//g1 begin    g2 x    g3 y    g4 end    g5 r
+	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )([\-0-9]+) ([\-0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");
 
 //schematic regex
-	static regex const r_field1("^  <([a-zA-Z]+)");											//regex group 1
-	static regex const r_field2("^ ( ([^ ]+)){2}");											//regex group 2
+	static regex const r_field1("^  <([a-zA-Z]+)");                                         //regex group 1
+	static regex const r_field2("^ ( ([^ ]+)){2}");                                         //regex group 2
 	static regex const r_field8("^ ( ([^ ]+)){8}");
 	static regex const r_field9("^ ( ([^ ]+)){9}");
-	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
-	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
-	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
-	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?m?)?))\"){1}");		//g5 "()"		g6 value	g7 suffix	g8 scientific	g9 engineer
+	static regex const r_quotedfield10_subst("^ ( ([^ ]+)){9}( \"([^\"]*)\" [0-1]{1}){1}"); //regex group 4
+
+	//g5 "()"    g6 value    g7 suffix    g8 scientific    g9 engineer
+	static regex const r_quotedfield10("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){0}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
+	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
+	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
+	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
+	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
+	static regex const r_quotedfield20("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){5}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
 
 //netlist regex
 	static regex const r_type("^([^:]*):");													//regex group 1
@@ -225,131 +241,215 @@ int SchParser::run(void) {
 					if(absent) unprintables.push_back(type);
 				} else if(type=="Eqn") {
 					//to be complete...
-					tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R, 0)));
+					tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R)));
 				} else if(type=="Pac") {
-					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, 2)));
+					//number
+						regex_search(line, match, r_quotedfield10);
+						N=stoi(match.str(6));
+						cout << "\tNumber : " << N << endl;
+					//impedance
+						regex_search(line, match, r_quotedfield12);
+						Z=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tImpedance : " << Z << endl;
+					//power
+						regex_search(line, match, r_quotedfield14);
+						P=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tPower : " << P << endl;
+					//frequency
+						regex_search(line, match, r_quotedfield16);
+						F=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tFrequency : " << F << endl;
+					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
 				} else if(type=="SUBST") {
-					//to be complete...
+					//relative permittivity
+						regex_search(line, match, r_quotedfield10);
+						er=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tRelative permittivity : " << er << endl;
+					//substrate thickness
+						regex_search(line, match, r_quotedfield12);
+						H=(stold(match.str(6)))*suffix(match.str(8), match.str(9), true);
+						cout << "\tSubstrate thickness : " << H << endl;
+					//metal thickness
+						regex_search(line, match, r_quotedfield14);
+						T=(stold(match.str(6)))*suffix(match.str(8), match.str(9), true);
+						cout << "\tMetal thickness : " << T << endl;
+					//loss tangent
+						regex_search(line, match, r_quotedfield16);
+						tand=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tLoss tangent : " << tand << endl;
+					//metal resistivity
+						regex_search(line, match, r_quotedfield18);
+						rho=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tMetal resistance : " << rho << endl;
+					//substrate roughness
+						regex_search(line, match, r_quotedfield20);
+						D=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						cout << "\tMetal roughness : " << D << endl;
+					tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, R, er, H, T, tand, rho, D)));
 				} else if(type=="MCORN") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, 2, W)));
+					tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MCROSS") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					//width 3
 						regex_search(line, match, r_quotedfield16);
-						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 3 : " << W3 << endl;
 					//width 4
 						regex_search(line, match, r_quotedfield18);
-						W4=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W4=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 4 : " << W4 << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, 4, W1, W2, W3, W4)));
+					tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, subst, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
 					//length
 						regex_search(line, match, r_quotedfield14);
-						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tLength : " << L << endl;
 					//space
 						regex_search(line, match, r_quotedfield16);
-						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tSpace : " << S << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, 4, W, L, S)));
+					tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, subst, W, L, S)));
 				} else if(type=="MGAP") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
 						string tmp;
-						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					//space
 						regex_search(line, match, r_quotedfield16);
-						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tSpace : " << S << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, 2, W1, W2, S)));
+					tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, subst, W1, W2, S)));
 				} else if(type=="MMBEND") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, 2, W)));
+					tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MLIN") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
 					//length
 						regex_search(line, match, r_quotedfield14);
-						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tLength : " << L << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, 2, W, L)));
+					tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, subst, W, L)));
 				} else if(type=="MOPEN") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, 1, W)));
+					tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MRSTUB") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//inner radius
 						regex_search(line, match, r_quotedfield12);
-						ri=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						ri=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tInner radius : " << ri << endl;
 					//outer radius
 						regex_search(line, match, r_quotedfield14);
-						ro=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						ro=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tOuter radius : " << ro << endl;
 					//alpha
 						//no unit
 						regex_search(line, match, r_quotedfield16);
 						alpha=stoi(match.str(5));
 						cout << "\tAlpha : " << alpha << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, mirrorx, R, 1, ri, ro, alpha)));
+					tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, mirrorx, R, subst, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 2 : " << W2 << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, 2, W1, W2)));
+					tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, subst, W1, W2)));
 				} else if(type=="MTEE") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					//width 3
 						regex_search(line, match, r_quotedfield16);
-						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 3 : " << W3 << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, 3, W1, W2, W3)));
+					tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, subst, W1, W2, W3)));
 				} else if(type=="MVIA") {
+					//substrat
+						regex_search(line, match, r_quotedfield10_subst);
+						subst=match.str(4);
+						cout << "\tSubstrat : " << subst << endl;
 					//diameter
 						regex_search(line, match, r_quotedfield12);
-						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9));
+						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tDiameter : " << D << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, mirrorx, R, 1, D)));
+					tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, mirrorx, R, subst, D)));
 					}
 				}
 			break;
@@ -463,7 +563,7 @@ void SchParser::warn_unprintable(void) {
 		}
 	}
 
-long double SchParser::suffix(string const s_sci, const string s_eng) {
+long double SchParser::suffix(string const s_sci, const string s_eng, bool is_length) {
 //convert suffix into multiplicator
 	static regex  const r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
 	smatch match;
@@ -484,35 +584,37 @@ long double SchParser::suffix(string const s_sci, const string s_eng) {
 		}
 
 //engineer suffix
-	if(s_eng=="E" || s_eng=="Em") {
+	if(s_eng=="E" || s_eng=="Em" || s_eng=="EHz" || s_eng=="EOhm" || s_eng=="EdBm") {
 		multiplicator*=1000000000000000000;
-	} else if(s_eng=="P" || s_eng=="Pm") {
+	} else if(s_eng=="P" || s_eng=="Pm" || s_eng=="PHz" || s_eng=="POhm" || s_eng=="PdBm") {
 		multiplicator*=1000000000000000;
-	} else if(s_eng=="T" || s_eng=="Tm") {
+	} else if(s_eng=="T" || s_eng=="Tm" || s_eng=="THz" || s_eng=="TOhm" || s_eng=="TdBm") {
 		multiplicator*=1000000000000;
-	} else if(s_eng=="G" || s_eng=="Gm") {
+	} else if(s_eng=="G" || s_eng=="Gm" || s_eng=="GHz" || s_eng=="GOhm" || s_eng=="GdBm") {
 		multiplicator*=1000000000;
-	} else if(s_eng=="M" || s_eng=="Mm") {
+	} else if(s_eng=="M" || s_eng=="Mm" || s_eng=="MHz" || s_eng=="MOhm" || s_eng=="MdBm") {
 		multiplicator*=1000000;
-	} else if(s_eng=="k" || s_eng=="km") {
+	} else if(s_eng=="k" || s_eng=="km" || s_eng=="kHz" || s_eng=="kOhm" || s_eng=="kdBm") {
 		multiplicator*=1000;
-	} else if(s_eng=="") {
+	} else if(s_eng=="" || s_eng=="Hz" || s_eng=="Ohm" || s_eng=="dBm") {
 		multiplicator*=1;
-	} else if(s_eng=="m" || s_eng=="mm") {
+	} else if(s_eng=="m" || s_eng=="mm" || s_eng=="mHz" || s_eng=="mOhm" || s_eng=="mdBm") {
 		multiplicator/=1000;
-	} else if(s_eng=="u" || s_eng=="um") {
+	} else if(s_eng=="u" || s_eng=="um" || s_eng=="uHz" || s_eng=="uOhm" || s_eng=="udBm") {
 		multiplicator/=1000000;
-	} else if(s_eng=="n" || s_eng=="nm") {
+	} else if(s_eng=="n" || s_eng=="nm" || s_eng=="nHz" || s_eng=="nOhm" || s_eng=="ndBm") {
 		multiplicator/=1000000000;
-	} else if(s_eng=="p" || s_eng=="pm") {
+	} else if(s_eng=="p" || s_eng=="pm" || s_eng=="pHz" || s_eng=="pOhm" || s_eng=="pdBm") {
 		multiplicator/=1000000000000;
-	} else if(s_eng=="f" || s_eng=="fm") {
+	} else if(s_eng=="f" || s_eng=="fm" || s_eng=="fHz" || s_eng=="fOhm" || s_eng=="fdBm") {
 		multiplicator/=1000000000000000;
-	} else if(s_eng=="a" || s_eng=="am") {
+	} else if(s_eng=="a" || s_eng=="am" || s_eng=="aHz" || s_eng=="aOhm" || s_eng=="adBm") {
 		multiplicator/=1000000000000000000;
 		}
 
-	multiplicator*=1000;	//reference unit = mm
+	if(is_length)
+		multiplicator*=1000;	//reference unit = mm
+
 	return(multiplicator);
 	}
 

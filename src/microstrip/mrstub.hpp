@@ -40,7 +40,7 @@ public :
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			std::string _subst,
 			long double _ri,
 			long double _ro,
 			short _alpha);

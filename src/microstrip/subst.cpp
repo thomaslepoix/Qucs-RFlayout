@@ -1,9 +1,9 @@
 /***************************************************************************
-                               mlin.cpp
+                               subst.cpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
-    email                : thomas.lepoix@protonmail.ch
+    email                : thomas.lepoix@protonmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,70 +15,92 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mlin.hpp"
+#include "subst.hpp"
 using namespace std;
 
-Mlin::Mlin(string _label,
+Subst::Subst(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			string _subst,
-			long double _w,
-			long double _l) :
-	Element(_label, _type, _mirrorx, _r, 2, _subst),
-	m_w(_w),
-	m_l(_l)
+			long double _er,
+			long double _h,
+			long double _t,
+			long double _tand,
+			long double _rho,
+			long double _d) :
+	Element(_label, _type, _mirrorx, _r, 0, ""),
+	m_er(_er),
+	m_h(_h),
+	m_t(_t),
+	m_tand(_tand),
+	m_rho(_rho),
+	m_d(_d)
 	{}
 
-Mlin::~Mlin() {
+Subst::~Subst() {
 	}
 
-string Mlin::getDescriptor(void) {
+string Subst::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
-long double Mlin::getW(void) {
-	return(m_w);
-	}
-
-long double Mlin::getL(void) {
+long double Subst::getL(void) {
 	return(m_l);
 	}
 
-string Mlin::getNet1(void) {
-	return(m_net1);
+long double Subst::getW(void) {
+	return(m_w);
 	}
 
-string Mlin::getNet2(void) {
-	return(m_net2);
+long double Subst::getEr(void){
+	return(m_er);
 	}
 
-int Mlin::getNpoint(void) {
+long double Subst::getH(void){
+	return(m_h);
+	}
+
+long double Subst::getT(void){
+	return(m_t);
+	}
+
+long double Subst::getTand(void){
+	return(m_tand);
+	}
+
+long double Subst::getRho(void){
+	return(m_rho);
+	}
+
+long double Subst::getD(void) {
+	return(m_d);
+	}
+
+int Subst::getNpoint(void) {
 	return(m_npoint);
 	}
 
-long double Mlin::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
+long double Subst::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
-		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y]) : rotateX(tab_p[_n][X], tab_p[_n][Y]);
 	} else {
 		coord=tab_p[_n][_xy];
 		}
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
-int Mlin::setNet1(string _net1) {
-	m_net1=_net1;
+int Subst::setW(long double _w) {
+	m_w=_w;
 	return(0);
 	}
 
-int Mlin::setNet2(string _net2) {
-	m_net2=_net2;
+int Subst::setL(long double _l) {
+	m_l=_l;
 	return(0);
 	}
 
-int Mlin::setP(void) {
+int Subst::setP(void) {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= m_w/2;
 	tab_p[1][X]= m_l/2;
@@ -88,40 +110,4 @@ int Mlin::setP(void) {
 	tab_p[3][X]=-m_l/2;
 	tab_p[3][Y]=-m_w/2;
 	return(0);
-	}
-
-void Mlin::getStep(int const _net, long double& xstep, long double& ystep) {
-	if(m_r==0) {
-		if(_net==1) {
-			xstep= - m_l/2;
-			ystep=0;
-		} else if(_net==2) {
-			xstep= + m_l/2;
-			ystep=0;
-			}
-	} else if(m_r==90) {
-		if(_net==1) {
-			xstep=0;
-			ystep= + m_l/2;
-		} else if(_net==2) {
-			xstep=0;
-			ystep= - m_l/2;
-			}
-	} else if(m_r==180) {
-		if(_net==1) {
-			xstep= + m_l/2;
-			ystep=0;
-		} else if(_net==2) {
-			xstep= - m_l/2;
-			ystep=0;
-			}
-	} else if(m_r==270) {
-		if(_net==1) {
-			xstep=0;
-			ystep= - m_l/2;
-		} else if(_net==2) {
-			xstep=0;
-			ystep= + m_l/2;
-			}
-		}
 	}

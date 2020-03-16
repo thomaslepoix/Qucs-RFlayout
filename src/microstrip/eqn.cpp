@@ -21,9 +21,8 @@ using namespace std;
 Eqn::Eqn(string _label,
 			string _type,
 			bool _mirrorx,
-			short _r,
-			short _nport) :
-	Element(_label, _type, _mirrorx, _r, _nport)
+			short _r) :
+	Element(_label, _type, _mirrorx, _r, 0, "")
 	{}
 
 Eqn::~Eqn() {

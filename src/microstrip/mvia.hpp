@@ -30,7 +30,7 @@ public :
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			std::string _subst,
 			long double _d);
 	~Mvia();
 	std::string getDescriptor(void) override;

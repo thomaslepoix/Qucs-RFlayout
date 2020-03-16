@@ -1,9 +1,9 @@
 /***************************************************************************
-                               mopen.hpp
+                               subst.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
-    email                : thomas.lepoix@protonmail.ch
+    email                : thomas.lepoix@protonmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,28 +15,50 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MOPEN_HPP
-#define MOPEN_HPP
+#ifndef SUBST_HPP
+#define SUBST_HPP
 
 #include "element.hpp"
 
-class Mopen final : public Element {
+class Subst final : public Element {
 private :
-	std::string const m_descriptor="microstrip_open";
+	const std::string m_descriptor="substrat";
 	long double m_w;
-	std::string m_net1;
+	long double m_l;
+	long double m_er;
+	long double m_h;
+	long double m_t;
+	long double m_tand;
+	long double m_rho;
+	long double m_d;
+	static const int m_npoint=4;
+	long double tab_p[m_npoint][2]={};
 public :
-	Mopen(std::string _label,
+	Subst(std::string _label,
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			std::string _subst,
-			long double _w);
-	~Mopen();
+			long double _er,
+			long double _h,
+			long double _t,
+			long double _tand,
+			long double _rho,
+			long double _d);
+	~Subst();
 	std::string getDescriptor(void) override;
+	long double getL(void) override;
 	long double getW(void) override;
-	std::string getNet1(void) override;
-	int setNet1(std::string _net1) override;
+	long double getEr(void) override;
+	long double getH(void) override;
+	long double getT(void) override;
+	long double getTand(void) override;
+	long double getRho(void) override;
+	long double getD(void) override;
+	int getNpoint(void) override;
+	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	int setW(long double _w) override;
+	int setL(long double _l) override;
+	int setP(void) override;
 };
 
-#endif // MOPEN_HPP
+#endif // SUBST_HPP

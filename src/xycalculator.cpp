@@ -23,6 +23,11 @@ XyCalculator::XyCalculator(vector<shared_ptr<Element>>& _tab_all, array<long dou
 	extrem_pos(_extrem_pos)
 	{}
 
+void XyCalculator::clear(void) {
+	for(unsigned char i=0;i<4;i++)
+		extrem_pos[i]=0.0;
+	}
+
 int XyCalculator::run(void) {
 
 //variables
@@ -90,7 +95,6 @@ int XyCalculator::run(void) {
 				}
 			current_net=netmin(current);
 			cout << "Selected net : " << current_net << endl;
-//			xystep(current, current_net, prev_xstep, prev_ystep);
 			current->getStep(current_net, prev_xstep, prev_ystep);
 			findnext(current, current_net, next);
 			cout << "Next label : " << next->getLabel() << endl;
@@ -100,7 +104,6 @@ int XyCalculator::run(void) {
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
 			if(current->getX()!=current->getX() || current->getY()!=current->getY()) {		//if position is -NaN
-//				xystep(current, current_net, current_xstep, current_ystep);
 				current->getStep(current_net, current_xstep, current_ystep);
 				cout << "Previous Xstep : " << prev_xstep << endl;
 				cout << "Previous Ystep : " << prev_ystep << endl;
@@ -119,16 +122,19 @@ int XyCalculator::run(void) {
 
 //find points positions & extrems points positions
 	for(shared_ptr<Element> it : tab_all) {
-		it->setP();
-		for(int u=0;u<it->getNpoint();u++) {
-			if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
-			if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
-			if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
-			if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
+		if(it->getType() != "SUBST") {
+			it->setP();
+			for(int u=0;u<it->getNpoint();u++) {
+				if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
+				if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
+				if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
+				if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
+				}
 			}
 		}
 
 	cout << endl;
+	cout << "Extrem positions :" << endl;
 	cout << "Xmin : " << extrem_pos[XMIN] << endl;
 	cout << "Xmax : " << extrem_pos[XMAX] << endl;
 	cout << "Ymin : " << extrem_pos[YMIN] << endl;
@@ -136,20 +142,24 @@ int XyCalculator::run(void) {
 
 //translate shapes in positive quarter
 	for(shared_ptr<Element> it : tab_all) {
-		it->setX(it->getX()-extrem_pos[XMIN]+1);
-		it->setY(it->getY()-extrem_pos[YMIN]+1);
-		it->setP();
+		if(it->getType() != "SUBST") {
+			it->setX(it->getX()-extrem_pos[XMIN]+1);
+			it->setY(it->getY()-extrem_pos[YMIN]+1);
+			it->setP();
+			}
 		}
 
 //reset extrem_pos
 	for(unsigned char i=0;i<4;i++)
 		extrem_pos[i]=0.0;
 	for(shared_ptr<Element> it : tab_all) {
-		for(int u=0;u<it->getNpoint();u++) {
-			if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
-			if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
-			if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
-			if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
+		if(it->getType() != "SUBST") {
+			for(int u=0;u<it->getNpoint();u++) {
+				if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
+				if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
+				if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
+				if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
+				}
 			}
 		}
 
@@ -159,7 +169,20 @@ int XyCalculator::run(void) {
 	cout << "Ymin : " << extrem_pos[YMIN] << endl;
 	cout << "Ymax : " << extrem_pos[YMAX] << endl;
 
-
+//provisoire: set substrate points
+	for(shared_ptr<Element> it : tab_all) {
+		if(it->getType() == "SUBST") {
+			it->setW(extrem_pos[XMAX]-extrem_pos[XMIN]);
+			it->setL(extrem_pos[YMAX]-extrem_pos[YMIN]);
+			it->setX(extrem_pos[XMIN]+it->getW()/2);
+			it->setY(extrem_pos[YMIN]+it->getL()/2);
+//			cout << "it->getW() : " << it->getW() << endl;
+//			cout << "it->getL() : " << it->getL() << endl;
+//			cout << "it->getX() : " << it->getX() << endl;
+//			cout << "it->getY() : " << it->getY() << endl;
+			it->setP();
+			}
+		}
 
 //delete objects inner pointers
 	for(shared_ptr<Element> it : tab_all) {

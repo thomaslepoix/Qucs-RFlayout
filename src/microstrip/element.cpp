@@ -22,12 +22,14 @@ Element::Element(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r,
-			short _nport) :
+			short _nport,
+			string _subst) :
 	m_label(_label),
 	m_type(_type),
 	m_mirrorx(_mirrorx),
 	m_r(_r),
-	m_nport(_nport)
+	m_nport(_nport),
+	m_subst(_subst)
 	{}
 
 Element::~Element() {
@@ -51,6 +53,10 @@ short Element::getR(void) {
 
 short Element::getNport(void) {
 	return(m_nport);
+	}
+
+string Element::getSubst(void) {
+	return(m_subst);
 	}
 
 long double Element::getX(void) {
@@ -125,6 +131,42 @@ long double Element::getRo(void) {
 	return(0);
 	}
 
+long double Element::getZ(void) {
+	return(0);
+	}
+
+long double Element::getDbm(void) {
+	return(0);
+	}
+
+long double Element::getF(void) {
+	return(0);
+	}
+
+long double Element::getEr(void) {
+	return(0);
+	}
+
+long double Element::getH(void) {
+	return(0);
+	}
+
+long double Element::getT(void) {
+	return(0);
+	}
+
+long double Element::getTand(void) {
+	return(0);
+	}
+
+long double Element::getRho(void) {
+	return(0);
+	}
+
+short Element::getN(void) {
+	return(0);
+	}
+
 short Element::getAlpha(void) {
 	return(0);
 	}
@@ -156,6 +198,14 @@ long double Element::getP(int /*_n*/, axis_t /*_xy*/, orientation_t /*_r*/, orig
 void Element::getStep(int const /*_net*/, long double& xstep, long double& ystep) {
 	xstep=0;
 	ystep=0;
+	}
+
+int Element::setW(long double /*_w*/) {
+	return(1);
+	}
+
+int Element::setL(long double /*_l*/) {
+	return(1);
 	}
 
 int Element::setNet1(string /*_net1*/) {
