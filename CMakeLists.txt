@@ -29,6 +29,29 @@ include( FixedShell )
 #find_program( CMAKE_CXX_CLANG_TIDY NAMES clang-tidy )
 #set( CMAKE_CXX_CPPCHECK "cppcheck")
 
+if( CMAKE_BUILD_TYPE MATCHES Coverage )
+	find_program( GCOV NAMES gcov )
+	if( GCOV )
+		message( STATUS "Found gcov: ${GCOV}" )
+	else( GCOV )
+		message( ERROR "Not found gcov: install it" )
+	endif( GCOV )
+
+	find_program( LCOV NAMES lcov )
+	if( LCOV )
+		message( STATUS "Found lcov: ${LCOV}" )
+	else( LCOV )
+		message( ERROR "Not found lcov: install it" )
+	endif( LCOV )
+
+	find_program( GENHTML NAMES genhtml )
+	if( GENHTML )
+		message( STATUS "Found genhtml: ${GENHTML}" )
+	else( GENHTML )
+		message( ERROR "Not found genhtml: install it" )
+	endif( GENHTML )
+endif( CMAKE_BUILD_TYPE MATCHES Coverage )
+
 set( CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
 	OWNER_READ
 	OWNER_WRITE
