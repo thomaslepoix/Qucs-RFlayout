@@ -1,5 +1,5 @@
 /***************************************************************************
-                               pac.cpp
+                               sp.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,61 +15,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "pac.hpp"
-using namespace std;
+#ifndef SP_HPP
+#define SP_HPP
 
-Pac::Pac(string _label,
-			string _type,
+#include "element.hpp"
+
+class Sp final : public Element {
+private :
+	std::string const m_descriptor="s_parameter_simulation";
+	long double m_fstart;
+	long double m_fstop;
+	std::string m_simtype;
+	unsigned long m_n;
+public :
+	Sp(std::string _label,
+			std::string _type,
 			bool _mirrorx,
 			short _r,
-			unsigned long _n,
-			long double _z,
-			long double _p,
-			long double _f) :
-	Element(_label, _type, _mirrorx, _r, 2, ""),
-	m_n(_n),
-	m_z(_z),
-	m_p(_p),
-	m_f(_f)
-	{}
+			std::string _simtype,
+			long double _fstart,
+			long double _fstop,
+			unsigned long _n);
+	~Sp();
+	std::string getDescriptor(void) override;
+	long double getFstart(void) override;
+	long double getFstop(void) override;
+	std::string getSimtype(void) override;
+	unsigned long getN(void) override;
+};
 
-Pac::~Pac() {
-	}
-
-string Pac::getDescriptor(void) {
-	return(m_descriptor);
-	}
-
-long double Pac::getZ(void) {
-	return(m_z);
-	}
-
-long double Pac::getDbm(void) {
-	return(m_p);
-	}
-
-long double Pac::getF(void) {
-	return(m_f);
-	}
-
-unsigned long Pac::getN(void) {
-	return(m_n);
-	}
-
-string Pac::getNet1(void) {
-	return(m_net1);
-	}
-
-string Pac::getNet2(void) {
-	return(m_net2);
-	}
-
-int Pac::setNet1(string _net1) {
-	m_net1=_net1;
-	return(0);
-	}
-
-int Pac::setNet2(string _net2) {
-	m_net2=_net2;
-	return(0);
-	}
+#endif // SP_HPP

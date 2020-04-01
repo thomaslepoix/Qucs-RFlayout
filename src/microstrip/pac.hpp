@@ -23,7 +23,7 @@
 class Pac final : public Element {
 private :
 	std::string const m_descriptor="ac_port";
-	short m_n;
+	unsigned long m_n;
 	long double m_z;
 	long double m_p;
 	long double m_f;
@@ -34,7 +34,7 @@ public :
 			std::string _type,
 			bool _mirrorx,
 			short _r,
-			short _n,
+			unsigned long _n,
 			long double _z,
 			long double _p,
 			long double _f);
@@ -47,7 +47,7 @@ public :
 	long double getZ(void) override;
 	long double getDbm(void) override;	//m_p
 	long double getF(void) override;
-	short getN(void) override;
+	unsigned long getN(void) override;
 };
 
 #endif // PAC_HPP

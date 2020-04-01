@@ -76,13 +76,16 @@ public:
 	virtual long double getZ(void);
 	virtual long double getDbm(void);
 	virtual long double getF(void);
+	virtual long double getFstart(void);
+	virtual long double getFstop(void);
 	virtual long double getEr(void);
 	virtual long double getH(void);
 	virtual long double getT(void);
 	virtual long double getTand(void);
 	virtual long double getRho(void);
-	virtual short getN(void);
+	virtual unsigned long getN(void);
 	virtual short getAlpha(void);
+	virtual std::string getSimtype(void);
 	virtual std::string getNet1(void);
 	virtual std::string getNet2(void);
 	virtual std::string getNet3(void);

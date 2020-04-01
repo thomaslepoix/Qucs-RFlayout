@@ -46,6 +46,7 @@ int SchParser::run(void) {
 	bool mirrorx;
 	short R;
 	string subst;
+	string simtype;
 	long double L;
 	long double W;
 	long double W1;
@@ -64,7 +65,9 @@ int SchParser::run(void) {
 	long double T;
 	long double tand;
 	long double rho;
-	short N;
+	long double Fstart;
+	long double Fstop;
+	unsigned long N;
 	short alpha;
 	string net1;
 	string net2;
@@ -72,16 +75,16 @@ int SchParser::run(void) {
 	string net4;
 
 //qucsstudio regex
-	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$");    //regex group 1
+	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$");  //regex group 1
 	//g1 begin    g2 x    g3 y    g4 end    g5 r
 	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )([\-0-9]+) ([\-0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");
 
 //schematic regex
-	static regex const r_field1("^  <([a-zA-Z]+)");                                         //regex group 1
-	static regex const r_field2("^ ( ([^ ]+)){2}");                                         //regex group 2
+	static regex const r_field1("^  <([.a-zA-Z]+)");                            //regex group 1
+	static regex const r_field2("^ ( ([^ ]+)){2}");                             //regex group 2
 	static regex const r_field8("^ ( ([^ ]+)){8}");
 	static regex const r_field9("^ ( ([^ ]+)){9}");
-	static regex const r_quotedfield10_subst("^ ( ([^ ]+)){9}( \"([^\"]*)\" [0-1]{1}){1}"); //regex group 4
+	static regex const r_quotedfield10_raw("^ ( ([^ ]+)){9}( \"([^\"]*)\" [0-1]{1}){1}"); //regex group 4
 
 	//g5 "()"    g6 value    g7 suffix    g8 scientific    g9 engineer
 	static regex const r_quotedfield10("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){0}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
@@ -92,12 +95,12 @@ int SchParser::run(void) {
 	static regex const r_quotedfield20("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){5}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
 
 //netlist regex
-	static regex const r_type("^([^:]*):");													//regex group 1
-	static regex const r_label("^([^:]*):([^ ]*)");											//regex group 2
-	static regex const r_net1("^([^ ]* ){1}_net([0-9]*)");									//regex group 2
-	static regex const r_net2("^([^ ]* ){2}_net([0-9]*)");									//regex group 2
-	static regex const r_net3("^([^ ]* ){3}_net([0-9]*)");									//regex group 2
-	static regex const r_net4("^([^ ]* ){4}_net([0-9]*)");									//regex group 2
+	static regex const r_type("^([^:]*):");                                     //regex group 1
+	static regex const r_label("^([^:]*):([^ ]*)");                             //regex group 2
+	static regex const r_net1("^([^ ]* ){1}_net([0-9]*)");                      //regex group 2
+	static regex const r_net2("^([^ ]* ){2}_net([0-9]*)");                      //regex group 2
+	static regex const r_net3("^([^ ]* ){3}_net([0-9]*)");                      //regex group 2
+	static regex const r_net4("^([^ ]* ){4}_net([0-9]*)");                      //regex group 2
 
 
 
@@ -260,6 +263,29 @@ int SchParser::run(void) {
 						F=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tFrequency : " << F << endl;
 					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
+				} else if(type==".SP") {
+					//simulation type
+						regex_search(line, match, r_quotedfield10_raw);
+						simtype=match.str(4);
+						cout << "\tSimulation type : " << simtype << endl;
+						if(simtype=="lin"
+						|| simtype=="log") {
+							//start frequency
+								regex_search(line, match, r_quotedfield12);
+								Fstart=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+								cout << "\tStart frequency : " << Fstart << endl;
+							//stop frequency
+								regex_search(line, match, r_quotedfield12);
+								Fstop=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+								cout << "\tStop frequency : " << Fstop << endl;
+							//step number
+								regex_search(line, match, r_quotedfield14);
+								N=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+								cout << "\tStep number : " << N << endl;
+							tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, R, simtype, Fstart, Fstop, N)));
+						} else { // "list" & "const"
+							log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
+							}
 				} else if(type=="SUBST") {
 					//relative permittivity
 						regex_search(line, match, r_quotedfield10);
@@ -288,7 +314,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, R, er, H, T, tand, rho, D)));
 				} else if(type=="MCORN") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width
@@ -298,7 +324,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MCROSS") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
@@ -320,7 +346,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, subst, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width
@@ -338,7 +364,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, subst, W, L, S)));
 				} else if(type=="MGAP") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
@@ -357,7 +383,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, subst, W1, W2, S)));
 				} else if(type=="MMBEND") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width
@@ -367,7 +393,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MLIN") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width
@@ -381,7 +407,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, subst, W, L)));
 				} else if(type=="MOPEN") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width
@@ -391,7 +417,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MRSTUB") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//inner radius
@@ -410,7 +436,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, mirrorx, R, subst, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
@@ -424,7 +450,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, subst, W1, W2)));
 				} else if(type=="MTEE") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
@@ -442,7 +468,7 @@ int SchParser::run(void) {
 					tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, subst, W1, W2, W3)));
 				} else if(type=="MVIA") {
 					//substrat
-						regex_search(line, match, r_quotedfield10_subst);
+						regex_search(line, match, r_quotedfield10_raw);
 						subst=match.str(4);
 						cout << "\tSubstrat : " << subst << endl;
 					//diameter
@@ -565,7 +591,7 @@ void SchParser::warn_unprintable(void) {
 
 long double SchParser::suffix(string const s_sci, const string s_eng, bool is_length) {
 //convert suffix into multiplicator
-	static regex  const r_sci("^e(-?)([0-9]*)$");		//g1 signe	g2 exposant
+	static regex  const r_sci("^e(-?)([0-9]*)$");    //g1 signe    g2 exposant
 	smatch match;
 	long double multiplicator=1;
 
@@ -613,7 +639,7 @@ long double SchParser::suffix(string const s_sci, const string s_eng, bool is_le
 		}
 
 	if(is_length)
-		multiplicator*=1000;	//reference unit = mm
+		multiplicator*=1000; //reference unit = mm
 
 	return(multiplicator);
 	}

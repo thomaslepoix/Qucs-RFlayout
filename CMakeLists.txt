@@ -75,12 +75,12 @@ set( CMAKE_AUTOUIC ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 #########################################################################SOURCES
-
 set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/main.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcorn.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcoupled.cpp"
@@ -106,6 +106,7 @@ set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.hpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcorn.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcoupled.hpp"

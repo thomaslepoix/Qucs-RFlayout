@@ -143,6 +143,14 @@ long double Element::getF(void) {
 	return(0);
 	}
 
+long double Element::getFstart(void) {
+	return(0);
+	}
+
+long double Element::getFstop(void) {
+	return(0);
+	}
+
 long double Element::getEr(void) {
 	return(0);
 	}
@@ -163,12 +171,16 @@ long double Element::getRho(void) {
 	return(0);
 	}
 
-short Element::getN(void) {
+unsigned long Element::getN(void) {
 	return(0);
 	}
 
 short Element::getAlpha(void) {
 	return(0);
+	}
+
+string Element::getSimtype(void) {
+	return("");
 	}
 
 string Element::getNet1(void) {
