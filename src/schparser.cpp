@@ -254,15 +254,15 @@ int SchParser::run(void) {
 						cout << "\tNumber : " << N << endl;
 					//impedance
 						regex_search(line, match, r_quotedfield12);
-						Z=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						Z=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tImpedance : " << Z << endl;
 					//power
 						regex_search(line, match, r_quotedfield14);
-						P=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						P=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tPower : " << P << endl;
 					//frequency
 						regex_search(line, match, r_quotedfield16);
-						F=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						F=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tFrequency : " << F << endl;
 					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
 				} else if(type==".SP") {
@@ -279,15 +279,15 @@ int SchParser::run(void) {
 						|| simtype=="log") {
 							//start frequency
 								regex_search(line, match, r_quotedfield12);
-								Fstart=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+								Fstart=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStart frequency : " << Fstart << endl;
 							//stop frequency
 								regex_search(line, match, r_quotedfield14);
-								Fstop=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+								Fstop=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStop frequency : " << Fstop << endl;
 							//step number
 								regex_search(line, match, r_quotedfield16);
-								N=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+								N=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStep number : " << N << endl;
 							tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, R, simtype, Fstart, Fstop, N)));
 						} else { // "list" & "const"
@@ -297,27 +297,27 @@ int SchParser::run(void) {
 				} else if(type=="SUBST") {
 					//relative permittivity
 						regex_search(line, match, r_quotedfield10);
-						er=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						er=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tRelative permittivity : " << er << endl;
 					//substrate thickness
 						regex_search(line, match, r_quotedfield12);
-						H=(stold(match.str(6)))*suffix(match.str(8), match.str(9), true);
+						H=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tSubstrate thickness : " << H << endl;
 					//metal thickness
 						regex_search(line, match, r_quotedfield14);
-						T=(stold(match.str(6)))*suffix(match.str(8), match.str(9), true);
+						T=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tMetal thickness : " << T << endl;
 					//loss tangent
 						regex_search(line, match, r_quotedfield16);
-						tand=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						tand=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tLoss tangent : " << tand << endl;
 					//metal resistivity
 						regex_search(line, match, r_quotedfield18);
-						rho=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						rho=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tMetal resistance : " << rho << endl;
 					//substrate roughness
 						regex_search(line, match, r_quotedfield20);
-						D=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
+						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tMetal roughness : " << D << endl;
 					tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, R, er, H, T, tand, rho, D)));
 				} else if(type=="MCORN") {
