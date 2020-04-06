@@ -43,6 +43,7 @@ int SchParser::run(void) {
 
 	string type;
 	string label;
+	bool is_active;
 	bool mirrorx;
 	short R;
 	string subst;
@@ -82,8 +83,9 @@ int SchParser::run(void) {
 //schematic regex
 	static regex const r_field1("^  <([.a-zA-Z]+)");                            //regex group 1
 	static regex const r_field2("^ ( ([^ ]+)){2}");                             //regex group 2
-	static regex const r_field8("^ ( ([^ ]+)){8}");
-	static regex const r_field9("^ ( ([^ ]+)){9}");
+	static regex const r_field3("^ ( ([^ ]+)){3}");                             //regex group 2
+	static regex const r_field8("^ ( ([^ ]+)){8}");                             //regex group 2
+	static regex const r_field9("^ ( ([^ ]+)){9}");                             //regex group 2
 	static regex const r_quotedfield10_raw("^ ( ([^ ]+)){9}( \"([^\"]*)\" [0-1]{1}){1}"); //regex group 4
 
 	//g5 "()"    g6 value    g7 suffix    g8 scientific    g9 engineer
@@ -264,10 +266,15 @@ int SchParser::run(void) {
 						cout << "\tFrequency : " << F << endl;
 					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
 				} else if(type==".SP") {
-					//simulation type
-						regex_search(line, match, r_quotedfield10_raw);
-						simtype=match.str(4);
-						cout << "\tSimulation type : " << simtype << endl;
+					//is active
+						regex_search(line, match, r_field3);
+						is_active=stoi(match.str(2));
+						cout << "\tIs active : " << is_active << endl;
+					if(is_active) {
+						//simulation type
+							regex_search(line, match, r_quotedfield10_raw);
+							simtype=match.str(4);
+							cout << "\tSimulation type : " << simtype << endl;
 						if(simtype=="lin"
 						|| simtype=="log") {
 							//start frequency
@@ -275,17 +282,18 @@ int SchParser::run(void) {
 								Fstart=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStart frequency : " << Fstart << endl;
 							//stop frequency
-								regex_search(line, match, r_quotedfield12);
+								regex_search(line, match, r_quotedfield14);
 								Fstop=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStop frequency : " << Fstop << endl;
 							//step number
-								regex_search(line, match, r_quotedfield14);
+								regex_search(line, match, r_quotedfield16);
 								N=(stold(match.str(6)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStep number : " << N << endl;
 							tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, R, simtype, Fstart, Fstop, N)));
 						} else { // "list" & "const"
 							log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
 							}
+						}
 				} else if(type=="SUBST") {
 					//relative permittivity
 						regex_search(line, match, r_quotedfield10);
