@@ -67,7 +67,8 @@ int main(int argc, char* argv[]) {
 				<< "\t\tFORMAT can be:" << endl
 				<< "\t\t- .kicad_pcb\t: kicad layout (default format)" << endl
 				<< "\t\t- .kicad_mod\t: kicad module" << endl
-				<< "\t\t- .lht\t\t: pcb-rnd layout" << endl;
+				<< "\t\t- .lht\t\t: pcb-rnd layout" << endl
+				<< "\t\t- .m\t\t: openems octave script" << endl;
 			exit(0);
 			}
 		if(string(argv[i])=="--version") {
@@ -86,7 +87,8 @@ int main(int argc, char* argv[]) {
 			i++;
 			if(string(argv[i])==".kicad_pcb"
 			|| string(argv[i])==".kicad_mod"
-			|| string(argv[i])==".lht") {
+			|| string(argv[i])==".lht"
+			|| string(argv[i])==".m") {
 				out_format=string(argv[i]);
 			} else {
 				log_err << "ERROR : Invalid output format : " << argv[i] << "\n";

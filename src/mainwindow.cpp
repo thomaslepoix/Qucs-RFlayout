@@ -31,6 +31,7 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 		ui->cb_format->addItem(tr(".kicad_pcb"));
 		ui->cb_format->addItem(tr(".kicad_mod"));
 		ui->cb_format->addItem(tr(".lht"));
+		ui->cb_format->addItem(tr(".m"));
 		ui->cb_format->setCurrentIndex(ui->cb_format->findText(out_format, Qt::MatchExactly));
 		}
 	
