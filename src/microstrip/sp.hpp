@@ -23,9 +23,9 @@
 class Sp final : public Element {
 private :
 	std::string const m_descriptor="s_parameter_simulation";
+	std::string m_simtype;
 	long double m_fstart;
 	long double m_fstop;
-	std::string m_simtype;
 	unsigned long m_n;
 public :
 	Sp(std::string _label,
