@@ -18,6 +18,7 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
+#include <string>
 #include <sstream>
 #include <iostream>
 
@@ -33,7 +34,7 @@ private:
 	func f;
 
 	template<typename T>
-	friend logger& operator<<(logger& log, T& in);
+	friend logger& operator<<(logger& log, T const& in);
 
 	void func_cli(std::stringstream& in);
 	void func_gui(std::stringstream& in);
@@ -49,7 +50,7 @@ public:
 extern logger log_err;
 
 template<typename T>
-logger& operator<<(logger& log, T& in) {
+logger& operator<<(logger& log, T const& in) {
 	std::stringstream ss;
 	ss << in;
 	log.print(ss);
