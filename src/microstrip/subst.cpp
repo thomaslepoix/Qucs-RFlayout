@@ -76,6 +76,10 @@ long double Subst::getD(void) {
 	return(m_d);
 	}
 
+long double Subst::getMargin(void) {
+	return(3*m_h);
+	}
+
 int Subst::getNpoint(void) {
 	return(m_npoint);
 	}
@@ -109,5 +113,9 @@ int Subst::setP(void) {
 	tab_p[2][Y]=-m_w/2;
 	tab_p[3][X]=-m_l/2;
 	tab_p[3][Y]=-m_w/2;
+	extrem_pos[XMIN]=getP(0, X, R, ABS);
+	extrem_pos[XMAX]=getP(1, X, R, ABS);
+	extrem_pos[YMIN]=getP(2, Y, R, ABS);
+	extrem_pos[YMAX]=getP(0, Y, R, ABS);
 	return(0);
 	}

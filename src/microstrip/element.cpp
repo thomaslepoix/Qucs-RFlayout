@@ -171,6 +171,10 @@ long double Element::getRho(void) {
 	return(0);
 	}
 
+long double Element::getMargin(void) {
+	return(0);
+	}
+
 unsigned long Element::getN(void) {
 	return(0);
 	}

@@ -83,6 +83,7 @@ public:
 	virtual long double getT(void);
 	virtual long double getTand(void);
 	virtual long double getRho(void);
+	virtual long double getMargin(void);
 	virtual unsigned long getN(void);
 	virtual short getAlpha(void);
 	virtual std::string getSimtype(void);

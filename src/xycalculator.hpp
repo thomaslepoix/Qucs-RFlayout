@@ -19,30 +19,57 @@
 #define XYCALCULATOR_HPP
 
 #include <iostream>
-#include <stack>
-#include <vector>
-#include <memory>
 #include <array>
+#include <memory>
+#include <stack>
+#include <utility>
+#include <vector>
 
 #include "logger.hpp"
 #include "microstrip/microstrip.hpp"
 
+class Block {
+public:
+	std::vector<std::shared_ptr<Element>> elements;
+	std::shared_ptr<Element> subst;
+	std::array<long double, 4> extrem_pos;
+	long double margin=0.0;
+
+	Block(void);
+	void shift(long double x, long double y);
+	void set_extrem_pos(void);
+	void print_extrem_pos(void);
+	void print(void);
+};
+
 class XyCalculator {
 private:
+
 	std::vector<std::shared_ptr<Element>>& tab_all;
+	std::vector<std::shared_ptr<Block>> all_blocks;
 	std::array<long double, 4>& extrem_pos;
 
-	int tab_remove(std::vector<std::shared_ptr<Element>>& tab_undone, std::shared_ptr<Element> const& current);
-	bool purgefind(std::shared_ptr<Element> const& current, std::string const _net);
-	int purgenets(void);
-	bool checkonenet(std::string const _net);
+	// Main functions
 	int checkintersection(void);
-	int activenets(std::shared_ptr<Element> const& _elem);
-	int netmin(std::shared_ptr<Element> const& _elem);
+	int place_elements(void);
+	int place_blocks(void);
+
+	// Toolbox functions
+	void sort_blocks(std::vector<std::shared_ptr<Block>> blocks, std::vector<std::shared_ptr<Element>> substs);
+	int add_to_block(std::shared_ptr<Block>& block, std::shared_ptr<Element> const& element);
+	int tab_remove(std::vector<std::shared_ptr<Element>>& elements, std::shared_ptr<Element> const& element);
+	bool purgefind(std::shared_ptr<Element> const& element, std::string const net);
+	int purgenets(void);
+	int purgeblocks(void);
+	bool checkonenet(std::string const net);
+	int activenets(std::shared_ptr<Element> const& element);
+	int netmin(std::shared_ptr<Element> const& element);
 	int findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
 
 public:
 	XyCalculator(std::vector<std::shared_ptr<Element>>& _tab_all, std::array<long double, 4>& _extrem_pos);
+
+	// Interface functions
 	int run(void);
 	void clear(void);
 };

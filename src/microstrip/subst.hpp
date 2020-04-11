@@ -18,6 +18,8 @@
 #ifndef SUBST_HPP
 #define SUBST_HPP
 
+#include <array>
+
 #include "element.hpp"
 
 class Subst final : public Element {
@@ -34,6 +36,7 @@ private :
 	static const int m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
+	std::array<long double, 4> extrem_pos;
 	Subst(std::string _label,
 			std::string _type,
 			bool _mirrorx,
@@ -54,6 +57,7 @@ public :
 	long double getTand(void) override;
 	long double getRho(void) override;
 	long double getD(void) override;
+	long double getMargin(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
 	int setW(long double _w) override;

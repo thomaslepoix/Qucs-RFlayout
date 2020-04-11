@@ -18,6 +18,65 @@
 #include "xycalculator.hpp"
 using namespace std;
 
+Block::Block(void) {
+	elements=std::vector<std::shared_ptr<Element>>();
+	subst=std::shared_ptr<Element>();
+	extrem_pos={0.0, 0.0, 0.0, 0.0};
+	}
+
+void Block::set_extrem_pos(void) {
+	//reset extrem_pos to a random existant point
+	for(std::shared_ptr<Element> it : elements) {
+		if(it->getNpoint()) {
+			extrem_pos[XMIN]=it->getP(1, X, R, ABS);
+			extrem_pos[XMAX]=it->getP(1, X, R, ABS);
+			extrem_pos[YMIN]=it->getP(1, Y, R, ABS);
+			extrem_pos[YMAX]=it->getP(1, Y, R, ABS);
+			break;
+			}
+		}
+	//set extrem_pos
+	for(std::shared_ptr<Element> it : elements) {
+		it->setP();
+		for(int i=0;i<it->getNpoint();i++) {
+			if(it->getP(i, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(i, X, R, ABS);
+			if(it->getP(i, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(i, X, R, ABS);
+			if(it->getP(i, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(i, Y, R, ABS);
+			if(it->getP(i, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(i, Y, R, ABS);
+			}
+		}
+	}
+
+void Block::shift(long double x, long double y) {
+	for(shared_ptr<Element> it : elements) {
+		it->setX(it->getX()+x);
+		it->setY(it->getY()+y);
+		}
+	set_extrem_pos();
+	}
+
+void Block::print_extrem_pos(void) {
+	cout << "\tXmin : " << extrem_pos[XMIN] << "\n"
+	        "\tXmax : " << extrem_pos[XMAX] << "\n"
+	        "\tYmin : " << extrem_pos[YMIN] << "\n"
+	        "\tYmax : " << extrem_pos[YMAX] << "\n";
+	}
+
+void Block::print(void) {
+	cout << "Elements :" << endl;
+	for(shared_ptr<Element> it : elements) {
+		cout << "\t" << it->getLabel() << "\t" << it->getType() << endl;
+		}
+
+	cout << "Substrate :" << endl;
+	if(subst)
+		cout << "\t" << subst->getLabel() << endl;
+
+	cout << "Extrem positions :\n";
+	print_extrem_pos();
+	cout << endl;
+	}
+
 XyCalculator::XyCalculator(vector<shared_ptr<Element>>& _tab_all, array<long double, 4>& _extrem_pos) :
 	tab_all(_tab_all),
 	extrem_pos(_extrem_pos)
@@ -26,9 +85,25 @@ XyCalculator::XyCalculator(vector<shared_ptr<Element>>& _tab_all, array<long dou
 void XyCalculator::clear(void) {
 	for(unsigned char i=0;i<4;i++)
 		extrem_pos[i]=0.0;
+	all_blocks.clear();
 	}
 
 int XyCalculator::run(void) {
+
+//check geometric coherence of the schematic
+	if(checkintersection()) {
+		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
+		           "\tPlease use a component like a tee or a cross to avoid this.\n";
+		return(3);
+		}
+
+	place_elements();
+	place_blocks();
+
+	return(0);
+	}
+
+int XyCalculator::place_elements(void) {
 
 //variables
 	vector<shared_ptr<Element>> tab_undone=tab_all;
@@ -43,13 +118,6 @@ int XyCalculator::run(void) {
 	int nnets;
 	int current_net=0;
 
-//check geometric coherence of the schematic
-	if(checkintersection()) {
-		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
-		           "\tPlease use a component like a tee or a cross to avoid this.\n";
-		return(3);
-		}
-
 //delete unconnected nets
 	purgenets();
 
@@ -58,6 +126,8 @@ int XyCalculator::run(void) {
 	current->setY(0);
 	cout << endl << "Finding positions..." << endl << endl;
 	cout << "Current label : " << current->getLabel() << endl;
+	all_blocks.push_back(shared_ptr<Block>(new Block()));
+	add_to_block(all_blocks.back(), current);
 
 //algorithm : find elements potitions
 	while(tab_undone.size()) {
@@ -68,6 +138,7 @@ int XyCalculator::run(void) {
 			tab_remove(tab_undone, current);
 			if(buffer.empty()==false){
 				current=buffer.top();
+				add_to_block(all_blocks.back(), current);
 				buffer.pop();
 				cout << "End of a branch : Next from buffer" << endl;
 				cout << endl;
@@ -75,16 +146,18 @@ int XyCalculator::run(void) {
 			} else {
 				if(tab_undone.size()) {
 					current=tab_undone[0];
+					all_blocks.push_back(shared_ptr<Block>(new Block()));
+					add_to_block(all_blocks.back(), current);
 					cout << "End of a block : Next from undone elements" << endl;
 					cout << endl;
 					cout << "Current label : " << current->getLabel() << endl;
 					}
 				if(current->getX()!=current->getX() || current->getY()!=current->getY()) {
-					//set a random position
-					current->setX(((long double)(tab_all.size()-tab_undone.size()))*-3);
-					current->setY(((long double)(tab_all.size()-tab_undone.size()))*-3);
-					cout << "Random X : " << current->getX() << endl;
-					cout << "Random Y : " << current->getY() << endl;
+					//reset position
+					current->setX(0);
+					current->setY(0);
+					cout << "Reset X : " << current->getX() << endl;
+					cout << "Reset Y : " << current->getY() << endl;
 					}
 				}
 		} else {
@@ -100,6 +173,7 @@ int XyCalculator::run(void) {
 			cout << "Next label : " << next->getLabel() << endl;
 			next->prev=current;
 			current=next;
+			add_to_block(all_blocks.back(), current);
 			next=nullptr;
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
@@ -118,97 +192,246 @@ int XyCalculator::run(void) {
 		}
 	cout << endl << "Finding positons... DONE" << endl;
 
-
-
-//find points positions & extrems points positions
-	for(shared_ptr<Element> it : tab_all) {
-		if(it->getType() != "SUBST") {
-			it->setP();
-			for(int u=0;u<it->getNpoint();u++) {
-				if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
-				if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
-				if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
-				if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
-				}
-			}
-		}
-
-	cout << endl;
-	cout << "Extrem positions :" << endl;
-	cout << "Xmin : " << extrem_pos[XMIN] << endl;
-	cout << "Xmax : " << extrem_pos[XMAX] << endl;
-	cout << "Ymin : " << extrem_pos[YMIN] << endl;
-	cout << "Ymax : " << extrem_pos[YMAX] << endl;
-
-//translate shapes in positive quarter
-	for(shared_ptr<Element> it : tab_all) {
-		if(it->getType() != "SUBST") {
-			it->setX(it->getX()-extrem_pos[XMIN]+1);
-			it->setY(it->getY()-extrem_pos[YMIN]+1);
-			it->setP();
-			}
-		}
-
-//reset extrem_pos
-	for(unsigned char i=0;i<4;i++)
-		extrem_pos[i]=0.0;
-	for(shared_ptr<Element> it : tab_all) {
-		if(it->getType() != "SUBST") {
-			for(int u=0;u<it->getNpoint();u++) {
-				if(it->getP(u, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(u, X, R, ABS);
-				if(it->getP(u, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(u, X, R, ABS);
-				if(it->getP(u, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(u, Y, R, ABS);
-				if(it->getP(u, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(u, Y, R, ABS);
-				}
-			}
-		}
-
-	cout << "Translated extrem positions :" << endl;
-	cout << "Xmin : " << extrem_pos[XMIN] << endl;
-	cout << "Xmax : " << extrem_pos[XMAX] << endl;
-	cout << "Ymin : " << extrem_pos[YMIN] << endl;
-	cout << "Ymax : " << extrem_pos[YMAX] << endl;
-
-//provisoire: set substrate points
-	for(shared_ptr<Element> it : tab_all) {
-		if(it->getType() == "SUBST") {
-			it->setW(extrem_pos[XMAX]-extrem_pos[XMIN]);
-			it->setL(extrem_pos[YMAX]-extrem_pos[YMIN]);
-			it->setX(extrem_pos[XMIN]+it->getW()/2);
-			it->setY(extrem_pos[YMIN]+it->getL()/2);
-//			cout << "it->getW() : " << it->getW() << endl;
-//			cout << "it->getL() : " << it->getL() << endl;
-//			cout << "it->getX() : " << it->getX() << endl;
-//			cout << "it->getY() : " << it->getY() << endl;
-			it->setP();
-			}
-		}
-
 //delete objects inner pointers
 	for(shared_ptr<Element> it : tab_all) {
 		it->prev=nullptr;
 		}
+
 	return(0);
 	}
 
-int XyCalculator::tab_remove(vector<shared_ptr<Element>>& tab_undone, shared_ptr<Element> const& current) {
-	for(unsigned int i=0;i<tab_undone.size();i++) {
-		if(tab_undone[i]==current) {
-			tab_undone.erase(tab_undone.begin()+i);
+int XyCalculator::place_blocks(void) {
+//place element blocks regarding each other
+
+	purgeblocks();
+
+//store all substrates
+	vector<shared_ptr<Element>> tab_subst;
+	for(shared_ptr<Element> it : tab_all) {
+		if(it->getType()=="SUBST") {
+			tab_subst.push_back(it);
+			}
+		}
+	if(!tab_subst.size()) {
+		//oems error no subst in sch
+		log_err << "3D ERROR : No substrate in the schematic.\n";
+		}
+
+//check block / subst coherence
+	for(shared_ptr<Block> block : all_blocks) {
+		vector<pair<string, int>> subst_in_block;
+		for(shared_ptr<Element> it : block->elements) {
+		//check if each element.subst field is valid
+/*useless?			if(it->getSubst()=="") {
+				//oems warning subst not set : it->getLabel()
+				log_err << "3D ERROR : Substrate not set in : " << it->getLabel() << "\n";
+				}*/
+			bool subst_exist=false;
+			for(shared_ptr<Element> subst : tab_subst) {
+				if(it->getSubst()==subst->getLabel()) {
+					subst_exist=true;
+					}
+				}
+			if(!subst_exist) {
+				//oems error invalid subst in sch : it->getLabel()
+				log_err << "3D ERROR : Invalid substrate \"" << it->getSubst()
+				        << "\" in : " << it->getLabel() << "\n";
+				}
+
+		//count each different subst occurences in a block
+			bool subst_registered=false;
+			for(pair<string, int> subst : subst_in_block) {
+				if(subst.first==it->getSubst()) {
+					subst.second++;
+					subst_registered=true;
+					break;
+					}
+				}
+			if(!subst_registered) {
+				subst_in_block.push_back(pair<string, int>(it->getSubst(), 1));
+				}
+			}
+
+	//treat different occurences configurations
+		if(subst_in_block.size()==0
+		||(subst_in_block.size()==1
+		&& subst_in_block[0].first=="")) {
+			//oems error no subst in a block
+			log_err << "3D ERROR : No substrate used in a block\n";
+		} else if(subst_in_block.size()>1) {
+			//oems error multiple subst used in a block
+			log_err << "3D ERROR : Too many substrates used in a block\n";
+		} else if(subst_in_block.size()==1) {
+			for(shared_ptr<Element> subst : tab_subst) {
+				if(subst->getLabel()==subst_in_block[0].first) {
+					block->subst=subst;
+					}
+				}
+			}
+		}
+
+	sort_blocks(all_blocks, tab_subst); //sort by subst
+
+//block placement
+	shared_ptr<Block> prev=nullptr;
+	axis_t vector=Y;
+	for(shared_ptr<Block> block : all_blocks) {
+		block->set_extrem_pos();
+		cout << endl;
+		cout << "Block :" << endl;
+		block->print();
+		if(block->subst) block->margin=block->subst->getMargin();
+		if(prev) {
+			long double shift_x;
+			long double shift_y;
+			cout << "Previous extrem positions :" << endl;
+			prev->print_extrem_pos();
+			bool is_new_subst=false;
+			if(block->subst!=prev->subst) {
+				is_new_subst=true;
+				cout << "Different substrate : margins doubled" << endl;
+				}
+			if(vector==X) {
+				cout << "Shift vector : X" << endl;
+				shift_x=prev->extrem_pos[XMAX]-block->extrem_pos[XMIN];
+				shift_y=prev->extrem_pos[YMIN]-block->extrem_pos[YMIN];
+				if(is_new_subst) shift_x+=prev->margin+block->margin;
+				shift_x+=prev->margin+block->margin;
+			} else {
+				cout << "Shift vector : Y" << endl;
+				shift_y=prev->extrem_pos[YMAX]-block->extrem_pos[YMIN];
+				shift_x=prev->extrem_pos[XMIN]-block->extrem_pos[XMIN];
+				if(is_new_subst) shift_y+=prev->margin+block->margin;
+				shift_y+=prev->margin+block->margin;
+				}
+			//shift=set_margin(prev, block, data);
+			cout << "Xshift : " << shift_x << endl;
+			cout << "Yshift : " << shift_y << endl;
+			block->shift(shift_x, shift_y);
+			cout << "Shifted extrem positions :" << endl;
+			block->print_extrem_pos();
+			}
+
+		prev=block;
+		if(block->extrem_pos[XMAX]-block->extrem_pos[XMIN]
+		>= block->extrem_pos[YMAX]-block->extrem_pos[YMIN]) {
+			vector=Y;
+		} else {
+			vector=X;
+			}
+		}
+
+//subst placement
+	for(shared_ptr<Element> subst : tab_subst) {
+		array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
+		for(shared_ptr<Block> block : all_blocks) {
+			if(block->subst==subst) {
+				extrem_pos=block->extrem_pos;
+				break;
+				}
+			this->extrem_pos=block->extrem_pos;
+			}
+		for(shared_ptr<Block> block : all_blocks) {
+			if(block->subst==subst) {
+				if(block->extrem_pos[XMIN]<extrem_pos[XMIN]) extrem_pos[XMIN]=block->extrem_pos[XMIN];
+				if(block->extrem_pos[XMAX]>extrem_pos[XMAX]) extrem_pos[XMAX]=block->extrem_pos[XMAX];
+				if(block->extrem_pos[YMIN]<extrem_pos[YMIN]) extrem_pos[YMIN]=block->extrem_pos[YMIN];
+				if(block->extrem_pos[YMAX]>extrem_pos[YMAX]) extrem_pos[YMAX]=block->extrem_pos[YMAX];
+				}
+			}
+		subst->setL(extrem_pos[XMAX]-extrem_pos[XMIN]+2*subst->getMargin());
+		subst->setW(extrem_pos[YMAX]-extrem_pos[YMIN]+2*subst->getMargin());
+		subst->setX((extrem_pos[XMAX]+extrem_pos[XMIN])/2);
+		subst->setY((extrem_pos[YMAX]+extrem_pos[YMIN])/2);
+		subst->setP();
+		}
+
+//set global extrem_pos
+	for(shared_ptr<Block> block : all_blocks) {
+		if(block->extrem_pos[XMIN]-block->margin<extrem_pos[XMIN]) extrem_pos[XMIN]=block->extrem_pos[XMIN]-block->margin;
+		if(block->extrem_pos[XMAX]+block->margin>extrem_pos[XMAX]) extrem_pos[XMAX]=block->extrem_pos[XMAX]+block->margin;
+		if(block->extrem_pos[YMIN]-block->margin<extrem_pos[YMIN]) extrem_pos[YMIN]=block->extrem_pos[YMIN]-block->margin;
+		if(block->extrem_pos[YMAX]+block->margin>extrem_pos[YMAX]) extrem_pos[YMAX]=block->extrem_pos[YMAX]+block->margin;
+		}
+
+	for(shared_ptr<Element> it : tab_subst) {
+		Subst *subst=dynamic_cast<Subst*>(it.get());
+		if(subst->extrem_pos[XMIN]-subst->getMargin()<extrem_pos[XMIN]) extrem_pos[XMIN]=subst->extrem_pos[XMIN]-subst->getMargin();
+		if(subst->extrem_pos[XMAX]+subst->getMargin()>extrem_pos[XMAX]) extrem_pos[XMAX]=subst->extrem_pos[XMAX]+subst->getMargin();
+		if(subst->extrem_pos[YMIN]-subst->getMargin()<extrem_pos[YMIN]) extrem_pos[YMIN]=subst->extrem_pos[YMIN]-subst->getMargin();
+		if(subst->extrem_pos[YMAX]+subst->getMargin()>extrem_pos[YMAX]) extrem_pos[YMAX]=subst->extrem_pos[YMAX]+subst->getMargin();
+		}
+
+//translate to positive quarter
+	for(shared_ptr<Block> block : all_blocks) {
+		block->shift(-extrem_pos[XMIN], -extrem_pos[YMIN]);
+		}
+	for(shared_ptr<Element> subst : tab_subst) {
+		subst->setX(subst->getX()-extrem_pos[XMIN]);
+		subst->setY(subst->getY()-extrem_pos[YMIN]);
+		subst->setP();
+		}
+	//maximums first
+	extrem_pos[XMAX]-=extrem_pos[XMIN];
+	extrem_pos[XMIN]-=extrem_pos[XMIN];
+	extrem_pos[YMAX]-=extrem_pos[YMIN];
+	extrem_pos[YMIN]-=extrem_pos[YMIN];
+
+	return(0);
+	}
+
+void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_ptr<Element>> substs) {
+	vector<shared_ptr<Block>> tmp_blocks;
+	for(shared_ptr<Element> subst : substs) {
+		for(shared_ptr<Block> block : blocks) {
+			if(block->subst==subst) {
+				tmp_blocks.push_back(block);
+				}
+			}
+		}
+	for(shared_ptr<Block> block : blocks) {
+		if(block->subst==nullptr) {
+			tmp_blocks.push_back(block);
+			}
+		}
+	blocks.swap(tmp_blocks);
+	}
+
+int XyCalculator::add_to_block(shared_ptr<Block>& block, shared_ptr<Element> const& element) {
+//add geometric element if not already present
+	if(element->getType()=="Pac"
+	|| element->getType()=="Eqn"
+	|| element->getType()=="SUBST"
+	|| element->getType()==".SP") {
+		return(1);
+		}
+	for(shared_ptr<Element> it : block->elements) {
+		if(it==element) {
+			return(1);
+			}
+		}
+	block->elements.push_back(element);
+	return(0);
+	}
+
+int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<Element> const& element) {
+	for(unsigned int i=0;i<elements.size();i++) {
+		if(elements[i]==element) {
+			elements.erase(elements.begin()+i);
 			break;
 			}
 		}
 	return(0);
 	}
 
-bool XyCalculator::purgefind(shared_ptr<Element> const& current, string const _net) {
+bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const net) {
 //check if another element with this net exists
 	for(shared_ptr<Element> it : tab_all) {
-		if(it!=current) {
-			if(it->getNet1()==_net) return(1);
-			if(it->getNet2()==_net) return(1);
-			if(it->getNet3()==_net) return(1);
-			if(it->getNet4()==_net) return(1);
+		if(it!=element) {
+			if(it->getNet1()==net) return(1);
+			if(it->getNet2()==net) return(1);
+			if(it->getNet3()==net) return(1);
+			if(it->getNet4()==net) return(1);
 			}
 		}
 	return(0);
@@ -225,14 +448,25 @@ int XyCalculator::purgenets(void) {
 	return(0);
 	}
 
-bool XyCalculator::checkonenet(string const _net) {
+int XyCalculator::purgeblocks(void) {
+//delete blocks with only a non geometric element inside
+	for(unsigned int i=0;i<all_blocks.size();i++) {
+		if(all_blocks[i]->elements.size()==0) {
+			all_blocks.erase(all_blocks.begin()+i);
+			i--;
+			}
+		}
+	return(0);
+	}
+
+bool XyCalculator::checkonenet(string const net) {
 	unsigned int count=0;
-	if(_net!=""){
+	if(net!=""){
 		for(shared_ptr<Element> it : tab_all) {
-			if(it->getNet1()==_net) count++;
-			if(it->getNet2()==_net) count++;
-			if(it->getNet3()==_net) count++;
-			if(it->getNet4()==_net) count++;
+			if(it->getNet1()==net) count++;
+			if(it->getNet2()==net) count++;
+			if(it->getNet3()==net) count++;
+			if(it->getNet4()==net) count++;
 			}
 		}
 	return(count>2 ? 1 : 0);
@@ -251,20 +485,20 @@ int XyCalculator::checkintersection(void) {
 	return(0);
 	}
 
-int XyCalculator::activenets(shared_ptr<Element> const& _elem) {
+int XyCalculator::activenets(shared_ptr<Element> const& element) {
 	int nlinks=0;
-	if(_elem->getNet1()!="") nlinks++;
-	if(_elem->getNet2()!="") nlinks++;
-	if(_elem->getNet3()!="") nlinks++;
-	if(_elem->getNet4()!="") nlinks++;
+	if(element->getNet1()!="") nlinks++;
+	if(element->getNet2()!="") nlinks++;
+	if(element->getNet3()!="") nlinks++;
+	if(element->getNet4()!="") nlinks++;
 	return(nlinks);
 	}
 
-int XyCalculator::netmin(shared_ptr<Element> const& _elem) {
-	if(_elem->getNet1()!="") return(1);
-	if(_elem->getNet2()!="") return(2);
-	if(_elem->getNet3()!="") return(3);
-	if(_elem->getNet4()!="") return(4);
+int XyCalculator::netmin(shared_ptr<Element> const& element) {
+	if(element->getNet1()!="") return(1);
+	if(element->getNet2()!="") return(2);
+	if(element->getNet3()!="") return(3);
+	if(element->getNet4()!="") return(4);
 	return(0);
 	}
 
