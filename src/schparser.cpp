@@ -319,7 +319,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield20);
 						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tMetal roughness : " << D << endl;
-					tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, R, er, H, T, tand, rho, D)));
+					tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D)));
 				} else if(type=="MCORN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -671,4 +671,3 @@ string SchParser::mstub_shift(bool const xy, string const str, string const r) {
 	}
 
 #pragma GCC diagnostic pop
-
