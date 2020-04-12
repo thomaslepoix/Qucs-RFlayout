@@ -221,11 +221,9 @@ int XyCalculator::place_blocks(void) {
 	for(shared_ptr<Block> block : all_blocks) {
 		vector<pair<string, int>> subst_in_block;
 		for(shared_ptr<Element> it : block->elements) {
-		//check if each element.subst field is valid
-/*useless?			if(it->getSubst()=="") {
-				//oems warning subst not set : it->getLabel()
-				log_err << "3D ERROR : Substrate not set in : " << it->getLabel() << "\n";
-				}*/
+			if(it->getType()=="Pac") {
+				continue; //no subst field in Pac
+				}
 			bool subst_exist=false;
 			for(shared_ptr<Element> subst : tab_subst) {
 				if(it->getSubst()==subst->getLabel()) {
@@ -399,8 +397,7 @@ void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_p
 
 int XyCalculator::add_to_block(shared_ptr<Block>& block, shared_ptr<Element> const& element) {
 //add geometric element if not already present
-	if(element->getType()=="Pac"
-	|| element->getType()=="Eqn"
+	if(element->getType()=="Eqn"
 	|| element->getType()=="SUBST"
 	|| element->getType()==".SP") {
 		return(1);
