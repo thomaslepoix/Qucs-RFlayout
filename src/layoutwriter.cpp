@@ -45,12 +45,21 @@ int LayoutWriter::run(string* out_name) {
 	cout << "Input schematic : " << data.n_sch << endl;
 	cout << "Output layout : " << n_out << endl;
 	ofstream f_out(n_out.c_str());
+	if(f_out.fail()) {
+		log_err << "ERROR : Unable to write " << n_out << "\n";
+		return(1);
+		}
 
 //write
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(f_out);
 	if(data.out_format==".kicad_mod") write_kicad_mod(name, f_out);
 	if(data.out_format==".lht") write_lht(f_out);
 	if(out_name) *out_name=n_out; //success message to stdout in GUI mode
+
+	if(f_out.fail()) {
+		log_err << "ERROR : Error occured while writing " << n_out << "\n";
+		return(1);
+		}
 
 	return(0);
 	}
