@@ -26,22 +26,20 @@
 #include <cmath>
 #include <array>
 
+#include "data.hpp"
+#include "logger.hpp"
 #include "microstrip/microstrip.hpp"
 
 class LayoutWriter {
 private:
-	std::vector<std::shared_ptr<Element>> const& tab_all;
-	std::array<long double, 4> const& extrem_pos;
-	std::string const& n_sch;
-	std::string const& out_dir;
-	std::string const& out_format;
+	Data& data;
 
 	int write_kicad_pcb(std::ofstream& f_out);
 	int write_kicad_mod(std::string const& name, std::ofstream& f_out);
 	int write_lht(std::ofstream& f_out);
 
 public:
-	LayoutWriter(std::vector<std::shared_ptr<Element>> const& _tab_all, std::array<long double, 4> const& _extrem_pos, std::string const& _n_sch, std::string const& _out_dir, std::string const& _out_format);
+	LayoutWriter(Data& _data);
 	int run(std::string* out_name=nullptr);
 };
 

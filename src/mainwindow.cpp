@@ -18,13 +18,14 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
+MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	converter(_n_sch.toStdString(), _out_dir.toStdString(), _out_format.toStdString()),
-	n_sch(_n_sch),
-	out_dir(_out_dir),
-	out_format(_out_format) {
+	converter(_data),
+	data(_data),
+	n_sch(QString::fromStdString(_data.n_sch)),
+	out_dir(QString::fromStdString(_data.out_dir)),
+	out_format(QString::fromStdString(_data.out_format)) {
 		ui->setupUi(this);
 		ui->le_path_in->setText(n_sch);
 		ui->le_path_out->setText(out_dir);
@@ -32,7 +33,7 @@ MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QW
 		ui->cb_format->addItem(tr(".kicad_mod"));
 		ui->cb_format->addItem(tr(".lht"));
 		ui->cb_format->addItem(tr(".m"));
-		ui->cb_format->setCurrentIndex(ui->cb_format->findText(_out_format, Qt::MatchExactly));
+		ui->cb_format->setCurrentIndex(ui->cb_format->findText(QString::fromStdString(_data.out_format), Qt::MatchExactly));
 		}
 	
 MainWindow::~MainWindow() {

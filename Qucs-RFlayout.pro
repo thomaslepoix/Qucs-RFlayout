@@ -75,7 +75,8 @@ HEADERS += \
 	$$PWD/src/converter.hpp \
 	$$PWD/src/mainwindow.hpp \
 	$$PWD/src/preview.hpp \
-	$$PWD/src/logger.hpp
+	$$PWD/src/logger.hpp \
+	$$PWD/src/data.hpp
 
 FORMS += \
 	$$PWD/src/mainwindow.ui

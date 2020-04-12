@@ -22,6 +22,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 
+#include "data.hpp"
 #include "logger.hpp"
 #include "converter.hpp"
 #include "preview.hpp"
@@ -35,7 +36,7 @@ class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent=0);
+	explicit MainWindow(Data& _data, QWidget* parent=0);
 	~MainWindow();
 	friend void operator<<(MainWindow& obj, std::stringstream& in);
 
@@ -51,12 +52,13 @@ private slots:
 	void on_pb_write_clicked(void);
 
 protected:
-	void keyPressEvent(QKeyEvent *event);
-	void keyReleaseEvent(QKeyEvent *event);
+	void keyPressEvent(QKeyEvent* event);
+	void keyReleaseEvent(QKeyEvent* event);
 
 private:
-	Ui::MainWindow *ui;
+	Ui::MainWindow* ui;
 	Converter converter;
+	Data& data;
 
 	QString n_sch;
 	QString out_dir;

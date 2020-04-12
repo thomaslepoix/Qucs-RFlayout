@@ -127,6 +127,7 @@ set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/mainwindow.hpp"
 	"${CMAKE_SOURCE_DIR}/src/preview.hpp"
 	"${CMAKE_SOURCE_DIR}/src/logger.hpp"
+	"${CMAKE_SOURCE_DIR}/src/data.hpp"
 	)
 
 ##########################################################################TARGET

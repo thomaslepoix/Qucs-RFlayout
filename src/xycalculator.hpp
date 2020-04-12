@@ -25,6 +25,7 @@
 #include <utility>
 #include <vector>
 
+#include "data.hpp"
 #include "logger.hpp"
 #include "microstrip/microstrip.hpp"
 
@@ -36,7 +37,7 @@ public:
 	long double margin=0.0;
 
 	Block(void);
-	void shift(long double x, long double y);
+	void shift(long double const x, long double const y);
 	void set_extrem_pos(void);
 	void print_extrem_pos(void);
 	void print(void);
@@ -45,9 +46,8 @@ public:
 class XyCalculator {
 private:
 
-	std::vector<std::shared_ptr<Element>>& tab_all;
 	std::vector<std::shared_ptr<Block>> all_blocks;
-	std::array<long double, 4>& extrem_pos;
+	Data& data;
 
 	// Main functions
 	int checkintersection(void);
@@ -67,7 +67,7 @@ private:
 	int findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
 
 public:
-	XyCalculator(std::vector<std::shared_ptr<Element>>& _tab_all, std::array<long double, 4>& _extrem_pos);
+	XyCalculator(Data& _data);
 
 	// Interface functions
 	int run(void);

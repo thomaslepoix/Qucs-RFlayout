@@ -19,9 +19,8 @@
 #include "schparser.hpp"
 using namespace std;
 
-SchParser::SchParser(vector<shared_ptr<Element>>& _tab_all, string const& _n_sch) :
-	tab_all(_tab_all),
-	n_sch(_n_sch)
+SchParser::SchParser(Data& _data) :
+	data(_data)
 	{}
 
 void SchParser::clear(void) {
@@ -107,12 +106,12 @@ int SchParser::run(void) {
 
 
 //open schematic
-	cout << endl << "Opening " << n_sch << "... ";
-	ifstream f_sch(n_sch.c_str());
+	cout << endl << "Opening " << data.n_sch << "... ";
+	ifstream f_sch(data.n_sch.c_str());
 	if(f_sch) {
 		cout << "OK" << endl;
 	} else {
-		log_err << "ERROR : Cannot open " << n_sch << "\n";
+		log_err << "ERROR : Cannot open " << data.n_sch << "\n";
 		return(1);
 		}
 
@@ -120,15 +119,15 @@ int SchParser::run(void) {
 	getline(f_sch, line);
 	regex_search(line, match, r_head);
 	if(match.str(1)=="Qucs") {
-		n_tmp=n_sch;
+		n_tmp=data.n_sch;
 	} else if(match.str(1)=="QucsStudio") {
 		// QucsStudio does not provide command line to produce netlist
 		// so, as formats are mostly compatible, let's try to replace the
 		// header and use Qucs instead
-		log_err << "WARNING : " << n_sch << " is a QucsStudio schematic, compatibility is not guaranteed\n";
+		log_err << "WARNING : " << data.n_sch << " is a QucsStudio schematic, compatibility is not guaranteed\n";
 
 		cout << "Conversion to Qucs format... ";
-		n_tmp=regex_replace(n_sch, r_sch, "\.tmp\.sch");
+		n_tmp=regex_replace(data.n_sch, r_sch, "\.tmp\.sch");
 		ofstream f_tmp(n_tmp.c_str());
 		if(!f_tmp) {
 			log_err << "ERROR : Cannot open " << n_tmp << "\n";
@@ -160,18 +159,18 @@ int SchParser::run(void) {
 			return(1);
 			}
 	} else {
-		log_err << "ERROR : " << n_sch << " appears to be neither a Qucs nor a QucsStudio schematic\n";
+		log_err << "ERROR : " << data.n_sch << " appears to be neither a Qucs nor a QucsStudio schematic\n";
 		return(1);
 		}
 
 //generate netlist
 	cout << endl;
-	if(regex_search(n_sch, r_sch)) {
-		n_net=regex_replace(n_sch, r_sch, "\.net");
-		cout << "n_sch : " << n_sch << endl;
+	if(regex_search(data.n_sch, r_sch)) {
+		n_net=regex_replace(data.n_sch, r_sch, "\.net");
+		cout << "n_sch : " << data.n_sch << endl;
 		cout << "n_net : " << n_net << endl;
 	} else {
-		log_err << "ERROR : Invalid input format : " << n_sch << "\n";
+		log_err << "ERROR : Invalid input format : " << data.n_sch << "\n";
 		return(1);
 		}
 
@@ -246,7 +245,7 @@ int SchParser::run(void) {
 					if(absent) unprintables.push_back(type);
 				} else if(type=="Eqn") {
 					//to be complete...
-					tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R)));
+					data.tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R)));
 				} else if(type=="Pac") {
 					//number
 						regex_search(line, match, r_quotedfield10);
@@ -264,7 +263,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield16);
 						F=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tFrequency : " << F << endl;
-					tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
+					data.tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
 				} else if(type==".SP") {
 					//is active
 						regex_search(line, match, r_field3);
@@ -289,7 +288,7 @@ int SchParser::run(void) {
 								regex_search(line, match, r_quotedfield16);
 								N=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStep number : " << N << endl;
-							tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, R, simtype, Fstart, Fstop, N)));
+							data.tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, R, simtype, Fstart, Fstop, N)));
 						} else { // "list" & "const"
 							log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
 							}
@@ -319,7 +318,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield20);
 						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tMetal roughness : " << D << endl;
-					tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D)));
+					data.tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D)));
 				} else if(type=="MCORN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -329,7 +328,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield12);
 						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, subst, W)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MCROSS") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -351,7 +350,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield18);
 						W4=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 4 : " << W4 << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, subst, W1, W2, W3, W4)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, mirrorx, R, subst, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -369,7 +368,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield16);
 						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tSpace : " << S << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, subst, W, L, S)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, mirrorx, R, subst, W, L, S)));
 				} else if(type=="MGAP") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -388,7 +387,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield16);
 						S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tSpace : " << S << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, subst, W1, W2, S)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, mirrorx, R, subst, W1, W2, S)));
 				} else if(type=="MMBEND") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -398,7 +397,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield12);
 						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, subst, W)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MLIN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -412,7 +411,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield14);
 						L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tLength : " << L << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, subst, W, L)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, mirrorx, R, subst, W, L)));
 				} else if(type=="MOPEN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -422,7 +421,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield12);
 						W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth : " << W << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, subst, W)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, mirrorx, R, subst, W)));
 				} else if(type=="MRSTUB") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -441,7 +440,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield16);
 						alpha=stoi(match.str(5));
 						cout << "\tAlpha : " << alpha << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, mirrorx, R, subst, ri, ro, alpha)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, mirrorx, R, subst, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -455,7 +454,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield14);
 						W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 2 : " << W2 << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, subst, W1, W2)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, mirrorx, R, subst, W1, W2)));
 				} else if(type=="MTEE") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -473,7 +472,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield16);
 						W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 3 : " << W3 << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, subst, W1, W2, W3)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, mirrorx, R, subst, W1, W2, W3)));
 				} else if(type=="MVIA") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -483,7 +482,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield12);
 						D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tDiameter : " << D << endl;
-					tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, mirrorx, R, subst, D)));
+					data.tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, mirrorx, R, subst, D)));
 					}
 				}
 			break;
@@ -507,7 +506,7 @@ int SchParser::run(void) {
 				label=match.str(2);
 				cout << "\tLabel : " << label << endl;
 			//find ielem->label
-				for(shared_ptr<Element> it : tab_all) {
+				for(shared_ptr<Element> it : data.tab_all) {
 					if(it->getLabel()==label) {
 						if(type=="Eqn"
 						|| type=="SUBST"){
@@ -581,7 +580,7 @@ int SchParser::run(void) {
 			}
 		}
 	cout << "Reading netlist... OK" << endl;
-	cout << "N elements : " << tab_all.size() << endl;
+	cout << "N elements : " << data.tab_all.size() << endl;
 	warn_unprintable();
 	return(0);
 	}

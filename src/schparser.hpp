@@ -24,6 +24,7 @@
 #include <vector>
 #include <memory>
 
+#include "data.hpp"
 #include "logger.hpp"
 #include "microstrip/microstrip.hpp"
 
@@ -33,8 +34,7 @@
 
 class SchParser {
 private:
-	std::vector<std::shared_ptr<Element>>& tab_all;
-	std::string const& n_sch;
+	Data& data;
 	std::vector<std::string> unprintables;
 
 	long double suffix(std::string const s_sci, std::string const s_eng, bool is_length);
@@ -43,7 +43,7 @@ private:
 	void warn_unprintable(void);
 
 public:
-	SchParser(std::vector<std::shared_ptr<Element>>& _tab_all, std::string const& _n_sch);
+	SchParser(Data& _data);
 	int run(void);
 	void clear(void);
 };

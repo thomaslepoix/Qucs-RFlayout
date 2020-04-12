@@ -24,6 +24,7 @@
 #include "logger.hpp"
 #include "mainwindow.hpp"
 #include "converter.hpp"
+#include "data.hpp"
 
 using namespace std;
 
@@ -45,9 +46,10 @@ int main(int argc, char* argv[]) {
 //variables
 	bool verbose=false;
 	bool gui=false;
-	string n_sch="";
-	string out_dir="";
-	string out_format=".kicad_pcb";
+	Data data;
+	data.n_sch="";
+	data.out_dir="";
+	data.out_format=".kicad_pcb";
 
 //argument parser
 	for(int i=0;i<argc;i++) {
@@ -77,11 +79,11 @@ int main(int argc, char* argv[]) {
 			}
 		if(string(argv[i])=="-i" && argv[i+1]) {
 			i++;
-			n_sch=string(argv[i]);
+			data.n_sch=string(argv[i]);
 			}
 		if(string(argv[i])=="-o" && argv[i+1]) {
 			i++;
-			out_dir=string(argv[i]);
+			data.out_dir=string(argv[i]);
 			}
 		if(string(argv[i])=="-f" && argv[i+1]) {
 			i++;
@@ -89,7 +91,7 @@ int main(int argc, char* argv[]) {
 			|| string(argv[i])==".kicad_mod"
 			|| string(argv[i])==".lht"
 			|| string(argv[i])==".m") {
-				out_format=string(argv[i]);
+				data.out_format=string(argv[i]);
 			} else {
 				log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
 				exit(1);
@@ -110,7 +112,7 @@ int main(int argc, char* argv[]) {
 	if(gui) {
 		log_err << "GUI mode\n";
 		QApplication a(argc, argv);
-		MainWindow w(QString::fromStdString(n_sch), QString::fromStdString(out_dir), QString::fromStdString(out_format));
+		MainWindow w(data);
 		log_err.obj=&w;
 		log_err.set_mode(gui);
 		w.show();
@@ -118,12 +120,12 @@ int main(int argc, char* argv[]) {
 
 	} else {
 
-		if(n_sch=="") {
+		if(data.n_sch=="") {
 			log_err << "ERROR : Need an input file\n";
 			exit(1);
 			}
 
-		Converter converter(n_sch, out_dir, out_format);
+		Converter converter(data);
 
 		int ret=converter.run();
 		if(ret) exit(ret);

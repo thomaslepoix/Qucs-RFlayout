@@ -22,27 +22,23 @@
 #include <memory>
 #include <vector>
 
+#include "data.hpp"
 #include "schparser.hpp"
 #include "xycalculator.hpp"
 #include "layoutwriter.hpp"
 
 class Converter {
 private:
+	Data& data;
 	SchParser parser;
 	XyCalculator xycalculator;
 	LayoutWriter layoutwriter;
 
-	std::vector<std::shared_ptr<Element>> tab_all;
-	std::array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
-	std::string n_sch;
-	std::string out_dir;
-	std::string out_format;
-
 public:
-	Converter(std::string _n_sch, std::string _out_dir, std::string _out_format);
+	Converter(Data& data);
 	~Converter(void);
 
-	void reset(std::string _n_sch, std::string _out_dir, std::string _out_format);
+	void reset(std::string n_sch, std::string out_dir, std::string out_format);
 	void clear(void);
 	int run(void);
 	int read(void);

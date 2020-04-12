@@ -5,10 +5,9 @@
 using namespace std;
 
 SCENARIO("", "[schparser]") {
-	vector<shared_ptr<Element>> tab_all;
-	string n_sch;
+	Data data;
 
-	SchParser parser(tab_all, n_sch);
+	SchParser parser(data);
 
 	GIVEN("check_void() must replace null strings by 0") {
 

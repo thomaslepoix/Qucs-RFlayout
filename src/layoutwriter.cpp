@@ -18,12 +18,8 @@
 #include "layoutwriter.hpp"
 using namespace std;
 
-LayoutWriter::LayoutWriter(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& _extrem_pos, string const& _n_sch, string const& _out_dir, string const& _out_format) :
-	tab_all(_tab_all),
-	extrem_pos(_extrem_pos),
-	n_sch(_n_sch),
-	out_dir(_out_dir),
-	out_format(_out_format)
+LayoutWriter::LayoutWriter(Data& _data) :
+	data(_data)
 	{}
 
 int LayoutWriter::run(string* out_name) {
@@ -38,23 +34,23 @@ int LayoutWriter::run(string* out_name) {
 	static regex const r_out("(^.*?)\\/?$");
 	static regex const r_empty("^$");
 	string n_out="";
-	string name=regex_replace(regex_replace(n_sch, r_basename, "$1"), r_sch, "");
+	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
 
 #pragma GCC diagnostic pop
 
 //generate output file
 	cout << endl;
-	n_out=regex_replace(out_dir, r_empty, "./");
-	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(n_sch, r_basename, "$1") + out_format;
-	cout << "Input schematic : " << n_sch << endl;
+	n_out=regex_replace(data.out_dir, r_empty, "./");
+	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1") + data.out_format;
+	cout << "Input schematic : " << data.n_sch << endl;
 	cout << "Output layout : " << n_out << endl;
 	ofstream f_out(n_out.c_str());
 
 //write
-	if(out_format==".kicad_pcb") write_kicad_pcb(f_out);
-	if(out_format==".kicad_mod") write_kicad_mod(name, f_out);
-	if(out_format==".lht") write_lht(f_out);
-	if(out_name) *out_name=n_out;
+	if(data.out_format==".kicad_pcb") write_kicad_pcb(f_out);
+	if(data.out_format==".kicad_mod") write_kicad_mod(name, f_out);
+	if(data.out_format==".lht") write_lht(f_out);
+	if(out_name) *out_name=n_out; //success message to stdout in GUI mode
 
 	return(0);
 	}
@@ -165,7 +161,7 @@ int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 	         "    (uvia_drill 0.1)\n"
 	         "  )\n\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : data.tab_all) {
 		type=it->getType();
 		if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -228,7 +224,7 @@ int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 	         "    (effects (font (size 1 1) (thickness 0.15)))\n"
 	         "  )\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : data.tab_all) {
 		type=it->getType();
 		if(type=="Eqn" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -309,8 +305,8 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         " ha:meta {\n"
 	         "   ha:size {\n"
 	         "    thermal_scale = 0.500000\n"
-	         "    x = " << extrem_pos[XMAX]+2 << "mm\n"
-	         "    y = " << extrem_pos[YMAX]+2 << "mm\n"
+	         "    x = " << data.extrem_pos[XMAX]+2 << "mm\n"
+	         "    y = " << data.extrem_pos[YMAX]+2 << "mm\n"
 	         "    isle_area_nm2 = 200000000.000000\n"
 	         "   }\n"
 	         "   ha:cursor {\n"
@@ -339,7 +335,7 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         "\n"
 	         "   li:objects {\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : data.tab_all) {
 		type=it->getType();
 		int n=0;
 		//if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
@@ -366,15 +362,15 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         "\n"
 	         "      li:objects {\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : data.tab_all) {
 		type=it->getType();
 		int n=0;
 		if(type=="MCORN"
-         ||type=="MCROSS"
-         ||type=="MMBEND"
-         ||type=="MLIN"
-         ||type=="MRSTUB"
-         ||type=="MTEE") {
+        || type=="MCROSS"
+        || type=="MMBEND"
+        || type=="MLIN"
+        || type=="MRSTUB"
+        || type=="MTEE") {
 			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
