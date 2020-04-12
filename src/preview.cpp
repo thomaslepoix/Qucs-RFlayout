@@ -15,6 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
+
 #include "preview.hpp"
 using namespace std;
 

@@ -15,6 +15,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream>
+#include <regex>
+
+#include "logger.hpp"
+#include "microstrip/element.hpp"
 #include "layoutwriter.hpp"
 using namespace std;
 

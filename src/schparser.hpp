@@ -18,15 +18,10 @@
 #ifndef SCHPARSER_HPP
 #define SCHPARSER_HPP
 
-#include <iostream>
 #include <fstream>
-#include <regex>
-#include <vector>
 #include <memory>
 
 #include "data.hpp"
-#include "logger.hpp"
-#include "microstrip/microstrip.hpp"
 
 #ifdef QRFL_UNITTEST
 #define private public

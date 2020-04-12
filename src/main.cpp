@@ -15,16 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream>
-#include <vector>
-#include <memory>
 #include <QApplication>
 
-#include "version.hpp"
+#include <iostream>
+
+#include "data.hpp"
+#include "converter.hpp"
 #include "logger.hpp"
 #include "mainwindow.hpp"
-#include "converter.hpp"
-#include "data.hpp"
+#include "version.hpp"
 
 using namespace std;
 

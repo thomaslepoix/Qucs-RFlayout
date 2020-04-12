@@ -18,15 +18,13 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
-#include <sstream>
 #include <QMainWindow>
-#include <QFileDialog>
+#include <QObject>
+
+#include <sstream>
 
 #include "data.hpp"
-#include "logger.hpp"
 #include "converter.hpp"
-#include "preview.hpp"
-#include "microstrip/microstrip.hpp"
 
 namespace Ui {
 class MainWindow;

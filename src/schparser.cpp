@@ -16,6 +16,12 @@
  ***************************************************************************/
 
 #include <QProcess>
+
+#include <iostream>
+#include <regex>
+
+#include "logger.hpp"
+#include "microstrip/microstrip.hpp"
 #include "schparser.hpp"
 using namespace std;
 

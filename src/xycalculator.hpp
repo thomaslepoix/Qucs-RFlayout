@@ -18,16 +18,12 @@
 #ifndef XYCALCULATOR_HPP
 #define XYCALCULATOR_HPP
 
-#include <iostream>
 #include <array>
 #include <memory>
-#include <stack>
-#include <utility>
 #include <vector>
 
 #include "data.hpp"
-#include "logger.hpp"
-#include "microstrip/microstrip.hpp"
+#include "microstrip/element.hpp"
 
 class Block {
 public:

@@ -18,17 +18,13 @@
 #ifndef PREVIEW_HPP
 #define PREVIEW_HPP
 
-#define _USE_MATH_DEFINES
-
 #include <QtWidgets>
 #include <QGLWidget>
 #include <QOpenGLFunctions_2_0>
-//#include <GL/glut.h>
 
 #include <array>
-#include <vector>
 #include <memory>
-#include <cmath>
+#include <vector>
 
 #include "microstrip/element.hpp"
 

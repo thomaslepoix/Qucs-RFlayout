@@ -18,9 +18,7 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-#include <string>
 #include <sstream>
-#include <iostream>
 
 // Prefer log_err instead of cerr
 // Do not use std::endl or std::flush with logger objects

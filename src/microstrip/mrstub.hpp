@@ -20,8 +20,6 @@
 
 #define _USE_MATH_DEFINES
 
-//#include <iostream>
-#include <cmath>
 #include "element.hpp"
 
 class Mrstub final : public Element {

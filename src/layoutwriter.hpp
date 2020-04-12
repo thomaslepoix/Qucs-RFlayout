@@ -20,15 +20,9 @@
 
 #define _USE_MATH_DEFINES
 
-#include <iostream>
 #include <fstream>
-#include <regex>
-#include <cmath>
-#include <array>
 
 #include "data.hpp"
-#include "logger.hpp"
-#include "microstrip/microstrip.hpp"
 
 class LayoutWriter {
 private:

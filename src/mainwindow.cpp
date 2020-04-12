@@ -15,8 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QFileDialog>
+
+#include "logger.hpp"
+#include "preview.hpp"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+using namespace std;
 
 MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	QMainWindow(parent),
@@ -99,7 +104,7 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	}
 
 void MainWindow::on_le_path_out_returnPressed(void) {
-	std::string out_name;
+	string out_name;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		if(!converter.write(out_name))
@@ -110,7 +115,7 @@ void MainWindow::on_le_path_out_returnPressed(void) {
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
-	std::string out_name;
+	string out_name;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		if(!converter.write(out_name))
@@ -130,7 +135,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(false);
 	}
 
-void operator<<(MainWindow& obj, std::stringstream& in) {
+void operator<<(MainWindow& obj, stringstream& in) {
 	obj.ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
 	}
 

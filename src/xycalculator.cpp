@@ -15,6 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream>
+#include <stack>
+#include <utility>
+
+#include "logger.hpp"
+#include "microstrip/subst.hpp"
 #include "xycalculator.hpp"
 using namespace std;
 

@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <cmath>
+
 #include "mrstub.hpp"
 using namespace std;
 
