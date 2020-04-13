@@ -219,8 +219,8 @@ int XyCalculator::place_blocks(void) {
 			}
 		}
 	if(!tab_subst.size()) {
-		//oems error no subst in sch
-		log_err << "3D ERROR : No substrate in the schematic.\n";
+		data.is_volume_error=true;
+		data.volume_error += "ERROR : No substrate in the schematic.\n";
 		}
 
 //check block / subst coherence
@@ -238,9 +238,9 @@ int XyCalculator::place_blocks(void) {
 					}
 				}
 			if(!subst_exist) {
-				//oems error invalid subst in sch : it->getLabel()
-				log_err << "3D ERROR : Invalid substrate \"" << it->getSubst()
-				        << "\" in : " << it->getLabel() << "\n";
+				data.is_volume_error=true;
+				data.volume_error += "ERROR : Invalid substrate \"" + it->getSubst()
+				                  + "\" in : " + it->getLabel() + "\n";
 				}
 
 		//count each different subst occurences in a block
@@ -261,11 +261,11 @@ int XyCalculator::place_blocks(void) {
 		if(subst_in_block.size()==0
 		||(subst_in_block.size()==1
 		&& subst_in_block[0].first=="")) {
-			//oems error no subst in a block
-			log_err << "3D ERROR : No substrate used in a block\n";
+			data.is_volume_error=true;
+			data.volume_error += "ERROR : No substrate used in a block\n";
 		} else if(subst_in_block.size()>1) {
-			//oems error multiple subst used in a block
-			log_err << "3D ERROR : Too many different substrates used in a block\n";
+			data.is_volume_error=true;
+			data.volume_error += "ERROR : Too many different substrates used in a block\n";
 		} else if(subst_in_block.size()==1) {
 			for(shared_ptr<Element> subst : tab_subst) {
 				if(subst->getLabel()==subst_in_block[0].first) {

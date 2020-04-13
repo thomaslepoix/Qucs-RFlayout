@@ -41,8 +41,7 @@ void Converter::clear(void) {
 	for(std::shared_ptr<Element> it : data.tab_all) {
 		it->prev=nullptr;
 		}
-	data.tab_all.clear();
-	data.tab_all.shrink_to_fit();
+	data.clear();
 	parser.clear();
 	xycalculator.clear();
 	}
