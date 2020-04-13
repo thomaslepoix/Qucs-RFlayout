@@ -100,6 +100,7 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/mainwindow.cpp"
 	"${CMAKE_SOURCE_DIR}/src/preview.cpp"
 	"${CMAKE_SOURCE_DIR}/src/logger.cpp"
+	"${CMAKE_SOURCE_DIR}/src/data.cpp"
 	)
 
 set( QUCS-RF-LAYOUT_HDRS

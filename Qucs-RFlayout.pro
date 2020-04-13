@@ -50,7 +50,8 @@ SOURCES += \
 	$$PWD/src/converter.cpp \
 	$$PWD/src/mainwindow.cpp \
 	$$PWD/src/preview.cpp \
-	$$PWD/src/logger.cpp
+	$$PWD/src/logger.cpp \
+	$$PWD/src/data.cpp
 
 HEADERS += \
 	$$PWD/src/microstrip/element.hpp \
