@@ -46,7 +46,7 @@ private:
 	Data& data;
 
 	// Main functions
-	int checkintersection(void);
+	bool checkintersection(void);
 	int place_elements(void);
 	int place_blocks(void);
 
@@ -55,12 +55,12 @@ private:
 	int add_to_block(std::shared_ptr<Block>& block, std::shared_ptr<Element> const& element);
 	int tab_remove(std::vector<std::shared_ptr<Element>>& elements, std::shared_ptr<Element> const& element);
 	bool purgefind(std::shared_ptr<Element> const& element, std::string const net);
-	int purgenets(void);
-	int purgeblocks(void);
+	int purge_nets(void);
+	int purge_blocks(void);
 	bool checkonenet(std::string const net);
 	int activenets(std::shared_ptr<Element> const& element);
 	int netmin(std::shared_ptr<Element> const& element);
-	int findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
+	void findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
 
 public:
 	XyCalculator(Data& _data);

@@ -75,7 +75,7 @@ int LayoutWriter::run(string* out_name) {
 	return(0);
 	}
 
-int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
+void LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 	string type;
 
 	f_out << "(kicad_pcb (version 20171130) (host pcbnew 5.0.1-33cea8e~67~ubuntu18.04.1)\n"
@@ -227,10 +227,9 @@ int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 		}
 
 	f_out << ")\n";
-	return(0);
 	}
 
-int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
+void LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 	string type;
 	string label;
 	smatch match;
@@ -283,10 +282,9 @@ int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 		}
 
 	f_out << ")\n";
-	return(0);
 	}
 
-int LayoutWriter::write_lht(ofstream& f_out) {
+void LayoutWriter::write_lht(ofstream& f_out) {
 	string type;
 
 	f_out << "ha:pcb-rnd-board-v4 {\n"
@@ -2619,7 +2617,6 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         "  }\n"
 	         " }\n"
 	         "}\n";
-	return(0);
 	}
 
 int LayoutWriter::check_m(void) {
@@ -2642,7 +2639,7 @@ int LayoutWriter::check_m(void) {
 	return(0);
 	}
 
-int LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
+void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 	string type;
 	string label;
 	long double extrem_pos_zmin=0.0;
@@ -2794,5 +2791,4 @@ int LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 	         "CSXGeomPlot([Sim_Path '/' Sim_CSX]);\n"
 	         "\n";
 
-	return(0);
 	}

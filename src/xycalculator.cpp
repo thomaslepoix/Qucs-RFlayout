@@ -103,7 +103,10 @@ int XyCalculator::run(void) {
 		return(3);
 		}
 
+//delete unconnected nets
+	purge_nets();
 	place_elements();
+	purge_blocks();
 	place_blocks();
 
 	return(0);
@@ -123,9 +126,6 @@ int XyCalculator::place_elements(void) {
 	long double current_ystep=0;
 	int nnets;
 	int current_net=0;
-
-//delete unconnected nets
-	purgenets();
 
 //first element
 	current->setX(0);
@@ -208,8 +208,6 @@ int XyCalculator::place_elements(void) {
 
 int XyCalculator::place_blocks(void) {
 //place element blocks regarding each other
-
-	purgeblocks();
 
 //store all substrates
 	vector<shared_ptr<Element>> tab_subst;
@@ -441,7 +439,7 @@ bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const ne
 	return(0);
 	}
 
-int XyCalculator::purgenets(void) {
+int XyCalculator::purge_nets(void) {
 //delete unconnected nets
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(purgefind(it, it->getNet1())==false) it->setNet1("");
@@ -452,7 +450,7 @@ int XyCalculator::purgenets(void) {
 	return(0);
 	}
 
-int XyCalculator::purgeblocks(void) {
+int XyCalculator::purge_blocks(void) {
 //delete blocks with only a non geometric element inside
 	for(unsigned int i=0;i<all_blocks.size();i++) {
 		if(all_blocks[i]->elements.size()==0) {
@@ -476,7 +474,7 @@ bool XyCalculator::checkonenet(string const net) {
 	return(count>2 ? 1 : 0);
 	}
 
-int XyCalculator::checkintersection(void) {
+bool XyCalculator::checkintersection(void) {
 //check if there are net intersections : more than 2 times the same net
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(checkonenet(it->getNet1())==true) return(1);
@@ -504,7 +502,7 @@ int XyCalculator::netmin(shared_ptr<Element> const& element) {
 	return(0);
 	}
 
-int XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net, shared_ptr<Element>& next) {
+void XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net, shared_ptr<Element>& next) {
 //find next element and delete link
 	string net="";
 	if(current_net==1) {
@@ -549,5 +547,4 @@ int XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net,
 				}
 			}
 		}
-	return(0);
 	}
