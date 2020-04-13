@@ -478,12 +478,10 @@ bool XyCalculator::checkonenet(string const net) {
 int XyCalculator::checkintersection(void) {
 //check if there are net intersections : more than 2 times the same net
 	for(shared_ptr<Element> it : data.tab_all) {
-		for(shared_ptr<Element> ut : data.tab_all) {
-			if(checkonenet(it->getNet1())==true) return(1);
-			if(checkonenet(it->getNet2())==true) return(1);
-			if(checkonenet(it->getNet3())==true) return(1);
-			if(checkonenet(it->getNet4())==true) return(1);
-			}
+		if(checkonenet(it->getNet1())==true) return(1);
+		if(checkonenet(it->getNet2())==true) return(1);
+		if(checkonenet(it->getNet3())==true) return(1);
+		if(checkonenet(it->getNet4())==true) return(1);
 		}
 	return(0);
 	}
