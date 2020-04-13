@@ -506,41 +506,41 @@ int XyCalculator::netmin(shared_ptr<Element> const& element) {
 
 int XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net, shared_ptr<Element>& next) {
 //find next element and delete link
-	string _net="";
+	string net="";
 	if(current_net==1) {
-		_net=current->getNet1();
+		net=current->getNet1();
 		current->setNet1("");
 	} else if(current_net==2) {
-		_net=current->getNet2();
+		net=current->getNet2();
 		current->setNet2("");
 	} else if(current_net==3) {
-		_net=current->getNet3();
+		net=current->getNet3();
 		current->setNet3("");
 	} else if(current_net==4) {
-		_net=current->getNet4();
+		net=current->getNet4();
 		current->setNet4("");
 		}
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(it!=current) {
-			if(it->getNet1()==_net) {
+			if(it->getNet1()==net) {
 				cout << "Next net : 1" << endl;
 				next=it;
 				it->setNet1("");
 				current_net=1;
 				break;
-			} else if(it->getNet2()==_net) {
+			} else if(it->getNet2()==net) {
 				cout << "Next net : 2" << endl;
 				next=it;
 				it->setNet2("");
 				current_net=2;
 				break;
-			} else if(it->getNet3()==_net) {
+			} else if(it->getNet3()==net) {
 				cout << "Next net : 3" << endl;
 				next=it;
 				it->setNet3("");
 				current_net=3;
 				break;
-			} else if(it->getNet4()==_net) {
+			} else if(it->getNet4()==net) {
 				cout << "Next net : 4" << endl;
 				next=it;
 				it->setNet4("");
