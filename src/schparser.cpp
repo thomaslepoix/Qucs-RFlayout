@@ -382,7 +382,6 @@ int SchParser::run(void) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						string tmp;
 						W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2

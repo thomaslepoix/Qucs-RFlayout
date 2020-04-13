@@ -30,7 +30,7 @@ public:
 	std::vector<std::shared_ptr<Element>> elements;
 	std::shared_ptr<Element> subst;
 	std::array<long double, 4> extrem_pos;
-	long double margin=0.0;
+	long double margin;
 
 	Block(void);
 	void shift(long double const x, long double const y);

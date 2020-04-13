@@ -24,15 +24,16 @@
 #include "xycalculator.hpp"
 using namespace std;
 
-Block::Block(void) {
-	elements=std::vector<std::shared_ptr<Element>>();
-	subst=std::shared_ptr<Element>();
-	extrem_pos={0.0, 0.0, 0.0, 0.0};
-	}
+Block::Block(void) :
+	elements(vector<shared_ptr<Element>>()),
+	subst(shared_ptr<Element>()),
+	extrem_pos({0.0, 0.0, 0.0, 0.0}),
+	margin(0.0)
+	{}
 
 void Block::set_extrem_pos(void) {
 	//reset extrem_pos to a random existant point
-	for(std::shared_ptr<Element> it : elements) {
+	for(shared_ptr<Element> it : elements) {
 		if(it->getNpoint()) {
 			extrem_pos[XMIN]=it->getP(1, X, R, ABS);
 			extrem_pos[XMAX]=it->getP(1, X, R, ABS);
@@ -42,7 +43,7 @@ void Block::set_extrem_pos(void) {
 			}
 		}
 	//set extrem_pos
-	for(std::shared_ptr<Element> it : elements) {
+	for(shared_ptr<Element> it : elements) {
 		it->setP();
 		for(int i=0;i<it->getNpoint();i++) {
 			if(it->getP(i, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(i, X, R, ABS);
