@@ -28,9 +28,11 @@ class LayoutWriter {
 private:
 	Data& data;
 
+	int check_m(void);
 	int write_kicad_pcb(std::ofstream& f_out);
 	int write_kicad_mod(std::string const& name, std::ofstream& f_out);
 	int write_lht(std::ofstream& f_out);
+	int write_m(std::string const& name, std::ofstream& f_out);
 
 public:
 	LayoutWriter(Data& _data);

@@ -43,6 +43,11 @@ int LayoutWriter::run(string* out_name) {
 
 #pragma GCC diagnostic pop
 
+//check
+	int ret=0;
+	if(data.out_format==".m") ret=check_m();
+	if(ret) return(ret);
+
 //generate output file
 	cout << endl;
 	n_out=regex_replace(data.out_dir, r_empty, "./");
@@ -59,6 +64,7 @@ int LayoutWriter::run(string* out_name) {
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(f_out);
 	if(data.out_format==".kicad_mod") write_kicad_mod(name, f_out);
 	if(data.out_format==".lht") write_lht(f_out);
+	if(data.out_format==".m") write_m(name, f_out);
 	if(out_name) *out_name=n_out; //success message to stdout in GUI mode
 
 	if(f_out.fail()) {
@@ -2616,3 +2622,177 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	return(0);
 	}
 
+int LayoutWriter::check_m(void) {
+	if(data.is_volume_error) {
+		log_err << data.volume_error;
+		return(0);
+		}
+
+	bool is_first_sp=true;
+	for(shared_ptr<Element> it : data.tab_all) {
+		if(it->getType()==".SP") {
+			if(is_first_sp==false) {
+				log_err << "ERROR : More than 1 active S parameter simulation.\n";
+				return(1);
+				}
+			is_first_sp=false;
+			}
+		}
+
+	return(0);
+	}
+
+int LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
+	string type;
+	string label;
+	long double extrem_pos_zmin=0.0;
+	long double extrem_pos_zmax=0.0;
+
+	//constants etc?
+	//substrates
+	//shapes
+	//postprocess
+
+	f_out << "%%%% Qucs-RFlayout generated from : " << name << ".sch\n"
+	         "\n"
+	         "clear;\n"
+	         "close all;\n"
+	         "physical_constants;\n"
+	         "suffix = '';\n"
+	         "\n"
+	         "Sim_Path = 'tmp';\n"
+	         "Sim_CSX = '" << name << ".xml';\n"
+	         "[status, message, messageid] = rmdir( Sim_Path, 's' );\n"
+	         "[status, message, messageid] = mkdir( Sim_Path );\n"
+	         "\n";
+
+	f_out << "%%%% VARIABLES\n";
+	for(shared_ptr<Element> it : data.tab_all) {
+		if(it->getType()==".SP") {
+			f_out << "fstart = " << it->getFstart() << ";\n"
+			         "fstop = " << it->getFstop() << ";\n";
+		} else if(it==data.tab_all.back()) {
+			f_out << "fstart = ;\n"
+			         "fstop = ;\n";
+			log_err << "WARNING : No active S parameter simulation in the schematic, you will have to set simulation frequencies manually.\n";
+			}
+		}
+	f_out << "f0 = (fstop + fstart) / 2; % Center frequency\n"
+	         "fc = (fstop - fstart) / 2; % Cutoff frequency\n"
+	         "unit = 1e-3;\n"
+	         "metal_div = 36;        % Depend on your simulation, you may want to tweak this value\n"
+	         "substrate_div = 30;    % Depend on your simulation, you may want to tweak this value\n"
+	         "time_res = 300000;     % Depend on your simulation, you may want to tweak this value\n"
+	         "metal_res = c0 / (f0 + fc) / unit / metal_div;\n"
+	         "substrate_res = c0 / (f0 + fc) / unit / substrate_div;\n"
+	         "SimBox = [120, 120, 90];\n"
+	         "\n";
+
+	f_out << "%%%% SUBSTRATES\n"
+	         "CSX = InitCSX();\n"
+	         "\n";
+
+	for(shared_ptr<Element> it : data.tab_all) {
+		type=it->getType();
+		if(type=="SUBST") {
+			if(-it->getH()-it->getT()-it->getMargin()<extrem_pos_zmin) extrem_pos_zmin=-it->getH()-it->getT()-it->getMargin();
+			if(it->getT()+it->getMargin()>extrem_pos_zmax) extrem_pos_zmax=it->getT()+it->getMargin();
+			f_out << it->getLabel() << ".metal.t = (" << it->getT() << ");\n" <<
+			         it->getLabel() << ".metal.rho = (" << it->getRho() << ");\n" <<
+			         it->getLabel() << ".metal.cond = (1 / " << it->getLabel() << ".metal.rho);\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".metal');\n"
+			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".metal', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".ground');\n"
+			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".ground', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
+
+			         "\n" <<
+			         it->getLabel() << ".substrate.tand = (" << it->getTand() << ");\n" <<
+			         it->getLabel() << ".substrate.Er = (" << it->getEr() << ");\n" <<
+			         it->getLabel() << ".substrate.K = (" << it->getLabel() << ".substrate.tand * 2 * pi * f0 * EPS0 * " << it->getLabel() << ".substrate.Er);\n" <<
+			         it->getLabel() << ".substrate.h = (" << it->getH() << ");\n" <<
+			         it->getLabel() << ".substrate.L = (" << it->getL() << ");\n" <<
+			         it->getLabel() << ".substrate.W = (" << it->getW() << ");\n"
+//			         it->getLabel() << ".cells = (" << "" << ");\n" << //TODO z mesh division
+			         "CSX = AddMaterial(CSX, '" << it->getLabel() << ".substrate');\n"
+			         "CSX = SetMaterialProperty(CSX, '" << it->getLabel() << ".substrate', ...\n"
+			         "\t'Epsilon', " << it->getLabel() << ".substrate.Er, ...\n"
+			         "\t'Kappa', " << it->getLabel() << ".substrate.K);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".substrate', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", -" << it->getLabel() << ".substrate.h], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", 0]);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".ground', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", (-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t)], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", -" << it->getLabel() << ".substrate.h]);\n"
+			         "\n";
+			}
+		}
+
+	f_out << "%%%% SHAPES\n";
+//	         "\n";
+
+	for(shared_ptr<Element> it : data.tab_all) {
+		type=it->getType();
+		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+			//nothing to do
+		} else if(type=="MCORN"
+		       || type=="MLIN") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\n";
+		} else if(type=="MCOUPLED") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(4, X, R, ABS) << ", " << -it->getP(4, Y, R, ABS) << ", 0], ...\n"
+			         "\t[" << it->getP(6, X, R, ABS) << ", " << -it->getP(6, Y, R, ABS) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\n";
+		} else if(type=="MCROSS"
+		       || type=="MMBEND"
+		       || type=="MRSTUB"
+		       || type=="MTEE") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "p = zeros(2, " << it->getNpoint() << ");\n";
+			for(int i=0;i<it->getNpoint();i++) {
+				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS) << "; p(2, " << i+1 << ") = " << -it->getP(i, Y, R, ABS) << ";\n";
+				}
+			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+			         "\n";
+			}
+		}
+
+	f_out << "%%%% MESH\n"
+	         "mesh.x = [ (0) ];\n"
+	         "mesh.y = [ (0) ];\n"
+	         "mesh.z = [ (0) ];\n"
+	         "%mesh = SmoothMesh(mesh, metal_res);\n"
+//	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
+//	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
+//	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
+//	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
+//	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
+	         "mesh.x = [mesh.x, " << data.extrem_pos[XMIN] << ", " << data.extrem_pos[XMAX] << "];\n"
+	         "mesh.y = [mesh.y, " << -data.extrem_pos[YMIN] << ", " << -data.extrem_pos[YMAX] << "];\n"
+	         "mesh.z = [mesh.z, " << extrem_pos_zmin << "," << extrem_pos_zmax << "];\n"
+	         "mesh = SmoothMesh(mesh, substrate_res);\n"
+	         "\n"
+	         "CSX = DefineRectGrid( CSX, unit, mesh );\n"
+	         "\n";
+
+	f_out << "%%%% SIMULATION\n"
+	         "FDTD = InitFDTD('NrTS', time_res );\n"
+	         "FDTD = SetGaussExcite( FDTD, f0, fc );\n"
+	         "BC = {'MUR' 'MUR' 'MUR' 'MUR' 'MUR' 'MUR'};\n"
+	         "FDTD = SetBoundaryCond( FDTD, BC );\n"
+	         "\n";
+
+	f_out << "%%%% RUN OPENEMS\n"
+	         "WriteOpenEMS([Sim_Path '/' Sim_CSX], FDTD, CSX);\n"
+	         "CSXGeomPlot([Sim_Path '/' Sim_CSX]);\n"
+	         "\n";
+
+	return(0);
+	}
