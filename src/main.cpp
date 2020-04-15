@@ -54,22 +54,22 @@ int main(int argc, char* argv[]) {
 	for(int i=0;i<argc;i++) {
 		if(string(argv[i])=="-h" || string(argv[i])=="--help") {
 			cout << "Usage: " << argv[0] << " -i FILENAME.sch" << endl
-				<< "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]" << endl
-				<< "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME" << endl
-				<< "       " << argv[0] << " -G" << endl
-				<< endl
-				<< "  -h, --help\tdisplay this help and exit" << endl
-				<< "      --version\tdisplay version information and exit" << endl
-				<< "  -v, --verbose\tverbose mode" << endl
-				<< "  -G\t\tGUI mode (no arguments equals to -G)" << endl
-				<< "  -i FILENAME\tuse file as input schematic" << endl
-				<< "  -o DIRNAME\tuse directory as output" << endl
-				<< "  -f FORMAT\tuse format as output layout format" << endl
-				<< "\t\tFORMAT can be:" << endl
-				<< "\t\t- .kicad_pcb\t: kicad layout (default format)" << endl
-				<< "\t\t- .kicad_mod\t: kicad module" << endl
-				<< "\t\t- .lht\t\t: pcb-rnd layout" << endl
-				<< "\t\t- .m\t\t: openems octave script" << endl;
+			     << "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]" << endl
+			     << "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME" << endl
+			     << "       " << argv[0] << " -G" << endl
+			     << endl
+			     << "  -h, --help\tdisplay this help and exit" << endl
+			     << "      --version\tdisplay version information and exit" << endl
+			     << "  -v, --verbose\tverbose mode" << endl
+			     << "  -G\t\tGUI mode (no arguments equals to -G)" << endl
+			     << "  -i FILENAME\tuse file as input schematic" << endl
+			     << "  -o DIRNAME\tuse directory as output" << endl
+			     << "  -f FORMAT\tuse format as output layout format" << endl
+			     << "\t\tFORMAT can be:" << endl
+			     << "\t\t- .kicad_pcb\t: kicad layout (default format)" << endl
+			     << "\t\t- .kicad_mod\t: kicad module" << endl
+			     << "\t\t- .lht\t\t: pcb-rnd layout" << endl
+			     << "\t\t- .m\t\t: openems octave script" << endl;
 			exit(0);
 			}
 		if(string(argv[i])=="--version") {
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
 		log_err.obj=&w;
 		log_err.set_mode(gui);
 		w.show();
-		return a.exec();
+		return(a.exec());
 
 	} else {
 

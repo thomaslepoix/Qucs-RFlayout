@@ -2664,15 +2664,18 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 	         "\n";
 
 	f_out << "%%%% VARIABLES\n";
+	bool is_there_sp=false;
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(it->getType()==".SP") {
+			is_there_sp=true;
 			f_out << "fstart = " << it->getFstart() << ";\n"
 			         "fstop = " << it->getFstop() << ";\n";
-		} else if(it==data.tab_all.back()) {
-			f_out << "fstart = ;\n"
-			         "fstop = ;\n";
-			log_err << "WARNING : No active S parameter simulation in the schematic, you will have to set simulation frequencies manually.\n";
 			}
+		}
+	if(!is_there_sp) {
+		f_out << "fstart = ;\n"
+		         "fstop = ;\n";
+		log_err << "WARNING : No active S parameter simulation in the schematic, you will have to set simulation frequencies manually.\n";
 		}
 	f_out << "f0 = (fstop + fstart) / 2; % Center frequency\n"
 	         "fc = (fstop - fstart) / 2; % Cutoff frequency\n"
@@ -2726,8 +2729,6 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 		}
 
 	f_out << "%%%% SHAPES\n";
-//	         "\n";
-
 	for(shared_ptr<Element> it : data.tab_all) {
 		type=it->getType();
 		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
@@ -2763,7 +2764,6 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 		}
 
 	f_out << "%%%% PORTS\n";
-
 	for(shared_ptr<Element> it : data.tab_all) {
 		type=it->getType();
 		if(type=="Pac") {
@@ -2773,7 +2773,6 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 			         it->getLabel() << ".Z = (" << it->getZ() << ");\n" <<
 			         it->getLabel() << ".P = (" << it->getDbm() << ");\n" <<
 			         it->getLabel() << ".F = (" << it->getF() << ");\n" <<
-			         it->getLabel() << ".W = (0.1); % Depend on your simulation, you may want to tweak this value\n" <<
 			         "[CSX port{" << it->getN() << "}] = AddLumpedPort(CSX, 5, " << it->getN() << ", " << it->getLabel() << ".Z, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)" << "], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", (" << it->getSubst() << ".metal.t)" << "], ...\n"
