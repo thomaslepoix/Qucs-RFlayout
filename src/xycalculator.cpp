@@ -97,13 +97,13 @@ void XyCalculator::clear(void) {
 int XyCalculator::run(void) {
 
 //check geometric coherence of the schematic
-	if(checkintersection()) {
+	if(check_intersection()) {
 		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
 		           "\tPlease use a component like a tee or a cross to avoid this.\n";
 		return(3);
 		}
 
-//delete unconnected nets
+	//delete unconnected nets
 	purge_nets();
 	place_elements();
 	purge_blocks();
@@ -112,7 +112,7 @@ int XyCalculator::run(void) {
 	return(0);
 	}
 
-int XyCalculator::place_elements(void) {
+void XyCalculator::place_elements(void) {
 
 //variables
 	vector<shared_ptr<Element>> tab_undone=data.tab_all;
@@ -202,11 +202,9 @@ int XyCalculator::place_elements(void) {
 	for(shared_ptr<Element> it : data.tab_all) {
 		it->prev=nullptr;
 		}
-
-	return(0);
 	}
 
-int XyCalculator::place_blocks(void) {
+void XyCalculator::place_blocks(void) {
 //place element blocks regarding each other
 
 //store all substrates
@@ -379,8 +377,6 @@ int XyCalculator::place_blocks(void) {
 	data.extrem_pos[XMIN]-=data.extrem_pos[XMIN];
 	data.extrem_pos[YMAX]-=data.extrem_pos[YMIN];
 	data.extrem_pos[YMIN]-=data.extrem_pos[YMIN];
-
-	return(0);
 	}
 
 void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_ptr<Element>> substs) {
@@ -461,7 +457,7 @@ int XyCalculator::purge_blocks(void) {
 	return(0);
 	}
 
-bool XyCalculator::checkonenet(string const net) {
+bool XyCalculator::check_onenet(string const net) {
 	unsigned int count=0;
 	if(net!=""){
 		for(shared_ptr<Element> it : data.tab_all) {
@@ -474,13 +470,13 @@ bool XyCalculator::checkonenet(string const net) {
 	return(count>2 ? 1 : 0);
 	}
 
-bool XyCalculator::checkintersection(void) {
+bool XyCalculator::check_intersection(void) {
 //check if there are net intersections : more than 2 times the same net
 	for(shared_ptr<Element> it : data.tab_all) {
-		if(checkonenet(it->getNet1())==true) return(1);
-		if(checkonenet(it->getNet2())==true) return(1);
-		if(checkonenet(it->getNet3())==true) return(1);
-		if(checkonenet(it->getNet4())==true) return(1);
+		if(check_onenet(it->getNet1())==true) return(1);
+		if(check_onenet(it->getNet2())==true) return(1);
+		if(check_onenet(it->getNet3())==true) return(1);
+		if(check_onenet(it->getNet4())==true) return(1);
 		}
 	return(0);
 	}

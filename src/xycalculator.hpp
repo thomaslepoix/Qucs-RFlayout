@@ -46,9 +46,9 @@ private:
 	Data& data;
 
 	// Main functions
-	bool checkintersection(void);
-	int place_elements(void);
-	int place_blocks(void);
+	bool check_intersection(void);
+	void place_elements(void);
+	void place_blocks(void);
 
 	// Toolbox functions
 	void sort_blocks(std::vector<std::shared_ptr<Block>> blocks, std::vector<std::shared_ptr<Element>> substs);
@@ -57,7 +57,7 @@ private:
 	bool purgefind(std::shared_ptr<Element> const& element, std::string const net);
 	int purge_nets(void);
 	int purge_blocks(void);
-	bool checkonenet(std::string const net);
+	bool check_onenet(std::string const net);
 	int activenets(std::shared_ptr<Element> const& element);
 	int netmin(std::shared_ptr<Element> const& element);
 	void findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
