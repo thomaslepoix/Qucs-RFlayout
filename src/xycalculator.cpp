@@ -105,11 +105,54 @@ int XyCalculator::run(void) {
 
 	//delete unconnected nets
 	purge_nets();
+	resolve_pac_shapes();
 	place_elements();
 	purge_blocks();
 	place_blocks();
 
 	return(0);
+	}
+
+void XyCalculator::resolve_pac_shapes(void) {
+// Pac have no shape so they calc it from adjacent largest element
+	for(shared_ptr<Element> pac : data.tab_all) {
+		if(pac->getType()=="Pac") {
+			long double edge=0;
+			short dir;
+			for(short i=1;i<=pac->getNport();i++) {
+				string pac_net;
+				if(i==1) pac_net=pac->getNet1();
+				else if(i==2) pac_net=pac->getNet2();
+				for(shared_ptr<Element> element : data.tab_all) {
+					if(element!=pac) {
+						int net=0;
+						if(element->getNet1()==pac_net) net=1;
+						if(element->getNet2()==pac_net) net=2;
+						if(element->getNet3()==pac_net) net=3;
+						if(element->getNet4()==pac_net) net=4;
+						if(net) {
+							long double edge_tmp;
+							short dir_tmp;
+							element->getEdge(net, edge_tmp, dir_tmp);
+							if(edge_tmp>edge) {
+								edge=edge_tmp;
+								dir=dir_tmp;
+								}
+							break;
+							}
+						}
+					}
+				}
+			pac->setW(edge);
+			switch(dir) {
+				// 180° switch as pac is 'in front of' its connected element
+				case XMIN: pac->setR(180); break;
+				case XMAX: pac->setR(270); break;
+				case YMIN: pac->setR(0); break;
+				case YMAX: pac->setR(90); break;
+				}
+			}
+		}
 	}
 
 void XyCalculator::place_elements(void) {
@@ -263,9 +306,16 @@ void XyCalculator::place_blocks(void) {
 			data.is_volume_error=true;
 			data.volume_error += "ERROR : Too many different substrates used in a block\n";
 		} else if(subst_in_block.size()==1) {
+			//assign a subst to block
 			for(shared_ptr<Element> subst : tab_subst) {
 				if(subst->getLabel()==subst_in_block[0].first) {
 					block->subst=subst;
+					}
+				}
+			//set pacs subst field to block subst
+			for(shared_ptr<Element> pac : block->elements) {
+				if(pac->getType()=="Pac") {
+					pac->setSubst(block->subst->getLabel());
 					}
 				}
 			}

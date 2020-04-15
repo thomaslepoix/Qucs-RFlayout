@@ -45,6 +45,7 @@ public :
 	std::string getNet1(void) override;
 	std::string getNet2(void) override;
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
+	void getEdge(int const _net, long double& edge, short& dir) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
 };

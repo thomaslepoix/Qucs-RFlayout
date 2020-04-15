@@ -125,3 +125,22 @@ void Mlin::getStep(int const _net, long double& xstep, long double& ystep) {
 			}
 		}
 	}
+
+void Mlin::getEdge(int const _net, long double& edge, short& dir) {
+	edge=m_w;
+	if(_net==1) {
+		switch(m_r) {
+			case 0: dir=XMIN; break;
+			case 90: dir=YMAX; break;
+			case 180: dir=XMAX; break;
+			case 270: dir=YMIN; break;
+			}
+	} else if(_net==2) {
+		switch(m_r) {
+			case 0: dir=XMAX; break;
+			case 90: dir=YMIN; break;
+			case 180: dir=XMIN; break;
+			case 270: dir=YMAX; break;
+			}
+		}
+	}

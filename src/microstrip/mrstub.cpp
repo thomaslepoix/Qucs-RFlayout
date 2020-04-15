@@ -108,3 +108,22 @@ int Mrstub::setP(void) {
 	tab_p[m_npoint-1][Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
 	return(0);
 	}
+
+void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) {
+	edge=m_w;
+	if(m_mirrorx==0) {
+		switch(m_r) {
+			case 0: dir=YMAX; break;
+			case 90: dir=XMAX; break;
+			case 180: dir=YMIN; break;
+			case 270: dir=XMIN; break;
+			}
+	} else if(m_mirrorx==1) {
+		switch(m_r) {
+			case 0: dir=YMIN; break;
+			case 90: dir=XMIN; break;
+			case 180: dir=YMAX; break;
+			case 270: dir=XMAX; break;
+			}
+		}
+	}

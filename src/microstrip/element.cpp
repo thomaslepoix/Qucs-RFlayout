@@ -216,11 +216,24 @@ void Element::getStep(int const /*_net*/, long double& xstep, long double& ystep
 	ystep=0;
 	}
 
+void Element::getEdge(int const /*_net*/, long double& edge, short& dir) {
+	edge=0;
+	dir=0;
+	}
+
 int Element::setW(long double /*_w*/) {
 	return(1);
 	}
 
 int Element::setL(long double /*_l*/) {
+	return(1);
+	}
+
+int Element::setR(short /*_r*/) {
+	return(1);
+	}
+
+int Element::setSubst(string /*_subst*/) {
 	return(1);
 	}
 

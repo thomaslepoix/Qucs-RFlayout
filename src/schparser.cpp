@@ -269,7 +269,7 @@ int SchParser::run(void) {
 						regex_search(line, match, r_quotedfield16);
 						F=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tFrequency : " << F << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, R, N, Z, P, F)));
+					data.tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, 0, N, Z, P, F)));
 				} else if(type==".SP") {
 					//is active
 						regex_search(line, match, r_field3);
@@ -294,7 +294,7 @@ int SchParser::run(void) {
 								regex_search(line, match, r_quotedfield16);
 								N=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 								cout << "\tStep number : " << N << endl;
-							data.tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, R, simtype, Fstart, Fstop, N)));
+							data.tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, 0, simtype, Fstart, Fstop, N)));
 						} else { // "list" & "const"
 							log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
 							}

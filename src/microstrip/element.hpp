@@ -94,8 +94,11 @@ public:
 	virtual int getNpoint(void);
 	virtual long double getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs);
 	virtual void getStep(int const _net, long double& xstep, long double& ystep);
+	virtual void getEdge(int const _net, long double& edge, short& dir);
 	virtual int setW(long double _w);
 	virtual int setL(long double _l);
+	virtual int setR(short _r);
+	virtual int setSubst(std::string _subst);
 	virtual int setNet1(std::string _net1);
 	virtual int setNet2(std::string _net2);
 	virtual int setNet3(std::string _net3);

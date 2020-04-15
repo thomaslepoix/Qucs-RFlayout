@@ -354,3 +354,57 @@ void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
 			}
 		}
 	}
+
+void Mcross::getEdge(int const _net, long double& edge, short& dir) {
+	if(_net==1) {
+		edge=m_w1;
+		switch(m_r) {
+			case 0: dir=XMIN; break;
+			case 90: dir=YMAX; break;
+			case 180: dir=XMAX; break;
+			case 270: dir=YMIN; break;
+			}
+	} else if(_net==2) {
+		edge=m_w2;
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0: dir=YMIN; break;
+				case 90: dir=XMIN; break;
+				case 180: dir=YMAX; break;
+				case 270: dir=XMAX; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0: dir=YMAX; break;
+				case 90: dir=XMAX; break;
+				case 180: dir=YMIN; break;
+				case 270: dir=XMIN; break;
+				}
+			}
+	} else if(_net==3) {
+		edge=m_w3;
+		switch(m_r) {
+			case 0: dir=XMAX; break;
+			case 90: dir=YMIN; break;
+			case 180: dir=XMIN; break;
+			case 270: dir=YMAX; break;
+			}
+	} else if(_net==4) {
+		edge=m_w4;
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0: dir=YMAX; break;
+				case 90: dir=XMAX; break;
+				case 180: dir=YMIN; break;
+				case 270: dir=XMIN; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0: dir=YMIN; break;
+				case 90: dir=XMIN; break;
+				case 180: dir=YMAX; break;
+				case 270: dir=XMAX; break;
+				}
+			}
+		}
+	}

@@ -52,6 +52,7 @@ public :
 	std::string getNet1(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	void getEdge(int const _net, long double& edge, short& dir) override;
 	int setNet1(std::string _net1) override;
 	int setP(void) override;
 };

@@ -47,6 +47,7 @@ private:
 
 	// Main functions
 	bool check_intersection(void);
+	void resolve_pac_shapes(void);
 	void place_elements(void);
 	void place_blocks(void);
 

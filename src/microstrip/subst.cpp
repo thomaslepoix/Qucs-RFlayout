@@ -29,6 +29,8 @@ Subst::Subst(string _label,
 			long double _rho,
 			long double _d) :
 	Element(_label, _type, _mirrorx, _r, 0, ""),
+	m_w(0.0),
+	m_l(0.0),
 	m_er(_er),
 	m_h(_h),
 	m_t(_t),

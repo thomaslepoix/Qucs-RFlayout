@@ -2694,7 +2694,8 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 		if(type=="SUBST") {
 			if(-it->getH()-it->getT()-it->getMargin()<extrem_pos_zmin) extrem_pos_zmin=-it->getH()-it->getT()-it->getMargin();
 			if(it->getT()+it->getMargin()>extrem_pos_zmax) extrem_pos_zmax=it->getT()+it->getMargin();
-			f_out << it->getLabel() << ".metal.t = (" << it->getT() << ");\n" <<
+			f_out << "% " << it->getLabel() << " : " << type << "\n" <<
+			         it->getLabel() << ".metal.t = (" << it->getT() << ");\n" <<
 			         it->getLabel() << ".metal.rho = (" << it->getRho() << ");\n" <<
 			         it->getLabel() << ".metal.cond = (1 / " << it->getLabel() << ".metal.rho);\n"
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".metal');\n"
@@ -2757,6 +2758,26 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS) << "; p(2, " << i+1 << ") = " << -it->getP(i, Y, R, ABS) << ";\n";
 				}
 			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+			         "\n";
+			}
+		}
+
+	f_out << "%%%% PORTS\n";
+
+	for(shared_ptr<Element> it : data.tab_all) {
+		type=it->getType();
+		if(type=="Pac") {
+			it->setL(0.2);
+			it->setP();
+			f_out << "% " << it->getLabel() << " : " << type << "\n" <<
+			         it->getLabel() << ".Z = (" << it->getZ() << ");\n" <<
+			         it->getLabel() << ".P = (" << it->getDbm() << ");\n" <<
+			         it->getLabel() << ".F = (" << it->getF() << ");\n" <<
+			         it->getLabel() << ".W = (0.1); % Depend on your simulation, you may want to tweak this value\n" <<
+			         "[CSX port{" << it->getN() << "}] = AddLumpedPort(CSX, 5, " << it->getN() << ", " << it->getLabel() << ".Z, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)" << "], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", (" << it->getSubst() << ".metal.t)" << "], ...\n"
+			         "\t[0 0 1], true);\n"
 			         "\n";
 			}
 		}
