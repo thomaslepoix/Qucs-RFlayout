@@ -100,5 +100,13 @@ unix {
 	INSTALLS += man
 	}
 
+unix {
+	changelog.extra = gzip -9 -c $$PWD/CHANGELOG > ./doc/changelog.gz
+	changelog.files = ./doc/changelog.gz
+	changelog.path = $$PREFIX/share/doc/qucsrflayout
+	changelog.clean = rm -f doc/changelog.gz
+	INSTALLS += changelog
+	}
+
 #CONFIG += object_parallel_to_source
 

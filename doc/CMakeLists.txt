@@ -22,3 +22,14 @@ install(
 	DESTINATION "share/man/man1" #"${CMAKE_INSTALL_MANDIR}"
 	)
 
+compress_gz( -9
+	"${CMAKE_SOURCE_DIR}/CHANGELOG"
+	"${CMAKE_BINARY_DIR}/doc/changelog.gz"
+	)
+
+install(
+	FILES "${CMAKE_BINARY_DIR}/doc/changelog.gz"
+	CONFIGURATIONS Release
+	DESTINATION "share/doc/qucsrflayout" #"${CMAKE_INSTALL_MANDIR}"
+	)
+

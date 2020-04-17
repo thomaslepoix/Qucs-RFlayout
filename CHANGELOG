@@ -1,0 +1,37 @@
+qucsrflayout (1.0.1)
+
+  [ Fixed ]
+  * Truncated decimal values in graphic mode only. (Closes: #4)
+
+  [ Added ]
+  * Changelog
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  17 Apr 2020
+
+qucsrflayout (1.0.0)
+
+  [ Added ]
+  * Supports Linux.
+  * Supports Windows (Benjamin Vernoux <https://github.com/bvernoux>).
+  * Requires Qucs installed.
+  * Supports QucsStudio schematics if Qucs is installed too.
+  * Supports output formats :
+    * .kicad_pcb : KiCad board
+    * .kicad_mod : KiCad module
+    * .lht : pcb-rnd board
+  * Supports microstrip components :
+    * MCORN
+    * MCOUPLED
+    * MCROSS
+    * MGAP
+    * MLIN
+    * MMBEND
+    * MOPEN
+    * MRSTUB
+    * MSTEP
+    * MTEE
+    * MVIA
+    * Pac
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  14 Feb 2020
+
