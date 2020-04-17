@@ -92,7 +92,7 @@ Qucs-RFlayout $
 
 <br>
 
-## Release process (from Linux)
+## Release process (using Docker)
 
 - Windows release process is based on cross compilation within an Arch Linux container (because Arch provides several libraries for MinGW, like Qt, Boost, etc. that most other distributions does not provide).
 
