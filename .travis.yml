@@ -7,19 +7,11 @@ matrix:
     - os: linux
       compiler: g++
       addons:
-      env: BUILD_SYSTEM=cmake BUILD_TYPE=Debug
-    - os: linux
-      compiler: g++
-      addons:
-      env: BUILD_SYSTEM=cmake BUILD_TYPE=Release
+      env: BUILD_SYSTEM=cmake
     - os: linux
       compiler: clang++
       addons:
-      env: BUILD_SYSTEM=cmake BUILD_TYPE=Debug
-    - os: linux
-      compiler: clang++
-      addons:
-      env: BUILD_SYSTEM=cmake BUILD_TYPE=Release
+      env: BUILD_SYSTEM=cmake
     - os: linux
       compiler: g++
       addons:
@@ -42,7 +34,7 @@ script:
   - echo CXXFLAGS=${CXXFLAGS}
   - mkdir build && cd build
   - if [[ "${BUILD_SYSTEM}" == "cmake" ]] ; then
-      cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} .. ;
+      cmake .. ;
     elif [[ "${BUILD_SYSTEM}" == "qmake" ]] ; then
       qmake .. ;
     fi
