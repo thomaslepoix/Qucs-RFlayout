@@ -32,10 +32,13 @@ private:
 	Data& data;
 	std::vector<std::string> unprintables;
 
+	void parse_schematic(std::ifstream& f_sch);
+	void parse_netlist(std::ifstream& f_net);
+	void warn_unprintable(void);
+
 	long double suffix(std::string const s_sci, std::string const s_eng, bool is_length);
 	std::string check_void(std::string match, std::string label);
 	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
-	void warn_unprintable(void);
 
 public:
 	SchParser(Data& _data);
