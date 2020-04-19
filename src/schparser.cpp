@@ -39,35 +39,69 @@ void SchParser::clear(void) {
 #pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
 
 int SchParser::run(void) {
-
-//variables
+	int ret;
+	string n_sch;
 	string n_net;
-	string n_tmp;
-	string line;
-	smatch match;
+	ifstream f_sch;
+	ifstream f_net;
 	static regex const r_sch("\.sch$");
 
-//qucsstudio regex
-	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$");  //regex group 1
+//filenames processing
+	cout << endl;
+	if(regex_search(data.n_sch, r_sch)) {
+		n_net=regex_replace(data.n_sch, r_sch, "\.net");
+		n_sch=regex_replace(data.n_sch, r_sch, "\.tmp\.sch");
+		cout << "Schematic : " << data.n_sch << endl;
+	} else {
+		log_err << "ERROR : Invalid input format : " << data.n_sch << "\n";
+		return(1);
+		}
+
+	open_file(f_sch, data.n_sch);
+
+	ret=check_qucsstudio(f_sch, n_sch);
+	if(ret) return(ret);
+
+	ret=generate_netlist(n_sch, n_net);
+	if(ret) return(ret);
+
+	open_file(f_net, n_net);
+
+	parse_schematic(f_sch);
+	parse_netlist(f_net);
+
+	cout << "Number of elements : " << data.tab_all.size() << endl;
+	warn_unprintable();
+	return(0);
+	}
+
+int SchParser::open_file(ifstream& file, string const name) {
+	cout << endl << "Opening " << name << "... ";
+	file.open(name.c_str());
+	if(file) {
+		cout << "OK" << endl;
+	} else {
+		cout << "KO" << endl;
+		log_err << "ERROR : Cannot open " << name << "\n";
+		return(1);
+		}
+	return(0);
+	}
+
+int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp) {
+	string line;
+	smatch match;
+
+	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$"); //regex group 1
+
 	//g1 begin    g2 x    g3 y    g4 end    g5 r
 	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )([\-0-9]+) ([\-0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");
 
 
-//open schematic
-	cout << endl << "Opening " << data.n_sch << "... ";
-	ifstream f_sch(data.n_sch.c_str());
-	if(f_sch) {
-		cout << "OK" << endl;
-	} else {
-		log_err << "ERROR : Cannot open " << data.n_sch << "\n";
-		return(1);
-		}
-
-//check if qucs or qucsstudio
 	getline(f_sch, line);
 	regex_search(line, match, r_head);
 	if(match.str(1)=="Qucs") {
-		n_tmp=data.n_sch;
+		n_tmp=data.n_sch; // f_sch is ok, reset n_tmp to its filename
 	} else if(match.str(1)=="QucsStudio") {
 		// QucsStudio does not provide command line to produce netlist
 		// so, as formats are mostly compatible, let's try to replace the
@@ -75,12 +109,12 @@ int SchParser::run(void) {
 		log_err << "WARNING : " << data.n_sch << " is a QucsStudio schematic, compatibility is not guaranteed\n";
 
 		cout << "Conversion to Qucs format... ";
-		n_tmp=regex_replace(data.n_sch, r_sch, "\.tmp\.sch");
 		ofstream f_tmp(n_tmp.c_str());
 		if(!f_tmp) {
 			log_err << "ERROR : Cannot open " << n_tmp << "\n";
 			return(1);
 			}
+
 		f_tmp << "<Qucs Schematic 0.0.0>" << endl;
 		while(getline(f_sch, line)) {
 			// MSTUB -> MRSTUB : wire wrap point is different, excentred by 10
@@ -95,63 +129,33 @@ int SchParser::run(void) {
 				}
 			}
 		cout << "OK" << endl;
+		cout << "Temporary schematic : " << n_tmp << endl;
 		
 		f_tmp.close();
 		f_sch.close();
-		cout << "Opening " << n_tmp << "... ";
-		f_sch.open(n_tmp.c_str());
-		if(f_sch) {
-			cout << "OK" << endl;
-		} else {
-			log_err << "ERROR : Cannot open " << n_tmp << "\n";
-			return(1);
-			}
+		open_file(f_sch, n_tmp);
 	} else {
 		log_err << "ERROR : " << data.n_sch << " appears to be neither a Qucs nor a QucsStudio schematic\n";
 		return(1);
 		}
+	return(0);
+	}
 
-//generate netlist
-	cout << endl;
-	if(regex_search(data.n_sch, r_sch)) {
-		n_net=regex_replace(data.n_sch, r_sch, "\.net");
-		cout << "n_sch : " << data.n_sch << endl;
-		cout << "n_net : " << n_net << endl;
-	} else {
-		log_err << "ERROR : Invalid input format : " << data.n_sch << "\n";
-		return(1);
-		}
-
+int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
 	cout << endl << "Generating netlist... ";
-	string net_gen="qucs -n -i \""+n_tmp+"\" -o \""+n_net+"\"";
+	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
 	QProcess process_qucs;
 	process_qucs.start(QString::fromStdString(net_gen));
 	bool ret = process_qucs.waitForFinished();
 	if(ret==false || process_qucs.exitCode()) {
 		cout << "KO" << endl;
-		log_err << "ERROR : Problem with calling Qucs : " << net_gen << "\n";
+		log_err << "ERROR : Problem calling Qucs : " << net_gen << "\n";
 		return(2);
 	} else {
 		cout << "OK" << endl;
+		cout << "Netlist : " << n_net << endl;
+		return(0);
 		}
-
-//open netlist
-	cout << endl << "Opening " << n_net << "... ";
-	ifstream f_net(n_net.c_str());		//all_MS.net
-	if(f_net) {
-		cout << "OK" << endl;
-	} else {
-		cout << "KO" << endl;
-		log_err << "ERROR : Cannot open netlist " << n_net << "\n";
-		return(1);
-		}
-
-	parse_schematic(f_sch);
-	parse_netlist(f_net);
-
-	cout << "N elements : " << data.tab_all.size() << endl;
-	warn_unprintable();
-	return(0);
 	}
 
 void SchParser::parse_schematic(ifstream& f_sch) {
@@ -578,7 +582,7 @@ void SchParser::warn_unprintable(void) {
 		}
 	}
 
-long double SchParser::suffix(string const s_sci, string const s_eng, bool is_length) {
+long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) {
 //convert suffix into multiplicator
 	static regex  const r_sci("^e(-?)([0-9]*)$");    //g1 signe    g2 exposant
 	smatch match;
@@ -634,7 +638,7 @@ long double SchParser::suffix(string const s_sci, string const s_eng, bool is_le
 	}
 
 
-string SchParser::check_void(string match, string label) {
+string SchParser::check_void(string const match, string const label) {
 	if(match=="") {
 		log_err << "WARNING : Void field in component " << label << " -> Assigned to 0\n";
 		return("0");
