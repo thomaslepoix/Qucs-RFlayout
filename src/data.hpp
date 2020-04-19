@@ -25,9 +25,24 @@
 
 #include "microstrip/element.hpp"
 
+class Block {
+public:
+	std::vector<std::shared_ptr<Element>> elements;
+	std::shared_ptr<Element> subst;
+	std::array<long double, 4> extrem_pos;
+	long double margin;
+
+	Block(void);
+	void shift(long double const x, long double const y);
+	void set_extrem_pos(void);
+	void print_extrem_pos(void);
+	void print(void);
+};
+
 class Data {
 public:
 	std::vector<std::shared_ptr<Element>> tab_all;
+	std::vector<std::shared_ptr<Block>> all_blocks;
 //	std::vector<std::shared_ptr<Element>> all_elem;
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_block;
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_subst;

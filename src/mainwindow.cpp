@@ -26,8 +26,8 @@ using namespace std;
 MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	converter(_data),
 	data(_data),
+	converter(_data),
 	n_sch(QString::fromStdString(_data.n_sch)),
 	out_dir(QString::fromStdString(_data.out_dir)),
 	out_format(QString::fromStdString(_data.out_format)) {

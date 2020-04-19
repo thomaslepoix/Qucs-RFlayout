@@ -55,8 +55,8 @@ protected:
 
 private:
 	Ui::MainWindow* ui;
-	Converter converter;
 	Data& data;
+	Converter converter;
 
 	QString n_sch;
 	QString out_dir;
