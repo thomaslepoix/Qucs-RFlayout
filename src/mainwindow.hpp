@@ -40,14 +40,17 @@ public:
 
 private slots:
 	void on_pb_read_clicked(void);
-	void on_le_path_in_textChanged(const QString _n_sch);
+	void on_le_path_in_textChanged(QString const _n_sch);
 	void on_le_path_in_returnPressed(void);
-	void on_cb_format_currentIndexChanged(const QString _out_format);
+	void on_cb_format_currentIndexChanged(QString const _out_format);
 	void on_pb_browse_in_clicked(void);
 	void on_pb_browse_out_clicked(void);
-	void on_le_path_out_textChanged(const QString _out_dir);
+	void on_le_path_out_textChanged(QString const _out_dir);
 	void on_le_path_out_returnPressed(void);
 	void on_pb_write_clicked(void);
+	void on_rb_export_whole_toggled(bool const is_checked);
+	void on_rb_export_each_subst_toggled(bool const is_checked);
+	void on_rb_export_each_block_toggled(bool const is_checked);
 
 protected:
 	void keyPressEvent(QKeyEvent* event);

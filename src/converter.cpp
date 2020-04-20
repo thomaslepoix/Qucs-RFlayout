@@ -69,8 +69,8 @@ int Converter::read(void) {
 	return(0);
 	}
 
-int Converter::write(string& out_name) {
-	return(layoutwriter.run(&out_name));
+int Converter::write(vector<string>& out_names) {
+	return(layoutwriter.run(&out_names));
 	}
 
 int Converter::size(void) {

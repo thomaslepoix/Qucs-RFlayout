@@ -42,7 +42,7 @@ public:
 	void clear(void);
 	int run(void);
 	int read(void);
-	int write(std::string& out_name);
+	int write(std::vector<std::string>& out_names);
 	int size(void);
 
 	std::vector<std::shared_ptr<Element>> const& get_tab_all(void);

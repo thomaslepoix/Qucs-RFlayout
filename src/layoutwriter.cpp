@@ -28,7 +28,7 @@ LayoutWriter::LayoutWriter(Data& _data) :
 	data(_data)
 	{}
 
-int LayoutWriter::run(string* out_name) {
+int LayoutWriter::run(vector<string>* out_names) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
@@ -72,7 +72,7 @@ int LayoutWriter::run(string* out_name) {
 					block.elements.push_back(element);
 				}
 
-			int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_name);
+			int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
 			if(ret) return(ret);
 			}
 	} else if(data.export_each_subst) {
@@ -84,7 +84,7 @@ int LayoutWriter::run(string* out_name) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
 					out=n_out+"-s"+to_string(++i)+data.out_format;
-					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_name);
+					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
 
@@ -108,7 +108,7 @@ int LayoutWriter::run(string* out_name) {
 			prev=it;
 			}
 		out=n_out+"-s"+to_string(++i)+data.out_format;
-		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_name);
+		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
 		Block block;
@@ -116,13 +116,13 @@ int LayoutWriter::run(string* out_name) {
 		block.elements=data.tab_all;
 
 		n_out+=data.out_format;
-		return(write(block, 0, 0, n_out, name, out_name));
+		return(write(block, 0, 0, n_out, name, out_names));
 		}
 
 	return(0);
 	}
 
-int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, string* out_name) {
+int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, vector<string>* out_names) {
 	cout << "Output layout : " << n_out << endl;
 	ofstream f_out(n_out.c_str());
 	if(f_out.fail()) {
@@ -134,7 +134,7 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 	if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
 	if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y);
 	if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
-	if(out_name) *out_name=n_out; //success message to stdout in GUI mode
+	if(out_names) out_names->push_back(n_out); //success message to stdout in GUI mode
 
 	if(f_out.fail()) {
 		log_err << "ERROR : Error occured while writing " << n_out << "\n";

@@ -39,6 +39,9 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 		ui->cb_format->addItem(tr(".lht"));
 		ui->cb_format->addItem(tr(".m"));
 		ui->cb_format->setCurrentIndex(ui->cb_format->findText(QString::fromStdString(_data.out_format), Qt::MatchExactly));
+		ui->rb_export_whole->setChecked((_data.export_each_block || _data.export_each_subst) ? false : true);
+		ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
+		ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
 		}
 	
 MainWindow::~MainWindow() {
@@ -104,24 +107,51 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	}
 
 void MainWindow::on_le_path_out_returnPressed(void) {
-	string out_name;
+	vector<string> out_names;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		if(!converter.write(out_name))
-			log_err << "Write OK : " << out_name <<"\n";
+		if(!converter.write(out_names)) {
+			for(string out : out_names) {
+				log_err << "Write : " << out << "\n";
+				}
+			}
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
 		}
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
-	string out_name;
+	vector<string> out_names;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		if(!converter.write(out_name))
-			log_err << "Write OK : " << out_name <<"\n";
+		if(!converter.write(out_names)) {
+			for(string out : out_names) {
+				log_err << "Write : " << out << "\n";
+				}
+			}
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
+		}
+	}
+
+void MainWindow::on_rb_export_whole_toggled(bool const is_checked) {
+	if(is_checked) {
+		data.export_each_subst=false;
+		data.export_each_block=false;
+		}
+	}
+
+void MainWindow::on_rb_export_each_subst_toggled(bool const is_checked) {
+	if(is_checked) {
+		data.export_each_subst=true;
+		data.export_each_block=false;
+		}
+	}
+
+void MainWindow::on_rb_export_each_block_toggled(bool const is_checked) {
+	if(is_checked) {
+		data.export_each_subst=false;
+		data.export_each_block=true;
 		}
 	}
 
