@@ -47,6 +47,7 @@ public :
 			long double _tand,
 			long double _rho,
 			long double _d);
+	Subst(Subst const* _subst);
 	~Subst();
 	std::string getDescriptor(void) override;
 	long double getL(void) override;

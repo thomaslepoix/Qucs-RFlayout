@@ -29,10 +29,12 @@ private:
 	Data& data;
 
 	int check_m(void);
-	void write_kicad_pcb(std::ofstream& f_out);
-	void write_kicad_mod(std::string const& name, std::ofstream& f_out);
-	void write_lht(std::ofstream& f_out);
-	void write_m(std::string const& name, std::ofstream& f_out);
+	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::string* out_name);
+	//TODO array<long double, 2> offset ?
+	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y);
+	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
+	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y);
+	void write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
 
 public:
 	LayoutWriter(Data& _data);

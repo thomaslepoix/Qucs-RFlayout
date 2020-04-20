@@ -48,6 +48,11 @@ void Block::set_extrem_pos(void) {
 			if(it->getP(i, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(i, Y, R, ABS);
 			}
 		}
+	//set boundary
+	boundary[XMIN]=extrem_pos[XMIN]-margin;
+	boundary[XMAX]=extrem_pos[XMAX]+margin;
+	boundary[YMIN]=extrem_pos[YMIN]-margin;
+	boundary[YMAX]=extrem_pos[YMAX]+margin;
 	}
 
 void Block::shift(long double const x, long double const y) {

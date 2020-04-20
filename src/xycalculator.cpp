@@ -268,11 +268,11 @@ void XyCalculator::place_blocks(void) {
 	shared_ptr<Block> prev=nullptr;
 	axis_t vector=Y;
 	for(shared_ptr<Block> block : data.all_blocks) {
-		block->set_extrem_pos();
 		cout << endl;
 		cout << "Block :" << endl;
 		block->print();
 		if(block->subst) block->margin=block->subst->getMargin();
+		block->set_extrem_pos();
 		if(prev) {
 			long double shift_x;
 			long double shift_y;
@@ -340,6 +340,7 @@ void XyCalculator::place_blocks(void) {
 		subst->setP();
 		}
 
+
 //set global extrem_pos
 	for(shared_ptr<Block> block : data.all_blocks) {
 		if(block->extrem_pos[XMIN]-block->margin<data.extrem_pos[XMIN]) data.extrem_pos[XMIN]=block->extrem_pos[XMIN]-block->margin;
@@ -349,7 +350,7 @@ void XyCalculator::place_blocks(void) {
 		}
 
 	for(shared_ptr<Element> it : tab_subst) {
-		Subst *subst=dynamic_cast<Subst*>(it.get());
+		Subst* subst=dynamic_cast<Subst*>(it.get());
 		if(subst->extrem_pos[XMIN]-subst->getMargin()<data.extrem_pos[XMIN]) data.extrem_pos[XMIN]=subst->extrem_pos[XMIN]-subst->getMargin();
 		if(subst->extrem_pos[XMAX]+subst->getMargin()>data.extrem_pos[XMAX]) data.extrem_pos[XMAX]=subst->extrem_pos[XMAX]+subst->getMargin();
 		if(subst->extrem_pos[YMIN]-subst->getMargin()<data.extrem_pos[YMIN]) data.extrem_pos[YMIN]=subst->extrem_pos[YMIN]-subst->getMargin();
@@ -372,6 +373,19 @@ void XyCalculator::place_blocks(void) {
 	data.extrem_pos[XMIN]-=data.extrem_pos[XMIN];
 	data.extrem_pos[YMAX]-=data.extrem_pos[YMIN];
 	data.extrem_pos[YMIN]-=data.extrem_pos[YMIN];
+	cout << "OK" << endl;
+
+//local subst placement
+	cout << endl << "Calculating local substrates positons... ";
+	for(shared_ptr<Block> block : data.all_blocks) {
+		Subst* subst=dynamic_cast<Subst*>(block->subst.get());
+		block->subst_local=shared_ptr<Element>(new Subst(subst));
+		block->subst_local->setL(block->boundary[XMAX]-block->boundary[XMIN]);//+2*block->subst_local->getMargin());
+		block->subst_local->setW(block->boundary[YMAX]-block->boundary[YMIN]);//+2*block->subst_local->getMargin());
+		block->subst_local->setX((block->boundary[XMAX]+block->boundary[XMIN])/2);
+		block->subst_local->setY((block->boundary[YMAX]+block->boundary[YMIN])/2);
+		block->subst_local->setP();
+		}
 	cout << "OK" << endl;
 	}
 

@@ -20,6 +20,7 @@
 
 #include "logger.hpp"
 #include "microstrip/element.hpp"
+#include "microstrip/subst.hpp"
 #include "layoutwriter.hpp"
 using namespace std;
 
@@ -35,11 +36,12 @@ int LayoutWriter::run(string* out_name) {
 
 //variables
 	static regex const r_sch("\.sch$");
-	static regex const r_basename("^.*?([^\/]*)\.sch$");                        // g1 basename
+	static regex const r_basename("^.*?([^\/]*)\.sch$"); // g1 basename
 	static regex const r_out("(^.*?)\\/?$");
 	static regex const r_empty("^$");
-	string n_out="";
 	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
+	string n_out=regex_replace(data.out_dir, r_empty, "./");
+	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1");
 
 #pragma GCC diagnostic pop
 
@@ -48,11 +50,79 @@ int LayoutWriter::run(string* out_name) {
 	if(data.out_format==".m") ret=check_m();
 	if(ret) return(ret);
 
-//generate output file
 	cout << endl;
-	n_out=regex_replace(data.out_dir, r_empty, "./");
-	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1") + data.out_format;
 	cout << "Input schematic : " << data.n_sch << endl;
+
+	if(data.export_each_block) {
+		unsigned int i=-1; // not a mistake
+		for(shared_ptr<Block> it : data.all_blocks) {
+			string out=n_out+"-b"+to_string(++i)+data.out_format;
+
+			Block block;
+			block.boundary=it->boundary;
+			block.boundary[XMIN]-=it->subst_local->getMargin();
+			block.boundary[XMAX]+=it->subst_local->getMargin();
+			block.boundary[YMIN]-=it->subst_local->getMargin();
+			block.boundary[YMAX]+=it->subst_local->getMargin();
+
+			block.elements=it->elements;
+			block.elements.push_back(it->subst_local);
+			for(shared_ptr<Element> element : data.tab_all) {
+				if(element->getType()==".SP")
+					block.elements.push_back(element);
+				}
+
+			int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_name);
+			if(ret) return(ret);
+			}
+	} else if(data.export_each_subst) {
+		unsigned int i=-1; // not a mistake
+		shared_ptr<Block> prev=nullptr;
+		string out;
+		Block block;
+		for(shared_ptr<Block> it : data.all_blocks) {
+			if(prev==nullptr || it->subst!=prev->subst) {
+				if(prev!=nullptr) {
+					out=n_out+"-s"+to_string(++i)+data.out_format;
+					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_name);
+					if(ret) return(ret);
+					}
+
+				Subst* subst=dynamic_cast<Subst*>(it->subst.get());
+				block.boundary=subst->extrem_pos;
+				block.boundary[XMIN]-=subst->getMargin();
+				block.boundary[XMAX]+=subst->getMargin();
+				block.boundary[YMIN]-=subst->getMargin();
+				block.boundary[YMAX]+=subst->getMargin();
+
+				block.elements.clear();
+				block.elements=it->elements;
+				block.elements.push_back(it->subst);
+				for(shared_ptr<Element> element : data.tab_all) {
+					if(element->getType()==".SP")
+						block.elements.push_back(element);
+					}
+			} else {
+				block.elements.insert(block.elements.end(), it->elements.begin(), it->elements.end());
+				}
+			prev=it;
+			}
+		out=n_out+"-s"+to_string(++i)+data.out_format;
+		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_name);
+		if(ret) return(ret);
+	} else {
+		Block block;
+		block.boundary=data.extrem_pos;
+		block.elements=data.tab_all;
+
+		n_out+=data.out_format;
+		return(write(block, 0, 0, n_out, name, out_name));
+		}
+
+	return(0);
+	}
+
+int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, string* out_name) {
 	cout << "Output layout : " << n_out << endl;
 	ofstream f_out(n_out.c_str());
 	if(f_out.fail()) {
@@ -60,11 +130,10 @@ int LayoutWriter::run(string* out_name) {
 		return(1);
 		}
 
-//write
-	if(data.out_format==".kicad_pcb") write_kicad_pcb(f_out);
-	if(data.out_format==".kicad_mod") write_kicad_mod(name, f_out);
-	if(data.out_format==".lht") write_lht(f_out);
-	if(data.out_format==".m") write_m(name, f_out);
+	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y);
+	if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
+	if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y);
+	if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
 	if(out_name) *out_name=n_out; //success message to stdout in GUI mode
 
 	if(f_out.fail()) {
@@ -75,7 +144,7 @@ int LayoutWriter::run(string* out_name) {
 	return(0);
 	}
 
-void LayoutWriter::write_kicad_pcb(ofstream& f_out) {
+void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y) {
 	string type;
 
 	f_out << "(kicad_pcb (version 20171130) (host pcbnew 5.0.1-33cea8e~67~ubuntu18.04.1)\n"
@@ -181,7 +250,7 @@ void LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 	         "    (uvia_drill 0.1)\n"
 	         "  )\n\n";
 
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
 		if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -193,7 +262,7 @@ void LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 				||type=="MRSTUB"
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "  (module " << it->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-			         "    (at " << it->getX() << " " << it->getY() << " " << it->getR() << ")\n"
+			         "    (at " << it->getX()+offset_x << " " << it->getY()+offset_y << " " << it->getR() << ")\n"
 			         "    (fp_text reference " << it->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
 			         "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
 			         "    )\n"
@@ -222,18 +291,19 @@ void LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 				}
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (via (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers F.Cu B.Cu))\n\n";
+			f_out << "  (via (at " << it->getX()+offset_x << " " << it->getY()+offset_y
+			      << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers F.Cu B.Cu))\n\n";
 			}
 		}
 
 	f_out << ")\n";
 	}
 
-void LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
+void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) {
 	string type;
 	string label;
 	smatch match;
-	regex r_pac("^P([0-9]*)$");													//regex group 1
+	regex r_pac("^P([0-9]*)$"); //g1 number // TODO getN() ?
 
 	f_out << "(module " << name << " (layer F.Cu) (tedit 5BD7B6BE)\n"
 	         "  (fp_text reference REF** (at 0 0.5) (layer F.SilkS)\n"
@@ -243,14 +313,15 @@ void LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 	         "    (effects (font (size 1 1) (thickness 0.15)))\n"
 	         "  )\n";
 
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
 		if(type=="Eqn" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();
 			regex_search(label, match, r_pac);
-			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX() << " " << it->getY() << " " << it->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
+			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX()+offset_x << " " << it->getY()+offset_y
+			      << " " << it->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
 		} else if(type=="MCORN"
 				||type=="MCROSS"
 				||type=="MMBEND"
@@ -259,33 +330,35 @@ void LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, X, R, ABS)
-				      << " "          << it->getP(i, Y, R, ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)+offset_x
+				      << " "          << it->getP(i, Y, R, ABS)+offset_y << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MCOUPLED") {///////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint()/2;i++) {
-				f_out << "      (xy " << it->getP(i, X, R, ABS)
-				      << " "          << it->getP(i, Y, R, ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)+offset_x
+				      << " "          << it->getP(i, Y, R, ABS)+offset_y << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
 			         "    (fp_poly (pts\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, X, R, ABS)
-				      << " "          << it->getP(i, Y, R, ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)+offset_x
+				      << " "          << it->getP(i, Y, R, ABS)+offset_y << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (pad \"\" thru_hole circle (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << " " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
+			f_out << "  (pad \"\" thru_hole circle (at " << it->getX()+offset_x << " " << it->getY()+offset_y
+			      << ") (size " << it->getD() << " " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
 			}
 		}
 
 	f_out << ")\n";
 	}
 
-void LayoutWriter::write_lht(ofstream& f_out) {
+void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y) {
 	string type;
+	unsigned int n=0;
 
 	f_out << "ha:pcb-rnd-board-v4 {\n"
 	         "\n"
@@ -323,8 +396,8 @@ void LayoutWriter::write_lht(ofstream& f_out) {
 	         " ha:meta {\n"
 	         "   ha:size {\n"
 	         "    thermal_scale = 0.500000\n"
-	         "    x = " << data.extrem_pos[XMAX]+2 << "mm\n"
-	         "    y = " << data.extrem_pos[YMAX]+2 << "mm\n"
+	         "    x = " << block.boundary[XMAX]+offset_x << "mm\n" //TODO
+	         "    y = " << block.boundary[YMAX]+offset_y << "mm\n"
 	         "    isle_area_nm2 = 200000000.000000\n"
 	         "   }\n"
 	         "   ha:cursor {\n"
@@ -353,19 +426,17 @@ void LayoutWriter::write_lht(ofstream& f_out) {
 	         "\n"
 	         "   li:objects {\n";
 
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
-		int n=0;
 		//if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
 			//nothing to do
 		if(type=="MVIA") {
-			f_out << "    ha:via." << n << " {"
-			         "     x=" << it->getX() << "mm; y=" << it->getY() << "mm; hole=" << it->getD() << "mm; mask=0.0; thickness=" << it->getR() << "mm; clearance=0mm;\n"
+			f_out << "    ha:via." << n++ << " {"
+			         "     x=" << it->getX()+offset_x << "mm; y=" << it->getY()+offset_y << "mm; hole=" << it->getD() << "mm; mask=0.0; thickness=" << it->getR() << "mm; clearance=0mm;\n"
 			         "     ha:flags {\n"
 			         "      via=1\n"
 			         "     }\n"
 			         "    }\n";
-			n++;
 			}
 		}
 
@@ -380,22 +451,21 @@ void LayoutWriter::write_lht(ofstream& f_out) {
 	         "\n"
 	         "      li:objects {\n";
 
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
-		int n=0;
 		if(type=="MCORN"
         || type=="MCROSS"
         || type=="MMBEND"
         || type=="MLIN"
         || type=="MRSTUB"
         || type=="MTEE") {
-			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+			f_out << "       ha:polygon." << n++ << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, X, R, ABS) << "mm; "
-					  << it->getP(i, Y, R, ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS)+offset_x << "mm; "
+					  << it->getP(i, Y, R, ABS)+offset_y << "mm }\n";
 				}
 			f_out << "          }\n"
 			         "        }\n"
@@ -404,15 +474,14 @@ void LayoutWriter::write_lht(ofstream& f_out) {
 			         "         clearpoly=1\n"
 			         "        }\n"
 			         "       }\n";
-			n++;
 		} else if(type=="MCOUPLED") {
-			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+			f_out << "       ha:polygon." << n++ << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint()/2;i++) {
 				f_out << "           { "
-					  << it->getP(i, X, R, ABS) << "mm; "
-					  << it->getP(i, Y, R, ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS)+offset_x << "mm; "
+					  << it->getP(i, Y, R, ABS)+offset_y << "mm }\n";
 				}
 			f_out << "          }\n"
 			         "        }\n"
@@ -421,14 +490,13 @@ void LayoutWriter::write_lht(ofstream& f_out) {
 			         "         clearpoly=1\n"
 			         "        }\n"
 			         "       }\n";
-			n++;
-			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+			f_out << "       ha:polygon." << n++ << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, X, R, ABS) << "mm; "
-					  << it->getP(i, Y, R, ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS)+offset_x << "mm; "
+					  << it->getP(i, Y, R, ABS)+offset_y << "mm }\n";
 				}
 			f_out << "          }\n"
 			         "        }\n"
@@ -437,7 +505,6 @@ void LayoutWriter::write_lht(ofstream& f_out) {
 			         "         clearpoly=1\n"
 			         "        }\n"
 			         "       }\n";
-			n++;
 			}
 		}
 
@@ -2639,7 +2706,7 @@ int LayoutWriter::check_m(void) {
 	return(0);
 	}
 
-void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
+void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) {
 	string type;
 	string label;
 	long double extrem_pos_zmin=0.0;
@@ -2657,7 +2724,7 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 	         "physical_constants;\n"
 	         "suffix = '';\n"
 	         "\n"
-	         "Sim_Path = 'tmp';\n"
+	         "Sim_Path = '" << name << "';\n"
 	         "Sim_CSX = '" << name << ".xml';\n"
 	         "[status, message, messageid] = rmdir( Sim_Path, 's' );\n"
 	         "[status, message, messageid] = mkdir( Sim_Path );\n"
@@ -2665,7 +2732,7 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 
 	f_out << "%%%% VARIABLES\n";
 	bool is_there_sp=false;
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		if(it->getType()==".SP") {
 			is_there_sp=true;
 			f_out << "fstart = " << it->getFstart() << ";\n"
@@ -2692,7 +2759,7 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 	         "CSX = InitCSX();\n"
 	         "\n";
 
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
 		if(type=="SUBST") {
 			if(-it->getH()-it->getT()-it->getMargin()<extrem_pos_zmin) extrem_pos_zmin=-it->getH()-it->getT()-it->getMargin();
@@ -2719,17 +2786,17 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 			         "\t'Epsilon', " << it->getLabel() << ".substrate.Er, ...\n"
 			         "\t'Kappa', " << it->getLabel() << ".substrate.K);\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << ".substrate', 1, ...\n"
-			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", -" << it->getLabel() << ".substrate.h], ...\n"
-			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", 0]);\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", 0]);\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << ".ground', 1, ...\n"
-			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", (-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t)], ...\n"
-			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", -" << it->getLabel() << ".substrate.h]);\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", (-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t)], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h]);\n"
 			         "\n";
 			}
 		}
 
 	f_out << "%%%% SHAPES\n";
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
 		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -2737,17 +2804,17 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 		       || type=="MLIN") {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
 			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
-			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", 0], ...\n"
-			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
 			         "\n";
 		} else if(type=="MCOUPLED") {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
 			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
-			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", 0], ...\n"
-			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
 			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
-			         "\t[" << it->getP(4, X, R, ABS) << ", " << -it->getP(4, Y, R, ABS) << ", 0], ...\n"
-			         "\t[" << it->getP(6, X, R, ABS) << ", " << -it->getP(6, Y, R, ABS) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\t[" << it->getP(4, X, R, ABS)+offset_x << ", " << -(it->getP(4, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(6, X, R, ABS)+offset_x << ", " << -(it->getP(6, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
 			         "\n";
 		} else if(type=="MCROSS"
 		       || type=="MMBEND"
@@ -2756,7 +2823,7 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
 			         "p = zeros(2, " << it->getNpoint() << ");\n";
 			for(int i=0;i<it->getNpoint();i++) {
-				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS) << "; p(2, " << i+1 << ") = " << -it->getP(i, Y, R, ABS) << ";\n";
+				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS)+offset_x << "; p(2, " << i+1 << ") = " << -(it->getP(i, Y, R, ABS)+offset_y) << ";\n";
 				}
 			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
 			         "\n";
@@ -2764,7 +2831,7 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 		}
 
 	f_out << "%%%% PORTS\n";
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
 		if(type=="Pac") {
 			it->setL(0.2);
@@ -2774,8 +2841,8 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 			         it->getLabel() << ".P = (" << it->getDbm() << ");\n" <<
 			         it->getLabel() << ".F = (" << it->getF() << ");\n" <<
 			         "[CSX port{" << it->getN() << "}] = AddLumpedPort(CSX, 5, " << it->getN() << ", " << it->getLabel() << ".Z, ...\n"
-			         "\t[" << it->getP(0, X, R, ABS) << ", " << -it->getP(0, Y, R, ABS) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)" << "], ...\n"
-			         "\t[" << it->getP(2, X, R, ABS) << ", " << -it->getP(2, Y, R, ABS) << ", (" << it->getSubst() << ".metal.t)" << "], ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)" << "], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", (" << it->getSubst() << ".metal.t)" << "], ...\n"
 			         "\t[0 0 1], true);\n"
 			         "\n";
 			}
@@ -2791,8 +2858,8 @@ void LayoutWriter::write_m(std::string const& name, std::ofstream& f_out) {
 //	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
 //	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
 //	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
-	         "mesh.x = [mesh.x, " << data.extrem_pos[XMIN] << ", " << data.extrem_pos[XMAX] << "];\n"
-	         "mesh.y = [mesh.y, " << -data.extrem_pos[YMIN] << ", " << -data.extrem_pos[YMAX] << "];\n"
+	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
+	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
 	         "mesh.z = [mesh.z, " << extrem_pos_zmin << "," << extrem_pos_zmax << "];\n"
 	         "mesh = SmoothMesh(mesh, substrate_res);\n"
 	         "\n"

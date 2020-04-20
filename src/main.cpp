@@ -27,15 +27,6 @@
 
 using namespace std;
 
-//	USAGE
-//	./qucs-rflayout
-//			-h --help
-//			-v 
-//			-i schematic.sch
-//			-f .output_format
-//			-o output/directory
-//			-G gui
-
 #ifdef QRFL_UNITTEST
 #define main not_main
 #endif // QRFL_UNITTEST
@@ -49,6 +40,8 @@ int main(int argc, char* argv[]) {
 	data.n_sch="";
 	data.out_dir="";
 	data.out_format=".kicad_pcb";
+	data.export_each_block=false;
+	data.export_each_subst=false;
 
 //argument parser
 	for(int i=0;i<argc;i++) {
@@ -69,12 +62,14 @@ int main(int argc, char* argv[]) {
 			     << "\t\t- .kicad_pcb\t: kicad layout (default format)" << endl
 			     << "\t\t- .kicad_mod\t: kicad module" << endl
 			     << "\t\t- .lht\t\t: pcb-rnd layout" << endl
-			     << "\t\t- .m\t\t: openems octave script" << endl;
-			exit(0);
+			     << "\t\t- .m\t\t: openems octave script" << endl
+			     << "  -s\t\texport each substrate in a different file" << endl
+			     << "  -b\t\texport each block in a different file" << endl;
+			return(0);
 			}
 		if(string(argv[i])=="--version") {
 			cout << "Qucs-RFlayout " << VERSION << endl;
-			exit(0);
+			return(0);
 			}
 		if(string(argv[i])=="-i" && argv[i+1]) {
 			i++;
@@ -93,8 +88,14 @@ int main(int argc, char* argv[]) {
 				data.out_format=string(argv[i]);
 			} else {
 				log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
-				exit(1);
+				return(1);
 				}
+			}
+		if(string(argv[i])=="-s") {
+			data.export_each_subst=true;
+			}
+		if(string(argv[i])=="-b") {
+			data.export_each_block=true;
 			}
 		if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 			verbose=true;
@@ -121,13 +122,13 @@ int main(int argc, char* argv[]) {
 
 		if(data.n_sch=="") {
 			log_err << "ERROR : Need an input file\n";
-			exit(1);
+			return(1);
 			}
 
 		Converter converter(data);
 
 		int ret=converter.run();
-		if(ret) exit(ret);
+		if(ret) return(ret);
 
 		cout << endl;
 		}

@@ -29,7 +29,9 @@ class Block {
 public:
 	std::vector<std::shared_ptr<Element>> elements;
 	std::shared_ptr<Element> subst;
-	std::array<long double, 4> extrem_pos;
+	std::shared_ptr<Element> subst_local;
+	std::array<long double, 4> extrem_pos; // extrem coords of elements
+	std::array<long double, 4> boundary;   // extrem_pos with margin
 	long double margin;
 
 	Block(void);
@@ -43,18 +45,21 @@ class Data {
 public:
 	std::vector<std::shared_ptr<Element>> tab_all;
 	std::vector<std::shared_ptr<Block>> all_blocks;
+//	std::vector<std::shared_ptr<Substrate>> all_substrates;
+
 //	std::vector<std::shared_ptr<Element>> all_elem;
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_block;
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_subst;
 
-	std::array<long double, 4> extrem_pos;
+	std::array<long double, 4> extrem_pos; // extrem coords of elements (subst included) + margins
 	std::string n_sch;
 	std::string out_dir;
 	std::string out_format;
+	bool export_each_block;
+	bool export_each_subst;
 
-	bool is_volume_error=false;
-//	std::string volume_warning;
-	std::string volume_error;
+	bool is_volume_error=false; // is 3D representation possible?
+	std::string volume_error; // 3D error messages buffer
 
 	Data(void);
 	void clear(void);
