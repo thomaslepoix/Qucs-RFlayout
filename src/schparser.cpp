@@ -206,6 +206,14 @@ void SchParser::parse_schematic(ifstream& f_sch) {
 				regex_search(line, match, r_field9);
 				short R=90*stoi(match.str(2));
 				cout << "\tRotation : " << R << endl;
+			//is active
+				regex_search(line, match, r_field3);
+				bool is_active=stoi(match.str(2));
+				cout << "\tIs active : " << is_active << endl;
+
+				if(!is_active) {
+					continue;
+					}
 
 				if(type=="TLIN"
 				|| type=="TAPEREDLINE"
@@ -244,33 +252,27 @@ void SchParser::parse_schematic(ifstream& f_sch) {
 						cout << "\tFrequency : " << F << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Pac(label, type, mirrorx, 0, N, Z, P, F)));
 				} else if(type==".SP") {
-					//is active
-						regex_search(line, match, r_field3);
-						bool is_active=stoi(match.str(2));
-						cout << "\tIs active : " << is_active << endl;
-					if(is_active) {
-						//simulation type
-							regex_search(line, match, r_quotedfield10_raw);
-							string simtype=match.str(4);
-							cout << "\tSimulation type : " << simtype << endl;
-						if(simtype=="lin"
-						|| simtype=="log") {
-							//start frequency
-								regex_search(line, match, r_quotedfield12);
-								long double Fstart=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
-								cout << "\tStart frequency : " << Fstart << endl;
-							//stop frequency
-								regex_search(line, match, r_quotedfield14);
-								long double Fstop=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
-								cout << "\tStop frequency : " << Fstop << endl;
-							//step number
-								regex_search(line, match, r_quotedfield16);
-								unsigned long N=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
-								cout << "\tStep number : " << N << endl;
-							data.tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, 0, simtype, Fstart, Fstop, N)));
-						} else { // "list" & "const"
-							log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
-							}
+					//simulation type
+						regex_search(line, match, r_quotedfield10_raw);
+						string simtype=match.str(4);
+						cout << "\tSimulation type : " << simtype << endl;
+					if(simtype=="lin"
+					|| simtype=="log") {
+						//start frequency
+							regex_search(line, match, r_quotedfield12);
+							long double Fstart=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+							cout << "\tStart frequency : " << Fstart << endl;
+						//stop frequency
+							regex_search(line, match, r_quotedfield14);
+							long double Fstop=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+							cout << "\tStop frequency : " << Fstop << endl;
+						//step number
+							regex_search(line, match, r_quotedfield16);
+							unsigned long N=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+							cout << "\tStep number : " << N << endl;
+						data.tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, 0, simtype, Fstart, Fstop, N)));
+					} else { // "list" & "const"
+						log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
 						}
 				} else if(type=="SUBST") {
 					//relative permittivity
