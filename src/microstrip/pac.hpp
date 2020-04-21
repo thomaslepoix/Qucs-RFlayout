@@ -36,6 +36,7 @@ private :
 public :
 	Pac(std::string _label,
 			std::string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			unsigned long _n,

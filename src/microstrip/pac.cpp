@@ -20,13 +20,14 @@ using namespace std;
 
 Pac::Pac(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			unsigned long _n,
 			long double _z,
 			long double _p,
 			long double _f) :
-	Element(_label, _type, _mirrorx, _r, 2, ""),
+	Element(_label, _type, _active, _mirrorx, _r, 2, ""),
 	m_n(_n),
 	m_z(_z),
 	m_p(_p),

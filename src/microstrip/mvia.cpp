@@ -20,11 +20,12 @@ using namespace std;
 
 Mvia::Mvia(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			string _subst,
 			long double _d) :
-	Element(_label, _type, _mirrorx, _r, 1, _subst),
+	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
 	m_d(_d)
 	{}
 

@@ -251,6 +251,8 @@ void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double co
 	         "  )\n\n";
 
 	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -314,6 +316,8 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 	         "  )\n";
 
 	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		if(type=="Eqn" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -427,6 +431,8 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 	         "   li:objects {\n";
 
 	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		//if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
 			//nothing to do
@@ -452,6 +458,8 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 	         "      li:objects {\n";
 
 	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		if(type=="MCORN"
         || type=="MCROSS"
@@ -2797,6 +2805,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	f_out << "%%%% SHAPES\n";
 	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -2843,7 +2853,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "[CSX port{" << it->getN() << "}] = AddLumpedPort(CSX, 5, " << it->getN() << ", " << it->getLabel() << ".Z, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)" << "], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", (" << it->getSubst() << ".metal.t)" << "], ...\n"
-			         "\t[0 0 1], true);\n"
+			         "\t[0 0 1], " << (it->getActive() ? "true" : "false") << ");\n"
 			         "\n";
 			}
 		}

@@ -22,7 +22,7 @@ Eqn::Eqn(string _label,
 			string _type,
 			bool _mirrorx,
 			short _r) :
-	Element(_label, _type, _mirrorx, _r, 0, "")
+	Element(_label, _type, true, _mirrorx, _r, 0, "")
 	{}
 
 Eqn::~Eqn() {

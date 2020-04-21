@@ -36,6 +36,7 @@ private :
 public :
 	Mrstub(std::string _label,
 			std::string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			std::string _subst,

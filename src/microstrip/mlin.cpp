@@ -20,12 +20,13 @@ using namespace std;
 
 Mlin::Mlin(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			string _subst,
 			long double _w,
 			long double _l) :
-	Element(_label, _type, _mirrorx, _r, 2, _subst),
+	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w(_w),
 	m_l(_l)
 	{}

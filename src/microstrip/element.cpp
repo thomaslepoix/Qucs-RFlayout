@@ -20,12 +20,14 @@ using namespace std;
 
 Element::Element(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			short _nport,
 			string _subst) :
 	m_label(_label),
 	m_type(_type),
+	m_active(_active),
 	m_mirrorx(_mirrorx),
 	m_r(_r),
 	m_nport(_nport),
@@ -41,6 +43,10 @@ string Element::getLabel(void) {
 
 string Element::getType(void) {
 	return(m_type);
+	}
+
+bool Element::getActive(void) {
+	return(m_active);
 	}
 
 bool Element::getMirrorx(void) {

@@ -26,7 +26,7 @@ Sp::Sp(string _label,
 			long double _fstart,
 			long double _fstop,
 			unsigned long _n) :
-	Element(_label, _type, _mirrorx, _r, 0, ""),
+	Element(_label, _type, true, _mirrorx, _r, 0, ""),
 	m_simtype(_simtype),
 	m_fstart(_fstart),
 	m_fstop(_fstop),

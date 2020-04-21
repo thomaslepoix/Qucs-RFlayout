@@ -33,6 +33,7 @@ class Element {
 protected:
 	std::string m_label;
 	std::string m_type;
+	bool m_active;
 	bool m_mirrorx;
 	short m_r;
 	short m_nport;
@@ -44,6 +45,7 @@ protected:
 public:
 	Element(std::string _label,
 			std::string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			short _nport,
@@ -52,6 +54,7 @@ public:
 	std::shared_ptr<Element> prev=nullptr;
 	std::string getLabel(void);
 	std::string getType(void);
+	bool getActive(void);
 	bool getMirrorx(void);
 	short getR(void);
 	short getNport(void);

@@ -20,13 +20,14 @@ using namespace std;
 
 Mgap::Mgap(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
 			string _subst,
 			long double _w1,
 			long double _w2,
 			long double _s) :
-	Element(_label, _type, _mirrorx, _r, 2, _subst),
+	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_s(_s)

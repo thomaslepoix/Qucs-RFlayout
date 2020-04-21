@@ -176,6 +176,8 @@ void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double
 void Preview::drawAll(void) {
 	glScalef(factor, factor, factor);
 	for(shared_ptr<Element> it : tab_all) {
+		if(!it->getActive())
+			continue;
 		QString type=QString::fromStdString(it->getType());
 		if(type=="MCORN"
 		|| type=="MCROSS"
