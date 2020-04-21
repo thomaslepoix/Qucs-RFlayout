@@ -2837,6 +2837,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				}
 			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
 			         "\n";
+		} else if(type=="MVIA") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getX()+it->getD()/2+offset_x << ", " << -(it->getY()+it->getD()/2+offset_y) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)], ...\n"
+			         "\t[" << it->getX()-it->getD()/2+offset_x << ", " << -(it->getY()-it->getD()/2+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\n";
 			}
 		}
 
