@@ -83,10 +83,10 @@ void XyCalculator::resolve_pac_shapes(void) {
 				}
 			pac->setW(edge);
 			switch(dir) {
-				// 180° switch as pac is 'in front of' its connected element
-				case XMIN: pac->setR(180); break;
-				case XMAX: pac->setR(270); break;
-				case YMIN: pac->setR(0); break;
+				// Only axis matters
+				case XMIN: pac->setR(0); break;
+				case XMAX: pac->setR(0); break;
+				case YMIN: pac->setR(90); break;
 				case YMAX: pac->setR(90); break;
 				}
 			}
