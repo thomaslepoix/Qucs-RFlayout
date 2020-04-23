@@ -37,6 +37,7 @@ public :
 	std::string getDescriptor(void) override;
 	long double getD(void) override;
 	std::string getNet1(void) override;
+	void getEdge(int const _net, long double& edge, short& dir) override;
 	int setNet1(std::string _net1) override;
 };
 

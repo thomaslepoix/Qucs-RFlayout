@@ -48,3 +48,13 @@ int Mvia::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
+
+void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
+	edge=m_d;
+	switch(m_r) {
+		case 0: dir=XMIN; break;
+		case 90: dir=YMAX; break;
+		case 180: dir=XMAX; break;
+		case 270: dir=YMIN; break;
+		}
+	}

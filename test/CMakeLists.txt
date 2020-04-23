@@ -14,6 +14,7 @@ set( QUCS-RF-LAYOUT_TESTS
 	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mrstub.cpp"
 	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mstep.cpp"
 	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mtee.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mvia.cpp"
 	"${CMAKE_SOURCE_DIR}/test/unit/test_schparser.cpp"
 	)
 
