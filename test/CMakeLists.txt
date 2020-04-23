@@ -4,6 +4,16 @@ include( Catch )
 
 set( QUCS-RF-LAYOUT_TESTS
 	"${CMAKE_SOURCE_DIR}/test/unit/test.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mcorn.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mcoupled.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mcross.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mgap.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mlin.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mmbend.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mopen.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mrstub.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mstep.cpp"
+	"${CMAKE_SOURCE_DIR}/test/unit/microstrip/test_mtee.cpp"
 	"${CMAKE_SOURCE_DIR}/test/unit/test_schparser.cpp"
 	)
 
@@ -78,7 +88,7 @@ add_custom_target( checkall
 
 add_test( NAME Unittest
 	COMMAND ${FIXED_SHELL}
-	"$<TARGET_FILE:unittest> -s --use-colour=yes 2> /dev/null"
+	"$<TARGET_FILE:unittest> --use-colour=yes 2> /dev/null"
 	)
 
 if( CMAKE_BUILD_TYPE MATCHES Coverage )
