@@ -56,7 +56,7 @@ void XyCalculator::resolve_pac_shapes(void) {
 	for(shared_ptr<Element> pac : data.tab_all) {
 		if(pac->getType()=="Pac") {
 			long double edge=0;
-			short dir;
+			short dir=0;
 			for(short i=1;i<=pac->getNport();i++) {
 				string pac_net;
 				if(i==1) pac_net=pac->getNet1();

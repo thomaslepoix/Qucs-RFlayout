@@ -51,7 +51,8 @@ SOURCES += \
 	$$PWD/src/mainwindow.cpp \
 	$$PWD/src/preview.cpp \
 	$$PWD/src/logger.cpp \
-	$$PWD/src/data.cpp
+	$$PWD/src/data.cpp \
+	$$PWD/src/oemsmesh.cpp
 
 HEADERS += \
 	$$PWD/src/microstrip/element.hpp \
@@ -77,7 +78,9 @@ HEADERS += \
 	$$PWD/src/mainwindow.hpp \
 	$$PWD/src/preview.hpp \
 	$$PWD/src/logger.hpp \
-	$$PWD/src/data.hpp
+	$$PWD/src/data.hpp \
+	$$PWD/src/oemsmesh.hpp \
+	$$PWD/src/oemsline.hpp
 
 FORMS += \
 	$$PWD/src/mainwindow.ui

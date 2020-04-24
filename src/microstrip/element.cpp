@@ -227,6 +227,18 @@ void Element::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	dir=0;
 	}
 
+int Element::getOemsNcorelines(void) {
+	return(0);
+	}
+
+int Element::getOemsMeshCore(int const /*_n*/, OemsLine& /*line*/) {
+	return(1);
+	}
+
+int Element::getOemsMeshInterface(int const /*_net*/, OemsLine& /*line*/) {
+	return(1);
+	}
+
 int Element::setW(long double /*_w*/) {
 	return(1);
 	}

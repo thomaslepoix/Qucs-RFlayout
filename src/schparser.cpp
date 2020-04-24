@@ -697,7 +697,7 @@ string SchParser::mstub_shift(bool const xy, string const str, string const r) {
 	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
 	else if(r=="2") return(xy ? to_string(stoi(str)+10) : str);
 	else if(r=="3") return(xy ? str : to_string(stoi(str)+10));
-	else return(str); //never happend
+	else return(str); // Never happens
 	}
 
 #pragma GCC diagnostic pop

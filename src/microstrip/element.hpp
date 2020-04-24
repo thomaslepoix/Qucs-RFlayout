@@ -24,6 +24,8 @@
 #include <memory>
 #include <string>
 
+#include "oemsline.hpp"
+
 enum axis_t {X, Y};            // x axis / y axis
 enum orientation_t {NOR, R};   // no rotation / rotation
 enum origin_t {REL, ABS};      // relative / absolute
@@ -98,6 +100,9 @@ public:
 	virtual long double getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs);
 	virtual void getStep(int const _net, long double& xstep, long double& ystep);
 	virtual void getEdge(int const _net, long double& edge, short& dir);
+	virtual int getOemsNcorelines(void);
+	virtual int getOemsMeshCore(int const _n, OemsLine& line);
+	virtual int getOemsMeshInterface(int const _net, OemsLine& line);
 	virtual int setW(long double _w);
 	virtual int setL(long double _l);
 	virtual int setR(short _r);

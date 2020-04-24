@@ -19,6 +19,7 @@
 #include <regex>
 
 #include "logger.hpp"
+#include "oemsmesh.hpp"
 #include "microstrip/element.hpp"
 #include "microstrip/subst.hpp"
 #include "layoutwriter.hpp"
@@ -2720,12 +2721,16 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	long double extrem_pos_zmin=0.0;
 	long double extrem_pos_zmax=0.0;
 
+	OemsMesh mesh(block.elements);
+
 	//constants etc?
 	//substrates
 	//shapes
 	//postprocess
 
-	f_out << "%%%% OpenEMS script grnerated by Qucs-RFlayout from : " << name << ".sch\n"
+	f_out << "#!/usr/bin/octave\n"
+	         "\n"
+	         "%%%% OpenEMS script grnerated by Qucs-RFlayout from : " << name << ".sch\n"
 	         "\n"
 	         "clear;\n"
 	         "close all;\n"
@@ -2735,6 +2740,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_process = true;\n"
 	         "flag_preprocess = true;\n"
 	         "flag_postprocess = true;\n"
+	         "flag_smoothmesh = true;\n"
 	         "arg_list = argv();\n"
 	         "for i = 1:nargin\n"
 	         "\tif strcmp(arg_list{i}, '--help') || strcmp(arg_list{i}, '-h')\n"
@@ -2747,6 +2753,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(\"\\t--no-gui            Do not open AppCSXCAD\");\n"
 	         "\t\tdisp(\"\\t--no-process        Do not execute simulation\");\n"
 	         "\t\tdisp(\"\\t--no-postprocess    Do not execute anything after simulation\");\n"
+	         "\t\tdisp(\"\\t--no-smooth-mesh    Only particular mesh lines\");\n"
 	         "\t\treturn;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-preprocess')\n"
 	         "\t\tflag_preprocess = false;\n"
@@ -2756,6 +2763,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tflag_process = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-postprocess')\n"
 	         "\t\tflag_postprocess = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-smoothmesh')\n"
+	         "\t\tflag_smoothmesh = false;\n"
 	         "\tendif\n"
 	         "endfor\n"
 	         "\n"
@@ -2876,6 +2885,69 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			}
 		}
 
+	f_out << "%%%% MESH\n";
+//	         "mesh.x = [ (0) ];\n"
+//	         "mesh.y = [ (0) ];\n"
+//	         "mesh.z = [ (0) ];\n";
+
+	f_out << "mesh.x = [ ...\n";
+	for(OemsLine line : mesh.x) {
+		if(line.third_rule) {
+			switch(line.direction) {
+				case XMIN: f_out << "\t(" << line.position << " - 2*metal_res/3), (" << line.position << " + metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
+				case XMAX: f_out << "\t(" << line.position << " + 2*metal_res/3), (" << line.position << " - metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
+				}
+		} else {
+			f_out << "\t(" << line.position << ") ... % " << line.label << " : " << line.type << "\n";
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.y = [ ...\n";
+	for(OemsLine line : mesh.y) {
+		if(line.third_rule) {
+			switch(line.direction) {
+				case YMIN: f_out << "\t(" << -line.position << " + 2*metal_res/3), (" << -line.position << " - metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
+				case YMAX: f_out << "\t(" << -line.position << " - 2*metal_res/3), (" << -line.position << " + metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
+				}
+		} else {
+			f_out << "\t(" << -line.position << ") ... % " << line.label << " : " << line.type << "\n";
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.z = [ ...\n";
+	for(shared_ptr<Element> it : block.elements) {
+		type=it->getType();
+		if(type=="SUBST") {
+			f_out << "\t(" << it->getLabel() << ".metal.t/2) ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h/3) ...\n"
+			         "\t(-2*" << it->getLabel() << ".substrate.h/3) ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t/2) ...\n";
+			}
+		}
+	f_out << "\t];\n";
+
+//	f_out << "mesh.z = linspace(" << -substrate.h-copper.h << ", "copper.h", 4);\n";
+
+	f_out << "if flag_smoothmesh\n"
+	         "mesh = SmoothMesh(mesh, metal_res);\n"
+	         "endif % flag_smoothmesh\n"
+//	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
+//	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
+//	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
+//	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
+//	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
+	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
+	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
+	         "mesh.z = [mesh.z, " << extrem_pos_zmin << "," << extrem_pos_zmax << "];\n"
+	         "if flag_smoothmesh\n"
+	         "mesh = SmoothMesh(mesh, substrate_res);\n"
+	         "endif % flag_smoothmesh\n"
+	         "\n"
+	         "CSX = DefineRectGrid( CSX, unit, mesh );\n"
+	         "\n";
+
 	f_out << "%%%% PORTS\n";
 	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
@@ -2893,24 +2965,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "\n";
 			}
 		}
-
-	f_out << "%%%% MESH\n"
-	         "mesh.x = [ (0) ];\n"
-	         "mesh.y = [ (0) ];\n"
-	         "mesh.z = [ (0) ];\n"
-	         "%mesh = SmoothMesh(mesh, metal_res);\n"
-//	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
-//	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
-//	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
-//	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
-//	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
-	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
-	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
-	         "mesh.z = [mesh.z, " << extrem_pos_zmin << "," << extrem_pos_zmax << "];\n"
-	         "mesh = SmoothMesh(mesh, substrate_res);\n"
-	         "\n"
-	         "CSX = DefineRectGrid( CSX, unit, mesh );\n"
-	         "\n";
 
 	f_out << "%%%% SIMULATION\n"
 	         "FDTD = InitFDTD('NrTS', time_res );\n"
@@ -2930,6 +2984,5 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endif % flag_process\n"
 	         "\n";
 
-	f_out << "return;\n"
-	         "\n";
+	f_out << "return;\n";
 	}

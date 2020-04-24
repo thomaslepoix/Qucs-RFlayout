@@ -145,3 +145,43 @@ void Mlin::getEdge(int const _net, long double& edge, short& dir) {
 			}
 		}
 	}
+
+int Mlin::getOemsNcorelines(void) {
+	return(2);
+	}
+
+int Mlin::getOemsMeshCore(int const _n, OemsLine& line) {
+	axis_t axis;
+	switch(m_r) {
+		case  0: case 180: axis=Y; break;
+		case 90: case 270: axis=X; break;
+		default: axis=X; break; // Never happens
+		}
+
+	if(_n==0) {
+		line.position=getP(0, axis, R, ABS);
+		switch(m_r) {
+			case 0: line.direction=YMAX; break;
+			case 90: line.direction=XMAX; break;
+			case 180: line.direction=YMIN; break;
+			case 270: line.direction=XMIN; break;
+			}
+	} else if(_n==1) {
+		line.position=getP(2, axis, R, ABS);
+		switch(m_r) {
+			case 0: line.direction=YMIN; break;
+			case 90: line.direction=XMIN; break;
+			case 180: line.direction=YMAX; break;
+			case 270: line.direction=XMAX; break;
+			}
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) {
+	return(0);
+	}

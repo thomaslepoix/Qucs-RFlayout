@@ -150,3 +150,26 @@ int Pac::setP(void) {
 	tab_p[3][Y]=-m_w/2;
 	return(0);
 	}
+
+int Pac::getOemsNcorelines(void) {
+	return(2);
+	}
+
+int Pac::getOemsMeshCore(int const _n, OemsLine& line) {
+	if(_n==0) {
+		line.position=m_x;
+		line.direction=XMIN;
+	} else if(_n==1) {
+		line.position=m_y;
+		line.direction=YMIN;
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=false;
+	return(0);
+	}
+
+int Pac::getOemsMeshInterface(int const _net, OemsLine& line) {
+	return(0);
+	}

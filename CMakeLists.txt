@@ -101,6 +101,7 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/preview.cpp"
 	"${CMAKE_SOURCE_DIR}/src/logger.cpp"
 	"${CMAKE_SOURCE_DIR}/src/data.cpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsmesh.cpp"
 	)
 
 set( QUCS-RF-LAYOUT_HDRS
@@ -129,6 +130,8 @@ set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/preview.hpp"
 	"${CMAKE_SOURCE_DIR}/src/logger.hpp"
 	"${CMAKE_SOURCE_DIR}/src/data.hpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsmesh.hpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsline.hpp"
 	)
 
 ##########################################################################TARGET
