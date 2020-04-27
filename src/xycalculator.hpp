@@ -30,11 +30,13 @@ private:
 
 	// Main functions
 	bool check_intersection(void);
+	void populate_adjacents(void);
 	void resolve_pac_shapes(void);
 	void place_elements(void);
 	void place_blocks(void);
 
 	// Toolbox functions
+	int get_port(std::shared_ptr<Element> const& element, std::string const net);
 	void sort_blocks(std::vector<std::shared_ptr<Block>> blocks, std::vector<std::shared_ptr<Element>> substs);
 	int add_to_block(std::shared_ptr<Block>& block, std::shared_ptr<Element> const& element);
 	int tab_remove(std::vector<std::shared_ptr<Element>>& elements, std::shared_ptr<Element> const& element);

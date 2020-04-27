@@ -239,6 +239,14 @@ int Element::getOemsMeshInterface(int const /*_net*/, OemsLine& /*line*/) {
 	return(1);
 	}
 
+bool Element::isOemsMeshInterface(int const /*_port*/, long double const /*_w*/) {
+	return(false);
+	}
+
+int Element::setAdjacent(int const /*_port*/, shared_ptr<Element> const& /*element*/, int const /*adjacent_port*/) {
+	return(1);
+	}
+
 int Element::setW(long double /*_w*/) {
 	return(1);
 	}

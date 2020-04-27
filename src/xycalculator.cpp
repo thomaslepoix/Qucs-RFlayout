@@ -43,6 +43,7 @@ int XyCalculator::run(void) {
 
 	//delete unconnected nets
 	purge_nets();
+	populate_adjacents();
 	resolve_pac_shapes();
 	place_elements();
 	purge_blocks();
@@ -505,6 +506,29 @@ int XyCalculator::netmin(shared_ptr<Element> const& element) {
 	if(element->getNet2()!="") return(2);
 	if(element->getNet3()!="") return(3);
 	if(element->getNet4()!="") return(4);
+	return(0);
+	}
+
+void XyCalculator::populate_adjacents(void) {
+	for(shared_ptr<Element> element : data.tab_all) {
+		for(shared_ptr<Element> it : data.tab_all) {
+			if(it!=element) {
+				if(get_port(it, element->getNet1())) element->setAdjacent(1, it, get_port(it, element->getNet1()));
+				if(get_port(it, element->getNet2())) element->setAdjacent(2, it, get_port(it, element->getNet2()));
+				if(get_port(it, element->getNet3())) element->setAdjacent(3, it, get_port(it, element->getNet3()));
+				if(get_port(it, element->getNet4())) element->setAdjacent(4, it, get_port(it, element->getNet4()));
+				}
+			}
+		}
+	}
+
+int XyCalculator::get_port(shared_ptr<Element> const& element, string const net) {
+	if(net!="") {
+		if(element->getNet1()==net) return(1);
+		if(element->getNet2()==net) return(2);
+		if(element->getNet3()==net) return(3);
+		if(element->getNet4()==net) return(4);
+		}
 	return(0);
 	}
 

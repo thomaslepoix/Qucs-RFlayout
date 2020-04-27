@@ -103,6 +103,9 @@ public:
 	virtual int getOemsNcorelines(void);
 	virtual int getOemsMeshCore(int const _n, OemsLine& line);
 	virtual int getOemsMeshInterface(int const _net, OemsLine& line);
+	virtual bool isOemsMeshInterface(int const _port, long double const _w);
+	virtual int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port);
+
 	virtual int setW(long double _w);
 	virtual int setL(long double _l);
 	virtual int setR(short _r);

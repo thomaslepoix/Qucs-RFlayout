@@ -174,6 +174,8 @@ int Mlin::getOemsMeshCore(int const _n, OemsLine& line) {
 			case 180: line.direction=YMAX; break;
 			case 270: line.direction=XMAX; break;
 			}
+	} else {
+		return(1);
 		}
 
 	line.label=m_label;
@@ -183,5 +185,59 @@ int Mlin::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) {
+	axis_t axis;
+	switch(m_r) {
+		case  0: case 180: axis=X; break;
+		case 90: case 270: axis=Y; break;
+		default: axis=X; break; // Never happens
+		}
+
+	if(_net==1 && adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w)) {
+		line.position=getP(0, axis, R, ABS);
+		switch(m_r) {
+			case 0: line.direction=XMIN; break;
+			case 90: line.direction=YMAX; break;
+			case 180: line.direction=XMAX; break;
+			case 270: line.direction=YMIN; break;
+			}
+	} else if(_net==2 && adjacent2.first!=nullptr && adjacent2.first->isOemsMeshInterface(adjacent2.second, m_w)) {
+		line.position=getP(2, axis, R, ABS);
+		switch(m_r) {
+			case 0: line.direction=XMAX; break;
+			case 90: line.direction=YMIN; break;
+			case 180: line.direction=XMIN; break;
+			case 270: line.direction=YMAX; break;
+			}
+	} else {
+		return(1);
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+bool Mlin::isOemsMeshInterface(int const _port, long double const _w) {
+	if(_port==1 || _port==2) {
+		return(_w>m_w ? true : false);
+	} else {
+		return(false);
+		}
+	}
+
+int Mlin::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
+	switch(_port) {
+		case 1:
+			adjacent1.first=adjacent;
+			adjacent1.second=adjacent_port;
+			break;
+		case 2:
+			adjacent2.first=adjacent;
+			adjacent2.second=adjacent_port;
+			break;
+		default:
+			return(1);
+		}
 	return(0);
 	}

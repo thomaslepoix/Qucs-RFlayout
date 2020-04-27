@@ -24,8 +24,7 @@ OemsMesh::OemsMesh(vector<shared_ptr<Element>>& elements) {
 	for(shared_ptr<Element> element : elements) {
 		for(int i=0;i<element->getOemsNcorelines();i++) {
 			OemsLine line;
-//			line.element=element;
-			if(!element->getOemsMeshCore(i,line)) {
+			if(!element->getOemsMeshCore(i, line)) {
 				if(line.direction==XMIN || line.direction==XMAX) {
 					x.push_back(line);
 				} else if(line.direction==YMIN || line.direction==YMAX) {
@@ -33,5 +32,16 @@ OemsMesh::OemsMesh(vector<shared_ptr<Element>>& elements) {
 					}
 				}
 			}
+		for(int i=1;i<=element->getNport();i++) {
+			OemsLine line;
+			if(!element->getOemsMeshInterface(i, line)) {
+				if(line.direction==XMIN || line.direction==XMAX) {
+					x.push_back(line);
+				} else if(line.direction==YMIN || line.direction==YMAX) {
+					y.push_back(line);
+					}
+				}
+			}
+
 		}
 	}
