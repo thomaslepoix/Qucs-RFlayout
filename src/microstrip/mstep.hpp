@@ -27,6 +27,10 @@ private :
 	long double m_w2;
 	std::string m_net1;
 	std::string m_net2;
+
+	// first : element, second : element's port
+	std::pair<std::shared_ptr<Element>, int> adjacent1;
+	std::pair<std::shared_ptr<Element>, int> adjacent2;
 public :
 	Mstep(std::string _label,
 			std::string _type,
@@ -43,6 +47,9 @@ public :
 	std::string getNet1(void) override;
 	std::string getNet2(void) override;
 	void getEdge(int const _net, long double& edge, short& dir) override;
+	int getOemsNcorelines(void) override;
+	int getOemsMeshCore(int const _n, OemsLine& line) override;
+	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
 };

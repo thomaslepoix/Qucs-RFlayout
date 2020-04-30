@@ -83,3 +83,64 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) {
 			}
 		}
 	}
+
+int Mstep::getOemsNcorelines(void) {
+	return(1);
+	}
+
+int Mstep::getOemsMeshCore(int const _n, OemsLine& line) {
+	if(_n!=0 || m_w1==m_w2)
+		return(1);
+
+	bool is_w1_longer;
+	if(adjacent1.first!=nullptr
+	&& adjacent2.first!=nullptr) {
+		is_w1_longer=(m_w1>m_w2 ? true : false);
+	} else if(adjacent1.first!=nullptr
+	       && adjacent2.first==nullptr) {
+		is_w1_longer=true;
+	} else if(adjacent1.first==nullptr
+	       && adjacent2.first!=nullptr) {
+		is_w1_longer=false;
+		}
+
+	switch(m_r) {
+		case 0:
+			line.position=m_x;
+			line.direction=(is_w1_longer ? XMAX : XMIN);
+			break;
+		case 90:
+			line.position=m_y;
+			line.direction=(is_w1_longer ? YMIN : YMAX);
+			break;
+		case 180:
+			line.position=m_x;
+			line.direction=(is_w1_longer ? XMIN : XMAX);
+			break;
+		case 270:
+			line.position=m_y;
+			line.direction=(is_w1_longer ? YMAX : YMIN);
+			break;
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+int Mstep::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
+	switch(_port) {
+		case 1:
+			adjacent1.first=adjacent;
+			adjacent1.second=adjacent_port;
+			break;
+		case 2:
+			adjacent2.first=adjacent;
+			adjacent2.second=adjacent_port;
+			break;
+		default:
+			return(1);
+		}
+	return(0);
+	}

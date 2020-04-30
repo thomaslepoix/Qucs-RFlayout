@@ -173,3 +173,85 @@ void Mcorn::getEdge(int const _net, long double& edge, short& dir) {
 			}
 		}
 	}
+
+int Mcorn::getOemsNcorelines(void) {
+	return(2);
+	}
+
+int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) {
+	if(_n==0) {
+		switch(m_r) {
+			case 0:   line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+			case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+			case 180: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+			case 270: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+			}
+	} else if(_n==1) {
+		switch(m_r) {
+			case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+			case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+			case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+			case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+			}
+	} else {
+		return(1);
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) {
+	if(_net==1
+	&&(adjacent1.first==nullptr
+	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w)))) {
+		switch(m_r) {
+			case 0:   line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
+			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			}
+	} else if(_net==2
+	       &&(adjacent2.first==nullptr
+	       ||(adjacent2.first!=nullptr && adjacent2.first->isOemsMeshInterface(adjacent2.second, m_w)))) {
+		switch(m_r) {
+			case 0:   line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
+			case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+			case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+			}
+	} else {
+		return(1);
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+bool Mcorn::isOemsMeshInterface(int const _port, long double const _w) {
+	if(_port==1 || _port==2) {
+		return(_w>m_w ? true : false);
+	} else {
+		return(false);
+		}
+	}
+
+int Mcorn::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
+	switch(_port) {
+		case 1:
+			adjacent1.first=adjacent;
+			adjacent1.second=adjacent_port;
+			break;
+		case 2:
+			adjacent2.first=adjacent;
+			adjacent2.second=adjacent_port;
+			break;
+		default:
+			return(1);
+		}
+	return(0);
+	}

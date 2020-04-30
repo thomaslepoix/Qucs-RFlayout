@@ -169,7 +169,3 @@ int Pac::getOemsMeshCore(int const _n, OemsLine& line) {
 	line.third_rule=false;
 	return(0);
 	}
-
-int Pac::getOemsMeshInterface(int const _net, OemsLine& line) {
-	return(0);
-	}

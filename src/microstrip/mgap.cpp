@@ -125,3 +125,11 @@ void Mgap::getEdge(int const _net, long double& edge, short& dir) {
 			}
 		}
 	}
+
+bool Mgap::isOemsMeshInterface(int const _port, long double const /*_w*/) {
+	if(_port==1 || _port==2) {
+		return(true);
+	} else {
+		return(false);
+		}
+	}

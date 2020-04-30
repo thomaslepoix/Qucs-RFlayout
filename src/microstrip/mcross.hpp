@@ -33,6 +33,12 @@ private :
 	std::string m_net4;
 	int m_npoint=6;
 	long double tab_p[6][2]={};
+
+	// first : element, second : element's port
+	std::pair<std::shared_ptr<Element>, int> adjacent1;
+	std::pair<std::shared_ptr<Element>, int> adjacent2;
+	std::pair<std::shared_ptr<Element>, int> adjacent3;
+	std::pair<std::shared_ptr<Element>, int> adjacent4;
 public :
 	Mcross(std::string _label,
 			std::string _type,
@@ -58,6 +64,11 @@ public :
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	void getEdge(int const _net, long double& edge, short& dir) override;
+	int getOemsNcorelines(void) override;
+	int getOemsMeshCore(int const _n, OemsLine& line) override;
+	int getOemsMeshInterface(int const _net, OemsLine& line) override;
+	bool isOemsMeshInterface(int const _port, long double const _w) override;
+	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string _net1) override;
 	int setNet2(std::string _net2) override;
 	int setNet3(std::string _net3) override;
