@@ -2741,6 +2741,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_process = true;\n"
 	         "flag_preprocess = true;\n"
 	         "flag_postprocess = true;\n"
+	         "flag_mesh = true;\n"
+	         "flag_highresmesh = true;\n"
+	         "flag_metalresmesh = true;\n"
 	         "flag_smoothmesh = true;\n"
 	         "arg_list = argv();\n"
 	         "for i = 1:nargin\n"
@@ -2749,12 +2752,15 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(['Usage:  ./', program_name(), ' <options>']);\n"
 	         "\t\tdisp(['        octave ', program_name(), ' <option>']);\n"
 	         "\t\tdisp('')\n"
-	         "\t\tdisp(\"\\t-h, --help          Display this help and exit\");\n"
-	         "\t\tdisp(\"\\t--no-preprocess     Do not execute anything before siulation\");\n"
-	         "\t\tdisp(\"\\t--no-gui            Do not open AppCSXCAD\");\n"
-	         "\t\tdisp(\"\\t--no-process        Do not execute simulation\");\n"
-	         "\t\tdisp(\"\\t--no-postprocess    Do not execute anything after simulation\");\n"
-	         "\t\tdisp(\"\\t--no-smooth-mesh    Only particular mesh lines\");\n"
+	         "\t\tdisp(\"\\t-h, --help           Display this help and exit\");\n"
+	         "\t\tdisp(\"\\t--no-preprocess      Do not execute anything before siulation\");\n"
+	         "\t\tdisp(\"\\t--no-gui             Do not open AppCSXCAD\");\n"
+	         "\t\tdisp(\"\\t--no-process         Do not execute simulation\");\n"
+	         "\t\tdisp(\"\\t--no-postprocess     Do not execute anything after simulation\");\n"
+	         "\t\tdisp(\"\\t--no-mesh            Do not mesh any shape\");\n"
+	         "\t\tdisp(\"\\t--no-highresmesh     No high resolution mesh for non orthogonal shapes\");\n"
+	         "\t\tdisp(\"\\t--no-metalresmesh    No particular mesh lines (thirds rule) at metal resolution for orthogonal shapes\");\n"
+	         "\t\tdisp(\"\\t--no-smoothmesh      Only particular mesh lines\");\n"
 	         "\t\treturn;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-preprocess')\n"
 	         "\t\tflag_preprocess = false;\n"
@@ -2764,6 +2770,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tflag_process = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-postprocess')\n"
 	         "\t\tflag_postprocess = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-mesh')\n"
+	         "\t\tflag_mesh = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-highresmesh')\n"
+	         "\t\tflag_highresmesh = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-metalresmesh')\n"
+	         "\t\tflag_metalresmesh = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-smoothmesh')\n"
 	         "\t\tflag_smoothmesh = false;\n"
 	         "\tendif\n"
@@ -2891,12 +2903,15 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "%%%% MESH\n"
 	         "mesh.x = [];\n"
 	         "mesh.y = [];\n"
-	         "mesh.z = [];\n";
+	         "mesh.z = [];\n"
+	         "if flag_mesh\n"
+	         "\n";
 
-	f_out << "mesh.x = [mesh.x, ...\n";
+	f_out << "% High resolution mesh for non orthogonal shapes\n"
+	         "if flag_highresmesh\n"
+	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
 		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
-			// High resolution
 			f_out << "\t(linspace(";
 			for(unsigned int i=0;i<2;i++) {
 				advance(line, i);
@@ -2930,26 +2945,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		}
 	f_out << "\t];\n";
 
-	f_out << "mesh.x = [mesh.x, ...\n";
-	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
-		if(!(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label)) {
-			// Metal resolution
-			if(line->third_rule) {
-				switch(line->direction) {
-					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
-					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
-					}
-			} else {
-				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
-				}
-			}
-		}
-	f_out << "\t];\n";
-
 	f_out << "mesh.y = [mesh.y, ...\n";
 	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
 		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
-			// High resolution
 			f_out << "\t(linspace(";
 			for(unsigned int i=0;i<2;i++) {
 				advance(line, i);
@@ -2981,12 +2979,34 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			f_out << ") / high_res))), ... % " << line->label << " : " << line->type << "\n";
 			}
 		}
+	f_out << "\t];\n"
+	         "endif % flag_highresmesh\n"
+	         "\n";
+
+	f_out << "% Standard metal resolution mesh for orthogonal shapes\n"
+	         "if flag_metalresmesh\n"
+	         "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else {
+			if(line->third_rule) {
+				switch(line->direction) {
+					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					}
+			} else {
+				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
+				}
+			}
+		}
 	f_out << "\t];\n";
 
 	f_out << "mesh.y = [mesh.y, ...\n";
 	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
-		if(!(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label)) {
-			// Metal resolution
+		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else {
 			if(line->third_rule) {
 				switch(line->direction) {
 					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
@@ -3016,18 +3036,21 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "if flag_smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, metal_res);\n"
 	         "endif % flag_smoothmesh\n"
+	         "endif % flag_metalresmesh\n"
 	         "\n"
 //	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
 //	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
 //	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
 //	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
 //	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
+	         "% Boundary box\n"
 	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
 	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
 	         "mesh.z = [mesh.z, " << extrem_pos_zmin << "," << extrem_pos_zmax << "];\n"
 	         "if flag_smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, substrate_res);\n"
 	         "endif % flag_smoothmesh\n"
+	         "endif % flag_mesh\n"
 	         "\n"
 	         "CSX = DefineRectGrid( CSX, unit, mesh );\n"
 	         "\n";
