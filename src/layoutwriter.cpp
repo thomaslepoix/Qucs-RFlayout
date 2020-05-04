@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <iostream>
+#include <iterator>
 #include <regex>
 
 #include "logger.hpp"
@@ -2773,8 +2774,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "Sim_Path = '" << name << "';\n"
 	         "Sim_CSX = '" << name << ".xml';\n"
 	         "if flag_preprocess\n"
-	         "[status, message, messageid] = rmdir( Sim_Path, 's' );\n"
-	         "[status, message, messageid] = mkdir( Sim_Path );\n"
+	         "[status, message, messageid] = rmdir(Sim_Path, 's');\n"
+	         "[status, message, messageid] = mkdir(Sim_Path);\n"
 	         "\n";
 
 	f_out << "%%%% VARIABLES\n";
@@ -2794,9 +2795,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "f0 = (fstop + fstart) / 2; % Center frequency\n"
 	         "fc = (fstop - fstart) / 2; % Cutoff frequency\n"
 	         "unit = 1e-3;\n"
-	         "metal_div = 36;        % Depend on your simulation, you may want to tweak this value\n"
+	         "high_div = 200;        % Depend on your simulation, you may want to tweak this value\n"
+	         "metal_div = 60;        % Depend on your simulation, you may want to tweak this value\n"
 	         "substrate_div = 30;    % Depend on your simulation, you may want to tweak this value\n"
 	         "time_res = 300000;     % Depend on your simulation, you may want to tweak this value\n"
+	         "high_res = c0 / (f0 + fc) / unit / high_div;\n"
 	         "metal_res = c0 / (f0 + fc) / unit / metal_div;\n"
 	         "substrate_res = c0 / (f0 + fc) / unit / substrate_div;\n"
 	         "SimBox = [120, 120, 90];\n"
@@ -2885,45 +2888,125 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			}
 		}
 
-	f_out << "%%%% MESH\n";
-//	         "mesh.x = [ (0) ];\n"
-//	         "mesh.y = [ (0) ];\n"
-//	         "mesh.z = [ (0) ];\n";
+	f_out << "%%%% MESH\n"
+	         "mesh.x = [];\n"
+	         "mesh.y = [];\n"
+	         "mesh.z = [];\n";
 
-	f_out << "mesh.x = [ ...\n";
-	for(OemsLine line : mesh.x) {
-		if(line.third_rule) {
-			switch(line.direction) {
-				case XMIN: f_out << "\t(" << line.position << " - 2*metal_res/3), (" << line.position << " + metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
-				case XMAX: f_out << "\t(" << line.position << " + 2*metal_res/3), (" << line.position << " - metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
+	f_out << "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
+			// High resolution
+			f_out << "\t(linspace(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case XMIN: f_out << "(" << line->position << " - 2*high_res/3), "; break;
+						case XMAX: f_out << "(" << line->position << " + 2*high_res/3), "; break;
+						}
+				} else {
+					f_out << "(" << line->position << "), ";
+					}
 				}
-		} else {
-			f_out << "\t(" << line.position << ") ... % " << line.label << " : " << line.type << "\n";
+			advance(line, -1);
+			f_out << "(abs(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case XMIN: f_out << "(" << line->position << " - 2*high_res/3)"; break;
+						case XMAX: f_out << "(" << line->position << " + 2*high_res/3)"; break;
+						}
+				} else {
+					f_out << "(" << line->position << ")";
+					}
+				if(i==0) {
+					f_out << " - ";
+					}
+				}
+			f_out << ") / high_res))), ... % " << line->label << " : " << line->type << "\n";
 			}
 		}
 	f_out << "\t];\n";
 
-	f_out << "mesh.y = [ ...\n";
-	for(OemsLine line : mesh.y) {
-		if(line.third_rule) {
-			switch(line.direction) {
-				case YMIN: f_out << "\t(" << -line.position << " + 2*metal_res/3), (" << -line.position << " - metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
-				case YMAX: f_out << "\t(" << -line.position << " - 2*metal_res/3), (" << -line.position << " + metal_res/3) ... % " << line.label << " : " << line.type << "\n"; break;
+	f_out << "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(!(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label)) {
+			// Metal resolution
+			if(line->third_rule) {
+				switch(line->direction) {
+					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					}
+			} else {
+				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
 				}
-		} else {
-			f_out << "\t(" << -line.position << ") ... % " << line.label << " : " << line.type << "\n";
 			}
 		}
 	f_out << "\t];\n";
 
-	f_out << "mesh.z = [ ...\n";
+	f_out << "mesh.y = [mesh.y, ...\n";
+	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
+		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
+			// High resolution
+			f_out << "\t(linspace(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3), "; break;
+						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3), "; break;
+						}
+				} else {
+					f_out << "(" << -line->position << "), ";
+					}
+				}
+			advance(line, -1);
+			f_out << "(abs(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3)"; break;
+						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3)"; break;
+						}
+				} else {
+					f_out << "(" << line->position << ")";
+					}
+				if(i==0) {
+					f_out << " - ";
+					}
+				}
+			f_out << ") / high_res))), ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.y = [mesh.y, ...\n";
+	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
+		if(!(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label)) {
+			// Metal resolution
+			if(line->third_rule) {
+				switch(line->direction) {
+					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case YMAX: f_out << "\t(" << -line->position << " - 2*metal_res/3), (" << -line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					}
+			} else {
+				f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
+				}
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.z = [mesh.z, ...\n";
 	for(shared_ptr<Element> it : block.elements) {
 		type=it->getType();
 		if(type=="SUBST") {
-			f_out << "\t(" << it->getLabel() << ".metal.t/2) ...\n"
-			         "\t(-" << it->getLabel() << ".substrate.h/3) ...\n"
-			         "\t(-2*" << it->getLabel() << ".substrate.h/3) ...\n"
-			         "\t(-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t/2) ...\n";
+			f_out << "\t(" << it->getLabel() << ".metal.t/2), ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h/3), ...\n"
+			         "\t(-2*" << it->getLabel() << ".substrate.h/3), ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t/2), ...\n";
 			}
 		}
 	f_out << "\t];\n";
@@ -2933,6 +3016,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "if flag_smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, metal_res);\n"
 	         "endif % flag_smoothmesh\n"
+	         "\n"
 //	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
 //	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
 //	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"

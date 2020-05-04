@@ -187,3 +187,73 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) {
 			}
 		}
 	}
+
+int Mmbend::getOemsNcorelines(void) {
+	return(4);
+	}
+
+int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) {
+	if(_n==0) {
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0:   line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
+				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+				case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0:   line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
+				case 270: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+				}
+			}
+	} else if(_n==1) {
+		switch(m_r) {
+			case 0:   line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
+			case 90:  line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
+			case 180: line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
+			case 270: line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
+			}
+	} else if(_n==2) {
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+				case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+				case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+				case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+				}
+		} else {
+			switch(m_r) {
+				case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+				case 90:  line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+				case 180: line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+				case 270: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+				}
+			}
+	} else if(_n==3) {
+		switch(m_r) {
+			case 0:   line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
+			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			}
+	} else {
+		return(1);
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	line.high_res=true;
+	return(0);
+	}
+
+bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) {
+	if(_port==1 || _port==2) {
+		return(_w>m_w ? true : false);
+	} else {
+		return(false);
+		}
+	}

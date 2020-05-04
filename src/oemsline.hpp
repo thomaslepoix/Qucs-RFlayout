@@ -21,13 +21,15 @@
 #include <memory>
 #include <string>
 
-class Element;
+// High resolution meshlines work by pair. To be printed as hres lines, it is
+// required that both lines of a pair are contiguous in a OemsMesh.dir vector
+// Otherwise both will be printed as regular metal resolution lines
 
 struct OemsLine {
 	long double position;
 	int direction;
 	bool third_rule;
-//	std::shared_ptr<Element> element;
+	bool high_res=false;
 	std::string label;
 	std::string type;
 };

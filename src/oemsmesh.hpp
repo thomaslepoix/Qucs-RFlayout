@@ -19,7 +19,6 @@
 #define OEMSMESH_HPP
 
 #include <memory>
-//#include <utility>
 #include <vector>
 
 #include "oemsline.hpp"
@@ -27,8 +26,6 @@
 
 class OemsMesh {
 public:
-//	std::vector<std::pair<long double, int>> x;
-//	std::vector<std::pair<long double, int>> y;
 	std::vector<OemsLine> x;
 	std::vector<OemsLine> y;
 
