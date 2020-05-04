@@ -66,24 +66,24 @@ int Mvia::getOemsNcorelines(void) {
 int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
 		switch(m_r) {
-			case 0:   line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
-			case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
-			case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
-			case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+			case 0:   line.position=m_y+m_d/2; line.direction=YMAX; break;
+			case 90:  line.position=m_x+m_d/2; line.direction=XMAX; break;
+			case 180: line.position=m_y-m_d/2; line.direction=YMIN; break;
+			case 270: line.position=m_x-m_d/2; line.direction=XMIN; break;
 			}
 	} else if(_n==1) {
 		switch(m_r) {
-			case 0:   line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
-			case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
-			case 180: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
-			case 270: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+			case 0:   line.position=m_x+m_d/2; line.direction=XMAX; break;
+			case 90:  line.position=m_y-m_d/2; line.direction=YMIN; break;
+			case 180: line.position=m_x-m_d/2; line.direction=XMIN; break;
+			case 270: line.position=m_y+m_d/2; line.direction=YMAX; break;
 			}
 	} else if(_n==2) {
 		switch(m_r) {
-			case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
-			case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
-			case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
-			case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+			case 0:   line.position=m_y-m_d/2; line.direction=YMIN; break;
+			case 90:  line.position=m_x-m_d/2; line.direction=XMIN; break;
+			case 180: line.position=m_y+m_d/2; line.direction=YMAX; break;
+			case 270: line.position=m_x+m_d/2; line.direction=XMAX; break;
 			}
 	} else {
 		return(1);
@@ -100,10 +100,10 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_d)))) {
 		switch(m_r) {
-			case 0:   line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
-			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
-			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
-			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			case 0:   line.position=m_x-m_d/2; line.direction=XMIN; break;
+			case 90:  line.position=m_y+m_d/2; line.direction=YMAX; break;
+			case 180: line.position=m_x+m_d/2; line.direction=XMAX; break;
+			case 270: line.position=m_y-m_d/2; line.direction=YMIN; break;
 			}
 	} else {
 		return(1);
