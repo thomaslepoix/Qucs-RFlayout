@@ -29,9 +29,6 @@ XyCalculator::XyCalculator(Data& _data) :
 	data(_data)
 	{}
 
-void XyCalculator::clear(void) {
-	}
-
 int XyCalculator::run(void) {
 
 //check geometric coherence of the schematic
@@ -141,7 +138,7 @@ void XyCalculator::place_elements(void) {
 					cout << "Current label : " << current->getLabel() << endl;
 					}
 				if(current->getX()!=current->getX() || current->getY()!=current->getY()) {
-					//reset position
+					// Reset position
 					current->setX(0);
 					current->setY(0);
 					cout << "Reset X : " << current->getX() << endl;
@@ -165,7 +162,7 @@ void XyCalculator::place_elements(void) {
 			next=nullptr;
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
-			if(current->getX()!=current->getX() || current->getY()!=current->getY()) {		//if position is -NaN
+			if(current->getX()!=current->getX() || current->getY()!=current->getY()) { // If position is -NaN
 				current->getStep(current_net, current_xstep, current_ystep);
 				cout << "Previous Xstep : " << prev_xstep << endl;
 				cout << "Previous Ystep : " << prev_ystep << endl;
@@ -179,11 +176,6 @@ void XyCalculator::place_elements(void) {
 			}
 		}
 	cout << "Calculating elements positons... OK" << endl;
-
-//delete objects inner pointers
-	for(shared_ptr<Element> it : data.tab_all) {
-		it->prev=nullptr;
-		}
 	}
 
 void XyCalculator::place_blocks(void) {
@@ -207,7 +199,7 @@ void XyCalculator::place_blocks(void) {
 		vector<pair<string, int>> subst_in_block;
 		for(shared_ptr<Element> it : block->elements) {
 			if(it->getType()=="Pac") {
-				continue; //no subst field in Pac
+				continue; // No subst field in Pac
 				}
 			bool subst_exist=false;
 			for(shared_ptr<Element> subst : tab_subst) {

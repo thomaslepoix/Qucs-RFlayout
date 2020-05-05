@@ -25,12 +25,6 @@ Converter::Converter(Data& _data) :
 	layoutwriter(_data)
 	{}
 
-Converter::~Converter(void) {
-	for(std::shared_ptr<Element> it : data.tab_all) {
-		it->prev=nullptr;
-		}
-	}
-
 void Converter::reset(string n_sch, string out_dir, string out_format) {
 	data.n_sch=n_sch;
 	data.out_dir=out_dir;
@@ -38,12 +32,7 @@ void Converter::reset(string n_sch, string out_dir, string out_format) {
 	}
 
 void Converter::clear(void) {
-	for(std::shared_ptr<Element> it : data.tab_all) {
-		it->prev=nullptr;
-		}
 	data.clear();
-	parser.clear();
-	xycalculator.clear();
 	}
 
 int Converter::run(void) {

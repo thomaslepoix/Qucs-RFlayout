@@ -62,6 +62,7 @@ public:
 	std::string volume_error; // 3D error messages buffer
 
 	Data(void);
+	~Data(void);
 	void clear(void);
 };
 

@@ -53,7 +53,6 @@ public:
 
 	// Interface functions
 	int run(void);
-	void clear(void);
 };
 
 #endif // XYCALCULATOR_HPP

@@ -30,10 +30,6 @@ SchParser::SchParser(Data& _data) :
 	data(_data)
 	{}
 
-void SchParser::clear(void) {
-	unprintables.clear();
-	}
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
 #pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
@@ -44,6 +40,7 @@ int SchParser::run(void) {
 	string n_net;
 	ifstream f_sch;
 	ifstream f_net;
+	vector<string> unprintables;
 	static regex const r_sch("\.sch$");
 
 //filenames processing
@@ -67,11 +64,11 @@ int SchParser::run(void) {
 
 	open_file(f_net, n_net);
 
-	parse_schematic(f_sch);
+	parse_schematic(f_sch, unprintables);
 	parse_netlist(f_net);
 
 	cout << "Number of elements : " << data.tab_all.size() << endl;
-	warn_unprintable();
+	warn_unprintable(unprintables);
 	return(0);
 	}
 
@@ -158,7 +155,7 @@ int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
 		}
 	}
 
-void SchParser::parse_schematic(ifstream& f_sch) {
+void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 	string line;
 	smatch match;
 
@@ -616,7 +613,7 @@ void SchParser::parse_netlist(ifstream& f_net) {
 	cout << "Reading netlist... OK" << endl;
 	}
 
-void SchParser::warn_unprintable(void) {
+void SchParser::warn_unprintable(vector<string>& unprintables) {
 	if(unprintables.size()) {
 		log_err << "WARNING : Schematic contains some unprintable transmission lines";
 		for(string element : unprintables) {
