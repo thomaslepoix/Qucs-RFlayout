@@ -39,4 +39,3 @@ else( GZIP )
 	endmacro( compress_gz COMPRESSION_RATE INPUT_FILE OUTPUT_FILE )
 
 endif( GZIP )
-

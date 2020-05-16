@@ -22,3 +22,6 @@ install(
 	DESTINATION "share/man/man1" #"${CMAKE_INSTALL_MANDIR}"
 	)
 
+###########################################################################LATEX
+
+add_subdirectory( "${CMAKE_CURRENT_SOURCE_DIR}/latex" )

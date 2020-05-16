@@ -1,0 +1,16 @@
+add_custom_target( doc )
+include( Latex )
+
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "table_orientation" )
+
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mcorn" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mcoupled" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mcross" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mgap" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mlin" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mmbend" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mopen" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mrstub" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mstep" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mtee" )
+add_latex_target( "${CMAKE_CURRENT_SOURCE_DIR}" "topology_mvia" )
