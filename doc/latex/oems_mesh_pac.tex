@@ -1,0 +1,33 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX, Mapping=tex-text]{Lato}
+\setmonofont{FreeMonoBold}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{xfp}
+
+\begin{document}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% SHAPE
+\filldraw [line width=0.5pt, fill=orange] (\ox,\oy) +(-0.5,-1) rectangle +(0.5,1);
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) ++(-0.5,0) +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0.5,0) +(0,-1) -- +(0,1);
+
+% MESH
+\draw [line width=0.5pt] (\ox,\oy) +(0,2) -- +(0,-1.7) node[below] {C0};
+\draw [line width=0.5pt] (\ox,\oy) +(-2,0) -- +(1.7,0) node[right] {C1};
+
+\end{tikzpicture}
+\end{document}
