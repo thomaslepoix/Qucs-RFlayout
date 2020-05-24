@@ -112,6 +112,8 @@ int main(int argc, char* argv[]) {
 	if(gui) {
 		log_err << "GUI mode\n";
 		QApplication a(argc, argv);
+		// Avoid a stold() bug introduced by QApplication() performing setlocale(LC_ALL, "")
+		setlocale(LC_NUMERIC, "C");
 		MainWindow w(data);
 		log_err.obj=&w;
 		log_err.set_mode(gui);
