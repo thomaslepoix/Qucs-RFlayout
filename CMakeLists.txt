@@ -4,7 +4,7 @@ cmake_policy( VERSION 3.11 )
 
 project( qucsrflayout
 	LANGUAGES CXX
-	VERSION 1.0.0
+	VERSION 1.0.1.1
 	DESCRIPTION "A tool to produce layout from qucs RF schematics (microstrip only for now)"
 #	HOMEPAGE_URL "https://github.com/thomaslepoix/Qucs-RFlayout"
 	)

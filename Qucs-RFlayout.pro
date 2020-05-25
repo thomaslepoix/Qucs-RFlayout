@@ -89,7 +89,7 @@ INCLUDEPATH += \
 	$$PWD/src
 
 DEFINES += \
-	QRFL_VERSION=\\\"1.0.0\\\"
+	QRFL_VERSION=\\\"1.0.1.1\\\"
 
 target.path = $$PREFIX/bin
 INSTALLS += target
@@ -110,4 +110,3 @@ unix {
 	}
 
 #CONFIG += object_parallel_to_source
-
