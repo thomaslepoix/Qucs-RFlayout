@@ -48,3 +48,12 @@ compile_latex_file( "oems_mesh_pac" REGISTER_TO "OEMS_MESH_FILES" )
 add_custom_target( "oems_mesh" DEPENDS ${OEMS_MESH_FILES} )
 add_dependencies( "doc" "oems_mesh" )
 
+install(
+	FILES
+		${TOPOLOGY_FILES}
+		${DETAIL_FILES}
+		${OEMS_MESH_FILES}
+	DESTINATION "share/doc/qucsrflayout" #"${CMAKE_INSTALL_DOCDIR}/qucsrflayout"
+	OPTIONAL
+	)
+
