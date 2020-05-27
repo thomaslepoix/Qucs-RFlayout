@@ -371,13 +371,15 @@ void XyCalculator::place_blocks(void) {
 //local subst placement
 	cout << endl << "Calculating local substrates positons... ";
 	for(shared_ptr<Block> block : data.all_blocks) {
-		Subst* subst=dynamic_cast<Subst*>(block->subst.get());
-		block->subst_local=shared_ptr<Element>(new Subst(subst));
-		block->subst_local->setL(block->boundary[XMAX]-block->boundary[XMIN]);//+2*block->subst_local->getMargin());
-		block->subst_local->setW(block->boundary[YMAX]-block->boundary[YMIN]);//+2*block->subst_local->getMargin());
-		block->subst_local->setX((block->boundary[XMAX]+block->boundary[XMIN])/2);
-		block->subst_local->setY((block->boundary[YMAX]+block->boundary[YMIN])/2);
-		block->subst_local->setP();
+		if(block->subst) {
+			Subst* subst=dynamic_cast<Subst*>(block->subst.get());
+			block->subst_local=shared_ptr<Element>(new Subst(subst));
+			block->subst_local->setL(block->boundary[XMAX]-block->boundary[XMIN]);//+2*block->subst_local->getMargin());
+			block->subst_local->setW(block->boundary[YMAX]-block->boundary[YMIN]);//+2*block->subst_local->getMargin());
+			block->subst_local->setX((block->boundary[XMAX]+block->boundary[XMIN])/2);
+			block->subst_local->setY((block->boundary[YMAX]+block->boundary[YMIN])/2);
+			block->subst_local->setP();
+			}
 		}
 	cout << "OK" << endl;
 	}
