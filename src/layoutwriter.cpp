@@ -2831,8 +2831,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         it->getLabel() << ".metal.t = (" << it->getT() << ");\n" <<
 			         it->getLabel() << ".metal.rho = (" << it->getRho() << ");\n" <<
 			         it->getLabel() << ".metal.cond = (1 / " << it->getLabel() << ".metal.rho);\n"
-			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".metal');\n"
-			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".metal', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
+//			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".metal');\n"
+//			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".metal', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".ground');\n"
 			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".ground', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
 
@@ -2870,16 +2870,21 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		} else if(type=="MCORN"
 		       || type=="MLIN") {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
-			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
 			         "\n";
 		} else if(type=="MCOUPLED") {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
-			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
-			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getP(4, X, R, ABS)+offset_x << ", " << -(it->getP(4, Y, R, ABS)+offset_y) << ", 0], ...\n"
 			         "\t[" << it->getP(6, X, R, ABS)+offset_x << ", " << -(it->getP(6, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
 			         "\n";
@@ -2892,11 +2897,15 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			for(int i=0;i<it->getNpoint();i++) {
 				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS)+offset_x << "; p(2, " << i+1 << ") = " << -(it->getP(i, Y, R, ABS)+offset_y) << ";\n";
 				}
-			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+			f_out << "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddLinPoly(CSX, '" << it->getLabel() << "', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+//			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
 			         "\n";
 		} else if(type=="MVIA") {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
-			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getX()+it->getD()/2+offset_x << ", " << -(it->getY()+it->getD()/2+offset_y) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)], ...\n"
 			         "\t[" << it->getX()-it->getD()/2+offset_x << ", " << -(it->getY()-it->getD()/2+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
 			         "\n";
