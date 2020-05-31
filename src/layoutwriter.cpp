@@ -2807,13 +2807,14 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "f0 = (fstop + fstart) / 2; % Center frequency\n"
 	         "fc = (fstop - fstart) / 2; % Cutoff frequency\n"
 	         "unit = 1e-3;\n"
+	         "lambda = c0 / (f0 + fc) / unit;\n"
 	         "high_div = 200;        % Depend on your simulation, you may want to tweak this value\n"
 	         "metal_div = 60;        % Depend on your simulation, you may want to tweak this value\n"
 	         "substrate_div = 30;    % Depend on your simulation, you may want to tweak this value\n"
 	         "time_res = 300000;     % Depend on your simulation, you may want to tweak this value\n"
-	         "high_res = c0 / (f0 + fc) / unit / high_div;\n"
-	         "metal_res = c0 / (f0 + fc) / unit / metal_div;\n"
-	         "substrate_res = c0 / (f0 + fc) / unit / substrate_div;\n"
+	         "high_res = lambda / high_div;\n"
+	         "metal_res = lambda / metal_div;\n"
+	         "substrate_res = lambda / substrate_div;\n"
 	         "SimBox = [120, 120, 90];\n"
 	         "\n";
 
