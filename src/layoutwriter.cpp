@@ -3047,9 +3047,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 //	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
 //	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
 	         "% Boundary box\n"
-	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
-	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
-	         "mesh.z = [mesh.z, " << extrem_pos_zmin << "," << extrem_pos_zmax << "];\n"
+//	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
+//	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
+//	         "mesh.z = [mesh.z, " << extrem_pos_zmin << ", " << extrem_pos_zmax << "];\n"
+	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << " - lambda * 3/4, " << block.boundary[XMAX]+offset_x << " + lambda * 3/4];\n"
+	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << " + lambda * 3/4, " << -(block.boundary[YMAX]+offset_y) << " - lambda * 3/4];\n" //TODO
+	         "mesh.z = [mesh.z, " << extrem_pos_zmin << " - lambda * 3/4, " << extrem_pos_zmax << " + lambda * 3/4];\n"
 	         "if flag_smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, substrate_res);\n"
 	         "endif % flag_smoothmesh\n"
