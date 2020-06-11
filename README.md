@@ -45,6 +45,12 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 ## Build & Install
 
+- Install dependencies :
+
+```sh
+sudo apt-get install qt5-default libqt5opengl5-dev texlive-xetex fonts-lato    # Debian
+```
+
 - With CMake (You must use a modern version >= 3.11) :
 
 ```sh
@@ -54,6 +60,7 @@ Qucs-RFlayout $
 
     cmake ..
     make
+    make doc
 
     # Prefered way : use your packet manager
     make package
@@ -64,7 +71,7 @@ Qucs-RFlayout $
     sudo make install
 ```
 
-- Or if you don't have CMake, you can use QMake :
+- Or if you don't have CMake, you can use QMake (Incomplete installation) :
 
 ```sh
 Qucs-RFlayout $
@@ -80,7 +87,7 @@ Qucs-RFlayout $
 
 ## Usage
 
-```
+```sh
 qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
 ```
 
