@@ -23,20 +23,20 @@
 
 #include <sstream>
 
-#include "data.hpp"
 #include "converter.hpp"
+#include "data.hpp"
+#include "logger.hpp"
 
 namespace Ui {
 class MainWindow;
 } // namespace Ui
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow, public Loggable {
 	Q_OBJECT
 
 public:
 	explicit MainWindow(Data& _data, QWidget* parent=0);
 	~MainWindow();
-	friend void operator<<(MainWindow& obj, std::stringstream& in);
 
 private slots:
 	void on_pb_read_clicked(void);
@@ -53,8 +53,8 @@ private slots:
 	void on_rb_export_each_block_toggled(bool const is_checked);
 
 protected:
-	void keyPressEvent(QKeyEvent* event);
-	void keyReleaseEvent(QKeyEvent* event);
+	void keyPressEvent(QKeyEvent* event) override;
+	void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
 	Ui::MainWindow* ui;
@@ -66,8 +66,8 @@ private:
 	QString out_format;
 	QString n_out;
 	QString openfile_path;
-};
 
-void operator<<(MainWindow& obj, std::stringstream& in);
+	void log(std::stringstream& in) override;
+};
 
 #endif // MAINWINDOW_HPP

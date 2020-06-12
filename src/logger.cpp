@@ -20,25 +20,28 @@
 #include "logger.hpp"
 using namespace std;
 
-logger log_err;
+Logger log_err;
 
-void logger::func_cli(stringstream& in) {
+void Loggable::log(stringstream& /*in*/) {
+	}
+
+void Logger::func_cli(stringstream& in) {
 	cerr << in.str();
 	}
 
-void logger::func_gui(stringstream& in) {
-	*obj << in;
+void Logger::func_gui(stringstream& in) {
+	obj->log(in);
 	}
 
-void logger::print(stringstream& in) {
+void Logger::print(stringstream& in) {
 	(this->*f)(in);
 	}
 
-logger::logger(void) : f(&logger::func_cli) {
+Logger::Logger(void) : f(&Logger::func_cli) {
 	}
 
-void logger::set_mode(bool gui) {
-	if(gui) f=&logger::func_gui;
-	else f=&logger::func_cli;
+void Logger::set_mode(bool gui) {
+	if(gui) f=&Logger::func_gui;
+	else f=&Logger::func_cli;
 	}
 

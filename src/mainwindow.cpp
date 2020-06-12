@@ -165,7 +165,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(false);
 	}
 
-void operator<<(MainWindow& obj, stringstream& in) {
-	obj.ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
+void MainWindow::log(stringstream& in) {
+	ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
 	}
-
