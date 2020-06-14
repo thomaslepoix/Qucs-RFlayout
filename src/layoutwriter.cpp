@@ -3135,7 +3135,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	unsigned int color=0;
 
 	f_out << "%%%% VARIABLES\n"
-	         "graphics_format = '.svg'\n"
+	         "graphics_format = '.svg';\n"
 	         "funit = 1e+3;\n"
 	         "funit_name = 'kHz';\n"
 	         "if fstop >= 1e+9 && fstart >= 1e+9\n"
@@ -3220,7 +3220,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "print(1, ['" << name << "', graphics_format]);\n"
 	         "\n";
 
-	f_out << "\n"
-	         "pause();\n"
+	f_out << "pause();\n"
 	         "return;\n";
 	}

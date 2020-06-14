@@ -82,10 +82,8 @@ void XyCalculator::resolve_pac_shapes(void) {
 			pac->setW(edge);
 			switch(dir) {
 				// Only axis matters
-				case XMIN: pac->setR(0); break;
-				case XMAX: pac->setR(0); break;
-				case YMIN: pac->setR(90); break;
-				case YMAX: pac->setR(90); break;
+				case XMIN: case XMAX: pac->setR(0); break;
+				case YMIN: case YMAX: pac->setR(90); break;
 				}
 			}
 		}
