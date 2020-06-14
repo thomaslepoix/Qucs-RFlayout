@@ -13,7 +13,7 @@
 \def\stepx{2.2}
 \def\stepy{1.9}
 \def\rows{9}
-\def\cols{13}
+\def\cols{14}
 
 % GRID
 \draw [line width=1pt, join=miter] (0,0)
@@ -186,8 +186,34 @@
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mrstub) ++(0,\fpeval{-8*\stepy})
 		++(\fpeval{\stepx/-5},0) -- +(\fpeval{\stepx/5},0) node[right] {1};
 
+% MSTUB
+\draw (\fpeval{9*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node[align=center](mstub) {\textbf{MSTUB}\\\footnotesize(QucsStudio)};
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-1*\stepy})
+		++(0,\fpeval{\stepx/5}) -- +(0,\fpeval{\stepx/-5}) node[below] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-2*\stepy})
+		++(\fpeval{\stepx/-5},0) -- +(\fpeval{\stepx/5},0) node[right] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-3*\stepy})
+		++(0,\fpeval{\stepx/-5}) -- +(0,\fpeval{\stepx/5}) node[above] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-4*\stepy})
+		++(\fpeval{\stepx/5},0) -- +(\fpeval{\stepx/-5},0) node[left] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-5*\stepy})
+		++(0,\fpeval{\stepx/-5}) -- +(0,\fpeval{\stepx/5}) node[above] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-6*\stepy})
+		++(\fpeval{\stepx/5},0) -- +(\fpeval{\stepx/-5},0) node[left] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-7*\stepy})
+		++(0,\fpeval{\stepx/5}) -- +(0,\fpeval{\stepx/-5}) node[below] {1};
+
+	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mstub) ++(0,\fpeval{-8*\stepy})
+		++(\fpeval{\stepx/-5},0) -- +(\fpeval{\stepx/5},0) node[right] {1};
+
 % MCORN
-\draw (\fpeval{9*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mcorn) {\textbf{MCORN}};
+\draw (\fpeval{10*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mcorn) {\textbf{MCORN}};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mcorn) ++(0,\fpeval{-1*\stepy})
 		-- +(\fpeval{\stepx/-5},0) node[left] {1};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mcorn) ++(0,\fpeval{-1*\stepy})
@@ -229,7 +255,7 @@
 		-- +(\fpeval{\stepx/5},0) node[right] {2};
 
 % MMBEND
-\draw (\fpeval{10*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mmbend) {\textbf{MMBEND}};
+\draw (\fpeval{11*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mmbend) {\textbf{MMBEND}};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mmbend) ++(0,\fpeval{-1*\stepy})
 		-- +(\fpeval{\stepx/-5},0) node[left] {1};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mmbend) ++(0,\fpeval{-1*\stepy})
@@ -271,7 +297,7 @@
 		-- +(\fpeval{\stepx/5},0) node[right] {2};
 
 % MTEE
-\draw (\fpeval{11*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mtee) {\textbf{MTEE}};
+\draw (\fpeval{12*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mtee) {\textbf{MTEE}};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mtee) ++(0,\fpeval{-1*\stepy})
 		-- +(\fpeval{\stepx/-5},0) node[left] {1};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mtee) ++(0,\fpeval{-1*\stepy})
@@ -329,7 +355,7 @@
 		-- +(\fpeval{\stepx/5},0) node[right] {3};
 
 % MCROSS
-\draw (\fpeval{12*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mcross) {\textbf{MCROSS}};
+\draw (\fpeval{13*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mcross) {\textbf{MCROSS}};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mcross) ++(0,\fpeval{-1*\stepy})
 		-- +(\fpeval{\stepx/-5},0) node[left] {1};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mcross) ++(0,\fpeval{-1*\stepy})
@@ -403,7 +429,7 @@
 		-- +(\fpeval{\stepx/5},0) node[right] {4};
 
 % MCOUPLED
-\draw (\fpeval{13*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mcoupled) {\textbf{MCOUPLED}};
+\draw (\fpeval{14*\stepx-\stepx/2},\fpeval{9*\stepy-\stepy/2}) node(mcoupled) {\textbf{MCOUPLED}};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mcoupled) ++(0,\fpeval{-1*\stepy})
 		++(0,\fpeval{\stepx/7}) -- +(\fpeval{\stepx/-5},0) node[left] {1};
 	\draw [line width=1pt, -{Circle[open, length=5pt]}] (mcoupled) ++(0,\fpeval{-1*\stepy})
