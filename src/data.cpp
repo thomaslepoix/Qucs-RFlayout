@@ -87,7 +87,16 @@ void Block::print(void) {
 
 Data::Data(void) :
 	extrem_pos({0.0, 0.0, 0.0, 0.0}),
-	is_volume_error(false)
+	out_format(".kicad_pcb"),
+	export_each_block(false),
+	export_each_subst(false),
+	is_volume_error(false),
+	subst_margin_factor(10),
+	oems_boundary_factor(3),
+	oems_highres_div(200),
+	oems_metalres_div(60),
+	oems_substres_div(30),
+	oems_timeres(300000)
 	{}
 
 Data::~Data(void) {

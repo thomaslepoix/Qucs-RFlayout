@@ -33,6 +33,7 @@ private :
 	long double m_tand;
 	long double m_rho;
 	long double m_d;
+	long double m_margin;
 	static const int m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
@@ -46,7 +47,8 @@ public :
 			long double _t,
 			long double _tand,
 			long double _rho,
-			long double _d);
+			long double _d,
+			unsigned int _margin_factor);
 	Subst(Subst const* _subst);
 	~Subst();
 	std::string getDescriptor(void) override;

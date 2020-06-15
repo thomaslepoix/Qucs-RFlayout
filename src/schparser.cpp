@@ -299,7 +299,7 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						regex_search(line, match, r_quotedfield20);
 						long double D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tMetal roughness : " << D << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D)));
+					data.tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D, data.subst_margin_factor)));
 				} else if(type=="MCORN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);

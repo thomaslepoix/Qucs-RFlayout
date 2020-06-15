@@ -27,7 +27,8 @@ Subst::Subst(string _label,
 			long double _t,
 			long double _tand,
 			long double _rho,
-			long double _d) :
+			long double _d,
+			unsigned int _margin_factor) :
 	Element(_label, _type, true, _mirrorx, _r, 0, ""),
 	m_w(0.0),
 	m_l(0.0),
@@ -36,7 +37,8 @@ Subst::Subst(string _label,
 	m_t(_t),
 	m_tand(_tand),
 	m_rho(_rho),
-	m_d(_d)
+	m_d(_d),
+	m_margin(_margin_factor*_h)
 	{}
 
 Subst::Subst(Subst const* _subst) :
@@ -54,7 +56,8 @@ Subst::Subst(Subst const* _subst) :
 	m_t(_subst->m_t),
 	m_tand(_subst->m_tand),
 	m_rho(_subst->m_rho),
-	m_d(_subst->m_d)
+	m_d(_subst->m_d),
+	m_margin(_subst->m_margin)
 	{}
 
 Subst::~Subst() {
@@ -97,7 +100,7 @@ long double Subst::getD(void) {
 	}
 
 long double Subst::getMargin(void) {
-	return(3*m_h);
+	return(m_margin);
 	}
 
 int Subst::getNpoint(void) {

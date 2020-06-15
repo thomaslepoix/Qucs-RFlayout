@@ -37,11 +37,6 @@ int main(int argc, char* argv[]) {
 	bool verbose=false;
 	bool gui=false;
 	Data data;
-	data.n_sch="";
-	data.out_dir="";
-	data.out_format=".kicad_pcb";
-	data.export_each_block=false;
-	data.export_each_subst=false;
 
 //argument parser
 	for(int i=0;i<argc;i++) {
@@ -64,7 +59,13 @@ int main(int argc, char* argv[]) {
 			     << "\t\t- .lht\t\t: pcb-rnd layout" << endl
 			     << "\t\t- .m\t\t: openems octave script" << endl
 			     << "  -s\t\texport each substrate in a different file" << endl
-			     << "  -b\t\texport each block in a different file" << endl;
+			     << "  -b\t\texport each block in a different file" << endl
+			     << "      --margin-factor INTEGER\t\tThe distance between circuits and substrate edges" << endl
+			     << "                             \t\tis defined as a substrate height multiple. Default is 10" << endl
+			     << "      --oems-highres-div INTEGER\tOpenEMS high resolution mesh lambda divisor. Default is 200" << endl
+			     << "      --oems-metalres-div INTEGER\tOpenEMS metal resolution mesh lambda divisor. Default is 60" << endl
+			     << "      --oems-substres-div INTEGER\tOpenEMS substrate resolution mesh lambda divisor. Default is 30" << endl
+			     << "      --oems-timeres INTEGER\t\tNumber of timesteps before OpenEMS stops simulation" << endl;
 			return(0);
 			}
 		if(string(argv[i])=="--version") {
@@ -96,6 +97,26 @@ int main(int argc, char* argv[]) {
 			}
 		if(string(argv[i])=="-b") {
 			data.export_each_block=true;
+			}
+		if(string(argv[i])=="--margin-factor" && argv[i+1]) {
+			i++;
+			data.subst_margin_factor=atoi(argv[i]);
+			}
+		if(string(argv[i])=="--oems-highres-div" && argv[i+1]) {
+			i++;
+			data.oems_highres_div=atoi(argv[i]);
+			}
+		if(string(argv[i])=="--oems-metalres-div" && argv[i+1]) {
+			i++;
+			data.oems_metalres_div=atoi(argv[i]);
+			}
+		if(string(argv[i])=="--oems-substres-div" && argv[i+1]) {
+			i++;
+			data.oems_substres_div=atoi(argv[i]);
+			}
+		if(string(argv[i])=="--oems-timeres" && argv[i+1]) {
+			i++;
+			data.oems_timeres=atoi(argv[i]);
 			}
 		if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 			verbose=true;

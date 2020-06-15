@@ -58,8 +58,15 @@ public:
 	bool export_each_block;
 	bool export_each_subst;
 
-	bool is_volume_error=false; // is 3D representation possible?
+	bool is_volume_error; // is 3D representation possible?
 	std::string volume_error; // 3D error messages buffer
+
+	unsigned int subst_margin_factor;
+	unsigned int oems_boundary_factor;
+	unsigned int oems_highres_div;
+	unsigned int oems_metalres_div;
+	unsigned int oems_substres_div;
+	unsigned int oems_timeres;
 
 	Data(void);
 	~Data(void);
