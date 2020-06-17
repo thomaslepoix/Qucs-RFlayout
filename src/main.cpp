@@ -72,20 +72,16 @@ int main(int argc, char* argv[]) {
 			        "                                     Can be used with '--port-shift' to create designs such as\n"
 			        "                                     center fed patch antenna.\n";
 			return(0);
-			}
-		if(string(argv[i])=="--version") {
+		} else if(string(argv[i])=="--version") {
 			cout << "Qucs-RFlayout " << VERSION << endl;
 			return(0);
-			}
-		if(string(argv[i])=="-i" && argv[i+1]) {
+		} else if(string(argv[i])=="-i" && argv[i+1]) {
 			i++;
 			data.n_sch=string(argv[i]);
-			}
-		if(string(argv[i])=="-o" && argv[i+1]) {
+		} else if(string(argv[i])=="-o" && argv[i+1]) {
 			i++;
 			data.out_dir=string(argv[i]);
-			}
-		if(string(argv[i])=="-f" && argv[i+1]) {
+		} else if(string(argv[i])=="-f" && argv[i+1]) {
 			i++;
 			if(string(argv[i])==".kicad_pcb"
 			|| string(argv[i])==".kicad_mod"
@@ -96,47 +92,36 @@ int main(int argc, char* argv[]) {
 				log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
 				return(1);
 				}
-			}
-		if(string(argv[i])=="-s") {
+		} else if(string(argv[i])=="-s") {
 			data.export_each_subst=true;
-			}
-		if(string(argv[i])=="-b") {
+		} else if(string(argv[i])=="-b") {
 			data.export_each_block=true;
-			}
-		if(string(argv[i])=="--margin-factor" && argv[i+1]) {
+		} else if(string(argv[i])=="--margin-factor" && argv[i+1]) {
 			i++;
 			data.subst_margin_factor=atoi(argv[i]);
-			}
-		if(string(argv[i])=="--oems-highres-div" && argv[i+1]) {
+		} else if(string(argv[i])=="--oems-highres-div" && argv[i+1]) {
 			i++;
 			data.oems_highres_div=atoi(argv[i]);
-			}
-		if(string(argv[i])=="--oems-metalres-div" && argv[i+1]) {
+		} else if(string(argv[i])=="--oems-metalres-div" && argv[i+1]) {
 			i++;
 			data.oems_metalres_div=atoi(argv[i]);
-			}
-		if(string(argv[i])=="--oems-substres-div" && argv[i+1]) {
+		} else if(string(argv[i])=="--oems-substres-div" && argv[i+1]) {
 			i++;
 			data.oems_substres_div=atoi(argv[i]);
-			}
-		if(string(argv[i])=="--oems-timeres" && argv[i+1]) {
+		} else if(string(argv[i])=="--oems-timeres" && argv[i+1]) {
 			i++;
 			data.oems_timeres=atoi(argv[i]);
-			}
-		if(string(argv[i])=="--port-shift" && argv[i+1] && argv[i+2] && argv[i+3]) {
+		} else if(string(argv[i])=="--port-shift" && argv[i+1] && argv[i+2] && argv[i+3]) {
 			i++;
 			data.port_shift_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
 			i+=2;
-			}
-		if(string(argv[i])=="--port-size" && argv[i+1] && argv[i+2] && argv[i+3]) {
+		} else if(string(argv[i])=="--port-size" && argv[i+1] && argv[i+2] && argv[i+3]) {
 			i++;
 			data.port_size_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
 			i+=2;
-			}
-		if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
+		} else if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 			verbose=true;
-			}
-		if(string(argv[i])=="-G" || argc==1) {
+		} else if(string(argv[i])=="-G" || argc==1) {
 			gui=true;
 			}
 		}
