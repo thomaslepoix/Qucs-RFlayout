@@ -96,7 +96,8 @@ Data::Data(void) :
 	oems_highres_div(200),
 	oems_metalres_div(60),
 	oems_substres_div(30),
-	oems_timeres(300000)
+	oems_timeres(300000),
+	port_default_l(0.2)
 	{}
 
 Data::~Data(void) {

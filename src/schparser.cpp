@@ -20,6 +20,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <tuple>
 
 #include "logger.hpp"
 #include "microstrip/microstrip.hpp"
@@ -67,9 +68,69 @@ int SchParser::run(void) {
 	parse_schematic(f_sch, unprintables);
 	parse_netlist(f_net);
 
+	parse_port_shift_args();
+	parse_port_size_args();
+
 	cout << "Number of elements : " << data.tab_all.size() << endl;
 	warn_unprintable(unprintables);
 	return(0);
+	}
+
+void SchParser::parse_port_shift_args(void) {
+	for(tuple<unsigned long, string, string> arg : data.port_shift_args) {
+		bool is_port_existant=false;
+		for(shared_ptr<Element> element : data.tab_all) {
+			if(element->getType()=="Pac") {
+				if(element->getN()==get<0>(arg)) {
+					smatch match;
+
+					// g1 value    g2 suffix    g3 scientific    g4 engineer
+					// Cares about negatives
+					static regex const r_port_shift_arg("([\-0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+
+					regex_search(get<1>(arg), match, r_port_shift_arg);
+					element->setShiftX(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
+					regex_search(get<2>(arg), match, r_port_shift_arg);
+					element->setShiftY(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
+
+					is_port_existant=true;
+					}
+				}
+			}
+		if(!is_port_existant) {
+			log_err << "WARNING : '--port-shift " << get<0>(arg) << " " << get<1>(arg) << " " << get<2>(arg)
+			        << "' Port '" << get<0>(arg) << "' does not exist -> Ignored\n";
+			}
+		}
+	}
+
+void SchParser::parse_port_size_args(void) {
+	for(tuple<unsigned long, string, string> arg : data.port_size_args) {
+		bool is_port_existant=false;
+		for(shared_ptr<Element> element : data.tab_all) {
+			if(element->getType()=="Pac") {
+				if(element->getN()==get<0>(arg)) {
+					smatch match;
+
+					// g1 value    g2 suffix    g3 scientific    g4 engineer
+					// Does not care about negatives
+					static regex const r_port_size_arg("([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+
+					regex_search(get<1>(arg), match, r_port_size_arg);
+					element->setL(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
+					regex_search(get<2>(arg), match, r_port_size_arg);
+					element->setW(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
+
+					dynamic_cast<Pac*>(element.get())->is_size_set=true;
+					is_port_existant=true;
+					}
+				}
+			}
+		if(!is_port_existant) {
+			log_err << "WARNING : '--port-size " << get<0>(arg) << " " << get<1>(arg) << " " << get<2>(arg)
+			        << "' Port '" << get<0>(arg) << "' does not exist -> Ignored\n";
+			}
+		}
 	}
 
 int SchParser::open_file(ifstream& file, string const name) {
@@ -682,7 +743,9 @@ long double SchParser::suffix(string const s_sci, string const s_eng, bool const
 
 string SchParser::check_void(string const match, string const label) {
 	if(match=="") {
-		log_err << "WARNING : Void field in component " << label << " -> Assigned to 0\n";
+		if(label!="") {
+			log_err << "WARNING : Void field in component " << label << " -> Assigned to 0\n";
+			}
 		return("0");
 	} else {
 		return(match);

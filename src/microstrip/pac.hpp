@@ -34,6 +34,8 @@ private :
 	static int const m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
+	bool is_size_set=false;
+
 	Pac(std::string _label,
 			std::string _type,
 			bool _active,

@@ -42,6 +42,8 @@ protected:
 	std::string m_subst;
     long double m_x=NAN;
     long double m_y=NAN;
+	long double m_shift_x=0.0;
+	long double m_shift_y=0.0;
 	long double rotateX(long double _x, long double _y);
 	long double rotateY(long double _x, long double _y);
 public:
@@ -65,6 +67,8 @@ public:
 	long double getY(void);
 	int setX(long double _x);
 	int setY(long double _y);
+	int setShiftX(long double _shift_x);
+	int setShiftY(long double _shift_y);
 
 	//default functions, to override
 	virtual std::string getDescriptor(void);

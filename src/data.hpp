@@ -21,6 +21,7 @@
 #include <array>
 #include <memory>
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 #include "microstrip/element.hpp"
@@ -67,6 +68,12 @@ public:
 	unsigned int oems_metalres_div;
 	unsigned int oems_substres_div;
 	unsigned int oems_timeres;
+
+	// Handles '--port-shift N X Y' arg.
+	std::vector<std::tuple<unsigned long, std::string, std::string>> port_shift_args;
+	// Handles '--port-size N L W' arg.
+	std::vector<std::tuple<unsigned long, std::string, std::string>> port_size_args;
+	long double port_default_l;
 
 	Data(void);
 	~Data(void);

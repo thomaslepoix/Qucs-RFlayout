@@ -21,6 +21,7 @@
 #include <utility>
 
 #include "logger.hpp"
+#include "microstrip/pac.hpp"
 #include "microstrip/subst.hpp"
 #include "xycalculator.hpp"
 using namespace std;
@@ -52,7 +53,7 @@ int XyCalculator::run(void) {
 void XyCalculator::resolve_pac_shapes(void) {
 // Pac have no shape so they calc it from adjacent largest element
 	for(shared_ptr<Element> pac : data.tab_all) {
-		if(pac->getType()=="Pac") {
+		if(pac->getType()=="Pac" && dynamic_cast<Pac*>(pac.get())->is_size_set==false) {
 			long double edge=0;
 			short dir=0;
 			for(short i=1;i<=pac->getNport();i++) {
@@ -80,6 +81,7 @@ void XyCalculator::resolve_pac_shapes(void) {
 					}
 				}
 			pac->setW(edge);
+			pac->setL(data.port_default_l);
 			switch(dir) {
 				// Only axis matters
 				case XMIN: case XMAX: pac->setR(0); break;

@@ -3092,8 +3092,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	f_out << "%%%% PORTS\n";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
-		it.second->setL(0.2);
-		it.second->setP();
 		f_out << "% " << it.second->getLabel() << " : " << it.second->getType() << "\n" <<
 		         it.second->getLabel() << ".Z = (" << it.second->getZ() << ");\n" <<
 		         it.second->getLabel() << ".P = (" << it.second->getDbm() << ");\n" <<

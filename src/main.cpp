@@ -41,31 +41,36 @@ int main(int argc, char* argv[]) {
 //argument parser
 	for(int i=0;i<argc;i++) {
 		if(string(argv[i])=="-h" || string(argv[i])=="--help") {
-			cout << "Usage: " << argv[0] << " -i FILENAME.sch" << endl
-			     << "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]" << endl
-			     << "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME" << endl
-			     << "       " << argv[0] << " -G" << endl
-			     << endl
-			     << "  -h, --help\tdisplay this help and exit" << endl
-			     << "      --version\tdisplay version information and exit" << endl
-			     << "  -v, --verbose\tverbose mode" << endl
-			     << "  -G\t\tGUI mode (no arguments equals to -G)" << endl
-			     << "  -i FILENAME\tuse file as input schematic" << endl
-			     << "  -o DIRNAME\tuse directory as output" << endl
-			     << "  -f FORMAT\tuse format as output layout format" << endl
-			     << "\t\tFORMAT can be:" << endl
-			     << "\t\t- .kicad_pcb\t: kicad layout (default format)" << endl
-			     << "\t\t- .kicad_mod\t: kicad module" << endl
-			     << "\t\t- .lht\t\t: pcb-rnd layout" << endl
-			     << "\t\t- .m\t\t: openems octave script" << endl
-			     << "  -s\t\texport each substrate in a different file" << endl
-			     << "  -b\t\texport each block in a different file" << endl
-			     << "      --margin-factor INTEGER\t\tThe distance between circuits and substrate edges" << endl
-			     << "                             \t\tis defined as a substrate height multiple. Default is 10" << endl
-			     << "      --oems-highres-div INTEGER\tOpenEMS high resolution mesh lambda divisor. Default is 200" << endl
-			     << "      --oems-metalres-div INTEGER\tOpenEMS metal resolution mesh lambda divisor. Default is 60" << endl
-			     << "      --oems-substres-div INTEGER\tOpenEMS substrate resolution mesh lambda divisor. Default is 30" << endl
-			     << "      --oems-timeres INTEGER\t\tNumber of timesteps before OpenEMS stops simulation" << endl;
+			cout << "Usage: " << argv[0] << " -i FILENAME.sch\n"
+			        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]\n"
+			        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME\n"
+			        "       " << argv[0] << " -G\n"
+			        "\n"
+			        "  -h, --help\tdisplay this help and exit.\n"
+			        "      --version\tdisplay version information and exit.\n"
+			        "  -v, --verbose\tverbose mode.\n"
+			        "  -G\t\tGUI mode (no arguments equals to -G).\n"
+			        "  -i FILENAME\tuse file as input schematic.\n"
+			        "  -o DIRNAME\tuse directory as output.\n"
+			        "  -f FORMAT\tuse format as output layout format.\n"
+			        "\t\tFORMAT can be:\n"
+			        "\t\t- .kicad_pcb\t: kicad layout (default format)\n"
+			        "\t\t- .kicad_mod\t: kicad module\n"
+			        "\t\t- .lht\t\t: pcb-rnd layout\n"
+			        "\t\t- .m\t\t: openems octave script\n"
+			        "  -s\t\texport each substrate in a different file.\n"
+			        "  -b\t\texport each block in a different file.\n"
+			        "\n"
+			        "      --margin-factor INTEGER\t\tThe distance between circuits and substrate edges.\n"
+			        "                             \t\tis defined as a substrate height multiple. Default is 10.\n"
+			        "      --oems-highres-div INTEGER\tOpenEMS high resolution mesh lambda divisor. Default is 200.\n"
+			        "      --oems-metalres-div INTEGER\tOpenEMS metal resolution mesh lambda divisor. Default is 60.\n"
+			        "      --oems-substres-div INTEGER\tOpenEMS substrate resolution mesh lambda divisor. Default is 30.\n"
+			        "      --oems-timeres INTEGER\t\tNumber of timesteps before OpenEMS stops simulation.\n"
+			        "      --port-shift N X Y\t\tTranslate a port. X grows to the right, Y grows to the bottom.\n"
+			        "      --port-size N L W\t\t\tSet a port size. L is in x axis, W in y axis.\n"
+			        "                       \t\t\tCan be used with '--port-shift' to create designs such as\n"
+			        "                       \t\t\tcenter fed patch antenna.\n";
 			return(0);
 			}
 		if(string(argv[i])=="--version") {
@@ -117,6 +122,16 @@ int main(int argc, char* argv[]) {
 		if(string(argv[i])=="--oems-timeres" && argv[i+1]) {
 			i++;
 			data.oems_timeres=atoi(argv[i]);
+			}
+		if(string(argv[i])=="--port-shift" && argv[i+1] && argv[i+2] && argv[i+3]) {
+			i++;
+			data.port_shift_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
+			i+=2;
+			}
+		if(string(argv[i])=="--port-size" && argv[i+1] && argv[i+2] && argv[i+3]) {
+			i++;
+			data.port_size_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
+			i+=2;
 			}
 		if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 			verbose=true;

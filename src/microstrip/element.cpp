@@ -66,11 +66,11 @@ string Element::getSubst(void) {
 	}
 
 long double Element::getX(void) {
-	return(m_x);
+	return(m_shift_x ? m_x+m_shift_x : m_x);
 	}
 
 long double Element::getY(void) {
-	return(m_y);
+	return(m_shift_y ? m_y+m_shift_y : m_y);
 	}
 
 int Element::setX(long double _x) {
@@ -80,6 +80,16 @@ int Element::setX(long double _x) {
 
 int Element::setY(long double _y) {
 	m_y=_y;
+	return(0);
+	}
+
+int Element::setShiftX(long double _shift_x) {
+	m_shift_x=_shift_x;
+	return(0);
+	}
+
+int Element::setShiftY(long double _shift_y) {
+	m_shift_y=_shift_y;
 	return(0);
 	}
 

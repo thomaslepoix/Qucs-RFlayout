@@ -38,6 +38,7 @@ private :
 	long double tab_p[m_npoint][2]={};
 public :
 	std::array<long double, 4> extrem_pos;
+
 	Subst(std::string _label,
 			std::string _type,
 			bool _mirrorx,
