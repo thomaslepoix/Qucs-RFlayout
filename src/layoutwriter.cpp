@@ -2747,6 +2747,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_process = true;\n"
 	         "flag_preprocess = true;\n"
 	         "flag_postprocess = true;\n"
+	         "flag_dump = true;\n"
 	         "flag_mesh = true;\n"
 	         "flag_highresmesh = true;\n"
 	         "flag_metalresmesh = true;\n"
@@ -2766,6 +2767,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(\"\\t--no-gui             Do not open AppCSXCAD.\");\n"
 	         "\t\tdisp(\"\\t--no-process         Do not execute simulation.\");\n"
 	         "\t\tdisp(\"\\t--no-postprocess     Do not execute anything after simulation.\");\n"
+	         "\t\tdisp(\"\\t--no-dump            Do not dump Et field, Ht field, current and current density\");\n"
 	         "\t\tdisp(\"\\t--no-mesh            Do not mesh any shape.\");\n"
 	         "\t\tdisp(\"\\t--no-highresmesh     No high resolution mesh for non orthogonal shapes.\");\n"
 	         "\t\tdisp(\"\\t--no-metalresmesh    No particular mesh lines (thirds rule) at metal resolution for orthogonal shapes.\");\n"
@@ -2781,6 +2783,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tflag_process = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-postprocess')\n"
 	         "\t\tflag_postprocess = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-dump')\n"
+	         "\t\tflag_dump = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-mesh')\n"
 	         "\t\tflag_mesh = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-highresmesh')\n"
@@ -3111,7 +3115,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "FDTD = SetBoundaryCond(FDTD, BC);\n"
 	         "\n";
 
-	f_out << "%%%% DUMPS\n";
+	f_out << "%%%% DUMPS\n"
+	         "if flag_dump\n";
 	for(shared_ptr<Element> it : block.elements) {
 		if(it->getType()=="SUBST") {
 			f_out << "% " << it->getLabel() << " ET\n"
@@ -3129,6 +3134,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "\n";
 			}
 		}
+	f_out << "endif % flag_dump\n";
 
 	f_out << "%%%% RUN OPENEMS\n"
 	         "WriteOpenEMS([Sim_Path '/' Sim_CSX], FDTD, CSX);\n"
@@ -3149,6 +3155,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	unsigned int color=0;
 
 	f_out << "%%%% VARIABLES\n"
+	         "if flag_postprocess\n"
 	         "name = '" << name << "';\n"
 	         "port_suffix = '-p';\n"
 	         "graphics_format = '.svg';\n"
@@ -3239,9 +3246,36 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "xlabel(['Frequency f (', funit_name, ')']);\n"
 	         "ylabel('S parameters (dB)');\n"
 	         "drawnow;\n"
-	         "print(1, [name, graphics_format]);\n"
+	         "print(1, [name, '-s', graphics_format]);\n"
 	         "\n";
 
-	f_out << "pause();\n"
+	color=6;
+	f_out << "%%%% PLOT PORT IMPEDANCES\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "% Port " << it.first << "\n"
+		         "if flag_active_port" << it.first << "\n"
+		         "\tfigure;\n"
+		         "\tZ" << it.first << " = port{" << it.first << "}.uf.tot./port{" << it.first << "}.if.tot;\n";
+		f_out << "\tplot(freq/funit, abs(Z" << it.first << "), "
+		         "'" << colors[color++%color_max] << "-;abs;', 'Linewidth', 2);\n"
+		         "\thold on;\n";
+		f_out << "\tplot(freq/funit, imag(Z" << it.first << "), "
+		         "'" << colors[color++%color_max] << "--;imag;', 'Linewidth', 2);\n"
+		         "\tgrid on;\n";
+		f_out << "\tplot(freq/funit, real(Z" << it.first << "), "
+		         "'" << colors[color++%color_max] << "--;real;', 'Linewidth', 2);\n"
+		         "\thold on;\n"
+		         "\t%legend('Location', 'northeastoutside');\n"
+		         "\ttitle('Impedance Z" << it.first << "');\n"
+		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
+		         "\tylabel('Impedance (Ohm)');\n"
+		         "\tdrawnow;\n"
+		         "\tprint(1, [name, '-z" << it.first << "', graphics_format]);\n"
+		         "endif\n"
+		         "\n";
+		}
+
+	f_out << "endif % flag_postprocess\n"
+	         "pause();\n"
 	         "return;\n";
 	}
