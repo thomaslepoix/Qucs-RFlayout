@@ -3261,10 +3261,10 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		         "\thold on;\n";
 		f_out << "\tplot(freq/funit, imag(Z" << it.first << "), "
 		         "'" << colors[color++%color_max] << "--;imag;', 'Linewidth', 2);\n"
-		         "\tgrid on;\n";
+		         "\thold on;\n";
 		f_out << "\tplot(freq/funit, real(Z" << it.first << "), "
 		         "'" << colors[color++%color_max] << "--;real;', 'Linewidth', 2);\n"
-		         "\thold on;\n"
+		         "\tgrid on;\n"
 		         "\t%legend('Location', 'northeastoutside');\n"
 		         "\ttitle('Impedance Z" << it.first << "');\n"
 		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
