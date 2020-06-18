@@ -3246,7 +3246,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "xlabel(['Frequency f (', funit_name, ')']);\n"
 	         "ylabel('S parameters (dB)');\n"
 	         "drawnow;\n"
-	         "print(1, [name, '-s', graphics_format]);\n"
+	         "print([name, '-s', graphics_format]);\n"
 	         "\n";
 
 	color=6;
@@ -3270,7 +3270,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
 		         "\tylabel('Impedance (Ohm)');\n"
 		         "\tdrawnow;\n"
-		         "\tprint(1, [name, '-z" << it.first << "', graphics_format]);\n"
+		         "\tprint([name, '-z" << it.first << "', graphics_format]);\n"
 		         "endif\n"
 		         "\n";
 		}
