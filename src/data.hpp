@@ -58,6 +58,7 @@ public:
 	std::string out_format;
 	bool export_each_block;
 	bool export_each_subst;
+	bool keep_tmp_files;
 
 	bool is_volume_error; // is 3D representation possible?
 	std::string volume_error; // 3D error messages buffer

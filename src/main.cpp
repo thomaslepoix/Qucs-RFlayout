@@ -60,6 +60,7 @@ int main(int argc, char* argv[]) {
 			        "                - .m            : OpenEMS Octave script\n"
 			        "  -s            Export each substrate in a different file.\n"
 			        "  -b            Export each block in a different file.\n"
+			        "  -k, --keep    Keep temporary files.\n"
 			        "\n"
 			        "      --margin-factor INTEGER        The distance between circuits and substrate edges.\n"
 			        "                                     is defined as a substrate height multiple. Default is 10.\n"
@@ -96,6 +97,8 @@ int main(int argc, char* argv[]) {
 			data.export_each_subst=true;
 		} else if(string(argv[i])=="-b") {
 			data.export_each_block=true;
+		} else if(string(argv[i])=="-k" || string(argv[i])=="--keep") {
+			data.keep_tmp_files=true;
 		} else if(string(argv[i])=="--margin-factor" && argv[i+1]) {
 			i++;
 			data.subst_margin_factor=atoi(argv[i]);

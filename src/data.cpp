@@ -90,6 +90,7 @@ Data::Data(void) :
 	out_format(".kicad_pcb"),
 	export_each_block(false),
 	export_each_subst(false),
+	keep_tmp_files(false),
 	is_volume_error(false),
 	subst_margin_factor(10),
 	oems_boundary_factor(3),

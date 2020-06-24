@@ -57,7 +57,8 @@ int SchParser::run(void) {
 
 	open_file(f_sch, data.n_sch);
 
-	ret=check_qucsstudio(f_sch, n_sch);
+	bool is_qucsstudio=false;
+	ret=check_qucsstudio(f_sch, n_sch, is_qucsstudio);
 	if(ret) return(ret);
 
 	ret=generate_netlist(n_sch, n_net);
@@ -73,6 +74,7 @@ int SchParser::run(void) {
 
 	cout << "Number of elements : " << data.tab_all.size() << endl;
 	warn_unprintable(unprintables);
+	rm_tmp_files(n_net, n_sch, is_qucsstudio);
 	return(0);
 	}
 
@@ -146,7 +148,7 @@ int SchParser::open_file(ifstream& file, string const name) {
 	return(0);
 	}
 
-int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp) {
+int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstudio) {
 	string line;
 	smatch match;
 
@@ -164,6 +166,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp) {
 		// QucsStudio does not provide command line to produce netlist
 		// so, as formats are mostly compatible, let's try to replace the
 		// header and use Qucs instead
+		is_qucsstudio=true;
 		log_err << "WARNING : " << data.n_sch << " is a QucsStudio schematic, compatibility is not guaranteed\n";
 
 		cout << "Conversion to Qucs format... ";
@@ -674,7 +677,7 @@ void SchParser::parse_netlist(ifstream& f_net) {
 	cout << "Reading netlist... OK" << endl;
 	}
 
-void SchParser::warn_unprintable(vector<string>& unprintables) {
+void SchParser::warn_unprintable(vector<string> const& unprintables) {
 	if(unprintables.size()) {
 		log_err << "WARNING : Schematic contains some unprintable transmission lines";
 		for(string element : unprintables) {
@@ -682,6 +685,21 @@ void SchParser::warn_unprintable(vector<string>& unprintables) {
 			if(element!=unprintables.back()) log_err << ",";
 			}
 		log_err << " -> Ignored\n";
+		}
+	}
+
+void SchParser::rm_tmp_files(string const n_net, string const n_sch, bool const is_qucsstudio) {
+	if(!data.keep_tmp_files) {
+		QProcess process_rm;
+		process_rm.start(QString::fromStdString("rm "+n_net+" "+(is_qucsstudio ? n_sch : "")));
+		bool ret = process_rm.waitForFinished();
+		if(ret==false || process_rm.exitCode()) {
+			log_err << "WARNING : Could not remove :\n"
+			        << n_net << (is_qucsstudio ? "\n"+n_sch+"\n" : "\n");
+		} else {
+			cout << "\nRemove temporary files :\n"
+			     << n_net << (is_qucsstudio ? "\n"+n_sch+"\n" : "\n");
+			}
 		}
 	}
 

@@ -34,11 +34,12 @@ private:
 	void parse_port_shift_args(void);
 	void parse_port_size_args(void);
 
-	int check_qucsstudio(std::ifstream& f_sch, std::string& n_tmp);
+	int check_qucsstudio(std::ifstream& f_sch, std::string& n_tmp, bool& is_qucsstudio);
 	int generate_netlist(std::string const& n_sch, std::string const& n_net);
 	void parse_schematic(std::ifstream& f_sch, std::vector<std::string>& unprintables);
 	void parse_netlist(std::ifstream& f_net);
-	void warn_unprintable(std::vector<std::string>& unprintables);
+	void warn_unprintable(std::vector<std::string> const& unprintables);
+	void rm_tmp_files(std::string const n_net, std::string const n_sch, bool const is_qucsstudio);
 
 	int open_file(std::ifstream& file, std::string const name);
 	long double suffix(std::string const s_sci, std::string const s_eng, bool const is_length);
