@@ -43,15 +43,14 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 - Better example : A low pass filter designed, produced and measured by [F4HDG](https://wiki.rfporn.org/doku.php/wiki:projects:filtres:lpf_23cm_microstrip). Thanks to him!
 
-<img src="res/lpf-sch.svg" align="center" width="100%" title="lpf-sch">
 
-<img src="res/lpf-pcb.png" align="right" width="55%" title="lpf-pcb">
-<img src="res/lpf-csx.png" align="right" width="45%" title="lpf-csx">
+<img src="res/lpf-sch.svg" width="100%" title="lpf-sch"/>
 
-<img src="res/lpf-ff3d-vm.gif" align="right" width="50%" title="lpf-ff3d-vm">
-<img src="res/lpf-paraview-et.gif" align="left" width="50%" title="lpf-paraview-et">
+<img src="res/lpf-csx.png" style="float:left;" width="360" title="lpf-csx"/> <img src="res/lpf-pcb.png" style="float:right;" width="440" title="lpf-pcb"/>
 
-<img src="res/lpf-dpl.svg" align="center" width="100%" title="lpf-dpl">
+<img src="res/lpf-ff3d-vm.gif" style="float:right;" width="410" title="lpf-ff3d-vm"/> <img src="res/lpf-paraview-et.gif" style="float:left;" width="410" title="lpf-paraview-et"/>
+
+<img src="res/lpf-dpl.svg" width="100%" title="lpf-dpl"/>
 
 - Generated scripts outputs :
     - Touchstone file (`.sxp`)
