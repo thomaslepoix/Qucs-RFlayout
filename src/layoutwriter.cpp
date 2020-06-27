@@ -2814,7 +2814,10 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		         "\telseif strcmp(arg_list{i}, '--no-" << it.first << "')\n"
 		         "\t\tflag_active_port" << it.first << " = false;\n";
 		}
-	f_out << "\tendif\n"
+	f_out << "\telse\n"
+	         "\t\tdisp(['ERROR : Unknown argument : ', arg_list{i}]);\n"
+	         "\t\treturn;\n"
+	         "\tendif\n"
 	         "endfor\n"
 	         "\n"
 	         "physical_constants;\n"

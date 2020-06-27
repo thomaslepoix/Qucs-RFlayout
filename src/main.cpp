@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 	Data data;
 
 //argument parser
-	for(int i=0;i<argc;i++) {
+	for(int i=1;i<argc;i++) {
 		if(string(argv[i])=="-h" || string(argv[i])=="--help") {
 			cout << "Usage: " << argv[0] << " -i FILENAME.sch\n"
 			        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]\n"
@@ -126,6 +126,9 @@ int main(int argc, char* argv[]) {
 			verbose=true;
 		} else if(string(argv[i])=="-G" || argc==1) {
 			gui=true;
+		} else {
+			log_err << "ERROR : Unknown argument : " << argv[i] << "\n";
+			return(1);
 			}
 		}
 
