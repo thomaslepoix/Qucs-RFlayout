@@ -3635,9 +3635,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "else\n"
 			         "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_res_ind, 'nogrid');\n"
 			         "endif\n"
-			         "set(h, 'Linewidth', 2);\n"
-			         "endif\n";
+			         "set(h, 'Linewidth', 2);\n";
 			}
+		f_out << "endif\n";
 		}
 	f_out << "legend('Location', 'northeastoutside');\n"
 	         "drawnow;\n"
