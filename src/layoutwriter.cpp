@@ -3142,10 +3142,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	f_out << "%%%% NF2FF\n"
 	         "if flag_nf2ff\n"
+	         "if flag_smoothmesh\n"
 	         "% Be careful that NF2FF box boundaries are not in PML\n"
 	         "[CSX nf2ff] = CreateNF2FFBox(CSX, 'nf2ff', ...\n"
 	         "\t[mesh.x(10), mesh.y(10), mesh.z(10)], ...\n"
 	         "\t[mesh.x(end-9), mesh.y(end-9), mesh.z(end-9)]);\n"
+	         "endif % flag_smoothmesh\n"
 	         "endif % flag_nf2ff\n"
 	         "\n";
 
