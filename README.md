@@ -70,6 +70,10 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 sudo apt-get install qt5-default libqt5opengl5-dev texlive-xetex fonts-lato    # Debian
 ```
 
+- OpenEMS scripts dependencies :
+
+  - [OpenEMS](https://github.com/thliebig/openEMS-Project) (CTB is required, be sure to add the `addpath` lines to your `.octaverc` / `startup.m` file)
+
 - With CMake (You must use a modern version >= 3.11) :
 
 ```sh
