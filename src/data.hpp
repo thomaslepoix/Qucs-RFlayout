@@ -64,17 +64,18 @@ public:
 	std::string volume_error; // 3D error messages buffer
 
 	unsigned int subst_margin_factor;
-	unsigned int oems_boundary_factor;
-	unsigned int oems_highres_div;
-	unsigned int oems_metalres_div;
-	unsigned int oems_substres_div;
-	unsigned int oems_timeres;
-
 	// Handles '--port-shift N X Y' arg.
 	std::vector<std::tuple<unsigned long, std::string, std::string>> port_shift_args;
 	// Handles '--port-size N L W' arg.
 	std::vector<std::tuple<unsigned long, std::string, std::string>> port_size_args;
 	long double port_default_l;
+
+	unsigned int oems_boundary_factor;
+	unsigned int oems_highres_div;
+	unsigned int oems_metalres_div;
+	unsigned int oems_substres_div;
+	unsigned int oems_timeres;
+	std::string oems_nf2ff_center;
 
 	Data(void);
 	~Data(void);

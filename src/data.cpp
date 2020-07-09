@@ -93,12 +93,12 @@ Data::Data(void) :
 	keep_tmp_files(false),
 	is_volume_error(false),
 	subst_margin_factor(10),
+	port_default_l(0.2),
 	oems_boundary_factor(3),
 	oems_highres_div(200),
 	oems_metalres_div(60),
 	oems_substres_div(30),
-	oems_timeres(300000),
-	port_default_l(0.2)
+	oems_timeres(300000)
 	{}
 
 Data::~Data(void) {

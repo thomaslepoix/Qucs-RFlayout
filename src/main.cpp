@@ -64,14 +64,15 @@ int main(int argc, char* argv[]) {
 			        "\n"
 			        "      --margin-factor INTEGER        The distance between circuits and substrate edges.\n"
 			        "                                     is defined as a substrate height multiple. Default is 10.\n"
+			        "      --port-shift N X Y             Translate a port. X grows to the right, Y grows to the bottom.\n"
+			        "      --port-size N L W              Set a port size. L is in x axis, W in y axis.\n"
+			        "                                     Can be used with '--port-shift' to create designs such as\n"
+			        "                                     center fed patch antenna.\n"
 			        "      --oems-highres-div INTEGER     OpenEMS high resolution mesh lambda divisor. Default is 200.\n"
 			        "      --oems-metalres-div INTEGER    OpenEMS metal resolution mesh lambda divisor. Default is 60.\n"
 			        "      --oems-substres-div INTEGER    OpenEMS substrate resolution mesh lambda divisor. Default is 30.\n"
 			        "      --oems-timeres INTEGER         Number of timesteps before OpenEMS stops simulation.\n"
-			        "      --port-shift N X Y             Translate a port. X grows to the right, Y grows to the bottom.\n"
-			        "      --port-size N L W              Set a port size. L is in x axis, W in y axis.\n"
-			        "                                     Can be used with '--port-shift' to create designs such as\n"
-			        "                                     center fed patch antenna.\n";
+			        "      --oems-nf2ff-center STRING     Set the OpenEMS far field center. Must be a component label.\n";
 			return(0);
 		} else if(string(argv[i])=="--version") {
 			cout << "Qucs-RFlayout " << VERSION << endl;
@@ -102,6 +103,14 @@ int main(int argc, char* argv[]) {
 		} else if(string(argv[i])=="--margin-factor" && argv[i+1]) {
 			i++;
 			data.subst_margin_factor=atoi(argv[i]);
+		} else if(string(argv[i])=="--port-shift" && argv[i+1] && argv[i+2] && argv[i+3]) {
+			i++;
+			data.port_shift_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
+			i+=2;
+		} else if(string(argv[i])=="--port-size" && argv[i+1] && argv[i+2] && argv[i+3]) {
+			i++;
+			data.port_size_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
+			i+=2;
 		} else if(string(argv[i])=="--oems-highres-div" && argv[i+1]) {
 			i++;
 			data.oems_highres_div=atoi(argv[i]);
@@ -114,14 +123,9 @@ int main(int argc, char* argv[]) {
 		} else if(string(argv[i])=="--oems-timeres" && argv[i+1]) {
 			i++;
 			data.oems_timeres=atoi(argv[i]);
-		} else if(string(argv[i])=="--port-shift" && argv[i+1] && argv[i+2] && argv[i+3]) {
+		} else if(string(argv[i])=="--oems-nf2ff-center" && argv[i+1]) {
 			i++;
-			data.port_shift_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
-			i+=2;
-		} else if(string(argv[i])=="--port-size" && argv[i+1] && argv[i+2] && argv[i+3]) {
-			i++;
-			data.port_size_args.push_back(make_tuple(stoul(string(argv[i])), string(argv[i+1]), string(argv[i+2])));
-			i+=2;
+			data.oems_nf2ff_center=string(argv[i]);
 		} else if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 			verbose=true;
 		} else if(string(argv[i])=="-G" || argc==1) {
