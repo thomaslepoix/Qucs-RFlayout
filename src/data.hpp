@@ -54,6 +54,7 @@ public:
 
 	std::array<long double, 4> extrem_pos; // extrem coords of elements (subst included) + margins
 	std::string n_sch;
+	std::string n_net;
 	std::string out_dir;
 	std::string out_format;
 	bool export_each_block;

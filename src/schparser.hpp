@@ -19,6 +19,7 @@
 #define SCHPARSER_HPP
 
 #include <fstream>
+#include <initializer_list>
 #include <memory>
 
 #include "data.hpp"
@@ -39,7 +40,7 @@ private:
 	void parse_schematic(std::ifstream& f_sch, std::vector<std::string>& unprintables);
 	void parse_netlist(std::ifstream& f_net);
 	void warn_unprintable(std::vector<std::string> const& unprintables);
-	void rm_tmp_files(std::string const n_net, std::string const n_sch, bool const is_qucsstudio);
+	void rm_tmp_files(std::initializer_list<std::string> args);
 
 	int open_file(std::ifstream& file, std::string const name);
 	long double suffix(std::string const s_sci, std::string const s_eng, bool const is_length);

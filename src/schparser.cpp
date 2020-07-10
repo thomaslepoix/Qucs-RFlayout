@@ -55,16 +55,22 @@ int SchParser::run(void) {
 		return(1);
 		}
 
-	open_file(f_sch, data.n_sch);
+	ret=open_file(f_sch, data.n_sch);
+	if(ret) return(ret);
 
 	bool is_qucsstudio=false;
 	ret=check_qucsstudio(f_sch, n_sch, is_qucsstudio);
 	if(ret) return(ret);
 
-	ret=generate_netlist(n_sch, n_net);
-	if(ret) return(ret);
+	if(data.n_net=="") {
+		ret=generate_netlist(n_sch, n_net);
+		if(ret) return(ret);
+	} else {
+		n_net=data.n_net;
+		}
 
-	open_file(f_net, n_net);
+	ret=open_file(f_net, n_net);
+	if(ret) return(ret);
 
 	parse_schematic(f_sch, unprintables);
 	parse_netlist(f_net);
@@ -74,7 +80,9 @@ int SchParser::run(void) {
 
 	cout << "Number of elements : " << data.tab_all.size() << endl;
 	warn_unprintable(unprintables);
-	rm_tmp_files(n_net, n_sch, is_qucsstudio);
+
+	// Remove QucsStudio temporary schematic and automatically generated netlist
+	rm_tmp_files({ (is_qucsstudio ? n_sch : ""), (data.n_net=="" ? n_net : "") });
 	return(0);
 	}
 
@@ -568,6 +576,7 @@ void SchParser::parse_netlist(ifstream& f_net) {
 							//to be complete
 						} else if(type=="MOPEN"
 							   || type=="MRSTUB"
+							   || type=="MSTUB"
 							   || type=="MVIA") {
 							//net 1
 								regex_search(line, match, r_net1);
@@ -688,17 +697,25 @@ void SchParser::warn_unprintable(vector<string> const& unprintables) {
 		}
 	}
 
-void SchParser::rm_tmp_files(string const n_net, string const n_sch, bool const is_qucsstudio) {
+void SchParser::rm_tmp_files(initializer_list<string> args) {
 	if(!data.keep_tmp_files) {
 		QProcess process_rm;
-		process_rm.start(QString::fromStdString("rm "+n_net+" "+(is_qucsstudio ? n_sch : "")));
-		bool ret = process_rm.waitForFinished();
-		if(ret==false || process_rm.exitCode()) {
-			log_err << "WARNING : Could not remove :\n"
-			        << n_net << (is_qucsstudio ? "\n"+n_sch+"\n" : "\n");
-		} else {
-			cout << "\nRemove temporary files :\n"
-			     << n_net << (is_qucsstudio ? "\n"+n_sch+"\n" : "\n");
+		string str_cmd;
+		string str_log;
+		for(string it : args) {
+			if(it!="") {
+				str_cmd+=" "+it;
+				str_log+="\n"+it;
+				}
+			}
+		if(str_cmd!="") {
+			process_rm.start(QString::fromStdString("rm"+str_cmd));
+			bool ret = process_rm.waitForFinished();
+			if(ret==false || process_rm.exitCode()) {
+				log_err << "WARNING : Could not remove :" << str_log << "\n";
+			} else {
+				cout << "\nRemove temporary files :" << str_log << "\n";
+				}
 			}
 		}
 	}
