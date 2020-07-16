@@ -2765,7 +2765,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_clean_result = false;\n"
 	         "flag_clean_simulation = false;\n"
 	         "flag_gui = true;\n"
-	         "flag_csx = true;\n"
 	         "flag_process = true;\n"
 	         "flag_preprocess = true;\n"
 	         "flag_postprocess = true;\n"
@@ -2817,12 +2816,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(\"\\t--no-gui               Do not open AppCSXCAD.\");\n"
 	         "\t\tdisp('');\n"
 	         "\t\tdisp('Preprocessing options:');\n"
-	         "\t\tdisp(\"\\t--no-csx               Do not write structure and mesh on disk.\");\n"
 	         "\t\tdisp(\"\\t--no-dump              Do not dump Et field, Ht field, current and current density\");\n"
 	         "\t\tdisp(\"\\t--no-highresmesh       No high resolution mesh for non orthogonal shapes.\");\n"
 	         "\t\tdisp(\"\\t--no-metalresmesh      No particular mesh lines (thirds rule) at metal resolution for orthogonal shapes.\");\n"
-	         "\t\tdisp(\"\\t--no-smoothmesh        Only particular mesh lines. Dry run.\");\n"
-	         "\t\tdisp(\"\\t--no-mesh              Do not mesh any shape. Dry run.\");\n"
+	         "\t\tdisp(\"\\t--no-smoothmesh        Only particular mesh lines.\");\n"
+	         "\t\tdisp(\"\\t--no-mesh              Do not mesh any shape.\");\n"
 	         "\t\tdisp('');\n"
 	         "\t\tdisp('Postprocessing options:');\n"
 	         "\t\tdisp(\"\\t--no-nf2ff             Do not calcul far field radiation.\");\n"
@@ -2867,8 +2865,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tflag_preprocess = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-gui')\n"
 	         "\t\tflag_gui = false;\n"
-	         "\telseif strcmp(arg_list{i}, '--no-csx')\n"
-	         "\t\tflag_csx = false;\n"
 //	         "\telseif strcmp(arg_list{i}, '--no-process')\n"
 //	         "\t\tflag_process = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-postprocess')\n"
@@ -2926,14 +2922,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tflag_dump = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-mesh')\n"
 	         "\t\tflag_mesh = false;\n"
-	         "\t\tflag_csx = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-highresmesh')\n"
 	         "\t\tflag_highresmesh = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-metalresmesh')\n"
 	         "\t\tflag_metalresmesh = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-smoothmesh')\n"
-	         "\t\tflag_smoothmesh = false;\n"
-	         "\t\tflag_csx = false;\n";
+	         "\t\tflag_smoothmesh = false;\n";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
 		f_out << "\telseif strcmp(arg_list{i}, '--" << it.first << "')\n"
 		         "\t\tflag_active_port" << it.first << " = true;\n"
@@ -3340,7 +3334,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endif % flag_mesh\n"
 	         "\n"
 	         "if flag_preprocess\n"
-	         "CSX = DefineRectGrid( CSX, unit, mesh );\n"
+	         "CSX = DefineRectGrid(CSX, unit, mesh);\n"
 	         "endif % flag_preprocess\n"
 	         "\n";
 
@@ -3370,12 +3364,14 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	f_out << "%%%% NF2FF\n"
 	         "if flag_nf2ff\n"
+	         "if flag_mesh\n"
 	         "if flag_smoothmesh\n"
 	         "% Be careful that NF2FF box boundaries are not in PML\n"
 	         "[CSX nf2ff] = CreateNF2FFBox(CSX, 'nf2ff', ...\n"
 	         "\t[mesh.x(10), mesh.y(10), mesh.z(10)], ...\n"
 	         "\t[mesh.x(end-9), mesh.y(end-9), mesh.z(end-9)]);\n"
 	         "endif % flag_smoothmesh\n"
+	         "endif % flag_mesh\n"
 	         "endif % flag_nf2ff\n"
 	         "\n";
 
@@ -3403,9 +3399,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "%%%% RUN OPENEMS\n"
-	         "if flag_csx\n"
 	         "WriteOpenEMS([path_simulation '/' Sim_CSX], FDTD, CSX);\n"
-	         "endif % flag_csx\n"
 	         "t_preprocess_stop = clock();\n"
 	         "endif % flag_preprocess\n"
 	         "if flag_gui\n"
