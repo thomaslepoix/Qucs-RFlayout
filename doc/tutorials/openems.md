@@ -13,15 +13,15 @@
   - [Visualize dumps with Paraview](#Visualize_dumps_with_Paraview) (TODO)
 - [Tips & tricks](#Tips_&_tricks)
   - [Convert a schematic portion only](#Convert_a_schematic_portion_only) (TODO)
-  - [Deal with too close mesh lines : Stub filter example](#Deal_with_too_close_mesh_lines_:_Stub_filter_example)
-  - [Move & resize ports : Center fed patch antenna example](#Move_&_resize_ports_:_Center_fed_patch_antenna_example) (TODO)
-  - [Draw special geometries with Qucs components : Loop patch antenna example](#Draw_special_geometries_with_Qucs_components_:_Loop_patch_antenna_example) (TODO)
+  - [Deal with too close mesh lines : Stub filter example](#Deal_with_too_close_mesh_lines_Stub_filter_example)
+  - [Move & resize ports : Center fed patch antenna example](#Move_&_resize_ports_Center_fed_patch_antenna_example) (TODO)
+  - [Draw special geometries with Qucs components : Loop patch antenna example](#Draw_special_geometries_with_Qucs_components_Loop_patch_antenna_example) (TODO)
 
 ## Basic usage <a name="Basic_usage"></a>
 
 This example is based on a microstrip low pass filter designed, produced and measured by [F4HDG](https://wiki.rfporn.org/doku.php/wiki:projects:filtres:lpf_23cm_microstrip).
 
-![lpf_sch](res/lpf-sch.svg)
+![lpf_sch](res/lpf_sch.svg)
 
 ### First conversion <a name="First_conversion"></a>
 
@@ -78,8 +78,7 @@ All of these resolutions are exprimed as wavelength fractions. You can set the d
 octave lpf.m --only-preprocess
 ```
 
-<img src="res/lpf_01.png" width="49%" title="lpf_01"/>
-<img src="res/lpf_02.png" width="49%" title="lpf_02"/>
+<img src="res/lpf_01.png" width="49%" title="lpf_01"/> <img src="res/lpf_02.png" width="49%" title="lpf_02"/>
 
 The mesh looks good but a little too large. To obtain better results we can reduce it by growing the divisor, trying different values. You can either modify it in the script :
 
@@ -98,10 +97,9 @@ octave lpf.m --only-postprocess
 
 100 looks better than 60.
 
-<img src="res/lpf_03.png" width="49%" title="lpf_03"/>
-<img src="res/lpf_04.png" width="49%" title="lpf_04"/>
+<img src="res/lpf_03.png" width="49%" title="lpf_03"/> <img src="res/lpf_04.png" width="49%" title="lpf_04"/>
 
-To deal with more complicated circuits and difficult meshs, take a look [to this chapter](#Deal_with_too_close_mesh_lines_:_Stub_filter_example).
+To deal with more complicated circuits and difficult meshs, take a look [to this chapter](#Deal_with_too_close_mesh_lines_Stub_filter_example).
 
 ### Run the simulation <a name="Run_the_simulation"></a>
 
@@ -120,15 +118,9 @@ You can also chose the ports you want to excite during the simulation. By defaul
 
 After some minutes, result windows will pop up and also be saved in `lpf_results/` :
 
-<img src="res/lpf_s.svg" width="33%" title="lpf_s"/>
-<img src="res/lpf_smith.svg" width="33%" title="lpf_smith"/>
-<img src="res/lpf_z1.svg" width="33%" title="lpf_z1"/>
-<img src="res/lpf_ff_azim_polar_dbn.svg" width="33%" title="lpf_ff_azim_polar_dbn">
-<img src="res/lpf_ff_azim_polar_dbi.svg" width="33%" title="lpf_ff_azim_polar_dbi">
-<img src="res/lpf_ff_azim_rect_dbi.svg" width="33%" title="lpf_ff_azim_rect_dbi">
-<img src="res/lpf_ff_elev_polar_dbn.svg" width="33%" title="lpf_ff_elev_polar_dbn">
-<img src="res/lpf_ff_elev_polar_dbi.svg" width="33%" title="lpf_ff_elev_polar_dbi">
-<img src="res/lpf_ff_elev_rect_dbi.svg" width="33%" title="lpf_ff_elev_rect_dbi">
+<img src="res/lpf_s.svg" width="33%" title="lpf_s"/> <img src="res/lpf_smith.svg" width="33%" title="lpf_smith"/> <img src="res/lpf_z1.svg" width="33%" title="lpf_z1"/>
+<img src="res/lpf_ff_azim_polar_dbn.svg" width="33%" title="lpf_ff_azim_polar_dbn"> <img src="res/lpf_ff_azim_polar_dbi.svg" width="33%" title="lpf_ff_azim_polar_dbi"> <img src="res/lpf_ff_azim_rect_dbi.svg" width="33%" title="lpf_ff_azim_rect_dbi">
+<img src="res/lpf_ff_elev_polar_dbn.svg" width="33%" title="lpf_ff_elev_polar_dbn"> <img src="res/lpf_ff_elev_polar_dbi.svg" width="33%" title="lpf_ff_elev_polar_dbi"> <img src="res/lpf_ff_elev_rect_dbi.svg" width="33%" title="lpf_ff_elev_rect_dbi">
 
 ### Postprocessing frequencies <a name="Postprocessing_frequencies"></a>
 
@@ -201,8 +193,7 @@ You can also modify the angles step (in degree), reduce it to produce better dia
 ```sh
 octave lpf.m --only-postprocess --nf2ff-force --nf2ff-3d --nf2ff-anglestep 1
 ```
-<img src="res/lpf_ff_3d_vm_5.png" width="49%" title="lpf_ff_3d_vm_5">
-<img src="res/lpf_ff_3d_vm_1.png" width="49%" title="lpf_ff_3d_vm_1">
+<img src="res/lpf_ff_3d_vm_5.png" width="49%" title="lpf_ff_3d_vm_5"> <img src="res/lpf_ff_3d_vm_1.png" width="49%" title="lpf_ff_3d_vm_1">
 
 ### Use results in Qucs <a name="Use_results_in_Qucs"></a>
 
@@ -218,7 +209,7 @@ You can use the produced Touchstone file to import and compare results in Qucs, 
 
 ### Convert a schematic portion only
 
-### Deal with too close mesh lines : Stub filter example <a name="Deal_with_too_close_mesh_lines_:_Stub_filter_example"></a>
+### Deal with too close mesh lines : Stub filter example <a name="Deal_with_too_close_mesh_lines_Stub_filter_example"></a>
 
 For a better understanding of how each component is meshed by Qucs-RFlayout, you can read the documentation.  TODO
 
@@ -322,5 +313,5 @@ Here are the results comparaison Qucs / OpenEMS / Measure :
 
 Note that the measure range is only 1GHz -> 3GHz.
 
-### Move & resize ports : Center fed patch antenna example <a name="Move_&_resize_ports_:_Center_fed_patch_antenna_example"></a>
-### Draw special geometries with Qucs components : Loop patch antenna example <a name="Draw_special_geometries_with_Qucs_components_:_Loop_patch_antenna_example"></a>
+### Move & resize ports : Center fed patch antenna example <a name="Move_&_resize_ports_Center_fed_patch_antenna_example"></a>
+### Draw special geometries with Qucs components : Loop patch antenna example <a name="Draw_special_geometries_with_Qucs_components_Loop_patch_antenna_example"></a>
