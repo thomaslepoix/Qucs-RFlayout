@@ -43,22 +43,23 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 - Better example : A low pass filter designed, produced and measured by [F4HDG](https://wiki.rfporn.org/doku.php/wiki:projects:filtres:lpf_23cm_microstrip). Thanks to him!
 
+<img src="doc/tutorials/res/lpf_sch.svg" width="100%" title="lpf_sch"/>
 
-<img src="res/lpf-sch.svg" width="100%" title="lpf-sch"/>
+<img src="res/lpf_csx.png" style="float:left;" width="360" title="lpf_csx"/> <img src="res/lpf_pcb.png" style="float:right;" width="440" title="lpf_pcb"/>
 
-<img src="res/lpf-csx.png" style="float:left;" width="360" title="lpf-csx"/> <img src="res/lpf-pcb.png" style="float:right;" width="440" title="lpf-pcb"/>
+<img src="doc/tutorials/res/lpf_ff_3d_vm.gif" style="float:right;" width="410" title="lpf_ff_3d_vm"/> <img src="res/lpf_paraview_et.gif" style="float:left;" width="410" title="lpf_paraview_et"/>
 
-<img src="res/lpf-ff3d-vm.gif" style="float:right;" width="410" title="lpf-ff3d-vm"/> <img src="res/lpf-paraview-et.gif" style="float:left;" width="410" title="lpf-paraview-et"/>
-
-<img src="res/lpf-dpl.svg" width="100%" title="lpf-dpl"/>
+<img src="doc/tutorials/res/lpf_dpl.svg" width="100%" title="lpf_dpl"/>
 
 - Generated scripts outputs :
     - Touchstone file (`.sxp`)
-    - S parameters
+    - S parameters (Smith chart and orthogonal)
     - Feed point impedance
     - Azimuth & elevation far field radiation pattern (polar and orthogonal, normalized and in dBi)
     - 3D far field radiation pattern for multiple frequencies (animated `.gif`)
     - Electric & magnetic fields, current and current density in time domain (visible with Paraview)
+
+- [Here](doc/tutorials/openems.md) is a tutorial.
 
 <br>
 
@@ -73,6 +74,7 @@ sudo apt-get install qt5-default libqt5opengl5-dev texlive-xetex fonts-lato    #
 - OpenEMS scripts dependencies :
 
   - [OpenEMS](https://github.com/thliebig/openEMS-Project) (CTB is required, be sure to add the `addpath` lines to your `.octaverc` / `startup.m` file)
+  - ImageMagick
 
 - With CMake (You must use a modern version >= 3.11) :
 
