@@ -1,4 +1,5 @@
 [![Travis build Status](https://travis-ci.org/thomaslepoix/Qucs-RFlayout.svg?branch=master)](https://travis-ci.org/thomaslepoix/Qucs-RFlayout)
+[![Liberapay patrons](https://img.shields.io/liberapay/patrons/thomaslepoix.svg?logo=liberapay)](https://liberapay.com/thomaslepoix/donate)
 
 # Qucs-RFlayout
 
