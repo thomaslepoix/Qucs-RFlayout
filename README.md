@@ -1,4 +1,8 @@
+[![Travis build Status](https://travis-ci.org/thomaslepoix/Qucs-RFlayout.svg?branch=master)](https://travis-ci.org/thomaslepoix/Qucs-RFlayout)
+[![Liberapay patrons](https://img.shields.io/liberapay/patrons/thomaslepoix.svg?logo=liberapay)](https://liberapay.com/thomaslepoix/donate)
+
 # Qucs-RFlayout
+
 A tool to produce layouts from Qucs RF schematic (microstrip only for now)
 
 `qucs-schematic.sch` -> `kicad-layout.kicad_pcb` [OK]
