@@ -280,6 +280,30 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 				short R=90*stoi(match.str(2));
 				cout << "\tRotation : " << R << endl;
 
+				if(data.used_elements.size()) {
+					bool is_used=false;
+					for(string it : data.used_elements) {
+						if(label==it) {
+							is_used=true;
+							break;
+							}
+						}
+					if(!is_used) {
+						continue;
+						}
+				} else {
+					bool is_excluded=false;
+					for(string it : data.excluded_elements) {
+						if(label==it) {
+							is_excluded=true;
+							break;
+							}
+						}
+					if(is_excluded) {
+						continue;
+						}
+					}
+
 				if(active==0) {
 					cout << "Inactive -> ignored" << endl;
 					continue;

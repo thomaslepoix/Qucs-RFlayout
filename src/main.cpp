@@ -67,6 +67,8 @@ int main(int argc, char* argv[]) {
 				        "  -b            Export each block in a different file.\n"
 				        "  -k, --keep    Keep temporary files.\n"
 				        "\n"
+				        "  -e, --exclude STRING               Exclude a component. Must be a component label.\n"
+				        "  -u, --use STRING                   Exclude all components except the used ones. Must be a component label.\n"
 				        "      --margin-factor INTEGER        The distance between circuits and substrate edges.\n"
 				        "                                     is defined as a substrate height multiple. Default is 10.\n"
 				        "      --port-shift N X Y             Translate a port. X grows to the right, Y grows to the bottom.\n"
@@ -108,6 +110,12 @@ int main(int argc, char* argv[]) {
 				data.export_each_block=true;
 			} else if(string(argv[i])=="-k" || string(argv[i])=="--keep") {
 				data.keep_tmp_files=true;
+			} else if((string(argv[i])=="-e" || string(argv[i])=="--exclude") && argv[i+1]) {
+				i++;
+				data.excluded_elements.push_back(string(argv[i]));
+			} else if((string(argv[i])=="-u" || string(argv[i])=="--use") && argv[i+1]) {
+				i++;
+				data.used_elements.push_back(string(argv[i]));
 			} else if(string(argv[i])=="--margin-factor" && argv[i+1]) {
 				i++;
 				data.subst_margin_factor=atoi(argv[i]);

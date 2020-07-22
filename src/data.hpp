@@ -64,6 +64,9 @@ public:
 	bool is_volume_error; // is 3D representation possible?
 	std::string volume_error; // 3D error messages buffer
 
+	std::vector<std::string> excluded_elements;
+	std::vector<std::string> used_elements;
+
 	unsigned int subst_margin_factor;
 	// Handles '--port-shift N X Y' arg.
 	std::vector<std::tuple<unsigned long, std::string, std::string>> port_shift_args;
