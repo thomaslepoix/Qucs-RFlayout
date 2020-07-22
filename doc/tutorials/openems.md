@@ -12,7 +12,7 @@
   - [Use results in Qucs](#Use_results_in_Qucs)
   - [Visualize dumps with Paraview](#Visualize_dumps_with_Paraview) (TODO)
 - [Tips & tricks](#Tips_&_tricks)
-  - [Convert a schematic portion only](#Convert_a_schematic_portion_only) (TODO)
+  - [Convert a schematic portion only](#Convert_a_schematic_portion_only)
   - [Deal with too close mesh lines : Stub filter example](#Deal_with_too_close_mesh_lines_Stub_filter_example)
   - [Move & resize ports : Center fed patch antenna example](#Move_&_resize_ports_Center_fed_patch_antenna_example) (TODO)
   - [Draw special geometries with Qucs components : Loop patch antenna example](#Draw_special_geometries_with_Qucs_components_Loop_patch_antenna_example) (TODO)
@@ -33,7 +33,7 @@ qucsrflayout -i lpf.sch -f .m
 
 If you want to reproduce this example and got the following errors, read [this chapter](#Convert_a_schematic_portion_only) :
 
-```sh
+```
 ERROR : No substrate used in a block
 ERROR : No substrate used in a block
 ERROR : No substrate used in a block
@@ -171,7 +171,7 @@ To place the NF2FF center elsewhere, you can manually edit the script :
 ```matlab
 % NF2FF center should be placed at the center of the radiating element.
 %nf2ff.center = [(max(mesh.x)-min(mesh.x))/2, (max(mesh.y)-min(mesh.y))/2, 0];
-nf2ff.center = MS2.center;
+nf2ff.center = MS2.center .+ [1.2345, -6.7890, 0];
 ```
 
 ### NF2FF 3D <a name="NF2FF_3D"></a>
@@ -201,13 +201,46 @@ You can use the produced Touchstone file to import and compare results in Qucs, 
 
 ![lpf_s2p](res/lpf_s2p.svg)
 
-![lpf_dpl](res/lpf-dpl.svg)
+![lpf_dpl](res/lpf_dpl.svg)
 
 ### Visualize dumps with Paraview <a name="Visualize_dumps_with_Paraview"></a>
 
 ## Tips & tricks <a name="Tips_&_tricks"></a>
 
-### Convert a schematic portion only
+### Convert a schematic portion only <a name="Convert_a_schematic_portion_only"></a>
+
+Qucs-RFlayout internally knows three entities :
+
+- `Element` : Basically any Qucs component, even the `SUBST` component.
+- `Block` : A block of consecutive elements. One block may have to be associated with one substrate.
+- `Substrate` : Compounded of element using the same `SUBST` element, disposed in one or multiple blocks.
+
+When exporting to a layout tool such as KiCad PcbNew, there is no substrate considerations so there is no problem if a block is compounded of elements using none or multiple different `SUBST` elements.
+
+But in OpenEMS that would be a nonsense, so all elements of a block have to be assossiated to the same one `SUBST` element.
+
+---
+
+Qucs schematics used in this tutorial does not contain just a circuit simulation, those are whole comparaison dashboards.
+
+![lpf_sch_full](res/lpf_sch_full.svg)
+
+The following errors come from the `P3`, `P4`, `P5` and `P6` `Pac` components forming four individual blocks without being assosiated with any `SUBST` component (The `Pac` component does not have a `substrate` field).
+
+```
+ERROR : No substrate used in a block
+ERROR : No substrate used in a block
+ERROR : No substrate used in a block
+ERROR : No substrate used in a block
+```
+
+To convert this schematic to an OpenEMS script, you can simply exclude those components from the conversion through the `-e, --exclude` argument :
+
+```sh
+qucsrflayout -i lpf.sch -f .m -e P3 -e P4 -e P5 -e P6
+```
+
+Alternatively, there is a `-u, --use` argument to exclude all components in the schematic and convert only the ones you want.
 
 ### Deal with too close mesh lines : Stub filter example <a name="Deal_with_too_close_mesh_lines_Stub_filter_example"></a>
 
