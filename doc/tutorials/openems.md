@@ -244,7 +244,7 @@ Alternatively, there is a `-u, --use` argument to exclude all components in the 
 
 ### Deal with too close mesh lines : Stub filter example <a name="Deal_with_too_close_mesh_lines_Stub_filter_example"></a>
 
-For a better understanding of how each component is meshed by Qucs-RFlayout, you can read the documentation.  TODO
+For a better understanding of how each component is meshed by Qucs-RFlayout, you can read the documentation (The `/usr[/local]/share/doc/qucsrflayout/oems_mesh_*.pdf` if you ran `make doc` while building).
 
 ---
 
