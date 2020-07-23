@@ -62,6 +62,18 @@ It is totally possible to run parts one by one, running the script for each one 
 
 ### Mesh check <a name="Mesh_check"></a>
 
+Before talking about mesh considerations, you must understand [how the OpenEMS mesh works](https://openems.de/index.php/FDTD_Mesh.html).
+
+To sum up, remember that :
+
+- The mesh is orthogonal and inhomogenous.
+- A mesh resolution is used for metal tracks, an other is used for substrate.
+- Each metal edge should be meshed with a inner line at `mres*1/3` and a outer line at `mres*2/3`. This is called the "thirds rule".
+
+![oems_mesh](res/oems_mesh.png)
+
+---
+
 The first step after a conversion is to check the produced mesh, as default mesh resolutions are arbitraries.
 
 There are three resolutions :
