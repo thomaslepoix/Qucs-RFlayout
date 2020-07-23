@@ -3867,20 +3867,18 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	color=0;
 	f_out << "%%%% PLOT S PARAMETERS\n"
-	         "figure;\n";
+	         "figure;\n"
+	         "hold on;\n"
+	         "grid on;\n";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
 		f_out << "if flag_active_port" << it.first << "\n";
 		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
-			if(it!=ports.front() || ut!=ports.front()) {
-				f_out << "\thold on;\n";
-				}
 			f_out << "\tplot(freq/funit, 20*log10(abs(s" << ut.first << it.first << ")), "
 			         "'" << colors[color++%color_max] << "-;s" << ut.first << it.first << ";', 'Linewidth', 2);\n";
 			}
 		f_out << "endif\n";
 		}
-	f_out << "grid on;\n"
-	         "%legend('Location', 'northeastoutside');\n"
+	f_out << "%legend('Location', 'northeastoutside');\n"
 	         "title('S parameters');\n"
 	         "xlabel(['Frequency f (', funit_name, ')']);\n"
 	         "ylabel('S parameters (dB)');\n"
@@ -3900,29 +3898,59 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endfor\n"
 
 //	         "for i = 1:numel(f_select)\n"
-	         "\tfigure;\n"
-	         "\tset(gca, 'ColorOrder', color_order_smith, 'NextPlot', 'replacechildren');\n"
-	         "\tfirst = true;\n";
+//	         "\t"
+	         "figure;\n"
+//	         "\t"
+	         "set(gca, 'ColorOrder', color_order_smith, 'NextPlot', 'replacechildren');\n"
+//	         "\t"
+	         "first = true;\n";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
-		f_out << "\tif flag_active_port" << it.first << "\n";
+		bool is_first=true;
+//		f_out << "\t";
+		f_out << "if flag_active_port" << it.first << "\n";
 		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
-			f_out << "\tif first == true\n"
-			         "\t\tfirst = false;\n"
-//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)));\n"
-			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index);\n"
-			         "\telse\n"
-//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
-			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
-			         "\tendif\n"
-			         "\tset(h, 'Linewidth', 2);\n";
+			if(is_first) {
+				is_first=false;
+//				f_out << "\t";
+				f_out << "if first == true\n"
+//				         "\t"
+				         "\t\tfirst = false;\n"
+//				         "\t"
+				         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index);\n"
+//				         "\t"
+//	//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)));\n"
+//				         "\t"
+				         "\telse\n"
+//				         "\t"
+				         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
+//				         "\t"
+//	//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
+//				         "\t"
+				         "\tendif\n"
+//				         "\t"
+				         "\tset(h, 'Linewidth', 2);\n";
+			} else {
+//				f_out << "\t";
+				f_out << "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
+//				         "\t"
+//	//			         "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
+//				         "\t"
+				         "\tset(h, 'Linewidth', 2);\n";
+				}
 			}
-		f_out << "\tendif\n";
+//		f_out << "\t";
+		f_out << "endif\n";
 		}
-	f_out << "\tlegend('Location', 'northeastoutside');\n"
-	         "\tdrawnow;\n"
-	         "\tprint([path_result, '/', name, '-smith', ...\n"
-//	         "\t\t'@', num2str(f_select(i), frequency_format), ...\n"
-	         "\t\tgraphics_format]);\n"
+//	f_out << "\t";
+	f_out << "legend('Location', 'northeastoutside');\n"
+//	         "\t"
+	         "drawnow;\n"
+//	         "\t"
+	         "print([path_result, '/', name, '-smith', ...\n"
+//	         "\t"
+//	//         "\t'@', num2str(f_select(i), frequency_format), ...\n"
+//	         "\t"
+	         "\tgraphics_format]);\n"
 //	         "endfor\n"
 	         "\n";
 
@@ -3932,16 +3960,15 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		f_out << "% Port " << it.first << "\n"
 		         "if flag_active_port" << it.first << "\n"
 		         "\tfigure;\n"
+		         "\thold on;\n"
+		         "\tgrid on;\n"
 		         "\tZ" << it.first << " = port{" << it.first << "}.uf.tot./port{" << it.first << "}.if.tot;\n";
 		f_out << "\tplot(freq/funit, abs(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "-;abs;', 'Linewidth', 2);\n"
-		         "\thold on;\n";
+		         "'" << colors[color++%color_max] << "-;abs;', 'Linewidth', 2);\n";
 		f_out << "\tplot(freq/funit, imag(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "--;imag;', 'Linewidth', 2);\n"
-		         "\thold on;\n";
+		         "'" << colors[color++%color_max] << "--;imag;', 'Linewidth', 2);\n";
 		f_out << "\tplot(freq/funit, real(Z" << it.first << "), "
 		         "'" << colors[color++%color_max] << "--;real;', 'Linewidth', 2);\n"
-		         "\tgrid on;\n"
 		         "\t%legend('Location', 'northeastoutside');\n"
 		         "\ttitle('Impedance Z" << it.first << "');\n"
 		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
