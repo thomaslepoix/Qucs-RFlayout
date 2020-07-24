@@ -254,6 +254,10 @@ qucsrflayout -i lpf.sch -f .m -e P3 -e P4 -e P5 -e P6
 
 Alternatively, there is a `-u, --use` argument to exclude all components in the schematic and convert only the ones you want.
 
+---
+
+Instead of exporting the whole schematic in a file, you can also export each substrate `-s` or each block `-b` in its own file.
+
 ### Deal with too close mesh lines : Stub filter example <a name="Deal_with_too_close_mesh_lines_Stub_filter_example"></a>
 
 For a better understanding of how each component is meshed by Qucs-RFlayout, you can read the documentation (The `/usr[/local]/share/doc/qucsrflayout/oems_mesh_*.pdf` if you ran `make doc` while building).
