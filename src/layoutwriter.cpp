@@ -3729,7 +3729,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tz_str = '';\n"
 	         "\tendif\n"
 	         "\tz_str = [num2str(real(z), '%4.2f'), z_str, num2str(imag(z), '%4.2f'), 'j'];\n"
-	         "\th = plot(s(f_ind(i)),['o;', ...\n"
+	         "\th = plot(s(f_ind(i)), ['o;', ...\n"
 	         "\t\tname, ' @ ', num2str(freq(f_ind(i))/1e6, ffmt), ' MHz', ...\n"
 	         "\t\t\"\\n\", num2str(20*log10(abs(s(f_ind(i)))), '%.1f'), 'dB ', ...\n"
 	         "%\t\tnum2str(s(f_ind(i)), '%4.2f'), ' Ω', ...\n"
@@ -3865,18 +3865,28 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "fclose(fd);\n"
 	         "\n";
 
-	color=0;
 	f_out << "%%%% PLOT S PARAMETERS\n"
 	         "figure;\n"
 	         "hold on;\n"
 	         "grid on;\n";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
 		f_out << "if flag_active_port" << it.first << "\n";
+		color=0;
 		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
 			f_out << "\tplot(freq/funit, 20*log10(abs(s" << ut.first << it.first << ")), "
-			         "'" << colors[color++%color_max] << "-;s" << ut.first << it.first << ";', 'Linewidth', 2);\n";
+			         "'" << colors[color++%color_max] << "-"/*";s" << ut.first << it.first << ";"*/"', 'Linewidth', 2);\n";
 			}
-		f_out << "endif\n";
+		color=0;
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			f_out << "\tfor i = 1:numel(f_select)\n"
+			         "\t\tplot(freq(find(freq == f_select(i)))/funit, ...\n"
+			         "\t\t\t20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i))))), ...\n"
+			         "\t\t\t['" << colors[color++%color_max] << "o;s" << ut.first << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit), funit_name, ...\n"
+			         "\t\t\t\"\\n\", num2str(20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i)))))), 'dB', ...\n"
+			         "\t\t\t';']);\n"
+			         "\tendfor\n";
+			}
+		f_out << "endif;\n";
 		}
 	f_out << "%legend('Location', 'northeastoutside');\n"
 	         "title('S parameters');\n"
