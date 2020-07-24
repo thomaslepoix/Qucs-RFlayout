@@ -2756,7 +2756,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "clear;\n"
 	         "close all;\n"
 	         "\n"
-	         "%%%% SYSTEM\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SYSTEM\n"
+	         "\n"
+	         "%%%% ARGUMENTS\n"
 	         "arg_only_preprocess = false;\n"
 	         "arg_only_postprocess = false;\n"
 	         "arg_no_preprocess = false;\n"
@@ -2768,6 +2770,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_process = true;\n"
 	         "flag_preprocess = true;\n"
 	         "flag_postprocess = true;\n"
+	         "flag_legend_out = false;\n"
 	         "flag_nf2ff = true;\n"
 	         "flag_nf2ff_mode = 0;\n"
 	         "flag_nf2ff_3d = false;\n"
@@ -2823,12 +2826,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(\"\\t--no-mesh              Do not mesh any shape.\");\n"
 	         "\t\tdisp('');\n"
 	         "\t\tdisp('Postprocessing options:');\n"
+	         "\t\tdisp(\"\\t--legend-out           Put legend boxes outside graphics\");\n"
 	         "\t\tdisp(\"\\t--no-nf2ff             Do not calcul far field radiation.\");\n"
 	         "\t\tdisp(\"\\t--nf2ff-force          Force NF2FF calculation.\");\n"
 //	         "\t\tdisp(\"\\t--nf2ff-center         Place the NF2FF calculation center. Should be placed at the radiating element center.\");\n" TODO qrfl args
 //	         "\t\tdisp(\"\\t                       By default NF2FF center is the simulation box center.\");\n"
-//	         "\t\tdisp(\"\\t--nf2ff-f F            Set the frequency for which to calculate far field and plot azimuth and elevation.\");\n"
-//	         "\t\tdisp(\"\\t                       'F' is a scientific number, eg. '2.3e9'. By default 'F' is where S11 is minimal.\");\n"
 	         "\t\tdisp(\"\\t--f <F>                Set frequency to place markers and compute far field radiations.\");\n"
 	         "\t\tdisp(\"\\t                       Can be called multiple times. Example : '--f 3.1e09'\");\n"
 	         "\t\tdisp(\"\\t--f-max s<A><B>        Place markers and compute far field radiations at the frequency for which the specified\");\n"
@@ -2896,6 +2898,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tflag_f_equal_s = [flag_f_equal_s; arg_list{i + 1}];\n"
 	         "\t\tflag_f_equal_v = [flag_f_equal_v, str2num(arg_list{i + 2})];\n"
 	         "\t\ti = i + 2;\n"
+	         "\telseif strcmp(arg_list{i}, '--legend-out')\n"
+	         "\t\tflag_legend_out = true;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-nf2ff')\n"
 	         "\t\tflag_nf2ff = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--nf2ff-force')\n"
@@ -3033,6 +3037,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endif\n"
 	         "[status, message, messageid] = mkdir(path_result);\n"
 	         "[status, message, messageid] = mkdir(path_simulation);\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREPROCESSING\n"
 	         "\n";
 
 	f_out << "%%%% VARIABLES\n"
@@ -3728,13 +3735,13 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\telse\n"
 	         "\t\tz_str = '';\n"
 	         "\tendif\n"
-	         "\tz_str = [num2str(real(z), '%4.2f'), z_str, num2str(imag(z), '%4.2f'), 'j'];\n"
+	         "\tz_str = [num2str(real(z), '%.2f'), z_str, num2str(imag(z), '%.2f'), 'j'];\n"
 	         "\th = plot(s(f_ind(i)), ['o;', ...\n"
 	         "\t\tname, ' @ ', num2str(freq(f_ind(i))/1e6, ffmt), ' MHz', ...\n"
 	         "\t\t\"\\n\", num2str(20*log10(abs(s(f_ind(i)))), '%.1f'), 'dB ', ...\n"
-	         "%\t\tnum2str(s(f_ind(i)), '%4.2f'), ' Ω', ...\n"
+	         "%\t\tnum2str(s(f_ind(i)), '%.2f'), ' Ω', ...\n"
 	         "\t\tz_str, ...\n"
-	         "\t\t';']);\n"
+	         "\t\t';'], 'linewidth', 2);\n"
 	         "\tset(gca, 'ColorOrder', circshift(get(gca, 'ColorOrder'), numel(h)));\n"
 	         "endfor\n"
 	         "\n"
@@ -3881,14 +3888,16 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			f_out << "\tfor i = 1:numel(f_select)\n"
 			         "\t\tplot(freq(find(freq == f_select(i)))/funit, ...\n"
 			         "\t\t\t20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i))))), ...\n"
-			         "\t\t\t['" << colors[color++%color_max] << "o;s" << ut.first << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit), funit_name, ...\n"
+			         "\t\t\t['" << colors[color++%color_max] << "o;s" << ut.first << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
 			         "\t\t\t\"\\n\", num2str(20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i)))))), 'dB', ...\n"
-			         "\t\t\t';']);\n"
+			         "\t\t\t';'], 'linewidth', 2);\n"
 			         "\tendfor\n";
 			}
 		f_out << "endif;\n";
 		}
-	f_out << "%legend('Location', 'northeastoutside');\n"
+	f_out << "if flag_legend_out\n"
+	         "legend('Location', 'northeastoutside');\n"
+	         "endif % flag_legend_out\n"
 	         "title('S parameters');\n"
 	         "xlabel(['Frequency f (', funit_name, ')']);\n"
 	         "ylabel('S parameters (dB)');\n"
@@ -3952,7 +3961,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		f_out << "endif\n";
 		}
 //	f_out << "\t";
-	f_out << "legend('Location', 'northeastoutside');\n"
+	f_out << "if flag_legend_out\n"
+	         "legend('Location', 'northeastoutside');\n"
+	         "endif % flag_legend_out\n"
 //	         "\t"
 	         "drawnow;\n"
 //	         "\t"
@@ -3974,12 +3985,34 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		         "\tgrid on;\n"
 		         "\tZ" << it.first << " = port{" << it.first << "}.uf.tot./port{" << it.first << "}.if.tot;\n";
 		f_out << "\tplot(freq/funit, abs(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "-;abs;', 'Linewidth', 2);\n";
+		         "'" << colors[color++%color_max] << "-;|Z" << it.first << "|;', 'Linewidth', 2);\n";
 		f_out << "\tplot(freq/funit, imag(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "--;imag;', 'Linewidth', 2);\n";
+		         "'" << colors[color++%color_max] << "--;Im(Z" << it.first << ");', 'Linewidth', 2);\n";
 		f_out << "\tplot(freq/funit, real(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "--;real;', 'Linewidth', 2);\n"
-		         "\t%legend('Location', 'northeastoutside');\n"
+		         "'" << colors[color%color_max] << "--;Re(Z" << it.first << ");', 'Linewidth', 2);\n";
+
+		color=6;
+		f_out<< "\tfor i = 1:numel(f_select)\n"
+
+		         "\t\tz = Z" << it.first << "(find(freq == f_select(i)));\n"
+		         "\t\tif imag(z) >= 0\n"
+		         "\t\t\tz_str = '+';\n"
+		         "\t\telse\n"
+		         "\t\t\tz_str = '';\n"
+		         "\t\tendif\n"
+		         "\t\tz_str = [num2str(real(z), '%.2f'), z_str, num2str(imag(z), '%.2f'), 'j'];\n"
+
+		         "\t\tplot(freq(find(freq == f_select(i)))/funit, abs(z), ...\n"
+		         "\t\t\t['" << colors[color++%color_max] << "o;Z" << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
+		         "\t\t\t\"\\n\", num2str(abs(z), '%.2f'), ' Ω ', z_str, ...\n"
+		         "\t\t\t';'], 'linewidth', 2);\n";
+		f_out << "\t\tplot(freq(find(freq == f_select(i)))/funit, imag(z), '" << colors[color++%color_max] << "o', 'linewidth', 2);\n";
+		f_out << "\t\tplot(freq(find(freq == f_select(i)))/funit, real(z), '" << colors[color++%color_max] << "o', 'linewidth', 2);\n"
+		         "\tendfor\n"
+
+		         "\tif flag_legend_out\n"
+		         "\tlegend('Location', 'northeastoutside');\n"
+		         "\tendif % flag_legend_out\n"
 		         "\ttitle('Impedance Z" << it.first << "');\n"
 		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
 		         "\tylabel('Impedance (Ohm)');\n"
@@ -4045,6 +4078,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\tset(gca, 'ColorOrder', color_order, 'NextPlot', 'replacechildren');\n"
 	         "\th = plotFFdB(nf2ff_elev, 'freq_index', i, 'xaxis', 'theta', 'param', [1, 2]);\n"
 	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tif flag_legend_out\n"
+	         "\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif % flag_legend_out\n"
 	         "\tdrawnow;\n"
 	         "\tprint([path_result, '/', name, '-ff-elev-rect-dbi@', ...\n"
 	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
@@ -4095,6 +4131,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\tset(gca, 'ColorOrder', color_order, 'NextPlot', 'replacechildren');\n"
 	         "\th = plotFFdB(nf2ff_azim, 'freq_index', i, 'xaxis', 'phi', 'param', [1, 2, 3]);\n"
 	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tif flag_legend_out\n"
+	         "\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif % flag_legend_out\n"
 	         "\tdrawnow;\n"
 	         "\tprint([path_result, '/', name, '-ff-azim-rect-dbi@', ...\n"
 	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
@@ -4149,6 +4188,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endif % flag_nf2ff\n"
 	         "endif % flag_postprocess\n"
 	         "t_postprocess_stop = clock();\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SYSTEM\n"
 	         "\n";
 
 	f_out << "%%%% TIMES\n"
