@@ -1,14 +1,29 @@
-// g++ ../test/unit/test{,_schparser}.cpp ../src/schparser.cpp -I../src/ -I~/testcatch/ -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/x86_64-linux-gnu/qt5/ -fPIC -o test
+/***************************************************************************
+                               test_schparser.cpp
+                             ------------------
+    begin                : Thu Oct 25 2018
+    copyright            : (C) 2018 by Thomas Lepoix
+    email                : thomas.lepoix@protonmail.ch
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <catch.hpp>
+
 #include "schparser.hpp"
 using namespace std;
 
-SCENARIO("", "[schparser]") {
-	vector<shared_ptr<Element>> tab_all;
-	string n_sch;
+SCENARIO("check_void()", "[schparser][toolbox]") {
 
-	SchParser parser(tab_all, n_sch);
+	Data data;
+	SchParser parser(data);
 
 	GIVEN("check_void() must replace null strings by 0") {
 

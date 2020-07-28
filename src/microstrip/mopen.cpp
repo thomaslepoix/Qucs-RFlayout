@@ -20,11 +20,12 @@ using namespace std;
 
 Mopen::Mopen(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
 	m_w(_w)
 	{}
 
@@ -45,5 +46,35 @@ string Mopen::getNet1(void) {
 
 int Mopen::setNet1(string _net1) {
 	m_net1=_net1;
+	return(0);
+	}
+
+void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
+	edge=m_w;
+	switch(m_r) {
+		case 0: dir=XMIN; break;
+		case 90: dir=YMAX; break;
+		case 180: dir=XMAX; break;
+		case 270: dir=YMIN; break;
+		}
+	}
+
+bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) {
+	if(_port==1) {
+		return(true);
+	} else {
+		return(false);
+		}
+	}
+
+int Mopen::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
+	switch(_port) {
+		case 1:
+			adjacent1.first=adjacent;
+			adjacent1.second=adjacent_port;
+			break;
+		default:
+			return(1);
+		}
 	return(0);
 	}

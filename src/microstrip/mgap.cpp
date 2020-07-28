@@ -20,13 +20,14 @@ using namespace std;
 
 Mgap::Mgap(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w1,
 			long double _w2,
 			long double _s) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_s(_s)
@@ -102,5 +103,33 @@ void Mgap::getStep(int const _net, long double& xstep, long double& ystep) {
 			xstep=0;
 			ystep= + m_s/2;
 			}
+		}
+	}
+
+void Mgap::getEdge(int const _net, long double& edge, short& dir) {
+	if(_net==1) {
+		edge=m_w1;
+		switch(m_r) {
+			case 0: dir=XMIN; break;
+			case 90: dir=YMAX; break;
+			case 180: dir=XMAX; break;
+			case 270: dir=YMIN; break;
+			}
+	} else if(_net==2) {
+		edge=m_w2;
+		switch(m_r) {
+			case 0: dir=XMAX; break;
+			case 90: dir=YMIN; break;
+			case 180: dir=XMIN; break;
+			case 270: dir=YMAX; break;
+			}
+		}
+	}
+
+bool Mgap::isOemsMeshInterface(int const _port, long double const /*_w*/) {
+	if(_port==1 || _port==2) {
+		return(true);
+	} else {
+		return(false);
 		}
 	}

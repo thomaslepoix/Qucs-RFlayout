@@ -1,0 +1,29 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX, Mapping=tex-text]{Lato}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{xfp}
+
+\begin{document}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) node[right] {1} +(0,-0.5) -- +(0,0.5);
+
+% DIMENSIONS
+\draw [line width=0.5pt, {Stealth[length=5pt]}-{Stealth[length=5pt]}]
+	(\ox,\oy) ++(-0.2,0) node[left] {W}
+	+(0,-0.5) -- +(0,0.5);
+
+\end{tikzpicture}
+\end{document}

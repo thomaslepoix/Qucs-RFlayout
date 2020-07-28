@@ -20,10 +20,11 @@
 
 #include "eqn.hpp"
 #include "pac.hpp"
-//#include "subst.hpp"
+#include "sp.hpp"
+#include "subst.hpp"
 #include "mcorn.hpp"
-#include "mcross.hpp"
 #include "mcoupled.hpp"
+#include "mcross.hpp"
 #include "mgap.hpp"
 #include "mmbend.hpp"
 #include "mlin.hpp"

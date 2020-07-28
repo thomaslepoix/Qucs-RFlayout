@@ -15,23 +15,33 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QFileDialog>
+
+#include "logger.hpp"
+#include "preview.hpp"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+using namespace std;
 
-MainWindow::MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent) :
+MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	converter(_n_sch.toStdString(), _out_dir.toStdString(), _out_format.toStdString()),
-	n_sch(_n_sch),
-	out_dir(_out_dir),
-	out_format(_out_format) {
+	data(_data),
+	converter(_data),
+	n_sch(QString::fromStdString(_data.n_sch)),
+	out_dir(QString::fromStdString(_data.out_dir)),
+	out_format(QString::fromStdString(_data.out_format)) {
 		ui->setupUi(this);
 		ui->le_path_in->setText(n_sch);
 		ui->le_path_out->setText(out_dir);
 		ui->cb_format->addItem(tr(".kicad_pcb"));
 		ui->cb_format->addItem(tr(".kicad_mod"));
 		ui->cb_format->addItem(tr(".lht"));
-		ui->cb_format->setCurrentIndex(ui->cb_format->findText(out_format, Qt::MatchExactly));
+		ui->cb_format->addItem(tr(".m"));
+		ui->cb_format->setCurrentIndex(ui->cb_format->findText(QString::fromStdString(_data.out_format), Qt::MatchExactly));
+		ui->rb_export_whole->setChecked((_data.export_each_block || _data.export_each_subst) ? false : true);
+		ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
+		ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
 		}
 	
 MainWindow::~MainWindow() {
@@ -97,24 +107,51 @@ void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	}
 
 void MainWindow::on_le_path_out_returnPressed(void) {
-	std::string out_name;
+	vector<string> out_names;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		converter.write(out_name);
-		log_err << "Write OK : " << out_name <<"\n";
+		if(!converter.write(out_names)) {
+			for(string out : out_names) {
+				log_err << "Write : " << out << "\n";
+				}
+			}
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
 		}
 	}
 
 void MainWindow::on_pb_write_clicked(void) {
-	std::string out_name;
+	vector<string> out_names;
 	if(converter.size()) {
 		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		converter.write(out_name);
-		log_err << "Write OK : " << out_name <<"\n";
+		if(!converter.write(out_names)) {
+			for(string out : out_names) {
+				log_err << "Write : " << out << "\n";
+				}
+			}
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
+		}
+	}
+
+void MainWindow::on_rb_export_whole_toggled(bool const is_checked) {
+	if(is_checked) {
+		data.export_each_subst=false;
+		data.export_each_block=false;
+		}
+	}
+
+void MainWindow::on_rb_export_each_subst_toggled(bool const is_checked) {
+	if(is_checked) {
+		data.export_each_subst=true;
+		data.export_each_block=false;
+		}
+	}
+
+void MainWindow::on_rb_export_each_block_toggled(bool const is_checked) {
+	if(is_checked) {
+		data.export_each_subst=false;
+		data.export_each_block=true;
 		}
 	}
 
@@ -128,7 +165,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(false);
 	}
 
-void operator<<(MainWindow& obj, std::stringstream& in) {
-	obj.ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
+void MainWindow::log(stringstream& in) {
+	ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
 	}
-

@@ -4,7 +4,7 @@ cmake_policy( VERSION 3.11 )
 
 project( qucsrflayout
 	LANGUAGES CXX
-	VERSION 1.0.1
+	VERSION 1.0.1.1
 	DESCRIPTION "A tool to produce layout from qucs RF schematics (microstrip only for now)"
 #	HOMEPAGE_URL "https://github.com/thomaslepoix/Qucs-RFlayout"
 	)
@@ -44,6 +44,29 @@ if( STATIC MATCHES TRUE )
 	set( CMAKE_CXX_CPPCHECK "cppcheck")
 endif( STATIC MATCHES TRUE )
 
+if( CMAKE_BUILD_TYPE MATCHES Coverage )
+	find_program( GCOV NAMES gcov )
+	if( GCOV )
+		message( STATUS "Found gcov: ${GCOV}" )
+	else( GCOV )
+		message( ERROR "Not found gcov: install it" )
+	endif( GCOV )
+
+	find_program( LCOV NAMES lcov )
+	if( LCOV )
+		message( STATUS "Found lcov: ${LCOV}" )
+	else( LCOV )
+		message( ERROR "Not found lcov: install it" )
+	endif( LCOV )
+
+	find_program( GENHTML NAMES genhtml )
+	if( GENHTML )
+		message( STATUS "Found genhtml: ${GENHTML}" )
+	else( GENHTML )
+		message( ERROR "Not found genhtml: install it" )
+	endif( GENHTML )
+endif( CMAKE_BUILD_TYPE MATCHES Coverage )
+
 set( CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
 	OWNER_READ
 	OWNER_WRITE
@@ -67,13 +90,13 @@ set( CMAKE_AUTOUIC ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 #########################################################################SOURCES
-
 set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/main.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.cpp"
-#	"${CMAKE_SOURCE_DIR}/srcmicrostrip/subst.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.cpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcorn.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcoupled.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcross.cpp"
@@ -92,13 +115,16 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/mainwindow.cpp"
 	"${CMAKE_SOURCE_DIR}/src/preview.cpp"
 	"${CMAKE_SOURCE_DIR}/src/logger.cpp"
+	"${CMAKE_SOURCE_DIR}/src/data.cpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsmesh.cpp"
 	)
 
 set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.hpp"
-#	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.hpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.hpp"
+	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcorn.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcoupled.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mcross.hpp"
@@ -118,6 +144,9 @@ set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/mainwindow.hpp"
 	"${CMAKE_SOURCE_DIR}/src/preview.hpp"
 	"${CMAKE_SOURCE_DIR}/src/logger.hpp"
+	"${CMAKE_SOURCE_DIR}/src/data.hpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsmesh.hpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsline.hpp"
 	)
 
 ##########################################################################TARGET

@@ -15,18 +15,24 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <regex>
+#include <utility>
+
+#include "logger.hpp"
+#include "oemsmesh.hpp"
+#include "microstrip/element.hpp"
+#include "microstrip/subst.hpp"
 #include "layoutwriter.hpp"
 using namespace std;
 
-LayoutWriter::LayoutWriter(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& _extrem_pos, string const& _n_sch, string const& _out_dir, string const& _out_format) :
-	tab_all(_tab_all),
-	extrem_pos(_extrem_pos),
-	n_sch(_n_sch),
-	out_dir(_out_dir),
-	out_format(_out_format)
+LayoutWriter::LayoutWriter(Data& _data) :
+	data(_data)
 	{}
 
-int LayoutWriter::run(string* out_name) {
+int LayoutWriter::run(vector<string>* out_names) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
@@ -34,32 +40,115 @@ int LayoutWriter::run(string* out_name) {
 
 //variables
 	static regex const r_sch("\.sch$");
-	static regex const r_basename("^.*?([^\/]*)\.sch$");                        // g1 basename
+	static regex const r_basename("^.*?([^\/]*)\.sch$"); // g1 basename
 	static regex const r_out("(^.*?)\\/?$");
 	static regex const r_empty("^$");
-	string n_out="";
-	string name=regex_replace(regex_replace(n_sch, r_basename, "$1"), r_sch, "");
+	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
+	string n_out=regex_replace(data.out_dir, r_empty, "./");
+	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1");
 
 #pragma GCC diagnostic pop
 
-//generate output file
-	cout << endl;
-	n_out=regex_replace(out_dir, r_empty, "./");
-	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(n_sch, r_basename, "$1") + out_format;
-	cout << "Input schematic : " << n_sch << endl;
-	cout << "Output layout : " << n_out << endl;
-	ofstream f_out(n_out.c_str());
+//check
+	int ret=0;
+	if(data.out_format==".m") ret=check_m();
+	if(ret) return(ret);
 
-//write
-	if(out_format==".kicad_pcb") write_kicad_pcb(f_out);
-	if(out_format==".kicad_mod") write_kicad_mod(name, f_out);
-	if(out_format==".lht") write_lht(f_out);
-	if(out_name) *out_name=n_out;
+	cout << endl;
+	cout << "Input schematic : " << data.n_sch << endl;
+
+	if(data.export_each_block) {
+		unsigned int i=-1; // not a mistake
+		for(shared_ptr<Block> it : data.all_blocks) {
+			string out=n_out+"-b"+to_string(++i)+data.out_format;
+
+			Block block;
+			block.boundary=it->boundary;
+			block.boundary[XMIN]-=it->subst_local->getMargin();
+			block.boundary[XMAX]+=it->subst_local->getMargin();
+			block.boundary[YMIN]-=it->subst_local->getMargin();
+			block.boundary[YMAX]+=it->subst_local->getMargin();
+
+			block.elements=it->elements;
+			block.elements.push_back(it->subst_local);
+			for(shared_ptr<Element> element : data.tab_all) {
+				if(element->getType()==".SP")
+					block.elements.push_back(element);
+				}
+
+			int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+			if(ret) return(ret);
+			}
+	} else if(data.export_each_subst) {
+		unsigned int i=-1; // not a mistake
+		shared_ptr<Block> prev=nullptr;
+		string out;
+		Block block;
+		for(shared_ptr<Block> it : data.all_blocks) {
+			if(prev==nullptr || it->subst!=prev->subst) {
+				if(prev!=nullptr) {
+					out=n_out+"-s"+to_string(++i)+data.out_format;
+					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+					if(ret) return(ret);
+					}
+
+				Subst* subst=dynamic_cast<Subst*>(it->subst.get());
+				block.boundary=subst->extrem_pos;
+				block.boundary[XMIN]-=subst->getMargin();
+				block.boundary[XMAX]+=subst->getMargin();
+				block.boundary[YMIN]-=subst->getMargin();
+				block.boundary[YMAX]+=subst->getMargin();
+
+				block.elements.clear();
+				block.elements=it->elements;
+				block.elements.push_back(it->subst);
+				for(shared_ptr<Element> element : data.tab_all) {
+					if(element->getType()==".SP")
+						block.elements.push_back(element);
+					}
+			} else {
+				block.elements.insert(block.elements.end(), it->elements.begin(), it->elements.end());
+				}
+			prev=it;
+			}
+		out=n_out+"-s"+to_string(++i)+data.out_format;
+		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+		if(ret) return(ret);
+	} else {
+		Block block;
+		block.boundary=data.extrem_pos;
+		block.elements=data.tab_all;
+
+		n_out+=data.out_format;
+		return(write(block, 0, 0, n_out, name, out_names));
+		}
 
 	return(0);
 	}
 
-int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
+int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, vector<string>* out_names) {
+	cout << "Output layout : " << n_out << endl;
+	ofstream f_out(n_out.c_str());
+	if(f_out.fail()) {
+		log_err << "ERROR : Unable to write " << n_out << "\n";
+		return(1);
+		}
+
+	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y);
+	if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
+	if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y);
+	if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
+	if(out_names) out_names->push_back(n_out); //success message to stdout in GUI mode
+
+	if(f_out.fail()) {
+		log_err << "ERROR : Error occured while writing " << n_out << "\n";
+		return(1);
+		}
+
+	return(0);
+	}
+
+void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y) {
 	string type;
 
 	f_out << "(kicad_pcb (version 20171130) (host pcbnew 5.0.1-33cea8e~67~ubuntu18.04.1)\n"
@@ -165,7 +254,9 @@ int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 	         "    (uvia_drill 0.1)\n"
 	         "  )\n\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
@@ -177,7 +268,7 @@ int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 				||type=="MRSTUB"
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "  (module " << it->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
-			         "    (at " << it->getX() << " " << it->getY() << " " << it->getR() << ")\n"
+			         "    (at " << it->getX()+offset_x << " " << it->getY()+offset_y << " " << it->getR() << ")\n"
 			         "    (fp_text reference " << it->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
 			         "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
 			         "    )\n"
@@ -206,19 +297,19 @@ int LayoutWriter::write_kicad_pcb(ofstream& f_out) {
 				f_out << "      ) (layer F.Cu) (width 0)\n    )\n  )\n\n";
 				}
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (via (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers F.Cu B.Cu))\n\n";
+			f_out << "  (via (at " << it->getX()+offset_x << " " << it->getY()+offset_y
+			      << ") (size " << it->getD() << ") (drill " << it->getD() << ") (layers F.Cu B.Cu))\n\n";
 			}
 		}
 
 	f_out << ")\n";
-	return(0);
 	}
 
-int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
+void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) {
 	string type;
 	string label;
 	smatch match;
-	regex r_pac("^P([0-9]*)$");													//regex group 1
+	regex r_pac("^P([0-9]*)$"); //g1 number // TODO getN() ?
 
 	f_out << "(module " << name << " (layer F.Cu) (tedit 5BD7B6BE)\n"
 	         "  (fp_text reference REF** (at 0 0.5) (layer F.SilkS)\n"
@@ -228,14 +319,17 @@ int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 	         "    (effects (font (size 1 1) (thickness 0.15)))\n"
 	         "  )\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
 		if(type=="Eqn" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();
 			regex_search(label, match, r_pac);
-			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX() << " " << it->getY() << " " << it->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
+			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX()+offset_x << " " << it->getY()+offset_y
+			      << " " << it->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
 		} else if(type=="MCORN"
 				||type=="MCROSS"
 				||type=="MMBEND"
@@ -244,34 +338,35 @@ int LayoutWriter::write_kicad_mod(string const& name, ofstream& f_out) {
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, X, R, ABS)
-				      << " "          << it->getP(i, Y, R, ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)+offset_x
+				      << " "          << it->getP(i, Y, R, ABS)+offset_y << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MCOUPLED") {///////////////////////////////////////////
 			f_out << "    (fp_poly (pts\n";
 			for(int i=0;i<it->getNpoint()/2;i++) {
-				f_out << "      (xy " << it->getP(i, X, R, ABS)
-				      << " "          << it->getP(i, Y, R, ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)+offset_x
+				      << " "          << it->getP(i, Y, R, ABS)+offset_y << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n"
 			         "    (fp_poly (pts\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
-				f_out << "      (xy " << it->getP(i, X, R, ABS)
-				      << " "          << it->getP(i, Y, R, ABS) << ")\n";
+				f_out << "      (xy " << it->getP(i, X, R, ABS)+offset_x
+				      << " "          << it->getP(i, Y, R, ABS)+offset_y << ")\n";
 				}
 			f_out << "      ) (layer F.Cu) (width 0)\n    )\n";
 		} else if(type=="MVIA") {///////////////////////////////////////////////
-			f_out << "  (pad \"\" thru_hole circle (at " << it->getX() << " " << it->getY() << ") (size " << it->getD() << " " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
+			f_out << "  (pad \"\" thru_hole circle (at " << it->getX()+offset_x << " " << it->getY()+offset_y
+			      << ") (size " << it->getD() << " " << it->getD() << ") (drill " << it->getD() << ") (layers *.Cu))\n";
 			}
 		}
 
 	f_out << ")\n";
-	return(0);
 	}
 
-int LayoutWriter::write_lht(ofstream& f_out) {
+void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y) {
 	string type;
+	unsigned int n=0;
 
 	f_out << "ha:pcb-rnd-board-v4 {\n"
 	         "\n"
@@ -309,8 +404,8 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         " ha:meta {\n"
 	         "   ha:size {\n"
 	         "    thermal_scale = 0.500000\n"
-	         "    x = " << extrem_pos[XMAX]+2 << "mm\n"
-	         "    y = " << extrem_pos[YMAX]+2 << "mm\n"
+	         "    x = " << block.boundary[XMAX]+offset_x << "mm\n" //TODO
+	         "    y = " << block.boundary[YMAX]+offset_y << "mm\n"
 	         "    isle_area_nm2 = 200000000.000000\n"
 	         "   }\n"
 	         "   ha:cursor {\n"
@@ -339,19 +434,19 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         "\n"
 	         "   li:objects {\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
-		int n=0;
 		//if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
 			//nothing to do
 		if(type=="MVIA") {
-			f_out << "    ha:via." << n << " {"
-			         "     x=" << it->getX() << "mm; y=" << it->getY() << "mm; hole=" << it->getD() << "mm; mask=0.0; thickness=" << it->getR() << "mm; clearance=0mm;\n"
+			f_out << "    ha:via." << n++ << " {"
+			         "     x=" << it->getX()+offset_x << "mm; y=" << it->getY()+offset_y << "mm; hole=" << it->getD() << "mm; mask=0.0; thickness=" << it->getR() << "mm; clearance=0mm;\n"
 			         "     ha:flags {\n"
 			         "      via=1\n"
 			         "     }\n"
 			         "    }\n";
-			n++;
 			}
 		}
 
@@ -366,22 +461,23 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         "\n"
 	         "      li:objects {\n";
 
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
 		type=it->getType();
-		int n=0;
 		if(type=="MCORN"
-         ||type=="MCROSS"
-         ||type=="MMBEND"
-         ||type=="MLIN"
-         ||type=="MRSTUB"
-         ||type=="MTEE") {
-			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+        || type=="MCROSS"
+        || type=="MMBEND"
+        || type=="MLIN"
+        || type=="MRSTUB"
+        || type=="MTEE") {
+			f_out << "       ha:polygon." << n++ << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, X, R, ABS) << "mm; "
-					  << it->getP(i, Y, R, ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS)+offset_x << "mm; "
+					  << it->getP(i, Y, R, ABS)+offset_y << "mm }\n";
 				}
 			f_out << "          }\n"
 			         "        }\n"
@@ -390,15 +486,14 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 			         "         clearpoly=1\n"
 			         "        }\n"
 			         "       }\n";
-			n++;
 		} else if(type=="MCOUPLED") {
-			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+			f_out << "       ha:polygon." << n++ << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
 			for(int i=0;i<it->getNpoint()/2;i++) {
 				f_out << "           { "
-					  << it->getP(i, X, R, ABS) << "mm; "
-					  << it->getP(i, Y, R, ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS)+offset_x << "mm; "
+					  << it->getP(i, Y, R, ABS)+offset_y << "mm }\n";
 				}
 			f_out << "          }\n"
 			         "        }\n"
@@ -407,14 +502,13 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 			         "         clearpoly=1\n"
 			         "        }\n"
 			         "       }\n";
-			n++;
-			f_out << "       ha:polygon." << n << " { clearance=0mm;\n"
+			f_out << "       ha:polygon." << n++ << " { clearance=0mm;\n"
 			         "        li:geometry {\n"
 			         "          ta:contour {\n";
 			for(int i=it->getNpoint()/2;i<it->getNpoint();i++) {
 				f_out << "           { "
-					  << it->getP(i, X, R, ABS) << "mm; "
-					  << it->getP(i, Y, R, ABS) << "mm }\n";
+					  << it->getP(i, X, R, ABS)+offset_x << "mm; "
+					  << it->getP(i, Y, R, ABS)+offset_y << "mm }\n";
 				}
 			f_out << "          }\n"
 			         "        }\n"
@@ -423,7 +517,6 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 			         "         clearpoly=1\n"
 			         "        }\n"
 			         "       }\n";
-			n++;
 			}
 		}
 
@@ -2603,6 +2696,1566 @@ int LayoutWriter::write_lht(ofstream& f_out) {
 	         "  }\n"
 	         " }\n"
 	         "}\n";
+	}
+
+int LayoutWriter::check_m(void) {
+	if(data.is_volume_error) {
+		log_err << data.volume_error;
+		return(1);
+		}
+
+	bool is_first_sp=true;
+	for(shared_ptr<Element> it : data.tab_all) {
+		if(it->getType()==".SP") {
+			if(is_first_sp==false) {
+				log_err << "ERROR : More than 1 active S parameter simulation.\n";
+				return(1);
+				}
+			is_first_sp=false;
+			}
+		}
+
+	if(data.oems_nf2ff_center!="") {
+		bool is_nf2ff_center_valid=false;
+		for(shared_ptr<Element> it : data.tab_all) {
+			if(it->getLabel()==data.oems_nf2ff_center) {
+				is_nf2ff_center_valid=true;
+				break;
+				}
+			}
+		if(!is_nf2ff_center_valid) {
+			log_err << "ERROR : Invalid NF2FF center : " << data.oems_nf2ff_center << ".\n";
+			return(1);
+			}
+		}
+
 	return(0);
 	}
 
+void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) {
+	string type;
+	string label;
+	long double extrem_pos_zmin=0.0;
+	long double extrem_pos_zmax=0.0;
+
+	OemsMesh mesh(block.elements);
+
+	// Need to store ports ordered.
+	vector<pair<unsigned int, shared_ptr<Element>>> ports;
+	for(shared_ptr<Element> it : block.elements) {
+		if(it->getType()=="Pac") {
+			ports.push_back(make_pair((unsigned int)it->getN(), it));
+			}
+		}
+	sort(begin(ports), end(ports));
+
+	f_out << "#!/usr/bin/octave\n"
+	         "\n"
+	         "%%%% OpenEMS script generated by Qucs-RFlayout from : " << name << ".sch\n"
+	         "\n"
+	         "clear;\n"
+	         "close all;\n"
+	         "\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SYSTEM\n"
+	         "\n"
+	         "%%%% ARGUMENTS\n"
+	         "arg_only_preprocess = false;\n"
+	         "arg_only_postprocess = false;\n"
+	         "arg_no_preprocess = false;\n"
+	         "arg_no_postprocess = false;\n"
+	         "flag_clean = false;\n"
+	         "flag_clean_result = false;\n"
+	         "flag_clean_simulation = false;\n"
+	         "flag_gui = true;\n"
+	         "flag_process = true;\n"
+	         "flag_preprocess = true;\n"
+	         "flag_postprocess = true;\n"
+	         "flag_legend_out = false;\n"
+	         "flag_nf2ff = true;\n"
+	         "flag_nf2ff_mode = 0;\n"
+	         "flag_nf2ff_3d = false;\n"
+	         "flag_nf2ff_frames = 0;\n"
+	         "flag_nf2ff_delay = '30';\n"
+	         "flag_nf2ff_phistep = 5;\n"
+	         "flag_nf2ff_thetastep = 5;\n"
+	         "flag_dump = true;\n"
+	         "flag_mesh = true;\n"
+	         "flag_highresmesh = true;\n"
+	         "flag_metalresmesh = true;\n"
+	         "flag_smoothmesh = true;\n";
+	for(pair<unsigned int, shared_ptr<Element>> port : ports) {
+		f_out << "flag_active_port" << port.first << " = " << (port==ports.front() ? "true" : "false") << ";\n";
+		}
+	f_out << "arg_list = argv();\n"
+	         "i = 1;\n"
+	         "while i <= nargin\n"
+	         "\tif strcmp(arg_list{i}, '--help') || strcmp(arg_list{i}, '-h')\n"
+	         "\t\tdisp('OpenEMS Octave script generated by Qucs-RFlayout from : " << name << ".sch');\n"
+	         "\t\tdisp(['Usage:  ./', program_name(), ' <options>']);\n"
+	         "\t\tdisp(['        octave ', program_name(), ' <option>']);\n"
+	         "\t\tdisp('');\n"
+	         "\t\tdisp('General options:');\n"
+	         "\t\tdisp(\"\\t-h, --help             Display this help and exit.\");\n"
+	         "\t\tdisp(\"\\t-c, --clean            Remove all result and simulation files.\");\n"
+	         "\t\tdisp(\"\\t-cr, --clean-result    Remove all result files.\");\n"
+	         "\t\tdisp(\"\\t-cs, --clean-sim       Remove all simulation files.\");\n"
+	         "\t\tdisp(\"\\t--<N>                  Enable a port. 'N' is a port number. By default the first port is enabled.\");\n"
+	         "\t\tdisp(\"\\t--no-<N>               Disable a port. 'N' is a port number. By default all other ports are disabled.\");\n"
+	         "\t\tdisp(\"\\t                       Possible port numbers are : ";
+	for(pair<unsigned int, shared_ptr<Element>> port : ports) {
+		f_out << port.first;
+		if(port!=ports.back()) {
+			f_out << ", ";
+			}
+		}
+	f_out << ".\");\n"
+	         "\t\tdisp('');\n"
+	         "\t\tdisp('Control options:');\n"
+	         "\t\tdisp(\"\\t--only-preprocess      Only structure and mesh construction.\");\n"
+	         "\t\tdisp(\"\\t--only-postprocess     Only process simulation datas to produce graphics and far field calculation.\");\n"
+	         "\t\tdisp(\"\\t--no-preprocess        Do not execute anything before siulation.\");\n"
+//	         "\t\tdisp(\"\\t--no-process           Do not execute simulation.\");\n"
+	         "\t\tdisp(\"\\t--no-postprocess       Do not execute anything after simulation.\");\n"
+	         "\t\tdisp(\"\\t--no-gui               Do not open AppCSXCAD.\");\n"
+	         "\t\tdisp('');\n"
+	         "\t\tdisp('Preprocessing options:');\n"
+	         "\t\tdisp(\"\\t--no-dump              Do not dump Et field, Ht field, current and current density\");\n"
+	         "\t\tdisp(\"\\t--no-highresmesh       No high resolution mesh for non orthogonal shapes.\");\n"
+	         "\t\tdisp(\"\\t--no-metalresmesh      No particular mesh lines (thirds rule) at metal resolution for orthogonal shapes.\");\n"
+	         "\t\tdisp(\"\\t--no-smoothmesh        Only particular mesh lines.\");\n"
+	         "\t\tdisp(\"\\t--no-mesh              Do not mesh any shape.\");\n"
+	         "\t\tdisp('');\n"
+	         "\t\tdisp('Postprocessing options:');\n"
+	         "\t\tdisp(\"\\t--legend-out           Put legend boxes outside graphics\");\n"
+	         "\t\tdisp(\"\\t--no-nf2ff             Do not calcul far field radiation.\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-force          Force NF2FF calculation.\");\n"
+//	         "\t\tdisp(\"\\t--nf2ff-center         Place the NF2FF calculation center. Should be placed at the radiating element center.\");\n" TODO qrfl args
+//	         "\t\tdisp(\"\\t                       By default NF2FF center is the simulation box center.\");\n"
+	         "\t\tdisp(\"\\t--f <F>                Set frequency to place markers and compute far field radiations.\");\n"
+	         "\t\tdisp(\"\\t                       Can be called multiple times. Example : '--f 3.1e09'\");\n"
+	         "\t\tdisp(\"\\t--f-max s<A><B>        Place markers and compute far field radiations at the frequency for which the specified\");\n"
+	         "\t\tdisp(\"\\t                       S parameter is maximal. A and B are port numbers, B must be active. Can be called multiple times.\");\n"
+	         "\t\tdisp(\"\\t--f-min s<A><B>        Place markers and compute far field radiations at the frequency for which the specified\");\n"
+	         "\t\tdisp(\"\\t                       S parameter is minimal. A and B are port numbers, B must be active. Can be called multiple times.\");\n"
+	         "\t\tdisp(\"\\t--f-equal s<A><B> <F>  Place markers and compute far field radiations at the frequency for which the specified\");\n"
+	         "\t\tdisp(\"\\t                       S parameter is equal to the specified value (in dB). Can be called multiple times.\");\n"
+	         "\t\tdisp(\"\\t                       Example : '--f-equal s21 -3.5'.\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-3d             Enable 3D far field representation (may be long).\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-frames <I>     Number of 3D frames to merge in a .gif. ImageMagick is required. Default (0, 1 or nothing) : use\");\n"
+	         "\t\tdisp(\"\\t                       default or --f* args specified frequencies and no .gif generated.\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-delay          Delay between each frames (in ms). Cf. convert's '-delay' argument. Default : 30\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-phistep <I>    Set phi angle (elevation) step for 3D far field. I is in degree, default is 5.\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-thetastep <I>  Set theta angle (azimuth) step for 3D far field. I is in degree, default is 5.\");\n"
+	         "\t\tdisp(\"\\t--nf2ff-anglestep <I>  Set phi & theta angle steps for 3D far field. I is in degree.\");\n"
+	         "\t\treturn;\n"
+	         "\telseif strcmp(arg_list{i}, '--clean') || strcmp(arg_list{i}, '-c')\n"
+	         "\t\tflag_clean = true;\n"
+	         "\telseif strcmp(arg_list{i}, '--clean-result') || strcmp(arg_list{i}, '-cr')\n"
+	         "\t\tflag_clean_result = true;\n"
+	         "\telseif strcmp(arg_list{i}, '--clean-sim') || strcmp(arg_list{i}, '-cs')\n"
+	         "\t\tflag_clean_simulation = true;\n"
+	         "\telseif strcmp(arg_list{i}, '--only-preprocess')\n"
+	         "\t\targ_only_preprocess = true;\n"
+	         "\t\tflag_process = false;\n"
+	         "\t\tflag_postprocess = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--only-postprocess')\n"
+	         "\t\targ_only_postprocess = true;\n"
+	         "\t\tflag_preprocess = false;\n"
+	         "\t\tflag_process = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-preprocess')\n"
+	         "\t\targ_no_preprocess = true;\n"
+	         "\t\tflag_preprocess = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-gui')\n"
+	         "\t\tflag_gui = false;\n"
+//	         "\telseif strcmp(arg_list{i}, '--no-process')\n"
+//	         "\t\tflag_process = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-postprocess')\n"
+	         "\t\targ_no_postprocess = true;\n"
+	         "\t\tflag_postprocess = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--f')\n"
+	         "\t\tif !exist('flag_f', 'var')\n"
+	         "\t\t\tflag_f = [];\n"
+	         "\t\tendif\n"
+	         "\t\tflag_f = [flag_f, str2num(arg_list{i + 1})];\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--f-max')\n"
+	         "\t\tif !exist('flag_f_max', 'var')\n"
+	         "\t\t\tflag_f_max = num2str([]);\n"
+	         "\t\tendif\n"
+	         "\t\tflag_f_max = [flag_f_max; arg_list{i + 1}];\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--f-min')\n"
+	         "\t\tif !exist('flag_f_min', 'var')\n"
+	         "\t\t\tflag_f_min = num2str([]);\n"
+	         "\t\tendif\n"
+	         "\t\tflag_f_min = [flag_f_min; arg_list{i + 1}];\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--f-equal')\n"
+	         "\t\tif !exist('flag_f_equal_s', 'var') || !exist('flag_f_equal_v', 'var')\n"
+	         "\t\t\tflag_f_equal_s = num2str([]);\n"
+	         "\t\t\tflag_f_equal_v = [];\n"
+	         "\t\tendif\n"
+	         "\t\tflag_f_equal_s = [flag_f_equal_s; arg_list{i + 1}];\n"
+	         "\t\tflag_f_equal_v = [flag_f_equal_v, str2num(arg_list{i + 2})];\n"
+	         "\t\ti = i + 2;\n"
+	         "\telseif strcmp(arg_list{i}, '--legend-out')\n"
+	         "\t\tflag_legend_out = true;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-nf2ff')\n"
+	         "\t\tflag_nf2ff = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-force')\n"
+	         "\t\tflag_nf2ff_mode = 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-3d')\n"
+	         "\t\tflag_nf2ff_3d = true;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-frames')\n"
+	         "\t\tflag_nf2ff_frames = str2num(arg_list{i + 1});\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-delay')\n"
+	         "\t\tflag_nf2ff_delay = arg_list{i + 1};\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-phistep')\n"
+	         "\t\tflag_nf2ff_phistep = str2num(arg_list{i + 1});\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-thetastep')\n"
+	         "\t\tflag_nf2ff_thetastep = str2num(arg_list{i + 1});\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--nf2ff-anglestep')\n"
+	         "\t\tflag_nf2ff_phistep = str2num(arg_list{i + 1});\n"
+	         "\t\tflag_nf2ff_thetastep = str2num(arg_list{i + 1});\n"
+	         "\t\ti = i + 1;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-dump')\n"
+	         "\t\tflag_dump = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-mesh')\n"
+	         "\t\tflag_mesh = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-highresmesh')\n"
+	         "\t\tflag_highresmesh = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-metalresmesh')\n"
+	         "\t\tflag_metalresmesh = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-smoothmesh')\n"
+	         "\t\tflag_smoothmesh = false;\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "\telseif strcmp(arg_list{i}, '--" << it.first << "')\n"
+		         "\t\tflag_active_port" << it.first << " = true;\n"
+		         "\telseif strcmp(arg_list{i}, '--no-" << it.first << "')\n"
+		         "\t\tflag_active_port" << it.first << " = false;\n";
+		}
+	f_out << "\telse\n"
+	         "\t\tdisp(['ERROR : Unknown argument : ', arg_list{i}]);\n"
+	         "\t\treturn;\n"
+	         "\tendif\n"
+	         "\ti = i + 1;\n"
+	         "endwhile\n"
+	         "if arg_only_preprocess && arg_only_postprocess\n"
+	         "\tdisp('ERROR : --only-preprocess and --only-postprocess are not compatible.');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if arg_only_preprocess && arg_no_preprocess\n"
+	         "\tdisp('ERROR : --only-preprocess and --no-preprocess are not compatible.');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if arg_only_postprocess && arg_no_postprocess\n"
+	         "\tdisp('ERROR : --only-postprocess and --no-postprocess are not compatible.');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if flag_mesh == false && arg_only_preprocess == false\n"
+	         "\tdisp('ERROR : --no-mesh only works with --only-preprocess.');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if flag_smoothmesh == false && arg_only_preprocess == false\n"
+	         "\tdisp('ERROR : --no-smoothmesh only works with --only-preprocess.');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if exist('flag_f_max', 'var')\n"
+	         "\tfor i = 1:rows(flag_f_max)\n"
+	         "\t\tif exist('flag_f_max', 'var') && numel(flag_f_max(i, :)) == 3 && flag_f_max(i, 1) == 's' ...\n"
+	         "\t\t&& exist(['flag_active_port', flag_f_max(i, 2)]) ...\n"
+	         "\t\t&& exist(['flag_active_port', flag_f_max(i, 3)])\n"
+	         "\t\t\tif eval(['flag_active_port', flag_f_max(i, 3)]) == false\n"
+	         "\t\t\t\tdisp(['ERROR : --f-max ', flag_f_max(i, :), ' : port ', flag_f_max(i, 3), ' is not an active port.']);\n"
+	         "\t\t\t\treturn;\n"
+	         "\t\t\tendif\n"
+	         "\t\telse\n"
+	         "\t\t\tdisp(['ERROR : --f-max ', flag_f_max(i, :), ' : incorrect argument.']);\n"
+	         "\t\t\treturn;\n"
+	         "\t\tendif\n"
+	         "\tendfor\n"
+	         "endif\n"
+	         "if exist('flag_f_min', 'var')\n"
+	         "\tfor i = 1:rows(flag_f_min)\n"
+	         "\t\tif numel(flag_f_min(i, :)) == 3 && flag_f_min(i, 1) == 's' ...\n"
+	         "\t\t&& exist(['flag_active_port', flag_f_min(i, 2)]) ...\n"
+	         "\t\t&& exist(['flag_active_port', flag_f_min(i, 3)])\n"
+	         "\t\t\tif eval(['flag_active_port', flag_f_min(i, 3)]) == false\n"
+	         "\t\t\t\tdisp(['ERROR : --f-min ', flag_f_min(i, :), ' : port ', flag_f_min(i, 3), ' is not an active port.']);\n"
+	         "\t\t\t\treturn;\n"
+	         "\t\t\tendif\n"
+	         "\t\telse\n"
+	         "\t\t\tdisp(['ERROR : --f-min ', flag_f_min(i, :), ' : incorrect argument.']);\n"
+	         "\t\t\treturn;\n"
+	         "\t\tendif\n"
+	         "\tendfor\n"
+	         "endif\n"
+	         "if exist('flag_f_equal_s', 'var')\n"
+	         "\tfor i = 1:rows(flag_f_equal_s)\n"
+	         "\t\tif numel(flag_f_equal_s(i, :)) == 3 && flag_f_equal_s(i, 1) == 's' ...\n"
+	         "\t\t&& exist(['flag_active_port', flag_f_equal_s(i, 2)]) ...\n"
+	         "\t\t&& exist(['flag_active_port', flag_f_equal_s(i, 3)])\n"
+	         "\t\t\tif eval(['flag_active_port', flag_f_equal_s(i, 3)]) == false\n"
+	         "\t\t\t\tdisp(['ERROR : --f-min ', flag_f_equal_s(i, :), ' : port ', flag_f_equal_s(i, 3), ' is not an active port.']);\n"
+	         "\t\t\t\treturn;\n"
+	         "\t\t\tendif\n"
+	         "\t\telse\n"
+	         "\t\t\tdisp(['ERROR : --f-min ', flag_f_equal_s(i, :), ' : incorrect argument.']);\n"
+	         "\t\t\treturn;\n"
+	         "\t\tendif\n"
+	         "\tendfor\n"
+	         "endif\n"
+	         "\n"
+
+	         "path_result = '" << name << "_result';\n"
+	         "path_simulation = '" << name << "_simulation';\n"
+	         "Sim_CSX = '" << name << ".xml';\n"
+	         "\n"
+
+	         "if flag_clean\n"
+	         "\t[status, message, messageid] = rmdir(path_result, 's');\n"
+	         "\t[status, message, messageid] = rmdir(path_simulation, 's');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if flag_clean_result\n"
+	         "\t[status, message, messageid] = rmdir(path_result, 's');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if flag_clean_simulation\n"
+	         "\t[status, message, messageid] = rmdir(path_simulation, 's');\n"
+	         "\treturn;\n"
+	         "endif\n"
+	         "if flag_preprocess && flag_process && flag_postprocess\n"
+	         "\t[status, message, messageid] = rmdir(path_result, 's');\n"
+	         "\t[status, message, messageid] = rmdir(path_simulation, 's');\n"
+	         "elseif flag_process\n"
+	         "\t[status, message, messageid] = rmdir(path_simulation, 's');\n"
+	         "endif\n"
+	         "[status, message, messageid] = mkdir(path_result);\n"
+	         "[status, message, messageid] = mkdir(path_simulation);\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREPROCESSING\n"
+	         "\n";
+
+	f_out << "%%%% VARIABLES\n"
+	         "t_preprocess_start = clock();\n"
+	         "physical_constants;\n";
+	bool is_there_sp=false;
+	for(shared_ptr<Element> it : block.elements) {
+		if(it->getType()==".SP") {
+			is_there_sp=true;
+			f_out << "fstart = " << it->getFstart() << ";\n"
+			         "fstop = " << it->getFstop() << ";\n"
+			         "points = " << it->getN() << ";\n";
+			}
+		}
+	if(!is_there_sp) {
+		f_out << "fstart = ;\n"
+		         "fstop = ;\n"
+		         "points = ;\n";
+		log_err << "WARNING : No active S parameter simulation in the schematic, you will have to set simulation frequencies manually.\n"; //TODO disp("set & rm this plz")
+		}
+	f_out << "f0 = (fstop + fstart) / 2; % Center frequency\n"
+	         "fc = (fstop - fstart) / 2; % Cutoff frequency\n"
+	         "unit = 1e-3;\n"
+	         "lambda = c0 / (f0 + fc) / unit;\n"
+	         "high_div = " << data.oems_highres_div << ";        % Depend on your simulation, you may want to tweak this value\n"
+	         "metal_div = " << data.oems_metalres_div << ";        % Depend on your simulation, you may want to tweak this value\n"
+	         "substrate_div = "<< data.oems_substres_div << ";    % Depend on your simulation, you may want to tweak this value\n"
+	         "time_res = " << data.oems_timeres << ";     % Depend on your simulation, you may want to tweak this value\n"
+	         "high_res = lambda / high_div;\n"
+	         "metal_res = lambda / metal_div;\n"
+	         "substrate_res = lambda / substrate_div;\n"
+	         "\n";
+
+	f_out << "%%%% SUBSTRATES\n"
+	         "CSX = InitCSX();\n"
+	         "if flag_preprocess\n"
+	         "\n";
+
+	for(shared_ptr<Element> it : block.elements) {
+		type=it->getType();
+		if(type=="SUBST") {
+			if(-it->getH()-it->getT()-it->getMargin()<extrem_pos_zmin) extrem_pos_zmin=-it->getH()-it->getT()-it->getMargin();
+			if(it->getT()+it->getMargin()>extrem_pos_zmax) extrem_pos_zmax=it->getT()+it->getMargin();
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "endif % flag_preprocess\n" <<
+			         it->getLabel() << ".metal.t = (" << it->getT() << ");\n" <<
+			         it->getLabel() << ".metal.rho = (" << it->getRho() << ");\n" <<
+			         it->getLabel() << ".metal.cond = (1 / " << it->getLabel() << ".metal.rho);\n" <<
+			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getLabel() << ".metal.t];\n" <<
+			         it->getLabel() << ".substrate.tand = (" << it->getTand() << ");\n" <<
+			         it->getLabel() << ".substrate.Er = (" << it->getEr() << ");\n" <<
+			         it->getLabel() << ".substrate.K = (" << it->getLabel() << ".substrate.tand * 2 * pi * f0 * EPS0 * " << it->getLabel() << ".substrate.Er);\n" <<
+			         it->getLabel() << ".substrate.h = (" << it->getH() << ");\n" <<
+			         it->getLabel() << ".substrate.L = (" << it->getL() << ");\n" <<
+			         it->getLabel() << ".substrate.W = (" << it->getW() << ");\n" <<
+			         it->getLabel() << ".dump.start = [" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", (" << it->getLabel() << ".metal.t/2)];\n" <<
+			         it->getLabel() << ".dump.stop = [" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", (" << it->getLabel() << ".metal.t/2)];\n"
+//			         it->getLabel() << ".cells = (" << "" << ");\n" << //TODO z mesh division
+			         "if flag_preprocess\n"
+			         "CSX = AddMaterial(CSX, '" << it->getLabel() << ".substrate');\n"
+			         "CSX = SetMaterialProperty(CSX, '" << it->getLabel() << ".substrate', ...\n"
+			         "\t'Epsilon', " << it->getLabel() << ".substrate.Er, ...\n"
+			         "\t'Kappa', " << it->getLabel() << ".substrate.K);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".substrate', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", 0]);\n"
+//			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".metal');\n"
+//			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".metal', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".ground');\n"
+			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".ground', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".ground', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", (-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t)], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h]);\n"
+			         "\n";
+			}
+		}
+
+	f_out << "%%%% SHAPES\n";
+	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
+		type=it->getType();
+		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+			//nothing to do
+		} else if(type=="MCORN"
+		       || type=="MLIN") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "endif % flag_preprocess\n" <<
+			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
+			         "if flag_preprocess\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\n";
+		} else if(type=="MCOUPLED") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "endif % flag_preprocess\n" <<
+			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
+			         "if flag_preprocess\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(4, X, R, ABS)+offset_x << ", " << -(it->getP(4, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(6, X, R, ABS)+offset_x << ", " << -(it->getP(6, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\n";
+		} else if(type=="MCROSS"
+		       || type=="MMBEND"
+		       || type=="MRSTUB"
+		       || type=="MTEE") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "endif % flag_preprocess\n" <<
+			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
+			         "if flag_preprocess\n"
+			         "p = zeros(2, " << it->getNpoint() << ");\n";
+			for(int i=0;i<it->getNpoint();i++) {
+				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS)+offset_x << "; p(2, " << i+1 << ") = " << -(it->getP(i, Y, R, ABS)+offset_y) << ";\n";
+				}
+			f_out << "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddLinPoly(CSX, '" << it->getLabel() << "', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+//			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+			         "\n";
+		} else if(type=="MVIA") {
+			f_out << "% " << it->getLabel() << " : " << type << "\n"
+			         "endif % flag_preprocess\n" <<
+			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
+			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getX()+it->getD()/2+offset_x << ", " << -(it->getY()+it->getD()/2+offset_y) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)], ...\n"
+			         "\t[" << it->getX()-it->getD()/2+offset_x << ", " << -(it->getY()-it->getD()/2+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "\n";
+			}
+		}
+
+	f_out << "%%%% MESH\n"
+	         "endif % flag_preprocess\n"
+	         "mesh.x = [];\n"
+	         "mesh.y = [];\n"
+	         "mesh.z = [];\n"
+	         "if flag_preprocess\n"
+	         "if flag_mesh\n"
+	         "\n";
+
+	f_out << "% High resolution mesh for non orthogonal shapes\n"
+	         "if flag_highresmesh\n"
+	         "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
+			f_out << "\t(linspace(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case XMIN: f_out << "(" << line->position << " - 2*high_res/3), "; break;
+						case XMAX: f_out << "(" << line->position << " + 2*high_res/3), "; break;
+						}
+				} else {
+					f_out << "(" << line->position << "), ";
+					}
+				}
+			advance(line, -1);
+			f_out << "(abs(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case XMIN: f_out << "(" << line->position << " - 2*high_res/3)"; break;
+						case XMAX: f_out << "(" << line->position << " + 2*high_res/3)"; break;
+						}
+				} else {
+					f_out << "(" << line->position << ")";
+					}
+				if(i==0) {
+					f_out << " - ";
+					}
+				}
+			f_out << ") / high_res))), ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.y = [mesh.y, ...\n";
+	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
+		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
+			f_out << "\t(linspace(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3), "; break;
+						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3), "; break;
+						}
+				} else {
+					f_out << "(" << -line->position << "), ";
+					}
+				}
+			advance(line, -1);
+			f_out << "(abs(";
+			for(unsigned int i=0;i<2;i++) {
+				advance(line, i);
+				if(line->third_rule) {
+					switch(line->direction) {
+						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3)"; break;
+						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3)"; break;
+						}
+				} else {
+					f_out << "(" << line->position << ")";
+					}
+				if(i==0) {
+					f_out << " - ";
+					}
+				}
+			f_out << ") / high_res))), ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "endif % flag_highresmesh\n"
+	         "\n";
+
+	f_out << "% Standard metal resolution mesh for orthogonal shapes\n"
+	         "if flag_metalresmesh\n"
+	         "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else {
+			if(line->third_rule) {
+				switch(line->direction) {
+					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					}
+			} else {
+				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
+				}
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.y = [mesh.y, ...\n";
+	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
+		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else {
+			if(line->third_rule) {
+				switch(line->direction) {
+					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case YMAX: f_out << "\t(" << -line->position << " - 2*metal_res/3), (" << -line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					}
+			} else {
+				f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
+				}
+			}
+		}
+	f_out << "\t];\n";
+
+	f_out << "mesh.z = [mesh.z, ...\n";
+	for(shared_ptr<Element> it : block.elements) {
+		type=it->getType();
+		if(type=="SUBST") {
+			f_out << "\t(" << it->getLabel() << ".metal.t/2), ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h/3), ...\n"
+			         "\t(-2*" << it->getLabel() << ".substrate.h/3), ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t/2), ...\n";
+			}
+		}
+	f_out << "\t];\n";
+
+//	f_out << "mesh.z = linspace(" << -substrate.h-copper.h << ", "copper.h", 4);\n";
+
+	f_out << "if flag_smoothmesh\n"
+	         "mesh = SmoothMesh(mesh, metal_res);\n"
+	         "endif % flag_smoothmesh\n"
+	         "endif % flag_metalresmesh\n"
+	         "endif % flag_mesh\n"
+	         "endif % flag_preprocess\n"
+	         "\n"
+//	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
+//	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
+//	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
+//	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
+//	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
+	         "% Boundary box\n"
+	         "if flag_mesh\n"
+//	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
+//	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
+//	         "mesh.z = [mesh.z, " << extrem_pos_zmin << ", " << extrem_pos_zmax << "];\n"
+	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << " - lambda * " << data.oems_boundary_factor << "/4, " << block.boundary[XMAX]+offset_x << " + lambda * " << data.oems_boundary_factor << "/4];\n"
+	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n" //TODO
+	         "mesh.z = [mesh.z, " << extrem_pos_zmin << " - lambda * " << data.oems_boundary_factor << "/4, " << extrem_pos_zmax << " + lambda * " << data.oems_boundary_factor << "/4];\n"
+	         "if flag_smoothmesh\n"
+	         "mesh = SmoothMesh(mesh, substrate_res);\n"
+	         "endif % flag_smoothmesh\n"
+	         "endif % flag_mesh\n"
+	         "\n"
+	         "if flag_preprocess\n"
+	         "CSX = DefineRectGrid(CSX, unit, mesh);\n"
+	         "endif % flag_preprocess\n"
+	         "\n";
+
+	f_out << "%%%% PORTS\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "% " << it.second->getLabel() << " : " << it.second->getType() << "\n" <<
+		         it.second->getLabel() << ".center = [" << it.second->getX()+offset_x << ", " << -(it.second->getY()+offset_y) << ", " << it.second->getSubst() << ".metal.t];\n" <<
+		         it.second->getLabel() << ".Z = (" << it.second->getZ() << ");\n" <<
+		         it.second->getLabel() << ".P = (" << it.second->getDbm() << ");\n" <<
+		         it.second->getLabel() << ".F = (" << it.second->getF() << ");\n" <<
+		         "[CSX port{" << it.second->getN() << "}] = AddLumpedPort(CSX, 5, " << it.second->getN() << ", " << it.second->getLabel() << ".Z, ...\n"
+		         "\t[" << it.second->getP(0, X, R, ABS)+offset_x << ", " << -(it.second->getP(0, Y, R, ABS)+offset_y) << ", (-" << it.second->getSubst() << ".substrate.h - " << it.second->getSubst() << ".metal.t)" << "], ...\n"
+		         "\t[" << it.second->getP(2, X, R, ABS)+offset_x << ", " << -(it.second->getP(2, Y, R, ABS)+offset_y) << ", (" << it.second->getSubst() << ".metal.t)" << "], ...\n"
+		         "\t[0 0 1], flag_active_port" << it.first << ");\n"
+		         "\n";
+		}
+
+	f_out << "%%%% SIMULATION\n"
+	         "if flag_preprocess\n"
+	         "FDTD = InitFDTD('NrTS', time_res);\n"
+	         "FDTD = SetGaussExcite(FDTD, f0, fc);\n"
+	         "%BC = {'MUR' 'MUR' 'MUR' 'MUR' 'MUR' 'MUR'};\n"
+	         "BC = {'PML_8' 'PML_8' 'PML_8' 'PML_8' 'PML_8' 'PML_8'};\n"
+	         "FDTD = SetBoundaryCond(FDTD, BC);\n"
+	         "endif % flag_preprocess\n"
+	         "\n";
+
+	f_out << "%%%% NF2FF\n"
+	         "if flag_nf2ff\n"
+	         "if flag_mesh\n"
+	         "if flag_smoothmesh\n"
+	         "% Be careful that NF2FF box boundaries are not in PML\n"
+	         "[CSX nf2ff] = CreateNF2FFBox(CSX, 'nf2ff', ...\n"
+	         "\t[mesh.x(10), mesh.y(10), mesh.z(10)], ...\n"
+	         "\t[mesh.x(end-9), mesh.y(end-9), mesh.z(end-9)]);\n"
+	         "endif % flag_smoothmesh\n"
+	         "endif % flag_mesh\n"
+	         "endif % flag_nf2ff\n"
+	         "\n";
+
+	f_out << "%%%% DUMPS\n"
+	         "if flag_preprocess\n"
+	         "if flag_dump\n";
+	for(shared_ptr<Element> it : block.elements) {
+		if(it->getType()=="SUBST") {
+			f_out << "% " << it->getLabel() << " ET\n"
+			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Et', 'DumpType', 0);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Et', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "% " << it->getLabel() << " HT\n"
+			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Ht', 'DumpType', 1);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Ht', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "% " << it->getLabel() << " CURRENT\n"
+			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Jt', 'DumpType', 2, 'DumpMode', 0);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Jt', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "% " << it->getLabel() << " CURRENT DENSITY\n"
+			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Cdt', 'DumpType', 3);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Cdt', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "\n";
+			}
+		}
+	f_out << "endif % flag_dump\n"
+	         "\n";
+
+	f_out << "%%%% RUN OPENEMS\n"
+	         "WriteOpenEMS([path_simulation '/' Sim_CSX], FDTD, CSX);\n"
+	         "t_preprocess_stop = clock();\n"
+	         "endif % flag_preprocess\n"
+	         "if flag_gui\n"
+	         "CSXGeomPlot([path_simulation '/' Sim_CSX]);\n"
+	         "endif % flag_gui\n"
+	         "if flag_process\n"
+	         "t_process_start = clock();\n"
+	         "RunOpenEMS(path_simulation, Sim_CSX);\n"
+	         "t_process_stop = clock();\n"
+	         "endif % flag_process\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FUNCTIONS\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "function h = plotFF3D_frames(nf2ff, prefix, varargin)\n"
+	         "% h = plotFF3D_frames(nf2ff, varargin)\n"
+	         "%\n"
+	         "% This is an enhanced version of plotFF3D to plot 3D far field pattern for\n"
+	         "% multiple frequencies. It will plot a frame for each frequency present in\n"
+	         "% nf2ff. It can also produce an animated gif.\n"
+	         "% For now, supports only V/m output.\n"
+	         "%\n"
+	         "% input:\n"
+	         "%   nf2ff:                 - Output of CalcNF2FF\n"
+	         "%   prefix:                - Frame name: '<prefix>@<f>.<format>'.\n"
+	         "%                          - Gif name: '<prefix>.<format>'.\n"
+	         "%\n"
+	         "% variable input:\n"
+	         "%   'unique_color_scale':  - Use an unique color scale for all frames.\n"
+	         "%   'unique_axis_scale':   - Use an unique axis scale for all frames.\n"
+	         "%   'unique_xyz_scale':    - Use an unique scale for x, y, z axis on each frame.\n"
+	         "%   'gif' <bool>:          - Merge all frames in an animated gif.\n"
+	         "%                          - Use ImageMagick's 'convert' command.\n"
+	         "%                          - Default: false.\n"
+	         "%   'delay' <str>:         - Delay between frames in the gif.\n"
+	         "%                          - Cf. convert '-delay' argument.\n"
+	         "%                          - Default: '30'.\n"
+	         "%   'colormap' <str>:      - Set a colormap for the plots.\n"
+	         "%                          - Default: 'jet'.\n"
+	         "%   'show_each' <bool>:    - Show each frame in its figure window.\n"
+	         "%                          - Default: false.\n"
+	         "%   'print' <bool>:        - Do not save frames/gif on disk.\n"
+	         "%                          - Default: true.\n"
+	         "%   'format' <str>:        - Frame format.\n"
+	         "%                          - You probably must not override it.\n"
+	         "%                          - Default: 'png'.\n"
+	         "%\n"
+	         "% example:\n"
+	         "%   plotFF3D_frames(nf2ff, [name, '-ff3d-vm'], 'gif', true, ...\n"
+	         "%       'unique_color_scale', 'unique_axis_scale');\n"
+	         "%\n"
+	         "% See also plotFF3D\n"
+	         "%\n"
+	         "% openEMS matlab interface\n"
+	         "% -----------------------\n"
+	         "% author: Thomas Lepoix\n"
+	         "\n"
+	         "flag_vm = true;\n"
+	         "\n"
+	         "unique_color_scale = false;\n"
+	         "unique_axis_scale = false;\n"
+	         "unique_xyz_scale = false;\n"
+	         "gif = false;\n"
+	         "delay = '30';\n"
+	         "colormap_arg = 'jet';\n"
+	         "show_each = false;\n"
+	         "print_arg = true;\n"
+	         "format_arg = 'png';\n"
+	         "\n"
+	         "n = 1;\n"
+	         "while n <= numel(varargin)\n"
+	         "\tif (strcmp(varargin{n}, 'unique_color_scale') == 1);\n"
+	         "\t\tunique_color_scale = true;\n"
+	         "\telseif (strcmp(varargin{n}, 'unique_axis_scale') == 1);\n"
+	         "\t\tunique_axis_scale = true;\n"
+	         "\telseif (strcmp(varargin{n}, 'unique_xyz_scale') == 1);\n"
+	         "\t\tunique_xyz_scale = true;\n"
+	         "\telseif (strcmp(varargin{n}, 'gif') == 1);\n"
+	         "\t\tgif = varargin{n + 1};\n"
+	         "\t\tn = n + 1;\n"
+	         "\telseif (strcmp(varargin{n}, 'delay') == 1);\n"
+	         "\t\tdelay = varargin{n+1};\n"
+	         "\t\tn = n + 1;\n"
+	         "\telseif (strcmp(varargin{n}, 'colormap') == 1);\n"
+	         "\t\tcolormap_arg = varargin{n+1};\n"
+	         "\t\tn = n + 1;\n"
+	         "\telseif (strcmp(varargin{n}, 'show_each') == 1);\n"
+	         "\t\tshow_each = varargin{n + 1};\n"
+	         "\t\tn = n + 1;\n"
+	         "\telseif (strcmp(varargin{n}, 'print') == 1);\n"
+	         "\t\tprint_arg = varargin{n + 1};\n"
+	         "\t\tn = n + 1;\n"
+	         "\telseif (strcmp(varargin{n}, 'format') == 1);\n"
+	         "\t\tformat_arg = varargin{n+1};\n"
+	         "\t\tn = n + 1;\n"
+	         "\telse\n"
+	         "\t\twarning('openEMS:plotFF3D_frames', ['unknown argument key: ''' varargin{n} '''']);\n"
+	         "\tendif\n"
+	         "\tn = n + 1;\n"
+	         "endwhile\n"
+	         "\n"
+	         "for n = 1:numel(nf2ff.freq)\n"
+	         "\tif flag_vm\n"
+	         "\t\tE_far{n} = nf2ff.E_norm{n};\n"
+	         "\tendif\n"
+	         "\n"
+	         "\t[theta, phi] = ndgrid(nf2ff.theta, nf2ff.phi);\n"
+	         "\tx{n} = E_far{n} .* sin(theta) .* cos(phi);\n"
+	         "\ty{n} = E_far{n} .* sin(theta) .* sin(phi);\n"
+	         "\tz{n} = E_far{n} .* cos(theta);\n"
+	         "\n"
+	         "\tif n == 1\n"
+	         "\t\tE_far_min = min(E_far{n}(:));\n"
+	         "\t\tE_far_max = max(E_far{n}(:));\n"
+	         "\t\tE_far_max_x = max(abs(x{n}(:)));\n"
+	         "\t\tE_far_max_y = max(abs(y{n}(:)));\n"
+	         "\t\tE_far_max_z = max(abs(z{n}(:)));\n"
+	         "\telse\n"
+	         "\t\tif min(E_far{n}(:)) < E_far_min\n"
+	         "\t\t\tE_far_min = min(E_far{n}(:));\n"
+	         "\t\tendif\n"
+	         "\t\tif max(E_far{n}(:)) > E_far_max\n"
+	         "\t\t\tE_far_max = max(E_far{n}(:));\n"
+	         "\t\tendif\n"
+	         "\t\tif max(abs(x{n}(:))) > E_far_max_x\n"
+	         "\t\t\tE_far_max_x = max(abs(x{n}(:)));\n"
+	         "\t\tendif\n"
+	         "\t\tif max(abs(y{n}(:))) > E_far_max_y\n"
+	         "\t\t\tE_far_max_y = max(abs(y{n}(:)));\n"
+	         "\t\tendif\n"
+	         "\t\tif max(abs(z{n}(:))) > E_far_max_z\n"
+	         "\t\t\tE_far_max_z = max(abs(z{n}(:)));\n"
+	         "\t\tendif\n"
+	         "\tendif\n"
+	         "\n"
+	         "\tfstop_digit_number = numel(num2str(nf2ff.freq(n)));\n"
+	         "endfor\n"
+	         "\n"
+	         "if show_each == false\n"
+	         "\tfigure;\n"
+	         "endif\n"
+	         "for n = 1:numel(nf2ff.freq)\n"
+	         "\tif show_each\n"
+	         "\t\tfigure;\n"
+	         "\tendif\n"
+	         "\tcolormap(colormap_arg);\n"
+	         "\n"
+	         "\th = surf(x{n}, y{n}, z{n}, E_far{n});\n"
+	         "\tset(h, 'EdgeColor', 'none');\n"
+	         "\taxis equal;\n"
+	         "\taxis off;\n"
+	         "\n"
+	         "\tif flag_vm\n"
+	         "\t\ttitletext = sprintf('Electrical far field [V/m] @ f = %e Hz', nf2ff.freq(n));\n"
+	         "\tendif\n"
+	         "\ttitle(titletext);\n"
+	         "\n"
+	         "\tif unique_color_scale\n"
+	         "\t\tcb = colorbar('YTick', linspace(E_far_min, E_far_max, 9));\n"
+	         "\t\tcaxis([0, E_far_max]);\n"
+	         "\telse\n"
+	         "\t\tcb = colorbar('YTick', linspace(min(E_far{n}(:)), max(E_far{n}(:)), 9));\n"
+	         "\tendif\n"
+	         "\tset(cb, 'Position', [0.75, 0.2, 0.05, 0.6]);\n"
+	         "\n"
+	         "\tif unique_axis_scale && unique_xyz_scale\n"
+	         "\t\txlim([-E_far_max, E_far_max]);\n"
+	         "\t\tylim([-E_far_max, E_far_max]);\n"
+	         "\t\tzlim([-E_far_max, E_far_max]);\n"
+	         "\telseif unique_axis_scale\n"
+	         "\t\txlim([-E_far_max_x, E_far_max_x]);\n"
+	         "\t\tylim([-E_far_max_y, E_far_max_y]);\n"
+	         "\t\tzlim([-E_far_max_z, E_far_max_z]);\n"
+	         "\telseif unique_xyz_scale\n"
+	         "\t\tlimit = max([xlim, ylim, zlim]);\n"
+	         "\t\txlim([-limit, limit]);\n"
+	         "\t\tylim([-limit, limit]);\n"
+	         "\t\tzlim([-limit, limit]);\n"
+	         "\tendif\n"
+	         "\n"
+	         "\tdrawnow;\n"
+	         "\tif print_arg\n"
+	         "\t\tprint([prefix, '@', ...\n"
+	         "\t\t\tnum2str(nf2ff.freq(n), ['%0', num2str(fstop_digit_number), '.0f']), ...\n"
+	         "\t\t\t'.', format_arg]);\n"
+	         "\tendif\n"
+	         "endfor\n"
+	         "\n"
+	         "if print_arg && gif\n"
+	         "\tsystem(['convert -delay ', delay, ' -loop 0 ', ...\n"
+	         "\t\tprefix, '@*.', format_arg, ' ', ...\n"
+	         "\t\tprefix, '.gif']);\n"
+	         "endif\n"
+	         "\n"
+	         "end\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "function h = plotSmith(s, name, freq, f_ind, varargin)\n"
+	         "% h = plotSmith(s, name, freq, f_ind, varargin)\n"
+	         "%\n"
+	         "% Reworked version of plotRefl to plot other S parameters than s11 and to plot\n"
+	         "% multiple S parameters on the same graphic.\n"
+	         "%\n"
+	         "% input:\n"
+	         "%   s:         S parameter.\n"
+	         "%   name:      S parameter name to display.\n"
+	         "%   freq:      Frequency array.\n"
+	         "%   f_ind:     Index array in 'freq' of the frequencies to put a marker on.\n"
+	         "%\n"
+	         "% variable input:\n"
+	         "%   'precision':   - Number of decimal places (floating point precision)\n"
+	         "%                    for the frequency (always in MHz), default is 2\n"
+	         "%   'nogrid':      - Do not replot grid.\n"
+	         "%                  - Not to put older plots under the grid, you should use it\n"
+	         "%                    unless it is the first time you use plotSmith in a figure.\n"
+	         "%\n"
+	         "% example:\n"
+	         "%   freq = [linspace(fstart, fstop, points), f_res];\n"
+	         "%   sort(freq);\n"
+	         "%   port{1} = calcPort(port{1}, Sim_Path, freq);\n"
+	         "%   port{2} = calcPort(port{2}, Sim_Path, freq);\n"
+	         "%   s11 = port{1}.uf.ref ./ port{1}.uf.inc;\n"
+	         "%   s21 = port{2}.uf.ref ./ port{1}.uf.inc;\n"
+	         "%   f_res_ind = find(freq == f_res);\n"
+	         "%   figure;\n"
+	         "%   plotSmith(s11, 's11', freq, f_res_ind);\n"
+	         "%   plotSmith(s21, 's21', freq, f_res_ind, 'nogrid');\n"
+	         "%   drawnow;\n"
+	         "%\n"
+	         "% See also PlotRefl\n"
+	         "%\n"
+	         "% openEMS matlab interface\n"
+	         "% -----------------------\n"
+	         "% author: Thomas Lepoix\n"
+	         "\n"
+	         "precision = 2;\n"
+	         "grid_arg = true;\n"
+	         "\n"
+	         "for n=1:2:numel(varargin)\n"
+	         "\tif (strcmp(varargin{n},'precision')==1);\n"
+	         "\t\tprecision = varargin{n+1};\n"
+	         "\telseif (strcmp(varargin{n},'nogrid')==1);\n"
+	         "\t\tgrid_arg = false;\n"
+	         "\telse\n"
+	         "\t\twarning('openEMS:plotSmith', ['unknown argument key: ''' varargin{n} '''']);\n"
+	         "\tendif\n"
+	         "endfor\n"
+	         "\n"
+	         "ffmt = ['%.', num2str(precision), 'f'];\n"
+	         "\n"
+	         "if grid_arg\n"
+	         "\taxis ([-1.15, 1.15, -1.15, 1.15], 'square');\n"
+	         "\taxis off;\n"
+	         "\thold on;\n"
+	         "\n"
+	         "\t% Horizontal axis\n"
+	         "\tplot([-1, 1], [0, 0], 'color', [0.9, 0.9, 0.9]);\n"
+	         "\n"
+	         "\t% Inner curved lines\n"
+	         "\tReZ = [0.2; 0.5; 1; 2];\n"
+	         "\tImZ = 1i * [1, 2, 5, 2];\n"
+	         "\tZ = ReZ .+ linspace(-ImZ, ImZ, 256);\n"
+	         "\tGamma = (Z-1)./(Z+1);\n"
+	         "\tplot(Gamma.', 'color', [0.9, 0.9, 0.9]);\n"
+	         "\n"
+	         "\tReZ = [0.5, 0.5, 1, 1, 2, 2, 5, 5, 10, 10];\n"
+	         "\tImZ = 1i * [-0.2; 0.2; -0.5; 0.5; -1; 1; -2; 2; -5; 5];\n"
+	         "\tZ = linspace(0, ReZ, 256) .+ ImZ;\n"
+	         "\tGamma = (Z-1)./(Z+1);\n"
+	         "\tplot(Gamma.', 'color', [0.9, 0.9, 0.9]);\n"
+	         "\n"
+	         "\t% Inner circles\n"
+	         "\tangle = linspace (0, 2 * pi, 256);\n"
+	         "\tReZ = [5, 10];\n"
+	         "\tcenter = ReZ ./ (ReZ + 1);\n"
+	         "\tradius = 1 ./ (ReZ + 1);\n"
+	         "\tplot(radius .* cos(angle.') .+ center, radius .* sin(angle.'), 'color', [0.9, 0.9, 0.9]);\n"
+	         "\n"
+	         "\t% Outer black circle\n"
+	         "\tReZ = [0];\n"
+	         "\tcenter = ReZ ./ (ReZ + 1);\n"
+	         "\tradius = 1 ./ (ReZ + 1);\n"
+	         "\tplot(radius .* cos(angle.') .+ center, radius .* sin(angle.'), 'k');\n"
+	         "\n"
+	         "\t% A trick to restore color order\n"
+	         "\tplot(0, 'visible', 'off');\n"
+	         "\n"
+	         "\t% Resistance\n"
+	         "\tReZ = [0.2, 0.5, 1, 2, 5, 10];\n"
+	         "\tImZ = zeros(1, length (ReZ));\n"
+	         "\trho = (ReZ.^2 + ImZ.^2 - 1 + 2i * ImZ) ./ ((ReZ + 1).^2 + ImZ.^2);\n"
+	         "\n"
+	         "\txoffset = [0.1, 0.1, 0.05, 0.05, 0.05, 0.075]; \n"
+	         "\tyoffset = -0.03;\n"
+	         "\n"
+	         "\tfor idx = 1:length(ReZ)\n"
+	         "\t\ttext(real(rho(idx)) - xoffset(idx), ...\n"
+	         "\t\t\timag(rho(idx)) - yoffset, ...\n"
+	         "\t\t\tnum2str(ReZ(idx)));\n"
+	         "\tendfor\n"
+	         "\n"
+	         "\t% Reactance\n"
+	         "\tReZ = [-0.06, -0.06, -0.06, -0.12, -0.5];\n"
+	         "\tImZ = [0.2, 0.5, 1, 2, 5];\n"
+	         "\trho = (ReZ.^2 + ImZ.^2 - 1 + 2i * ImZ) ./ ((ReZ + 1).^2 + ImZ.^2);\n"
+	         "\n"
+	         "\tfor idx = 1:length(ImZ)\n"
+	         "\t\ttext(real(rho(idx)), imag(rho(idx)), [num2str(ImZ(idx)), 'j']);\n"
+	         "\t\ttext(real(rho(idx)), -imag(rho(idx)), [num2str(-ImZ(idx)), 'j']);\n"
+	         "\tendfor\n"
+	         "\n"
+	         "\t% Zero\n"
+	         "\trho = (-0.05.^2 + 0.^2 - 1) ./ ((-0.05 + 1).^2 + 0.^2);\n"
+	         "\ttext(real(rho), imag(rho), '0');\n"
+	         "endif\n"
+	         "\n"
+	         "% Markers\n"
+	         "for i = 1:numel(f_ind)\n"
+	         "\tz = s(f_ind(i));\n"
+	         "\tif imag(z) >= 0\n"
+	         "\t\tz_str = '+';\n"
+	         "\telse\n"
+	         "\t\tz_str = '';\n"
+	         "\tendif\n"
+	         "\tz_str = [num2str(real(z), '%.2f'), z_str, num2str(imag(z), '%.2f'), 'j'];\n"
+	         "\th = plot(s(f_ind(i)), ['o;', ...\n"
+	         "\t\tname, ' @ ', num2str(freq(f_ind(i))/1e6, ffmt), ' MHz', ...\n"
+	         "\t\t\"\\n\", num2str(20*log10(abs(s(f_ind(i)))), '%.1f'), 'dB ', ...\n"
+	         "%\t\tnum2str(s(f_ind(i)), '%.2f'), ' Ω', ...\n"
+	         "\t\tz_str, ...\n"
+	         "\t\t';'], 'linewidth', 2);\n"
+	         "\tset(gca, 'ColorOrder', circshift(get(gca, 'ColorOrder'), numel(h)));\n"
+	         "endfor\n"
+	         "\n"
+	         "h = plot(s);\n"
+	         "\n"
+	         "if (nargout == 0)\n"
+	         "\tclear h;\n"
+	         "end\n"
+	         "\n"
+	         "end\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% POSTPROCESSING\n"
+	         "\n";
+
+	static array<char, 7> const colors={ 'm', 'g', 'c', 'y', 'r', 'b', 'k' };
+	static unsigned int const color_max=7;
+	unsigned int color=0;
+
+	f_out << "%%%% VARIABLES\n"
+	         "if flag_postprocess\n"
+	         "t_postprocess_start = clock();\n"
+	         "color_order = [ ...\n"
+	         "\t[1, 0, 1]; ... % m\n"
+	         "\t[0, 1, 0]; ... % g\n"
+	         "\t[0, 1, 1]; ... % c\n"
+	         "\t[1, 1, 0]; ... % y\n"
+	         "\t[1, 0, 0]; ... % r\n"
+	         "\t[0, 0, 1]; ... % b\n"
+	         "\t[0, 0, 0]];    % k\n"
+	         "name = '" << name << "';\n"
+	         "port_suffix = '-p';\n"
+	         "graphics_format = '.svg';\n"
+	         "frequency_format = ['%0', num2str(numel(num2str(fstop))), '.0f'];\n"
+	         "funit = 1e+3;\n"
+	         "funit_name = 'kHz';\n"
+	         "if fstop >= 1e+9 && fstart >= 1e+9\n"
+	         "\tfunit = 1e+9;\n"
+	         "\tfunit_name = 'GHz';\n"
+	         "elseif fstop >= 1e+6 && fstart >= 1e+6\n"
+	         "\tfunit = 1e+6;\n"
+	         "\tfunit_name = 'MHz';\n"
+	         "endif\n"
+	         "freq = linspace(fstart, fstop, points);\n"
+	         "if exist('flag_f', 'var')\n"
+	         "\tf_select = flag_f;\n"
+	         "\tfreq = [freq, f_select];\n"
+	         "\tfreq = sort(unique(freq));\n"
+	         "\tpoints = numel(freq);\n"
+	         "elseif exist('flag_f_max', 'var') || exist('flag_f_min', 'var') ...\n"
+	         "|| (exist('flag_f_equal_s', 'var') && exist('flag_f_equal_v', 'var'))\n"
+	         "\tf_select = [];\n"
+	         "else\n"
+	         "\tf_select = [freq(round(points / 2))];\n"
+	         "endif\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "port{" << it.first << "} = calcPort(port{" << it.first << "}, path_simulation, freq);\n";
+		}
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "if flag_active_port" << it.first << "\n"
+		         "\tport_suffix = [port_suffix, '" << it.first << "'];\n";
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			f_out << "\ts" << ut.first << it.first << " = port{" << ut.first << "}.uf.ref ./ port{" << it.first << "}.uf.inc;\n";
+			}
+		f_out << "endif\n";
+		}
+	f_out << "if exist('flag_f_max', 'var')\n"
+	         "\tfor i = 1:rows(flag_f_max)\n"
+	         "\t\tf_select = [f_select, freq(find(eval(flag_f_max(i, :)) == max(eval(flag_f_max(i, :)))))];\n"
+	         "\tendfor\n"
+	         "endif\n"
+	         "if exist('flag_f_min', 'var')\n"
+	         "\tfor i = 1:rows(flag_f_min)\n"
+	         "\t\tf_select = [f_select, freq(find(eval(flag_f_min(i, :)) == min(eval(flag_f_min(i, :)))))];\n"
+	         "\tendfor\n"
+	         "endif\n"
+	         "if exist('flag_f_equal_s', 'var') && exist('flag_f_equal_v', 'var')\n"
+	         "\tfor i = 1:rows(flag_f_equal_s)\n"
+	         "\t\tf_select = [f_select, freq(find( ...\n"
+	         "\t\t\tabs(20*log10(abs(eval(flag_f_equal_s(i, :)))) .- flag_f_equal_v(i)) ...\n"
+	         "\t\t\t== min(abs(20*log10(abs(eval(flag_f_equal_s(i, :)))) .- flag_f_equal_v(i))) ))];\n"
+	         "\tendfor\n"
+	         "endif\n"
+	         "\n";
+
+	f_out << "%%%% SAVE TOUCHSTONE\n"
+	         "spara = [];\n";
+	bool is_port_correspondance=true;
+	for(unsigned int i=1;i<=ports.size();i++) {
+		if(i!=ports[i-1].first) {
+			is_port_correspondance=false;
+			}
+		f_out << "if flag_active_port" << ports[i-1].first << "\n";
+		for(unsigned int j=1;j<=ports.size();j++) {
+			if(j!=ports[j-1].first) {
+				is_port_correspondance=false;
+				}
+			f_out << "\tspara(" << j << "," << i << ",:) = s" << ports[j-1].first << ports[i-1].first << ";\n";
+			}
+		f_out << "else\n";
+		for(unsigned int j=1;j<=ports.size();j++) {
+			if(j!=ports[j-1].first) {
+				is_port_correspondance=false;
+				}
+			f_out << "\tspara(" << j << "," << i << ",:) = repmat([0], 1, points);\n";
+			}
+		f_out << "endif\n";
+		}
+	f_out << "write_touchstone('s', freq, spara, [path_result, '/', name, port_suffix, '.s" << ports.size() << "p']);\n"
+	         "% Append header to touchstone file\n"
+	         "fd = fopen([path_result, '/', name, port_suffix, '.s" << ports.size() << "p'], 'r');\n"
+	         "tmp = fread(fd);\n"
+	         "fclose(fd);\n"
+	         "fd = fopen([path_result, '/', name, port_suffix, '.s" << ports.size() << "p'], 'wt');\n"
+	         "header = [\"! Generated by a Qucs-RFlayout generated OpenEMS script\\n\"";
+	if(is_port_correspondance) {
+		f_out << "];\n";
+	} else {
+		f_out << ", ...\n"
+		         "\t\"! Ports correspondance with the original " << name << ".sch file\\n\", ...\n";
+		for(unsigned int i=1;i<ports.size();i++) {
+			f_out << "\t\"! " << i << " : " << ports[i-1].first << "(Qucs)\\n\", ...\n";
+			}
+		f_out << "\t\"! " << ports.size() << " : " << ports.back().first << "(Qucs)\\n\"];\n";
+		}
+	f_out << "fprintf(fd, '%s%s', header, tmp);\n"
+	         "fclose(fd);\n"
+	         "\n";
+
+	f_out << "%%%% PLOT S PARAMETERS\n"
+	         "figure;\n"
+	         "hold on;\n"
+	         "grid on;\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "if flag_active_port" << it.first << "\n";
+		color=0;
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			f_out << "\tplot(freq/funit, 20*log10(abs(s" << ut.first << it.first << ")), "
+			         "'" << colors[color++%color_max] << "-"/*";s" << ut.first << it.first << ";"*/"', 'Linewidth', 2);\n";
+			}
+		color=0;
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			f_out << "\tfor i = 1:numel(f_select)\n"
+			         "\t\tplot(freq(find(freq == f_select(i)))/funit, ...\n"
+			         "\t\t\t20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i))))), ...\n"
+			         "\t\t\t['" << colors[color++%color_max] << "o;s" << ut.first << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
+			         "\t\t\t\"\\n\", num2str(20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i)))))), 'dB', ...\n"
+			         "\t\t\t';'], 'linewidth', 2);\n"
+			         "\tendfor\n";
+			}
+		f_out << "endif;\n";
+		}
+	f_out << "if flag_legend_out\n"
+	         "legend('Location', 'northeastoutside');\n"
+	         "endif % flag_legend_out\n"
+	         "title('S parameters');\n"
+	         "xlabel(['Frequency f (', funit_name, ')']);\n"
+	         "ylabel('S parameters (dB)');\n"
+	         "drawnow;\n"
+	         "print([path_result, '/', name, '-s', graphics_format]);\n"
+	         "\n";
+
+	f_out << "%%%% PLOT SMITH CHART\n"
+	         "% A trick to use only needed colors as 'plotSmith()' interfer with color order\n"
+	         "color_order_smith = [ ...\n"
+	         "\tcolor_order(1, :); ...\n"
+	         "\tcolor_order(2, :)];\n"
+
+	         "f_index = [];\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tf_index = [f_index, find(freq == f_select(i))];\n"
+	         "endfor\n"
+
+//	         "for i = 1:numel(f_select)\n"
+//	         "\t"
+	         "figure;\n"
+//	         "\t"
+	         "set(gca, 'ColorOrder', color_order_smith, 'NextPlot', 'replacechildren');\n"
+//	         "\t"
+	         "first = true;\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		bool is_first=true;
+//		f_out << "\t";
+		f_out << "if flag_active_port" << it.first << "\n";
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			if(is_first) {
+				is_first=false;
+//				f_out << "\t";
+				f_out << "if first == true\n"
+//				         "\t"
+				         "\t\tfirst = false;\n"
+//				         "\t"
+				         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index);\n"
+//				         "\t"
+//	//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)));\n"
+//				         "\t"
+				         "\telse\n"
+//				         "\t"
+				         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
+//				         "\t"
+//	//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
+//				         "\t"
+				         "\tendif\n"
+//				         "\t"
+				         "\tset(h, 'Linewidth', 2);\n";
+			} else {
+//				f_out << "\t";
+				f_out << "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
+//				         "\t"
+//	//			         "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
+//				         "\t"
+				         "\tset(h, 'Linewidth', 2);\n";
+				}
+			}
+//		f_out << "\t";
+		f_out << "endif\n";
+		}
+//	f_out << "\t";
+	f_out << "if flag_legend_out\n"
+	         "legend('Location', 'northeastoutside');\n"
+	         "endif % flag_legend_out\n"
+//	         "\t"
+	         "drawnow;\n"
+//	         "\t"
+	         "print([path_result, '/', name, '-smith', ...\n"
+//	         "\t"
+//	//         "\t'@', num2str(f_select(i), frequency_format), ...\n"
+//	         "\t"
+	         "\tgraphics_format]);\n"
+//	         "endfor\n"
+	         "\n";
+
+	color=6;
+	f_out << "%%%% PLOT PORT IMPEDANCES\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "% Port " << it.first << "\n"
+		         "if flag_active_port" << it.first << "\n"
+		         "\tfigure;\n"
+		         "\thold on;\n"
+		         "\tgrid on;\n"
+		         "\tZ" << it.first << " = port{" << it.first << "}.uf.tot./port{" << it.first << "}.if.tot;\n";
+		f_out << "\tplot(freq/funit, abs(Z" << it.first << "), "
+		         "'" << colors[color++%color_max] << "-;|Z" << it.first << "|;', 'Linewidth', 2);\n";
+		f_out << "\tplot(freq/funit, imag(Z" << it.first << "), "
+		         "'" << colors[color++%color_max] << "--;Im(Z" << it.first << ");', 'Linewidth', 2);\n";
+		f_out << "\tplot(freq/funit, real(Z" << it.first << "), "
+		         "'" << colors[color%color_max] << "--;Re(Z" << it.first << ");', 'Linewidth', 2);\n";
+
+		color=6;
+		f_out<< "\tfor i = 1:numel(f_select)\n"
+
+		         "\t\tz = Z" << it.first << "(find(freq == f_select(i)));\n"
+		         "\t\tif imag(z) >= 0\n"
+		         "\t\t\tz_str = '+';\n"
+		         "\t\telse\n"
+		         "\t\t\tz_str = '';\n"
+		         "\t\tendif\n"
+		         "\t\tz_str = [num2str(real(z), '%.2f'), z_str, num2str(imag(z), '%.2f'), 'j'];\n"
+
+		         "\t\tplot(freq(find(freq == f_select(i)))/funit, abs(z), ...\n"
+		         "\t\t\t['" << colors[color++%color_max] << "o;Z" << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
+		         "\t\t\t\"\\n\", num2str(abs(z), '%.2f'), ' Ω ', z_str, ...\n"
+		         "\t\t\t';'], 'linewidth', 2);\n";
+		f_out << "\t\tplot(freq(find(freq == f_select(i)))/funit, imag(z), '" << colors[color++%color_max] << "o', 'linewidth', 2);\n";
+		f_out << "\t\tplot(freq(find(freq == f_select(i)))/funit, real(z), '" << colors[color++%color_max] << "o', 'linewidth', 2);\n"
+		         "\tendfor\n"
+
+		         "\tif flag_legend_out\n"
+		         "\tlegend('Location', 'northeastoutside');\n"
+		         "\tendif % flag_legend_out\n"
+		         "\ttitle('Impedance Z" << it.first << "');\n"
+		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
+		         "\tylabel('Impedance (Ohm)');\n"
+		         "\tdrawnow;\n"
+		         "\tprint([path_result, '/', name, '-z" << it.first << "', graphics_format]);\n"
+		         "endif\n"
+		         "\n";
+		}
+
+//	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% NF2FF\n"
+	         "\n";
+
+	f_out << "%%%% VARIABLES\n"
+	         "if flag_nf2ff\n"
+	         "% NF2FF center should be placed at the center of the radiating element.\n" <<
+	         (data.oems_nf2ff_center!=""
+	         ? "%nf2ff.center = [(max(mesh.x)-min(mesh.x))/2, (max(mesh.y)-min(mesh.y))/2, 0];\n"
+	           "nf2ff.center = " + data.oems_nf2ff_center + ".center;\n"
+	         : "nf2ff.center = [(max(mesh.x)-min(mesh.x))/2, (max(mesh.y)-min(mesh.y))/2, 0];\n"
+			 ) <<
+	         "\n";
+
+	f_out << "%%%% ELEVATION\n"
+	         "% A trick to use only needed colors as 'polarFF()' interfer with color order\n"
+	         "color_order_polar = [ ...\n"
+	         "\tcolor_order(1, :); ...\n"
+	         "\tcolor_order(2, :)];\n"
+	         "t_nf2ffelev_start = clock();\n"
+	         "nf2ff_elev = CalcNF2FF(nf2ff, path_simulation, f_select, ...\n"
+	         "\t[-180:2:180]*pi/180, [0, 90]*pi/180, ...\n"
+	         "\t'Center', nf2ff.center, ...\n"
+	         "\t'Verbose', 1, 'Mode', flag_nf2ff_mode, 'Outfile', 'nf2ff_theta.h5');\n"
+	         "t_nf2ffelev_stop = clock();\n"
+	         "\n"
+	         "% Polar dB normalized\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tfigure;\n"
+	         "\tset(gca, 'ColorOrder', color_order_polar, 'NextPlot', 'replacechildren');\n"
+	         "\th = polarFF(nf2ff_elev, 'freq_index', i, 'xaxis', 'theta', 'param', [1, 2], 'normalize', 1, 'xtics', 10);\n"
+	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tdrawnow;\n"
+	         "\tprint([path_result, '/', name, '-ff-elev-polar-dbn@', ...\n"
+	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
+	         "\t\tgraphics_format]);\n"
+	         "endfor\n"
+	         "\n"
+	         "% Polar dBi\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tfigure;\n"
+	         "\tset(gca, 'ColorOrder', color_order_polar, 'NextPlot', 'replacechildren');\n"
+	         "\th = polarFF(nf2ff_elev, 'freq_index', i, 'xaxis', 'theta', 'param', [1, 2], 'logscale', [-20, 10], 'xtics', 10);\n"
+	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tdrawnow;\n"
+	         "\tprint([path_result, '/', name, '-ff-elev-polar-dbi@', ...\n"
+	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
+	         "\t\tgraphics_format]);\n"
+	         "endfor\n"
+	         "\n"
+	         "% Rect dBi\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tfigure;\n"
+	         "\tset(gca, 'ColorOrder', color_order, 'NextPlot', 'replacechildren');\n"
+	         "\th = plotFFdB(nf2ff_elev, 'freq_index', i, 'xaxis', 'theta', 'param', [1, 2]);\n"
+	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tif flag_legend_out\n"
+	         "\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif % flag_legend_out\n"
+	         "\tdrawnow;\n"
+	         "\tprint([path_result, '/', name, '-ff-elev-rect-dbi@', ...\n"
+	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
+	         "\t\tgraphics_format]);\n"
+	         "endfor\n"
+	         "\n";
+
+	f_out << "%%%% AZIMUTH\n"
+	         "% A trick to use only needed colors as 'polarFF()' interfer with color order\n"
+	         "color_order_polar = [ ...\n"
+	         "\tcolor_order(3, :); ...\n"
+	         "\tcolor_order(1, :); ...\n"
+	         "\tcolor_order(2, :)];\n"
+	         "t_nf2ffazim_start = clock();\n"
+	         "nf2ff_azim = CalcNF2FF(nf2ff, path_simulation, f_select, ...\n"
+	         "\t[30, 60, 90]*pi/180, [-180:2:180]*pi/180, ...\n"
+	         "\t'Center', nf2ff.center, ...\n"
+	         "\t'Verbose', 1, 'Mode', flag_nf2ff_mode, 'Outfile', 'nf2ff_phi.h5');\n"
+	         "t_nf2ffazim_stop = clock();\n"
+	         "\n"
+	         "% Polar dB normalized\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tfigure;\n"
+	         "\tset(gca, 'ColorOrder', color_order_polar, 'NextPlot', 'replacechildren');\n"
+	         "\th = polarFF(nf2ff_azim, 'freq_index', i, 'xaxis', 'phi', 'param', [1, 2, 3], 'normalize', 1, 'xtics', 10);\n"
+	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tdrawnow;\n"
+	         "\tprint([path_result, '/', name, '-ff-azim-polar-dbn@', ...\n"
+	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
+	         "\t\tgraphics_format]);\n"
+	         "endfor\n"
+	         "\n"
+	         "% Polar dBi\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tfigure;\n"
+	         "\tset(gca, 'ColorOrder', color_order_polar, 'NextPlot', 'replacechildren');\n"
+	         "\th = polarFF(nf2ff_azim, 'freq_index', i, 'xaxis', 'phi', 'param', [1, 2, 3], 'logscale', [-20, 10], 'xtics', 10);\n"
+	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tdrawnow;\n"
+	         "\tprint([path_result, '/', name, '-ff-azim-polar-dbi@', ...\n"
+	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
+	         "\t\tgraphics_format]);\n"
+	         "endfor\n"
+	         "\n"
+	         "% Rect dBi\n"
+	         "for i = 1:numel(f_select)\n"
+	         "\tfigure;\n"
+	         "\tset(gca, 'ColorOrder', color_order, 'NextPlot', 'replacechildren');\n"
+	         "\th = plotFFdB(nf2ff_azim, 'freq_index', i, 'xaxis', 'phi', 'param', [1, 2, 3]);\n"
+	         "\tset(h, 'Linewidth', 2);\n"
+	         "\tif flag_legend_out\n"
+	         "\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif % flag_legend_out\n"
+	         "\tdrawnow;\n"
+	         "\tprint([path_result, '/', name, '-ff-azim-rect-dbi@', ...\n"
+	         "\t\tnum2str(f_select(i), frequency_format), ...\n"
+	         "\t\tgraphics_format]);\n"
+	         "endfor\n"
+	         "\n";
+
+	f_out << "%%%% 3D\n"
+	         "if flag_nf2ff_3d\n"
+	         "phi_range = [-180:flag_nf2ff_phistep:180];\n"
+	         "theta_range = [0:flag_nf2ff_thetastep:180];\n"
+	         "if flag_nf2ff_frames > 1\n"
+	         "\tfreqs = [fstart:(fstop-fstart) / (flag_nf2ff_frames-1):fstop];\n"
+	         "\tgif = true;\n"
+	         "\tshow_each = false;\n"
+	         "else\n"
+	         "\tfreqs = f_select;\n"
+	         "\tgif = false;\n"
+	         "\tshow_each = true;\n"
+	         "endif\n"
+	         "t_nf2ff3d_start = clock();\n"
+	         "nf2ff_3d = CalcNF2FF(nf2ff, path_simulation, freqs, theta_range*pi/180, phi_range*pi/180, ...\n"
+	         "\t'Center', nf2ff.center, ...\n"
+	         "\t'Verbose', 1, 'Mode', flag_nf2ff_mode, 'Outfile', 'nf2ff_3d.h5');\n"
+	         "t_nf2ff3d_stop = clock();\n"
+	         "\n"
+	         "% V/m\n"
+	         "plotFF3D_frames(nf2ff_3d, [path_result, '/', name, '-ff-3d-vm'], ...\n"
+	         "\t'gif', gif, 'show_each', show_each, 'delay', flag_nf2ff_delay, ...\n"
+	         "\t'unique_color_scale', 'unique_axis_scale');\n"
+	         "\n"
+/*	         "% V/m\n"
+	         "figure;\n"
+	         "plotFF3D(nf2ff);\n"
+	         "drawnow;\n"
+	         "print([path_result, '/', name, '-ff3d-vm', '.png']);\n"
+	         "\n"
+	         "% dB\n"
+	         "figure;\n"
+	         "plotFF3D(nf2ff, 'logscale', -20);\n"
+	         "drawnow;\n"
+	         "print([path_result, '/', name, '-ff3d-db', '.png']);\n"
+	         "\n"
+*/	         "% Dump\n"
+	         "if flag_dump\n"
+	         "E_far_normalized = nf2ff_3d.E_norm{1} / max(nf2ff_3d.E_norm{1}(:)) * nf2ff_3d.Dmax(1);\n"
+	         "DumpFF2VTK([path_simulation '/ff.vtk'], E_far_normalized, theta_range, phi_range, 'scale', unit * 10);\n"
+	         "endif % flag_dump\n"
+	         "\n";
+
+	f_out << "endif % flag_nf2ff_3d\n"
+	         "endif % flag_nf2ff\n"
+	         "endif % flag_postprocess\n"
+	         "t_postprocess_stop = clock();\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SYSTEM\n"
+	         "\n";
+
+	f_out << "%%%% TIMES\n"
+	         "disp(\"\\nDurations :\");\n"
+	         "d_total = 0;\n"
+	         "if flag_preprocess\n"
+	         "\td_preprocess = etime(t_preprocess_stop, t_preprocess_start);\n"
+	         "\th_preprocess = fix(d_preprocess / 3600);\n"
+	         "\tm_preprocess = fix((d_preprocess - h_preprocess*3600) / 60);\n"
+	         "\ts_preprocess = round(d_preprocess - h_preprocess*3600 - m_preprocess*60);\n"
+	         "\tdisp(['Preprocessing : ', ...\n"
+	         "\t\tnum2str(h_preprocess), 'h ', ...\n"
+	         "\t\tnum2str(m_preprocess), 'm ', ...\n"
+	         "\t\tnum2str(s_preprocess), 's']);\n"
+	         "\td_total = d_total + d_preprocess;\n"
+	         "endif\n"
+	         "if flag_process\n"
+	         "\td_process = etime(t_process_stop, t_process_start);\n"
+	         "\th_process = fix(d_process / 3600);\n"
+	         "\tm_process = fix((d_process - h_process*3600) / 60);\n"
+	         "\ts_process = round(d_process - h_process*3600 - m_process*60);\n"
+	         "\tdisp(['Processing : ', ...\n"
+	         "\t\tnum2str(h_process), 'h ', ...\n"
+	         "\t\tnum2str(m_process), 'm ', ...\n"
+	         "\t\tnum2str(s_process), 's']);\n"
+	         "\td_total = d_total + d_process;\n"
+	         "endif\n"
+	         "if flag_postprocess\n"
+	         "\td_postprocess = etime(t_postprocess_stop, t_postprocess_start);\n"
+	         "\th_postprocess = fix(d_postprocess / 3600);\n"
+	         "\tm_postprocess = fix((d_postprocess - h_postprocess*3600) / 60);\n"
+	         "\ts_postprocess = round(d_postprocess - h_postprocess*3600 - m_postprocess*60);\n"
+	         "\tdisp(['Postprocessing : ', ...\n"
+	         "\t\tnum2str(h_postprocess), 'h ', ...\n"
+	         "\t\tnum2str(m_postprocess), 'm ', ...\n"
+	         "\t\tnum2str(s_postprocess), 's']);\n"
+	         "\td_total = d_total + d_postprocess;\n"
+	         "\tif flag_nf2ff\n"
+	         "\t\td_nf2ff = etime(t_nf2ffazim_stop, t_nf2ffazim_start) ...\n"
+	         "\t\t\t+ etime(t_nf2ffelev_stop, t_nf2ffelev_start);\n"
+	         "\t\tif flag_nf2ff_3d\n"
+	         "\t\t\td_nf2ff3d = etime(t_nf2ff3d_stop, t_nf2ff3d_start);\n"
+	         "\t\t\td_nf2ff = d_nf2ff + d_nf2ff3d;\n"
+	         "\t\tendif\n"
+	         "\t\th_nf2ff = fix(d_nf2ff / 3600);\n"
+	         "\t\tm_nf2ff = fix((d_nf2ff - h_nf2ff*3600) / 60);\n"
+	         "\t\ts_nf2ff = round(d_nf2ff - h_nf2ff*3600 - m_nf2ff*60);\n"
+	         "\t\tdisp(['Of which NF2FF : ', ...\n"
+	         "\t\t\tnum2str(h_nf2ff), 'h ', ...\n"
+	         "\t\t\tnum2str(m_nf2ff), 'm ', ...\n"
+	         "\t\t\tnum2str(s_nf2ff), 's']);\n"
+	         "\tendif\n"
+	         "endif\n"
+	         "h_total = fix(d_total / 3600);\n"
+	         "m_total = fix((d_total - h_total*3600) / 60);\n"
+	         "s_total = round(d_total - h_total*3600 - m_total*60);\n"
+	         "disp(['Total : ', ...\n"
+	         "\tnum2str(h_total), 'h ', ...\n"
+	         "\tnum2str(m_total), 'm ', ...\n"
+	         "\tnum2str(s_total), 's']);\n"
+	         "\n";
+
+	f_out << "if flag_postprocess\n"
+	         "disp(\"\\nTerminated, press any key to exit.\");\n"
+	         "pause();\n"
+	         "endif % flag_postprocess\n"
+	         "return;\n";
+	}

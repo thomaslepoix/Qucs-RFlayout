@@ -1,0 +1,157 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX, Mapping=tex-text]{Lato}
+\usepackage{tikz}
+\usepackage{xfp}
+
+\begin{document}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% SHAPE
+\filldraw [line width=0.5pt, fill=orange] (\ox,\oy)
+	+(-1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {5} --
+	+(0.5,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {4} --
+	+(0.5,-0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {3} --
+	+(1,-0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {2} --
+	+(1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {1} --
+	+(-1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {0} --
+	cycle;
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) ++(-1,0) node[right] {1} +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0,1) node[below] {2} +(-1,0) -- +(1,0);
+\draw [line width=2pt] (\ox,\oy) ++(1,0) node[left] {3} +(0,-0.5) -- +(0,0.5);
+\draw [line width=2pt] (\ox,\oy) ++(0,-1) node[above] {4} +(-0.5,0) -- +(0.5,0);
+
+% CONDITION
+\draw (\ox,\oy) ++(0,-2) node {\footnotesize\textbf{W1 > W3 \&\& W2 > W4}};
+
+\end{tikzpicture}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% SHAPE
+\filldraw [line width=0.5pt, fill=orange] (\ox,\oy)
+	+(-1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {5} --
+	+(1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {4} --
+	+(1,0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {3} --
+	+(0.5,0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {2} --
+	+(0.5,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {1} --
+	+(-1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {0} --
+	cycle;
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) ++(-1,0) node[right] {1} +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0,1) node[below] {2} +(-0.5,0) -- +(0.5,0);
+\draw [line width=2pt] (\ox,\oy) ++(1,0) node[left] {3} +(0,-0.5) -- +(0,0.5);
+\draw [line width=2pt] (\ox,\oy) ++(0,-1) node[above] {4} +(-1,0) -- +(1,0);
+
+% CONDITION
+\draw (\ox,\oy) ++(0,-2) node {\footnotesize\textbf{W1 > W3 \&\& W2 < W4}};
+
+\end{tikzpicture}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% SHAPE
+\filldraw [line width=0.5pt, fill=orange] (\ox,\oy)
+	+(-1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {5} --
+	+(1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {4} --
+	+(1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {3} --
+	+(-0.5,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {2} --
+	+(-0.5,0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {1} --
+	+(-1,0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {0} --
+	cycle;
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) ++(-1,0) node[right] {1} +(0,-0.5) -- +(0,0.5);
+\draw [line width=2pt] (\ox,\oy) ++(0,1) node[below] {2} +(-0.5,0) -- +(0.5,0);
+\draw [line width=2pt] (\ox,\oy) ++(1,0) node[left] {3} +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0,-1) node[above] {4} +(-1,0) -- +(1,0);
+
+% CONDITION
+\draw (\ox,\oy) ++(0,-2) node {\footnotesize\textbf{W1 < W3 \&\& W2 < W4}};
+
+\end{tikzpicture}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% SHAPE
+\filldraw [line width=0.5pt, fill=orange] (\ox,\oy)
+	+(-0.5,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {3} --
+	+(1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {2} --
+	+(1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {1} --
+	+(-1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {0} --
+	+(-1,-0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {5} --
+	+(-0.5,-0.5) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {4} --
+	cycle;
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) ++(-1,0) node[right] {1} +(0,-0.5) -- +(0,0.5);
+\draw [line width=2pt] (\ox,\oy) ++(0,1) node[below] {2} +(-1,0) -- +(1,0);
+\draw [line width=2pt] (\ox,\oy) ++(1,0) node[left] {3} +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0,-1) node[above] {4} +(-0.5,0) -- +(0.5,0);
+
+% CONDITION
+\draw (\ox,\oy) ++(0,-2) node {\footnotesize\textbf{W1 < W3 \&\& W2 > W4}};
+
+\end{tikzpicture}
+\begin{tikzpicture}
+
+\def\width{5}
+\def\height{5}
+\def\ox{\fpeval{\width /2}}
+\def\oy{\fpeval{\height /2}}
+
+\tiny
+\path [use as bounding box] (0,0) rectangle (\width,\height);
+
+% SHAPE
+\filldraw [line width=0.5pt, fill=orange] (\ox,\oy)
+	+(-1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below left] {3} --
+	+(1,-1) node[draw, fill=black, circle, inner sep=1pt] {} node[below right] {2} --
+	+(1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above right] {1} --
+	+(-1,1) node[draw, fill=black, circle, inner sep=1pt] {} node[above left] {0} --
+	cycle;
+
+% PORTS
+\draw [line width=2pt] (\ox,\oy) ++(-1,0) node[right] {1} +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0,1) node[below] {2} +(-1,0) -- +(1,0);
+\draw [line width=2pt] (\ox,\oy) ++(1,0) node[left] {3} +(0,-1) -- +(0,1);
+\draw [line width=2pt] (\ox,\oy) ++(0,-1) node[above] {4} +(-0.5,0) -- +(0.5,0);
+
+% CONDITION
+\draw (\ox,\oy) ++(0,-2) node {\footnotesize\textbf{W1 == W3 || W2 == W4}};
+
+\end{tikzpicture}
+\end{document}

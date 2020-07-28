@@ -15,6 +15,76 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="4" column="3" colspan="3">
+     <widget class="QRadioButton" name="rb_export_each_block">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="text">
+       <string>Each block in a file</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="l_output">
+      <property name="text">
+       <string>Output :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="le_path_in"/>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="le_path_out"/>
+    </item>
+    <item row="1" column="2" colspan="4">
+     <widget class="QTextBrowser" name="tb_log"/>
+    </item>
+    <item row="3" column="3" colspan="3">
+     <widget class="QRadioButton" name="rb_export_each_subst">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="text">
+       <string>Each substrate in a file</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2" colspan="2">
+     <widget class="QPushButton" name="pb_browse_out">
+      <property name="text">
+       <string>Browse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="5" colspan="2">
+     <widget class="Preview" name="glw_preview" native="true"/>
+    </item>
+    <item row="5" column="5">
+     <widget class="QComboBox" name="cb_format"/>
+    </item>
+    <item row="0" column="2" colspan="2">
+     <widget class="QPushButton" name="pb_browse_in">
+      <property name="text">
+       <string>Browse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3" colspan="2">
+     <widget class="QLabel" name="l_format">
+      <property name="text">
+       <string>Format :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QPushButton" name="pb_write">
+      <property name="text">
+       <string>Write</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="l_input">
       <property name="text">
@@ -29,55 +99,14 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="5">
-     <widget class="QComboBox" name="cb_format"/>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="l_output">
-      <property name="text">
-       <string>Output :</string>
+    <item row="2" column="3" colspan="3">
+     <widget class="QRadioButton" name="rb_export_whole">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
       </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="le_path_out"/>
-    </item>
-    <item row="1" column="3" colspan="2">
-     <widget class="QLabel" name="l_format">
       <property name="text">
-       <string>Format :</string>
+       <string>Whole layout in a file</string>
       </property>
-     </widget>
-    </item>
-    <item row="3" column="2" colspan="2">
-     <widget class="QPushButton" name="pb_browse_out">
-      <property name="text">
-       <string>Browse</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="5">
-     <widget class="QPushButton" name="pb_write">
-      <property name="text">
-       <string>Write</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="le_path_in"/>
-    </item>
-    <item row="0" column="2" colspan="2">
-     <widget class="QPushButton" name="pb_browse_in">
-      <property name="text">
-       <string>Browse</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" rowspan="2" colspan="2">
-     <widget class="Preview" name="glw_preview" native="true"/>
-    </item>
-    <item row="2" column="2" colspan="4">
-     <widget class="QTextBrowser" name="tb_log">
      </widget>
     </item>
    </layout>

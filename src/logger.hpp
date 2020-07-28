@@ -19,41 +19,43 @@
 #define LOGGER_HPP
 
 #include <sstream>
-#include <iostream>
 
 // Prefer log_err instead of cerr
 // Do not use std::endl or std::flush with logger objects
 
-class MainWindow;
-void operator<<(MainWindow& obj, std::stringstream& in);
-
-class logger {
+class Loggable {
 private:
-	typedef void (logger::*func)(std::stringstream&);
+	friend class Logger;
+	virtual void log(std::stringstream& in);
+};
+
+class Logger {
+private:
+	typedef void (Logger::*func)(std::stringstream&);
 	func f;
 
 	template<typename T>
-	friend logger& operator<<(logger& log, T& in);
+	friend Logger& operator<<(Logger& log, T const& in);
 
 	void func_cli(std::stringstream& in);
 	void func_gui(std::stringstream& in);
 	void print(std::stringstream& in);
 
 public:
-	MainWindow* obj=nullptr;
+	Loggable* obj=nullptr;
 
-	logger(void);
+	Logger(void);
 	void set_mode(bool gui);
 };
 
-extern logger log_err;
+extern Logger log_err;
 
 template<typename T>
-logger& operator<<(logger& log, T& in) {
+Logger& operator<<(Logger& logger, T const& in) {
 	std::stringstream ss;
 	ss << in;
-	log.print(ss);
-	return(log);
+	logger.print(ss);
+	return(logger);
 	}
 
 #endif // LOGGER_HPP

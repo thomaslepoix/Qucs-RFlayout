@@ -27,8 +27,7 @@ public :
 	Eqn(std::string _label,
 			std::string _type,
 			bool _mirrorx,
-			short _r,
-			short _nport);
+			short _r);
 	~Eqn();
 	std::string getDescriptor(void) override;
 };

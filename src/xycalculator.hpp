@@ -18,31 +18,40 @@
 #ifndef XYCALCULATOR_HPP
 #define XYCALCULATOR_HPP
 
-#include <iostream>
-#include <stack>
-#include <vector>
 #include <memory>
-#include <array>
+#include <vector>
 
-#include "logger.hpp"
-#include "microstrip/microstrip.hpp"
+#include "data.hpp"
+#include "microstrip/element.hpp"
 
 class XyCalculator {
 private:
-	std::vector<std::shared_ptr<Element>>& tab_all;
-	std::array<long double, 4>& extrem_pos;
+	Data& data;
 
-	int tab_remove(std::vector<std::shared_ptr<Element>>& tab_undone, std::shared_ptr<Element> const& current);
-	bool purgefind(std::shared_ptr<Element> const& current, std::string const _net);
-	int purgenets(void);
-	bool checkonenet(std::string const _net);
-	int checkintersection(void);
-	int activenets(std::shared_ptr<Element> const& _elem);
-	int netmin(std::shared_ptr<Element> const& _elem);
-	int findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
+	// Main functions
+	bool check_intersection(void);
+	void populate_adjacents(void);
+	void resolve_pac_shapes(void);
+	void place_elements(void);
+	void place_blocks(void);
+
+	// Toolbox functions
+	int get_port(std::shared_ptr<Element> const& element, std::string const net);
+	void sort_blocks(std::vector<std::shared_ptr<Block>> blocks, std::vector<std::shared_ptr<Element>> substs);
+	int add_to_block(std::shared_ptr<Block>& block, std::shared_ptr<Element> const& element);
+	int tab_remove(std::vector<std::shared_ptr<Element>>& elements, std::shared_ptr<Element> const& element);
+	bool purgefind(std::shared_ptr<Element> const& element, std::string const net);
+	int purge_nets(void);
+	int purge_blocks(void);
+	bool check_onenet(std::string const net);
+	int activenets(std::shared_ptr<Element> const& element);
+	int netmin(std::shared_ptr<Element> const& element);
+	void findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
 
 public:
-	XyCalculator(std::vector<std::shared_ptr<Element>>& _tab_all, std::array<long double, 4>& _extrem_pos);
+	XyCalculator(Data& _data);
+
+	// Interface functions
 	int run(void);
 };
 

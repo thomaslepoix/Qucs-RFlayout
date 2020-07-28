@@ -31,6 +31,8 @@ SOURCES += \
 	$$PWD/src/microstrip/element.cpp \
 	$$PWD/src/microstrip/eqn.cpp \
 	$$PWD/src/microstrip/pac.cpp \
+	$$PWD/src/microstrip/sp.cpp \
+	$$PWD/src/microstrip/subst.cpp \
 	$$PWD/src/microstrip/mcorn.cpp \
 	$$PWD/src/microstrip/mcoupled.cpp \
 	$$PWD/src/microstrip/mcross.cpp \
@@ -48,12 +50,16 @@ SOURCES += \
 	$$PWD/src/converter.cpp \
 	$$PWD/src/mainwindow.cpp \
 	$$PWD/src/preview.cpp \
-	$$PWD/src/logger.cpp
+	$$PWD/src/logger.cpp \
+	$$PWD/src/data.cpp \
+	$$PWD/src/oemsmesh.cpp
 
 HEADERS += \
 	$$PWD/src/microstrip/element.hpp \
 	$$PWD/src/microstrip/eqn.hpp \
 	$$PWD/src/microstrip/pac.hpp \
+	$$PWD/src/microstrip/sp.hpp \
+	$$PWD/src/microstrip/subst.hpp \
 	$$PWD/src/microstrip/mcorn.hpp \
 	$$PWD/src/microstrip/mcoupled.hpp \
 	$$PWD/src/microstrip/mcross.hpp \
@@ -71,7 +77,10 @@ HEADERS += \
 	$$PWD/src/converter.hpp \
 	$$PWD/src/mainwindow.hpp \
 	$$PWD/src/preview.hpp \
-	$$PWD/src/logger.hpp
+	$$PWD/src/logger.hpp \
+	$$PWD/src/data.hpp \
+	$$PWD/src/oemsmesh.hpp \
+	$$PWD/src/oemsline.hpp
 
 FORMS += \
 	$$PWD/src/mainwindow.ui
@@ -80,7 +89,7 @@ INCLUDEPATH += \
 	$$PWD/src
 
 DEFINES += \
-	QRFL_VERSION=\\\"1.0.1\\\"
+	QRFL_VERSION=\\\"1.0.1.1\\\"
 
 target.path = $$PREFIX/bin
 INSTALLS += target
@@ -109,4 +118,3 @@ unix {
 	}
 
 #CONFIG += object_parallel_to_source
-

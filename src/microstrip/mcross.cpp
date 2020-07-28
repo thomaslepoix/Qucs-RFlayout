@@ -20,14 +20,15 @@ using namespace std;
 
 Mcross::Mcross(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
-			short _nport,
+			string _subst,
 			long double _w1,
 			long double _w2,
 			long double _w3,
 			long double _w4) :
-	Element(_label, _type, _mirrorx, _r, _nport),
+	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_w3(_w3),
@@ -109,12 +110,12 @@ int Mcross::setNet4(string _net4) {
 	}
 
 int Mcross::setP(void) {
-//	signed short i=0;
+// TODO 0 at bottom left, counter clockwise
+// instead of 0 at top left, clockwise
 	signed short s1;
 	signed short s2;
 	long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
 	long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
-//	unsigned short Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
 	if(m_mirrorx) {
 		s1= 1;
 		s2=-1;
@@ -353,4 +354,301 @@ void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
 			xstep= + (Wlong)/2;
 			}
 		}
+	}
+
+void Mcross::getEdge(int const _net, long double& edge, short& dir) {
+	if(_net==1) {
+		edge=m_w1;
+		switch(m_r) {
+			case 0: dir=XMIN; break;
+			case 90: dir=YMAX; break;
+			case 180: dir=XMAX; break;
+			case 270: dir=YMIN; break;
+			}
+	} else if(_net==2) {
+		edge=m_w2;
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0: dir=YMIN; break;
+				case 90: dir=XMIN; break;
+				case 180: dir=YMAX; break;
+				case 270: dir=XMAX; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0: dir=YMAX; break;
+				case 90: dir=XMAX; break;
+				case 180: dir=YMIN; break;
+				case 270: dir=XMIN; break;
+				}
+			}
+	} else if(_net==3) {
+		edge=m_w3;
+		switch(m_r) {
+			case 0: dir=XMAX; break;
+			case 90: dir=YMIN; break;
+			case 180: dir=XMIN; break;
+			case 270: dir=YMAX; break;
+			}
+	} else if(_net==4) {
+		edge=m_w4;
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0: dir=YMAX; break;
+				case 90: dir=XMAX; break;
+				case 180: dir=YMIN; break;
+				case 270: dir=XMIN; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0: dir=YMIN; break;
+				case 90: dir=XMIN; break;
+				case 180: dir=YMAX; break;
+				case 270: dir=XMAX; break;
+				}
+			}
+		}
+	}
+
+int Mcross::getOemsNcorelines(void) {
+	if(m_w1==m_w3 || m_w2==m_w4){
+		return(0);
+	} else {
+		return(2);
+		}
+	}
+
+int Mcross::getOemsMeshCore(int const _n, OemsLine& line) {
+	if(_n==0) {
+		if(m_w1>m_w3 && m_w2>m_w4) {
+			if(m_mirrorx==0) {
+				switch(m_r) {
+					case 0:   line.position=getP(3, Y, R, ABS); line.direction=YMAX; break;
+					case 90:  line.position=getP(3, X, R, ABS); line.direction=XMAX; break;
+					case 180: line.position=getP(3, Y, R, ABS); line.direction=YMIN; break;
+					case 270: line.position=getP(3, X, R, ABS); line.direction=XMIN; break;
+					}
+			} else if(m_mirrorx==1) {
+				switch(m_r) {
+					case 0:   line.position=getP(3, Y, R, ABS); line.direction=YMIN; break;
+					case 90:  line.position=getP(3, X, R, ABS); line.direction=XMIN; break;
+					case 180: line.position=getP(3, Y, R, ABS); line.direction=YMAX; break;
+					case 270: line.position=getP(3, X, R, ABS); line.direction=XMAX; break;
+					}
+				}
+		} else if(m_w1>m_w3 && m_w2<m_w4) {
+			switch(m_r) {
+				case 0:   line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+				case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+				case 180: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+				case 270: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+				}
+		} else if(m_w1<m_w3 && m_w2<m_w4) {
+			if(m_mirrorx==0) {
+				switch(m_r) {
+					case 0:   line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
+					case 90:  line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
+					case 180: line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
+					case 270: line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
+					}
+			} else if(m_mirrorx==1) {
+				switch(m_r) {
+					case 0:   line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
+					case 90:  line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
+					case 180: line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
+					case 270: line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
+					}
+				}
+		} else if(m_w1<m_w3 && m_w2>m_w4) {
+			switch(m_r) {
+				case 0:   line.position=getP(4, X, R, ABS); line.direction=XMIN; break;
+				case 90:  line.position=getP(4, Y, R, ABS); line.direction=YMAX; break;
+				case 180: line.position=getP(4, X, R, ABS); line.direction=XMAX; break;
+				case 270: line.position=getP(4, Y, R, ABS); line.direction=YMIN; break;
+				}
+		} else {
+			return(1);
+			}
+	} else if(_n==1) {
+		if(m_w1>m_w3 && m_w2>m_w4) {
+			switch(m_r) {
+				case 0:   line.position=getP(3, X, R, ABS); line.direction=XMAX; break;
+				case 90:  line.position=getP(3, Y, R, ABS); line.direction=YMIN; break;
+				case 180: line.position=getP(3, X, R, ABS); line.direction=XMIN; break;
+				case 270: line.position=getP(3, Y, R, ABS); line.direction=YMAX; break;
+				}
+		} else if(m_w1>m_w3 && m_w2<m_w4) {
+			if(m_mirrorx==0) {
+				switch(m_r) {
+					case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+					case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+					case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+					case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+					}
+			} else if(m_mirrorx==1) {
+				switch(m_r) {
+					case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+					case 90:  line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+					case 180: line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+					case 270: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+					}
+				}
+		} else if(m_w1<m_w3 && m_w2<m_w4) {
+			switch(m_r) {
+				case 0:   line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
+				case 90:  line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
+				case 180: line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
+				case 270: line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
+				}
+		} else if(m_w1<m_w3 && m_w2>m_w4) {
+			if(m_mirrorx==0) {
+				switch(m_r) {
+					case 0:   line.position=getP(4, Y, R, ABS); line.direction=YMAX; break;
+					case 90:  line.position=getP(4, X, R, ABS); line.direction=XMAX; break;
+					case 180: line.position=getP(4, Y, R, ABS); line.direction=YMIN; break;
+					case 270: line.position=getP(4, X, R, ABS); line.direction=XMIN; break;
+					}
+			} else if(m_mirrorx==1) {
+				switch(m_r) {
+					case 0:   line.position=getP(4, Y, R, ABS); line.direction=YMIN; break;
+					case 90:  line.position=getP(4, X, R, ABS); line.direction=XMIN; break;
+					case 180: line.position=getP(4, Y, R, ABS); line.direction=YMAX; break;
+					case 270: line.position=getP(4, X, R, ABS); line.direction=XMAX; break;
+					}
+				}
+		} else {
+			return(1);
+			}
+	} else {
+		return(1);
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) {
+	long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
+	long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
+
+	if(_net==1
+	&&(adjacent1.first==nullptr
+	||(adjacent1.first!=nullptr
+	&& adjacent1.first->isOemsMeshInterface(adjacent1.second, (m_w1==m_w3 || m_w2==m_w4) ? Wlong13 : m_w1)))) {
+		switch(m_r) {
+			case 0:   line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
+			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			}
+	} else if(_net==2
+	       &&(adjacent2.first==nullptr
+	       ||(adjacent2.first!=nullptr
+	       && adjacent2.first->isOemsMeshInterface(adjacent2.second, (m_w1==m_w3 || m_w2==m_w4) ? Wlong24 : m_w2)))) {
+		int p=(m_w1<m_w3 && m_w2<m_w4) ? 3 : 1;
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0:   line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
+				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+				case 270: line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0:   line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
+				case 270: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				}
+			}
+	} else if(_net==3
+	       &&(adjacent3.first==nullptr
+	       ||(adjacent3.first!=nullptr
+	       && adjacent3.first->isOemsMeshInterface(adjacent3.second, (m_w1==m_w3 || m_w2==m_w4) ? Wlong13 : m_w3)))) {
+		int p=(m_w1>m_w3 && m_w2<m_w4)
+		    ||(m_w1<m_w3 && m_w2<m_w4)
+		    ? 3 : 1;
+		switch(m_r) {
+			case 0:   line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+			case 90:  line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
+			case 180: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+			case 270: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+			}
+	} else if(_net==4
+	       &&(adjacent4.first==nullptr
+	       ||(adjacent4.first!=nullptr
+	       && adjacent4.first->isOemsMeshInterface(adjacent4.second, (m_w1==m_w3 || m_w2==m_w4) ? Wlong24 : m_w4)))) {
+		int p=(m_w1>m_w3 && m_w2>m_w4)
+		    ||(m_w1>m_w3 && m_w2<m_w4)
+		    ||(m_w1<m_w3 && m_w2<m_w4)
+		    ? 5 : 3;
+		if(m_mirrorx==0) {
+			switch(m_r) {
+				case 0:   line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
+				case 270: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				}
+		} else if(m_mirrorx==1) {
+			switch(m_r) {
+				case 0:   line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
+				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+				case 270: line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				}
+			}
+	} else {
+		return(1);
+		}
+
+	line.label=m_label;
+	line.type=m_type;
+	line.third_rule=true;
+	return(0);
+	}
+
+bool Mcross::isOemsMeshInterface(int const _port, long double const _w) {
+	if(m_w1==m_w3 || m_w2==m_w4) {
+		long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
+		long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
+		switch(_port) {
+			case 1: case 3: return(_w>Wlong13 ? true : false);
+			case 2: case 4: return(_w>Wlong24 ? true : false);
+			default : return(false);
+			}
+	} else {
+		switch(_port) {
+			case 1: return(_w>m_w1 ? true : false);
+			case 2: return(_w>m_w2 ? true : false);
+			case 3: return(_w>m_w3 ? true : false);
+			case 4: return(_w>m_w4 ? true : false);
+			default: return(false);
+			}
+		}
+	}
+
+int Mcross::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
+	switch(_port) {
+		case 1:
+			adjacent1.first=adjacent;
+			adjacent1.second=adjacent_port;
+			break;
+		case 2:
+			adjacent2.first=adjacent;
+			adjacent2.second=adjacent_port;
+			break;
+		case 3:
+			adjacent3.first=adjacent;
+			adjacent3.second=adjacent_port;
+			break;
+		case 4:
+			adjacent4.first=adjacent;
+			adjacent4.second=adjacent_port;
+			break;
+		default:
+			return(1);
+		}
+	return(0);
 	}

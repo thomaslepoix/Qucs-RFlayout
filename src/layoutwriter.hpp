@@ -20,29 +20,26 @@
 
 #define _USE_MATH_DEFINES
 
-#include <iostream>
 #include <fstream>
-#include <regex>
-#include <cmath>
-#include <array>
+#include <memory>
 
-#include "microstrip/microstrip.hpp"
+#include "data.hpp"
 
 class LayoutWriter {
 private:
-	std::vector<std::shared_ptr<Element>> const& tab_all;
-	std::array<long double, 4> const& extrem_pos;
-	std::string const& n_sch;
-	std::string const& out_dir;
-	std::string const& out_format;
+	Data& data;
 
-	int write_kicad_pcb(std::ofstream& f_out);
-	int write_kicad_mod(std::string const& name, std::ofstream& f_out);
-	int write_lht(std::ofstream& f_out);
+	int check_m(void);
+	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::vector<std::string>* out_names);
+	//TODO array<long double, 2> offset ?
+	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y);
+	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
+	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y);
+	void write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
 
 public:
-	LayoutWriter(std::vector<std::shared_ptr<Element>> const& _tab_all, std::array<long double, 4> const& _extrem_pos, std::string const& _n_sch, std::string const& _out_dir, std::string const& _out_format);
-	int run(std::string* out_name=nullptr);
+	LayoutWriter(Data& _data);
+	int run(std::vector<std::string>* out_names=nullptr);
 };
 
 #endif // LAYOUTWRITER_HPP

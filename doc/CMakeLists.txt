@@ -33,3 +33,6 @@ install(
 	DESTINATION "share/doc/qucsrflayout" #"${CMAKE_INSTALL_MANDIR}"
 	)
 
+###########################################################################LATEX
+
+add_subdirectory( "${CMAKE_CURRENT_SOURCE_DIR}/latex" )

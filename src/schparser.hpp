@@ -18,14 +18,11 @@
 #ifndef SCHPARSER_HPP
 #define SCHPARSER_HPP
 
-#include <iostream>
 #include <fstream>
-#include <regex>
-#include <vector>
+#include <initializer_list>
 #include <memory>
 
-#include "logger.hpp"
-#include "microstrip/microstrip.hpp"
+#include "data.hpp"
 
 #ifdef QRFL_UNITTEST
 #define private public
@@ -33,19 +30,26 @@
 
 class SchParser {
 private:
-	std::vector<std::shared_ptr<Element>>& tab_all;
-	std::string const& n_sch;
-	std::vector<std::string> unprintables;
+	Data& data;
 
-	long double suffix(std::string const s_sci, std::string const s_eng);
-	std::string check_void(std::string match, std::string label);
+	void parse_port_shift_args(void);
+	void parse_port_size_args(void);
+
+	int check_qucsstudio(std::ifstream& f_sch, std::string& n_tmp, bool& is_qucsstudio);
+	int generate_netlist(std::string const& n_sch, std::string const& n_net);
+	void parse_schematic(std::ifstream& f_sch, std::vector<std::string>& unprintables);
+	void parse_netlist(std::ifstream& f_net);
+	void warn_unprintable(std::vector<std::string> const& unprintables);
+	void rm_tmp_files(std::initializer_list<std::string> args);
+
+	int open_file(std::ifstream& file, std::string const name);
+	long double suffix(std::string const s_sci, std::string const s_eng, bool const is_length);
+	std::string check_void(std::string const match, std::string const label="");
 	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
-	void warn_unprintable(void);
 
 public:
-	SchParser(std::vector<std::shared_ptr<Element>>& _tab_all, std::string const& _n_sch);
+	SchParser(Data& _data);
 	int run(void);
-	void clear(void);
 };
 
 #ifdef QRFL_UNITTEST

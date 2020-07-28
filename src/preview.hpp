@@ -18,17 +18,13 @@
 #ifndef PREVIEW_HPP
 #define PREVIEW_HPP
 
-#define _USE_MATH_DEFINES
-
 #include <QtWidgets>
 #include <QGLWidget>
 #include <QOpenGLFunctions_2_0>
-//#include <GL/glut.h>
 
 #include <array>
-#include <vector>
 #include <memory>
-#include <cmath>
+#include <vector>
 
 #include "microstrip/element.hpp"
 
@@ -40,7 +36,7 @@ public :
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
 	void resetView(void);
 
-	void setFCtrl(bool flag_ctrl);
+	void setFCtrl(bool _flag_ctrl);
 	void setFShift(bool _flag_shift);
 protected:
 	void initializeGL();
@@ -55,7 +51,7 @@ protected:
 //	void keyReleaseEvent(QKeyEvent *event);
 
 private:
-	enum t_color{orange, green};
+	enum t_color {orange, green};
 	void drawAll(void);
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color);
 

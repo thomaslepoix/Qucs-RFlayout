@@ -20,14 +20,18 @@ using namespace std;
 
 Element::Element(string _label,
 			string _type,
+			bool _active,
 			bool _mirrorx,
 			short _r,
-			short _nport) :
+			short _nport,
+			string _subst) :
 	m_label(_label),
 	m_type(_type),
+	m_active(_active),
 	m_mirrorx(_mirrorx),
 	m_r(_r),
-	m_nport(_nport)
+	m_nport(_nport),
+	m_subst(_subst)
 	{}
 
 Element::~Element() {
@@ -39,6 +43,10 @@ string Element::getLabel(void) {
 
 string Element::getType(void) {
 	return(m_type);
+	}
+
+bool Element::getActive(void) {
+	return(m_active);
 	}
 
 bool Element::getMirrorx(void) {
@@ -53,12 +61,16 @@ short Element::getNport(void) {
 	return(m_nport);
 	}
 
+string Element::getSubst(void) {
+	return(m_subst);
+	}
+
 long double Element::getX(void) {
-	return(m_x);
+	return(m_shift_x ? m_x+m_shift_x : m_x);
 	}
 
 long double Element::getY(void) {
-	return(m_y);
+	return(m_shift_y ? m_y+m_shift_y : m_y);
 	}
 
 int Element::setX(long double _x) {
@@ -68,6 +80,16 @@ int Element::setX(long double _x) {
 
 int Element::setY(long double _y) {
 	m_y=_y;
+	return(0);
+	}
+
+int Element::setShiftX(long double _shift_x) {
+	m_shift_x=_shift_x;
+	return(0);
+	}
+
+int Element::setShiftY(long double _shift_y) {
+	m_shift_y=_shift_y;
 	return(0);
 	}
 
@@ -125,8 +147,60 @@ long double Element::getRo(void) {
 	return(0);
 	}
 
+long double Element::getZ(void) {
+	return(0);
+	}
+
+long double Element::getDbm(void) {
+	return(0);
+	}
+
+long double Element::getF(void) {
+	return(0);
+	}
+
+long double Element::getFstart(void) {
+	return(0);
+	}
+
+long double Element::getFstop(void) {
+	return(0);
+	}
+
+long double Element::getEr(void) {
+	return(0);
+	}
+
+long double Element::getH(void) {
+	return(0);
+	}
+
+long double Element::getT(void) {
+	return(0);
+	}
+
+long double Element::getTand(void) {
+	return(0);
+	}
+
+long double Element::getRho(void) {
+	return(0);
+	}
+
+long double Element::getMargin(void) {
+	return(0);
+	}
+
+unsigned long Element::getN(void) {
+	return(0);
+	}
+
 short Element::getAlpha(void) {
 	return(0);
+	}
+
+string Element::getSimtype(void) {
+	return("");
 	}
 
 string Element::getNet1(void) {
@@ -156,6 +230,47 @@ long double Element::getP(int /*_n*/, axis_t /*_xy*/, orientation_t /*_r*/, orig
 void Element::getStep(int const /*_net*/, long double& xstep, long double& ystep) {
 	xstep=0;
 	ystep=0;
+	}
+
+void Element::getEdge(int const /*_net*/, long double& edge, short& dir) {
+	edge=0;
+	dir=0;
+	}
+
+int Element::getOemsNcorelines(void) {
+	return(0);
+	}
+
+int Element::getOemsMeshCore(int const /*_n*/, OemsLine& /*line*/) {
+	return(1);
+	}
+
+int Element::getOemsMeshInterface(int const /*_net*/, OemsLine& /*line*/) {
+	return(1);
+	}
+
+bool Element::isOemsMeshInterface(int const /*_port*/, long double const /*_w*/) {
+	return(false);
+	}
+
+int Element::setAdjacent(int const /*_port*/, shared_ptr<Element> const& /*element*/, int const /*adjacent_port*/) {
+	return(1);
+	}
+
+int Element::setW(long double /*_w*/) {
+	return(1);
+	}
+
+int Element::setL(long double /*_l*/) {
+	return(1);
+	}
+
+int Element::setR(short /*_r*/) {
+	return(1);
+	}
+
+int Element::setSubst(string /*_subst*/) {
+	return(1);
 	}
 
 int Element::setNet1(string /*_net1*/) {

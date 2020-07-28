@@ -18,44 +18,47 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
-#include <sstream>
 #include <QMainWindow>
-#include <QFileDialog>
+#include <QObject>
 
-#include "logger.hpp"
+#include <sstream>
+
 #include "converter.hpp"
-#include "preview.hpp"
-#include "microstrip/microstrip.hpp"
+#include "data.hpp"
+#include "logger.hpp"
 
 namespace Ui {
 class MainWindow;
 } // namespace Ui
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow, public Loggable {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString _n_sch, QString _out_dir, QString _out_format, QWidget* parent=0);
+	explicit MainWindow(Data& _data, QWidget* parent=0);
 	~MainWindow();
-	friend void operator<<(MainWindow& obj, std::stringstream& in);
 
 private slots:
 	void on_pb_read_clicked(void);
-	void on_le_path_in_textChanged(const QString _n_sch);
+	void on_le_path_in_textChanged(QString const _n_sch);
 	void on_le_path_in_returnPressed(void);
-	void on_cb_format_currentIndexChanged(const QString _out_format);
+	void on_cb_format_currentIndexChanged(QString const _out_format);
 	void on_pb_browse_in_clicked(void);
 	void on_pb_browse_out_clicked(void);
-	void on_le_path_out_textChanged(const QString _out_dir);
+	void on_le_path_out_textChanged(QString const _out_dir);
 	void on_le_path_out_returnPressed(void);
 	void on_pb_write_clicked(void);
+	void on_rb_export_whole_toggled(bool const is_checked);
+	void on_rb_export_each_subst_toggled(bool const is_checked);
+	void on_rb_export_each_block_toggled(bool const is_checked);
 
 protected:
-	void keyPressEvent(QKeyEvent *event);
-	void keyReleaseEvent(QKeyEvent *event);
+	void keyPressEvent(QKeyEvent* event) override;
+	void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
-	Ui::MainWindow *ui;
+	Ui::MainWindow* ui;
+	Data& data;
 	Converter converter;
 
 	QString n_sch;
@@ -63,8 +66,8 @@ private:
 	QString out_format;
 	QString n_out;
 	QString openfile_path;
-};
 
-void operator<<(MainWindow& obj, std::stringstream& in);
+	void log(std::stringstream& in) override;
+};
 
 #endif // MAINWINDOW_HPP
