@@ -3899,8 +3899,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "legend('Location', 'northeastoutside');\n"
 	         "endif % flag_legend_out\n"
 	         "title('S parameters');\n"
-	         "xlabel(['Frequency f (', funit_name, ')']);\n"
-	         "ylabel('S parameters (dB)');\n"
+	         "xlabel(['Frequency (', funit_name, ')']);\n"
+	         "ylabel('S parameter (dB)');\n"
 	         "drawnow;\n"
 	         "print([path_result, '/', name, '-s', graphics_format]);\n"
 	         "\n";
@@ -4014,12 +4014,43 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		         "\tlegend('Location', 'northeastoutside');\n"
 		         "\tendif % flag_legend_out\n"
 		         "\ttitle('Impedance Z" << it.first << "');\n"
-		         "\txlabel(['Frequency f (', funit_name, ')']);\n"
-		         "\tylabel('Impedance (Ohm)');\n"
+		         "\txlabel(['Frequency (', funit_name, ')']);\n"
+		         "\tylabel('Impedance (Ω)');\n"
 		         "\tdrawnow;\n"
 		         "\tprint([path_result, '/', name, '-z" << it.first << "', graphics_format]);\n"
 		         "endif\n"
 		         "\n";
+		}
+
+	color=0;
+	f_out << "%%%% PLOT PORT VSWR\n";
+	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
+		f_out << "% Port " << it.first << "\n"
+		         "if flag_active_port" << it.first << "\n"
+		         "\tfigure;\n"
+		         "\thold on;\n"
+		         "\tgrid on;\n"
+		         "\tvswr" << it.first << " = (1+(abs(s" << it.first << it.first << ")))./(1-(abs(s" << it.first << it.first << ")));\n"
+		         "\tplot(freq/funit, vswr" << it.first << ", "
+		         "'" << colors[color%color_max] << "-', 'Linewidth', 2);\n"
+		         "\tfor i = 1:numel(f_select)\n"
+		         "\t\tvswr = vswr" << it.first << "(find(freq == f_select(i)));\n"
+		         "\t\tplot(freq(find(freq == f_select(i)))/funit, vswr, ...\n"
+		         "\t\t\t['" << colors[color%color_max] << "o;VSWR" << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
+		         "\t\t\t\"\\n\", num2str(vswr, '%.2f'), ...\n"
+		         "\t\t\t';'], 'linewidth', 2);\n"
+		         "\tendfor\n"
+		         "\tif flag_legend_out\n"
+		         "\tlegend('Location', 'northeastoutside');\n"
+		         "\tendif % flag_legend_out\n"
+		         "\ttitle('VSWR" << it.first << "');\n"
+		         "\txlabel(['Frequency (', funit_name, ')']);\n"
+		         "\tylabel('VSWR');\n"
+		         "\tdrawnow;\n"
+		         "\tprint([path_result, '/', name, '-vswr" << it.first << "', graphics_format]);\n"
+		         "endif\n"
+		         "\n";
+		color=color+1%color_max;
 		}
 
 //	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
