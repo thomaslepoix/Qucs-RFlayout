@@ -28,7 +28,7 @@ Mrstub::Mrstub(string _label,
 			string _subst,
 			long double _ri,
 			long double _ro,
-			short _alpha) :
+			long double _alpha) :
 	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
 	m_ri(_ri),
 	m_ro(_ro),
@@ -60,7 +60,7 @@ long double Mrstub::getRo(void) {
 	return(m_ro);
 	}
 
-short Mrstub::getAlpha(void) {
+long double Mrstub::getAlpha(void) {
 	return(m_alpha);
 	}
 

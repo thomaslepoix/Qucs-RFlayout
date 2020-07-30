@@ -42,14 +42,14 @@ public :
 			std::string _subst,
 			long double _ri,
 			long double _ro,
-			short _alpha);
+			long double _alpha);
 	~Mrstub();
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;
 	long double getRi(void) override;
 	long double getRo(void) override;
-	short getAlpha(void) override;
+	long double getAlpha(void) override;
 	std::string getNet1(void) override;
 	int getNpoint(void) override;
 	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;

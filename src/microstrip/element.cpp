@@ -191,11 +191,11 @@ long double Element::getMargin(void) {
 	return(0);
 	}
 
-unsigned long Element::getN(void) {
+long double Element::getAlpha(void) {
 	return(0);
 	}
 
-short Element::getAlpha(void) {
+unsigned long Element::getN(void) {
 	return(0);
 	}
 

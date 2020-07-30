@@ -512,9 +512,8 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						long double ro=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
 						cout << "\tOuter radius : " << ro << endl;
 					//alpha
-						//no unit
 						regex_search(line, match, r_quotedfield16);
-						short alpha=stoi(match.str(5));
+						long double alpha=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 						cout << "\tAlpha : " << alpha << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, active, mirrorx, R, subst, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
