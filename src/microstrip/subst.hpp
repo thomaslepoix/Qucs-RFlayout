@@ -22,6 +22,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Subst final : public Element {
 private :
 	const std::string m_descriptor="substrat";

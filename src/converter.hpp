@@ -27,6 +27,7 @@
 #include "xycalculator.hpp"
 #include "layoutwriter.hpp"
 
+//******************************************************************************
 class Converter {
 private:
 	Data& data;

@@ -18,6 +18,7 @@
 #include "sp.hpp"
 using namespace std;
 
+//******************************************************************************
 Sp::Sp(string _label,
 			string _type,
 			bool _mirrorx,
@@ -33,23 +34,27 @@ Sp::Sp(string _label,
 	m_n(_n)
 	{}
 
+//******************************************************************************
 string Sp::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Sp::getFstart(void) {
 	return(m_fstart);
 	}
 
+//******************************************************************************
 long double Sp::getFstop(void) {
 	return(m_fstop);
 	}
 
+//******************************************************************************
 string Sp::getSimtype(void) {
 	return(m_simtype);
 	}
 
+//******************************************************************************
 unsigned long Sp::getN(void) {
 	return(m_n);
 	}
-

@@ -18,6 +18,7 @@
 #include "pac.hpp"
 using namespace std;
 
+//******************************************************************************
 Pac::Pac(string _label,
 			string _type,
 			bool _active,
@@ -36,46 +37,57 @@ Pac::Pac(string _label,
 	m_l(0.0)
 	{}
 
+//******************************************************************************
 string Pac::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Pac::getW(void) {
 	return(m_w);
 	}
 
+//******************************************************************************
 long double Pac::getL(void) {
 	return(m_l);
 	}
 
+//******************************************************************************
 long double Pac::getZ(void) {
 	return(m_z);
 	}
 
+//******************************************************************************
 long double Pac::getDbm(void) {
 	return(m_p);
 	}
 
+//******************************************************************************
 long double Pac::getF(void) {
 	return(m_f);
 	}
 
+//******************************************************************************
 unsigned long Pac::getN(void) {
 	return(m_n);
 	}
 
+//******************************************************************************
 string Pac::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 string Pac::getNet2(void) {
 	return(m_net2);
 	}
 
+//******************************************************************************
 int Pac::getNpoint(void) {
 	return(m_npoint);
 	}
 
+//******************************************************************************
 long double Pac::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
@@ -87,6 +99,7 @@ long double Pac::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
+//******************************************************************************
 void Pac::getEdge(int const _net, long double& edge, short& dir) {
 	edge=m_w;
 	if(_net==1) {
@@ -106,36 +119,43 @@ void Pac::getEdge(int const _net, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 int Pac::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::setNet2(string _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::setSubst(string _subst) {
 	m_subst=_subst;
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::setW(long double _w) {
 	m_w=_w;
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::setL(long double _l) {
 	m_l=_l;
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::setR(short _r) {
 	m_r=_r;
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::setP(void) {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= m_w/2;
@@ -148,10 +168,12 @@ int Pac::setP(void) {
 	return(0);
 	}
 
+//******************************************************************************
 int Pac::getOemsNcorelines(void) {
 	return(2);
 	}
 
+//******************************************************************************
 int Pac::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
 		line.position=m_x;

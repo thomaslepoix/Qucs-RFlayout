@@ -28,6 +28,7 @@
 #define private public
 #endif // QRFL_UNITTEST
 
+//******************************************************************************
 class SchParser {
 private:
 	Data& data;

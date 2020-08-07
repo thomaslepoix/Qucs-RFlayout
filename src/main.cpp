@@ -31,6 +31,7 @@ using namespace std;
 #define main not_main
 #endif // QRFL_UNITTEST
 
+//******************************************************************************
 int main(int argc, char* argv[]) {
 
 //variables

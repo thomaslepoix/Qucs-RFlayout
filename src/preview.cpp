@@ -22,9 +22,11 @@
 #include "preview.hpp"
 using namespace std;
 
+//******************************************************************************
 Preview::Preview(QWidget* parent) : QGLWidget(parent), QOpenGLFunctions_2_0() {
 	}
 
+//******************************************************************************
 void Preview::initializeGL() {
 	initializeOpenGLFunctions();
 
@@ -43,6 +45,7 @@ void Preview::initializeGL() {
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	}
 
+//******************************************************************************
 void Preview::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
@@ -58,6 +61,7 @@ void Preview::paintGL() {
 //	drawtriangle();
 	}
 
+//******************************************************************************
 void Preview::resizeGL(int width, int height) {
     int side = qMax(width, height);
     glViewport((width - side) / 2, (height - side) / 2, side, side);
@@ -70,6 +74,7 @@ void Preview::resizeGL(int width, int height) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+//******************************************************************************
 static void qNormalizeAngle(int &angle) {
 	while (angle < 0)
 		angle += 360 * 16;
@@ -77,6 +82,7 @@ static void qNormalizeAngle(int &angle) {
 		angle -= 360 * 16;
 	}
 
+//******************************************************************************
 void Preview::setXRotation(int angle) {
     qNormalizeAngle(angle);
     if (angle != xRot) {
@@ -85,6 +91,7 @@ void Preview::setXRotation(int angle) {
 		}
 	}
 
+//******************************************************************************
 void Preview::setYRotation(int angle) {
     qNormalizeAngle(angle);
     if (angle != yRot) {
@@ -93,6 +100,7 @@ void Preview::setYRotation(int angle) {
 		}
 	}
 
+//******************************************************************************
 void Preview::setZRotation(int angle) {
     qNormalizeAngle(angle);
     if (angle != zRot) {
@@ -101,10 +109,12 @@ void Preview::setZRotation(int angle) {
 		}
 	}
 
+//******************************************************************************
 void Preview::mousePressEvent(QMouseEvent *event) {
 	lastPos = event->pos();
 	}
 
+//******************************************************************************
 void Preview::mouseMoveEvent(QMouseEvent *event) {
 	int dx = event->x() - lastPos.x();
 	int dy = event->y() - lastPos.y();
@@ -129,6 +139,8 @@ void Preview::mouseMoveEvent(QMouseEvent *event) {
 //pcb-rnd	SHIFT |	CTRL _	NONE +
 //openems					NONE +
 //this		SHIFT _	CTRL +	NONE |
+
+//******************************************************************************
 void Preview::wheelEvent(QWheelEvent *event) {
 	if(flag_ctrl) {
 		factor+=(long double)event->delta()/240*fit_factor;
@@ -141,16 +153,19 @@ void Preview::wheelEvent(QWheelEvent *event) {
 	updateGL();
 	}
 
+//******************************************************************************
 void Preview::setFCtrl(bool _flag_ctrl) {
 	flag_ctrl=_flag_ctrl;
 	}
 
+//******************************************************************************
 void Preview::setFShift(bool _flag_shift) {
 	flag_shift=_flag_shift;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
+//******************************************************************************
 void Preview::resetView(void) {
 	xRot=0;
 	yRot=0;
@@ -161,6 +176,7 @@ void Preview::resetView(void) {
 	updateGL();
 	}
 
+//******************************************************************************
 void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& extrem_pos) {
 	tab_all.clear();
 	tab_all=_tab_all;
@@ -170,6 +186,7 @@ void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double
 	resetView();
 	}
 
+//******************************************************************************
 void Preview::drawAll(void) {
 	glScalef(factor, factor, factor);
 	for(shared_ptr<Element> it : tab_all) {
@@ -214,6 +231,7 @@ void Preview::drawAll(void) {
 		}
 	}
 
+//******************************************************************************
 void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color) {
 	glClear(GL_STENCIL_BUFFER_BIT);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 

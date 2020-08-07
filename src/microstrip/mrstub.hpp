@@ -22,6 +22,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mrstub final : public Element {
 private :
 	std::string const m_descriptor="microstrip_radial_stub";

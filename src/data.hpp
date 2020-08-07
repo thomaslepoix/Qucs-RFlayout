@@ -26,6 +26,7 @@
 
 #include "microstrip/element.hpp"
 
+//******************************************************************************
 class Block {
 public:
 	std::vector<std::shared_ptr<Element>> elements;
@@ -43,6 +44,7 @@ public:
 	void print(void);
 };
 
+//******************************************************************************
 class Data {
 public:
 	std::vector<std::shared_ptr<Element>> tab_all;

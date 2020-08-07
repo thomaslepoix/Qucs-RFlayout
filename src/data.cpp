@@ -20,6 +20,7 @@
 #include "data.hpp"
 using namespace std;
 
+//******************************************************************************
 Block::Block(void) :
 	elements(vector<shared_ptr<Element>>()),
 	subst(shared_ptr<Element>()),
@@ -27,6 +28,7 @@ Block::Block(void) :
 	margin(0.0)
 	{}
 
+//******************************************************************************
 void Block::set_extrem_pos(void) {
 	//reset extrem_pos to a random existant point
 	for(shared_ptr<Element> it : elements) {
@@ -55,6 +57,7 @@ void Block::set_extrem_pos(void) {
 	boundary[YMAX]=extrem_pos[YMAX]+margin;
 	}
 
+//******************************************************************************
 void Block::shift(long double const x, long double const y) {
 	for(shared_ptr<Element> it : elements) {
 		it->setX(it->getX()+x);
@@ -63,6 +66,7 @@ void Block::shift(long double const x, long double const y) {
 	set_extrem_pos();
 	}
 
+//******************************************************************************
 void Block::print_extrem_pos(void) {
 	cout << "\tXmin : " << extrem_pos[XMIN] << "\n"
 	        "\tXmax : " << extrem_pos[XMAX] << "\n"
@@ -70,6 +74,7 @@ void Block::print_extrem_pos(void) {
 	        "\tYmax : " << extrem_pos[YMAX] << "\n";
 	}
 
+//******************************************************************************
 void Block::print(void) {
 	cout << "Elements :" << endl;
 	for(shared_ptr<Element> it : elements) {
@@ -85,6 +90,7 @@ void Block::print(void) {
 	cout << endl;
 	}
 
+//******************************************************************************
 Data::Data(void) :
 	extrem_pos({0.0, 0.0, 0.0, 0.0}),
 	out_format(".kicad_pcb"),
@@ -101,10 +107,12 @@ Data::Data(void) :
 	oems_timeres(300000)
 	{}
 
+//******************************************************************************
 Data::~Data(void) {
 	clear();
 	}
 
+//******************************************************************************
 void Data::clear(void) {
 	all_blocks.clear();
 	for(shared_ptr<Element> it : tab_all) {

@@ -25,6 +25,7 @@
 
 #include "data.hpp"
 
+//******************************************************************************
 class LayoutWriter {
 private:
 	Data& data;

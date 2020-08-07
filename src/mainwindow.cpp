@@ -23,6 +23,7 @@
 #include "ui_mainwindow.h"
 using namespace std;
 
+//******************************************************************************
 MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
@@ -43,11 +44,13 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 		ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
 		ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
 		}
-	
+
+//******************************************************************************
 MainWindow::~MainWindow(void) {
 	delete ui;
 	}
 
+//******************************************************************************
 void MainWindow::on_pb_browse_in_clicked(void) {
 	if(this->openfile_path.length() == 0) {
 		this->openfile_path = QDir::currentPath();
@@ -60,14 +63,16 @@ void MainWindow::on_pb_browse_in_clicked(void) {
 		return;
 		}
 
-	this->openfile_path = QFileInfo(n_sch).path(); // store path for next time
+	this->openfile_path = QFileInfo(n_sch).path(); // Store path for next time
 	ui->le_path_in->setText(n_sch);
 	}
 
+//******************************************************************************
 void MainWindow::on_le_path_in_textChanged(const QString _n_sch) {
 	n_sch=_n_sch;
 	}
 
+//******************************************************************************
 void MainWindow::on_pb_read_clicked(void) {
 
 	ui->tb_log->clear();
@@ -81,6 +86,7 @@ void MainWindow::on_pb_read_clicked(void) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::on_le_path_in_returnPressed(void) {
 	ui->tb_log->clear();
 	if(n_sch=="") {
@@ -93,19 +99,23 @@ void MainWindow::on_le_path_in_returnPressed(void) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::on_cb_format_currentIndexChanged(const QString _out_format) {
 	out_format=_out_format;
 	}
 
+//******************************************************************************
 void MainWindow::on_pb_browse_out_clicked(void) {
 	out_dir=QFileDialog::getExistingDirectory(this, tr("Output directory"), "./", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	ui->le_path_out->setText(out_dir);
 	}
 
+//******************************************************************************
 void MainWindow::on_le_path_out_textChanged(const QString _out_dir) {
 	out_dir=_out_dir;
 	}
 
+//******************************************************************************
 void MainWindow::on_le_path_out_returnPressed(void) {
 	vector<string> out_names;
 	if(converter.size()) {
@@ -120,6 +130,7 @@ void MainWindow::on_le_path_out_returnPressed(void) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::on_pb_write_clicked(void) {
 	vector<string> out_names;
 	if(converter.size()) {
@@ -134,6 +145,7 @@ void MainWindow::on_pb_write_clicked(void) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::on_rb_export_whole_toggled(bool const is_checked) {
 	if(is_checked) {
 		data.export_each_subst=false;
@@ -141,6 +153,7 @@ void MainWindow::on_rb_export_whole_toggled(bool const is_checked) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::on_rb_export_each_subst_toggled(bool const is_checked) {
 	if(is_checked) {
 		data.export_each_subst=true;
@@ -148,6 +161,7 @@ void MainWindow::on_rb_export_each_subst_toggled(bool const is_checked) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::on_rb_export_each_block_toggled(bool const is_checked) {
 	if(is_checked) {
 		data.export_each_subst=false;
@@ -155,16 +169,19 @@ void MainWindow::on_rb_export_each_block_toggled(bool const is_checked) {
 		}
 	}
 
+//******************************************************************************
 void MainWindow::keyPressEvent(QKeyEvent *event) {
 	if(event->key()==Qt::Key_Control) ui->glw_preview->setFCtrl(true);
 	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(true);
 	}
 
+//******************************************************************************
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 	if(event->key()==Qt::Key_Control) ui->glw_preview->setFCtrl(false);
 	if(event->key()==Qt::Key_Shift) ui->glw_preview->setFShift(false);
 	}
 
+//******************************************************************************
 void MainWindow::log(stringstream& in) {
 	ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
 	}

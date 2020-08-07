@@ -18,6 +18,7 @@
 #include "mcross.hpp"
 using namespace std;
 
+//******************************************************************************
 Mcross::Mcross(string _label,
 			string _type,
 			bool _active,
@@ -35,46 +36,57 @@ Mcross::Mcross(string _label,
 	m_w4(_w4)
 	{}
 
+//******************************************************************************
 string Mcross::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Mcross::getW1(void) {
 	return(m_w1);
 	}
 
+//******************************************************************************
 long double Mcross::getW2(void) {
 	return(m_w2);
 	}
 
+//******************************************************************************
 long double Mcross::getW3(void) {
 	return(m_w3);
 	}
 
+//******************************************************************************
 long double Mcross::getW4(void) {
 	return(m_w4);
 	}
 
+//******************************************************************************
 string Mcross::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 string Mcross::getNet2(void) {
 	return(m_net2);
 	}
 
+//******************************************************************************
 string Mcross::getNet3(void) {
 	return(m_net3);
 	}
 
+//******************************************************************************
 string Mcross::getNet4(void) {
 	return(m_net4);
 	}
 
+//******************************************************************************
 int Mcross::getNpoint(void) {
 	return(m_npoint);
 	}
 
+//******************************************************************************
 long double Mcross::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
@@ -106,6 +118,7 @@ int Mcross::setNet4(string _net4) {
 	return(0);
 	}
 
+//******************************************************************************
 int Mcross::setP(void) {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at top left, clockwise
@@ -204,6 +217,7 @@ int Mcross::setP(void) {
 	return(0);
 	}
 
+//******************************************************************************
 void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
 	long double Wlong=0;
 	if(m_mirrorx==0 && m_r==0) {
@@ -353,6 +367,7 @@ void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
 		}
 	}
 
+//******************************************************************************
 void Mcross::getEdge(int const _net, long double& edge, short& dir) {
 	if(_net==1) {
 		edge=m_w1;
@@ -407,6 +422,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 int Mcross::getOemsNcorelines(void) {
 	if(m_w1==m_w3 || m_w2==m_w4){
 		return(0);
@@ -415,6 +431,7 @@ int Mcross::getOemsNcorelines(void) {
 		}
 	}
 
+//******************************************************************************
 int Mcross::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
 		if(m_w1>m_w3 && m_w2>m_w4) {
@@ -526,6 +543,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) {
 	long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
 	long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
@@ -606,6 +624,7 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 bool Mcross::isOemsMeshInterface(int const _port, long double const _w) {
 	if(m_w1==m_w3 || m_w2==m_w4) {
 		long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
@@ -626,6 +645,7 @@ bool Mcross::isOemsMeshInterface(int const _port, long double const _w) {
 		}
 	}
 
+//******************************************************************************
 int Mcross::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1:

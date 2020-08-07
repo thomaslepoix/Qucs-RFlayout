@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mgap final : public Element {
 private :
 	std::string const m_descriptor="microstrip_gap";

@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mcross final : public Element {
 private :
 	std::string const m_descriptor="microstrip_cross";

@@ -18,6 +18,7 @@
 #include "mvia.hpp"
 using namespace std;
 
+//******************************************************************************
 Mvia::Mvia(string _label,
 			string _type,
 			bool _active,
@@ -29,23 +30,28 @@ Mvia::Mvia(string _label,
 	m_d(_d)
 	{}
 
+//******************************************************************************
 string Mvia::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Mvia::getD(void) {
 	return(m_d);
 	}
 
+//******************************************************************************
 string Mvia::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 int Mvia::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
+//******************************************************************************
 void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	edge=m_d;
 	switch(m_r) {
@@ -56,10 +62,12 @@ void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 int Mvia::getOemsNcorelines(void) {
 	return(3);
 	}
 
+//******************************************************************************
 int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
 		switch(m_r) {
@@ -92,6 +100,7 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
 	if(_net==1
 	&&(adjacent1.first==nullptr
@@ -112,6 +121,7 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 bool Mvia::isOemsMeshInterface(int const _port, long double const _w) {
 	if(_port==1) {
 		return(_w>m_d ? true : false);
@@ -120,6 +130,7 @@ bool Mvia::isOemsMeshInterface(int const _port, long double const _w) {
 		}
 	}
 
+//******************************************************************************
 int Mvia::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1:

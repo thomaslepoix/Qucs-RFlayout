@@ -23,6 +23,7 @@
 // Prefer log_err instead of cerr
 // Do not use std::endl or std::flush with logger objects
 
+//******************************************************************************
 class Loggable {
 private:
 	friend class Logger;
@@ -32,6 +33,7 @@ public:
 	~Loggable(void)=default;
 };
 
+//******************************************************************************
 class Logger {
 private:
 	typedef void (Logger::*func)(std::stringstream&);
@@ -52,8 +54,10 @@ public:
 	void set_mode(bool gui);
 };
 
+//******************************************************************************
 extern Logger log_err;
 
+//******************************************************************************
 template<typename T>
 Logger& operator<<(Logger& logger, T const& in) {
 	std::stringstream ss;

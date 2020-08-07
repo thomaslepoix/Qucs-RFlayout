@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mcorn final : public Element {
 private :
 	std::string const m_descriptor="microstrip_corner";

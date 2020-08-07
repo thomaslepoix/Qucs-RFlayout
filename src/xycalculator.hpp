@@ -24,6 +24,7 @@
 #include "data.hpp"
 #include "microstrip/element.hpp"
 
+//******************************************************************************
 class XyCalculator {
 private:
 	Data& data;

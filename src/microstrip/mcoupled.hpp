@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mcoupled final : public Element {
 private :
 	std::string const m_descriptor="microstrip_coupled_lines";

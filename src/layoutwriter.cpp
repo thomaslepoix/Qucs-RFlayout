@@ -28,10 +28,12 @@
 #include "layoutwriter.hpp"
 using namespace std;
 
+//******************************************************************************
 LayoutWriter::LayoutWriter(Data& _data) :
 	data(_data)
 	{}
 
+//******************************************************************************
 int LayoutWriter::run(vector<string>* out_names) {
 
 //variables
@@ -120,6 +122,7 @@ int LayoutWriter::run(vector<string>* out_names) {
 	return(0);
 	}
 
+//******************************************************************************
 int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, vector<string>* out_names) {
 	cout << "Output layout : " << n_out << endl;
 	ofstream f_out(n_out.c_str());
@@ -142,6 +145,7 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 	return(0);
 	}
 
+//******************************************************************************
 void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) {
 	string type;
 
@@ -301,6 +305,7 @@ void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double co
 	f_out << ")\n";
 	}
 
+//******************************************************************************
 void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) {
 	string type;
 	string label;
@@ -362,6 +367,7 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 	f_out << ")\n";
 	}
 
+//******************************************************************************
 void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) {
 	string type;
 	unsigned int n=0;
@@ -2698,6 +2704,7 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 	         "}\n";
 	}
 
+//******************************************************************************
 int LayoutWriter::check_m(void) {
 	if(data.is_volume_error) {
 		log_err << data.volume_error;
@@ -2732,6 +2739,7 @@ int LayoutWriter::check_m(void) {
 	return(0);
 	}
 
+//******************************************************************************
 void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) {
 	string type;
 	string label;

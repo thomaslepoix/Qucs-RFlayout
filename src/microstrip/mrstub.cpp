@@ -20,6 +20,7 @@
 #include "mrstub.hpp"
 using namespace std;
 
+//******************************************************************************
 Mrstub::Mrstub(string _label,
 			string _type,
 			bool _active,
@@ -37,38 +38,47 @@ Mrstub::Mrstub(string _label,
 	m_l=sqrt((m_ri*m_ri)-((m_w/2)*(m_w/2)));
 	}
 
+//******************************************************************************
 string Mrstub::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Mrstub::getW(void) {
 	return(m_w);
 	}
 
+//******************************************************************************
 long double Mrstub::getL(void) {
 	return(m_l);
 	}
 
+//******************************************************************************
 long double Mrstub::getRi(void) {
 	return(m_ri);
 	}
 
+//******************************************************************************
 long double Mrstub::getRo(void) {
 	return(m_ro);
 	}
 
+//******************************************************************************
 long double Mrstub::getAlpha(void) {
 	return(m_alpha);
 	}
 
+//******************************************************************************
 string Mrstub::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 int Mrstub::getNpoint(void) {
 	return(m_npoint);
 	}
 
+//******************************************************************************
 long double Mrstub::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	long double coord;
 	if(_r) {
@@ -80,11 +90,13 @@ long double Mrstub::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
+//******************************************************************************
 int Mrstub::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
+//******************************************************************************
 int Mrstub::setP(void) {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at bottom right, clockwise
@@ -109,6 +121,7 @@ int Mrstub::setP(void) {
 	return(0);
 	}
 
+//******************************************************************************
 void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	edge=m_w;
 	if(m_mirrorx==0) {
@@ -128,10 +141,12 @@ void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 int Mrstub::getOemsNcorelines(void) {
 	return(4);
 	}
 
+//******************************************************************************
 int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
 		if(m_mirrorx==0) {
@@ -192,6 +207,7 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 bool Mrstub::isOemsMeshInterface(int const _port, long double const _w) {
 	if(_port==1) {
 		return(_w>m_w ? true : false);

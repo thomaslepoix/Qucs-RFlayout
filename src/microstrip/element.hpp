@@ -26,11 +26,13 @@
 
 #include "oemsline.hpp"
 
+//******************************************************************************
 enum axis_t {X, Y};            // x axis / y axis
 enum orientation_t {NOR, R};   // no rotation / rotation
 enum origin_t {REL, ABS};      // relative / absolute
 enum {XMIN, XMAX, YMIN, YMAX}; // extrem_pos index
 
+//******************************************************************************
 class Element {
 protected:
 	std::string m_label;

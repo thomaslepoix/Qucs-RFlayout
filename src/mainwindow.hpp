@@ -28,9 +28,11 @@
 #include "logger.hpp"
 
 namespace Ui {
+//******************************************************************************
 class MainWindow;
 } // namespace Ui
 
+//******************************************************************************
 class MainWindow : public QMainWindow, public Loggable {
 	Q_OBJECT
 

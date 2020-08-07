@@ -28,6 +28,7 @@
 
 #include "microstrip/element.hpp"
 
+//******************************************************************************
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 //	Q_OBJECT
 public :

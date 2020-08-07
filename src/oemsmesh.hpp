@@ -24,6 +24,7 @@
 #include "oemsline.hpp"
 #include "microstrip/element.hpp"
 
+//******************************************************************************
 class OemsMesh {
 public:
 	std::vector<OemsLine> x;

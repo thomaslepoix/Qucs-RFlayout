@@ -27,10 +27,12 @@
 #include "schparser.hpp"
 using namespace std;
 
+//******************************************************************************
 SchParser::SchParser(Data& _data) :
 	data(_data)
 	{}
 
+//******************************************************************************
 int SchParser::run(void) {
 	int ret;
 	string n_sch;
@@ -43,7 +45,7 @@ int SchParser::run(void) {
 	vector<pair<string, long double>> variables;
 	static regex const r_sch("\\.sch$");
 
-//filenames processing
+	// Filenames processing
 	cout << endl;
 	if(regex_search(data.n_sch, r_sch)) {
 		n_net=regex_replace(data.n_sch, r_sch, ".net");
@@ -112,6 +114,7 @@ int SchParser::run(void) {
 	return(0);
 	}
 
+//******************************************************************************
 void SchParser::parse_port_shift_args(void) {
 	for(tuple<unsigned long, string, string> arg : data.port_shift_args) {
 		bool is_port_existant=false;
@@ -140,6 +143,7 @@ void SchParser::parse_port_shift_args(void) {
 		}
 	}
 
+//******************************************************************************
 void SchParser::parse_port_size_args(void) {
 	for(tuple<unsigned long, string, string> arg : data.port_size_args) {
 		bool is_port_existant=false;
@@ -170,6 +174,7 @@ void SchParser::parse_port_size_args(void) {
 		}
 	}
 
+//******************************************************************************
 int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstudio) {
 	string line;
 	smatch match;
@@ -234,6 +239,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 	return(0);
 	}
 
+//******************************************************************************
 int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
 	cout << endl << "Generating netlist... ";
 	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
@@ -250,6 +256,7 @@ int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
 		}
 	}
 
+//******************************************************************************
 long double SchParser::process_field(vector<pair<string, long double>> const& variables, string const variable, string const value, string const s_sci, string const s_eng, string const label, bool const is_length) {
 	if(variable!="") {
 		for(pair<string, long double> it : variables) {
@@ -264,6 +271,7 @@ long double SchParser::process_field(vector<pair<string, long double>> const& va
 		}
 	}
 
+//******************************************************************************
 void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double>>& variables) {
 	string line;
 	string text;
@@ -301,6 +309,7 @@ void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double
 	cout << "Reading data file... OK" << endl;
 	}
 
+//******************************************************************************
 void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& is_there_eqn) {
 	string line;
 	smatch match;
@@ -331,6 +340,7 @@ void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& i
 	f_sch.seekg(0);
 	}
 
+//******************************************************************************
 void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, long double>>& variables, vector<string>& unprintables) {
 	string line;
 	smatch match;
@@ -667,6 +677,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 	cout << "Reading schematic... OK" << endl;
 	}
 
+//******************************************************************************
 void SchParser::parse_netlist(ifstream& f_net) {
 	string line;
 	smatch match;
@@ -807,6 +818,7 @@ void SchParser::parse_netlist(ifstream& f_net) {
 	cout << "Reading netlist... OK" << endl;
 	}
 
+//******************************************************************************
 void SchParser::warn_unprintable(vector<string> const& unprintables) {
 	if(unprintables.size()) {
 		log_err << "WARNING : Schematic contains some unprintable transmission lines";
@@ -818,6 +830,7 @@ void SchParser::warn_unprintable(vector<string> const& unprintables) {
 		}
 	}
 
+//******************************************************************************
 void SchParser::rm_tmp_files(initializer_list<string> const args) {
 	if(!data.keep_tmp_files) {
 		QProcess process_rm;
@@ -841,8 +854,9 @@ void SchParser::rm_tmp_files(initializer_list<string> const args) {
 		}
 	}
 
-long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) {
 // Convert suffix into multiplicator
+//******************************************************************************
+long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) {
 	static regex  const r_sci("^e(-?|\\+?)([0-9]*)$");    // g1 signe    g2 exposant
 	smatch match;
 	long double multiplicator=1;
@@ -896,7 +910,7 @@ long double SchParser::suffix(string const s_sci, string const s_eng, bool const
 	return(multiplicator);
 	}
 
-
+//******************************************************************************
 string SchParser::check_void(string const match, string const label) {
 	if(match=="") {
 		if(label!="") {
@@ -908,6 +922,7 @@ string SchParser::check_void(string const match, string const label) {
 		}
 	}
 
+//******************************************************************************
 string SchParser::mstub_shift(bool const xy, string const str, string const r) {
 	if(r=="0")      return(xy ? to_string(stoi(str)-10) : str);
 	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
