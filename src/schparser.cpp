@@ -31,48 +31,71 @@ SchParser::SchParser(Data& _data) :
 	data(_data)
 	{}
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
-#pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
-
 int SchParser::run(void) {
 	int ret;
 	string n_sch;
 	string n_net;
+	string n_dat;
 	ifstream f_sch;
 	ifstream f_net;
+	ifstream f_dat;
 	vector<string> unprintables;
-	static regex const r_sch("\.sch$");
+	vector<pair<string, long double>> variables;
+	static regex const r_sch("\\.sch$");
 
 //filenames processing
 	cout << endl;
 	if(regex_search(data.n_sch, r_sch)) {
-		n_net=regex_replace(data.n_sch, r_sch, "\.net");
-		n_sch=regex_replace(data.n_sch, r_sch, "\.tmp\.sch");
-		cout << "Schematic : " << data.n_sch << endl;
+		n_net=regex_replace(data.n_sch, r_sch, ".net");
+		n_sch=regex_replace(data.n_sch, r_sch, ".tmp.sch");
 	} else {
 		log_err << "ERROR : Invalid input format : " << data.n_sch << "\n";
 		return(1);
 		}
 
-	ret=open_file(f_sch, data.n_sch);
-	if(ret) return(ret);
+	cout << "Schematic file : " << data.n_sch << endl;
+	f_sch.open(data.n_sch.c_str());
+	if(f_sch.fail()) {
+		log_err << "ERROR : Cannot open " << data.n_sch << "\n";
+		return(1);
+		}
 
 	bool is_qucsstudio=false;
 	ret=check_qucsstudio(f_sch, n_sch, is_qucsstudio);
-	if(ret) return(ret);
+	if(ret)
+		return(ret);
 
 	if(data.n_net=="") {
 		ret=generate_netlist(n_sch, n_net);
-		if(ret) return(ret);
+		if(ret)
+			return(ret);
 	} else {
 		n_net=data.n_net;
 		}
 
-	ret=open_file(f_net, n_net);
-	if(ret) return(ret);
+	cout << "Netlist file : " << n_net << endl;
+	f_net.open(n_net.c_str());
+	if(f_net.fail()) {
+		log_err << "ERROR : Cannot open " << n_net << "\n";
+		return(1);
+		}
 
-	parse_schematic(f_sch, unprintables);
+	bool is_there_eqn;
+	parse_schematic_datafile(f_sch, n_dat, is_there_eqn);
+
+	f_dat.open(n_dat.c_str());
+	if(f_dat.fail()) {
+		if(is_there_eqn) {
+			log_err << "WARNING : Cannot open " << n_dat <<
+			           ". Not problematic if variables and equations are not used."
+			           " Otherwise, try to run a simulation to produce it.\n";
+			}
+	} else {
+		cout << "Data file : " << n_dat << endl;
+		parse_data(f_dat, variables);
+		}
+
+	parse_schematic_components(f_sch, variables, unprintables);
 	parse_netlist(f_net);
 
 	parse_port_shift_args();
@@ -81,6 +104,9 @@ int SchParser::run(void) {
 	cout << "Number of elements : " << data.tab_all.size() << endl;
 	warn_unprintable(unprintables);
 
+	f_sch.close();
+	f_net.close();
+	f_dat.close();
 	// Remove QucsStudio temporary schematic and automatically generated netlist
 	rm_tmp_files({ (is_qucsstudio ? n_sch : ""), (data.n_net=="" ? n_net : "") });
 	return(0);
@@ -96,7 +122,7 @@ void SchParser::parse_port_shift_args(void) {
 
 					// g1 value    g2 suffix    g3 scientific    g4 engineer
 					// Cares about negatives
-					static regex const r_port_shift_arg("([\-0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+					static regex const r_port_shift_arg("((?:-?|\\+?)[0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
 
 					regex_search(get<1>(arg), match, r_port_shift_arg);
 					element->setShiftX(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
@@ -124,7 +150,8 @@ void SchParser::parse_port_size_args(void) {
 
 					// g1 value    g2 suffix    g3 scientific    g4 engineer
 					// Does not care about negatives
-					static regex const r_port_size_arg("([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+					static regex const r_port_size_arg("(\\+?[0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+			break;
 
 					regex_search(get<1>(arg), match, r_port_size_arg);
 					element->setL(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
@@ -143,27 +170,15 @@ void SchParser::parse_port_size_args(void) {
 		}
 	}
 
-int SchParser::open_file(ifstream& file, string const name) {
-	cout << endl << "Opening " << name << "... ";
-	file.open(name.c_str());
-	if(file) {
-		cout << "OK" << endl;
-	} else {
-		cout << "KO" << endl;
-		log_err << "ERROR : Cannot open " << name << "\n";
-		return(1);
-		}
-	return(0);
-	}
-
 int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstudio) {
 	string line;
 	smatch match;
 
-	static regex const r_head("^<(Qucs(?:Studio)?) Schematic [0-9]+\.[0-9]+\.[0-9]+>$"); //regex group 1
+	// g1 software    g2 major
+	static regex const r_head("^<(Qucs(?:Studio)?) Schematic ([0-9]+)\\.[0-9]+\\.[0-9]+>$");
 
-	//g1 begin    g2 x    g3 y    g4 end    g5 r
-	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )([\-0-9]+) ([\-0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");
+	// g1 begin    g2 x    g3 y    g4 end    g5 r
+	static regex const r_mstub("^  <MSTUB((?: [^ ]+){2} )(-?[0-9]+) (-?[0-9]+)((?: [^ ]+){3} ([0123])[^>]+>$)");
 
 
 	getline(f_sch, line);
@@ -171,6 +186,11 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 	if(match.str(1)=="Qucs") {
 		n_tmp=data.n_sch; // f_sch is ok, reset n_tmp to its filename
 	} else if(match.str(1)=="QucsStudio") {
+		if(stoi(match.str(2))>=3) {
+			log_err << "ERROR : QucsStudio 3.x and newer are not supported.\n";
+			return(1);
+			}
+
 		// QucsStudio does not provide command line to produce netlist
 		// so, as formats are mostly compatible, let's try to replace the
 		// header and use Qucs instead
@@ -179,7 +199,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 
 		cout << "Conversion to Qucs format... ";
 		ofstream f_tmp(n_tmp.c_str());
-		if(!f_tmp) {
+		if(f_tmp.fail()) {
 			log_err << "ERROR : Cannot open " << n_tmp << "\n";
 			return(1);
 			}
@@ -198,11 +218,15 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 				}
 			}
 		cout << "OK" << endl;
-		cout << "Temporary schematic : " << n_tmp << endl;
+		cout << "Temporary schematic file : " << n_tmp << endl;
 		
 		f_tmp.close();
 		f_sch.close();
-		open_file(f_sch, n_tmp);
+		f_sch.open(n_tmp.c_str());
+		if(f_sch.fail()) {
+			log_err << "ERROR : Cannot open " << n_tmp << "\n";
+			return(1);
+			}
 	} else {
 		log_err << "ERROR : " << data.n_sch << " appears to be neither a Qucs nor a QucsStudio schematic\n";
 		return(1);
@@ -222,31 +246,111 @@ int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
 		return(2);
 	} else {
 		cout << "OK" << endl;
-		cout << "Netlist : " << n_net << endl;
 		return(0);
 		}
 	}
 
-void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
+long double SchParser::process_field(vector<pair<string, long double>> const& variables, string const variable, string const value, string const s_sci, string const s_eng, string const label, bool const is_length) {
+	if(variable!="") {
+		for(pair<string, long double> it : variables) {
+			if(it.first==variable) {
+				return(it.second*(is_length ? 1000 : 1));
+				}
+			}
+		log_err << "WARNING : Variable not found in component " << label << " : " << variable << " -> Assigned to 0. Try to start a simulation.\n";
+		return(0);
+	} else {
+		return(stold(check_void(value, label))*suffix(s_sci, s_eng, is_length));
+		}
+	}
+
+void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double>>& variables) {
+	string line;
+	string text;
+	smatch match;
+	static regex const r_indep("^<indep (.*) 1>$");
+
+	// g1 variable    g2 "()"    g3 value    g4 scientific
+	static regex const r_variable("<indep (.*) 1>\n  ((\\+?-?[0-9.]*)((e(?:-?|\\+?)[0-9]+)?))\n<\\/indep>");
+
+	cout << endl << "Reading data file... " << endl;
+
+	// Variable are 3 lines "<indep>" blocks, so do not buffer too long
+	// "<indep>" blocks as those are not variables.
+	int line_count=0;
+	bool is_in_block=false;
+	while(getline(f_dat, line)) {
+		if(regex_match(line, r_indep)) {
+			line_count=0;
+			is_in_block=true;
+			}
+		if(is_in_block && line_count<5) {
+			text+=line + "\n";
+			line_count++;
+			}
+		if(line=="</indep>") {
+			if(regex_search(text, match, r_variable)) {
+				variables.push_back(make_pair(match.str(1), (stold(check_void(match.str(3), match.str(1))))*suffix(match.str(4), "", false)));
+				cout << "Variable : " << variables.back().first << " = " << variables.back().second << endl;
+				}
+			text.erase();
+			is_in_block=false;
+			}
+		}
+
+	cout << "Reading data file... OK" << endl;
+	}
+
+void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& is_there_eqn) {
 	string line;
 	smatch match;
 
-	static regex const r_field1("^  <([.a-zA-Z]+)");                            //regex group 1
-	static regex const r_field2("^ ( ([^ ]+)){2}");                             //regex group 2
-	static regex const r_field3("^ ( ([^ ]+)){3}");                             //regex group 2
-	static regex const r_field8("^ ( ([^ ]+)){8}");                             //regex group 2
-	static regex const r_field9("^ ( ([^ ]+)){9}");                             //regex group 2
+	// g1 path    g2 absolute
+	static regex const r_dat("^  <DataSet=(((?:[a-zA-Z]:)?[\\/]?).*)>$");
+	static regex const r_path("^(.*\\/)[^\\/]*$");      // g1 path
+	static regex const r_field1("^  <([.a-zA-Z]+)");    //regex group 1
+
+	is_there_eqn=false;
+	f_sch.seekg(0);
+	while(getline(f_sch, line)) {
+		if(line=="</Components>") {
+			break;
+			}
+		if(regex_search(line, match, r_dat)) {
+			if(match.str(2)=="") {
+				n_dat=regex_replace(data.n_sch, r_path, "$1") + match.str(1);
+			} else {
+				n_dat=match.str(1);
+				}
+			}
+		if(regex_search(line, match, r_field1) && match.str(1)=="Eqn") {
+			is_there_eqn=true;
+			break;
+			}
+		}
+	f_sch.seekg(0);
+	}
+
+void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, long double>>& variables, vector<string>& unprintables) {
+	string line;
+	smatch match;
+
+	static regex const r_field1("^  <([.a-zA-Z]+)");    //regex group 1
+	static regex const r_field2("^ ( ([^ ]+)){2}");     //regex group 2
+	static regex const r_field3("^ ( ([^ ]+)){3}");     //regex group 2
+	static regex const r_field8("^ ( ([^ ]+)){8}");     //regex group 2
+	static regex const r_field9("^ ( ([^ ]+)){9}");     //regex group 2
 	static regex const r_quotedfield10_raw("^ ( ([^ ]+)){9}( \"([^\"]*)\" [0-1]{1}){1}"); //regex group 4
 
-	//g5 "()"    g6 value    g7 suffix    g8 scientific    g9 engineer
-	static regex const r_quotedfield10("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){0}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
-	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
-	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
-	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
-	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
-	static regex const r_quotedfield20("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){5}( \"(([0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?))\"){1}");
+	// g5 "()"    g6 value    g7 suffix    g8 scientific    g9 engineer    g10 variable
+	static regex const r_quotedfield10("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){0}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield20("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){5}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
 
-	//read schematic <Components> </Components>
+	// Read schematic <Components> </Components>
 	cout << endl << "Reading schematic... " << endl;
 	while(getline(f_sch, line)) {
 		if(line=="<Components>") {
@@ -326,9 +430,6 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						if(element==type) absent=false;
 						}
 					if(absent) unprintables.push_back(type);
-				} else if(type=="Eqn") {
-					//to be complete...
-					data.tab_all.push_back(shared_ptr<Element>(new Eqn(label, type, mirrorx, R)));
 				} else if(type=="Pac") {
 					//number
 						regex_search(line, match, r_quotedfield10);
@@ -336,15 +437,15 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tNumber : " << N << endl;
 					//impedance
 						regex_search(line, match, r_quotedfield12);
-						long double Z=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double Z=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tImpedance : " << Z << endl;
 					//power
 						regex_search(line, match, r_quotedfield14);
-						long double P=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double P=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tPower : " << P << endl;
 					//frequency
 						regex_search(line, match, r_quotedfield16);
-						long double F=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double F=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tFrequency : " << F << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Pac(label, type, active, mirrorx, 0, N, Z, P, F)));
 				} else if(type==".SP") {
@@ -356,11 +457,11 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 					|| simtype=="log") {
 						//start frequency
 							regex_search(line, match, r_quotedfield12);
-							long double Fstart=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+							long double Fstart=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 							cout << "\tStart frequency : " << Fstart << endl;
 						//stop frequency
 							regex_search(line, match, r_quotedfield14);
-							long double Fstop=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+							long double Fstop=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 							cout << "\tStop frequency : " << Fstop << endl;
 						//step number
 							regex_search(line, match, r_quotedfield16);
@@ -373,27 +474,27 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 				} else if(type=="SUBST") {
 					//relative permittivity
 						regex_search(line, match, r_quotedfield10);
-						long double er=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double er=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tRelative permittivity : " << er << endl;
 					//substrate thickness
 						regex_search(line, match, r_quotedfield12);
-						long double H=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double H=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tSubstrate thickness : " << H << endl;
 					//metal thickness
 						regex_search(line, match, r_quotedfield14);
-						long double T=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double T=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tMetal thickness : " << T << endl;
 					//loss tangent
 						regex_search(line, match, r_quotedfield16);
-						long double tand=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double tand=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tLoss tangent : " << tand << endl;
 					//metal resistivity
 						regex_search(line, match, r_quotedfield18);
-						long double rho=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double rho=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tMetal resistivity : " << rho << endl;
 					//substrate roughness
 						regex_search(line, match, r_quotedfield20);
-						long double D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double D=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tMetal roughness : " << D << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D, data.subst_margin_factor)));
 				} else if(type=="MCORN") {
@@ -403,7 +504,7 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						long double W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, active, mirrorx, R, subst, W)));
 				} else if(type=="MCROSS") {
@@ -413,19 +514,19 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						long double W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W1=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						long double W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W2=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					//width 3
 						regex_search(line, match, r_quotedfield16);
-						long double W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W3=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 3 : " << W3 << endl;
 					//width 4
 						regex_search(line, match, r_quotedfield18);
-						long double W4=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W4=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 4 : " << W4 << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, active, mirrorx, R, subst, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
@@ -435,15 +536,15 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						long double W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
 					//length
 						regex_search(line, match, r_quotedfield14);
-						long double L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double L=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tLength : " << L << endl;
 					//space
 						regex_search(line, match, r_quotedfield16);
-						long double S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double S=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tSpace : " << S << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, active, mirrorx, R, subst, W, L, S)));
 				} else if(type=="MGAP") {
@@ -453,15 +554,15 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						long double W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W1=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						long double W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W2=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					//space
 						regex_search(line, match, r_quotedfield16);
-						long double S=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double S=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tSpace : " << S << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, active, mirrorx, R, subst, W1, W2, S)));
 				} else if(type=="MMBEND") {
@@ -471,7 +572,7 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						long double W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, active, mirrorx, R, subst, W)));
 				} else if(type=="MLIN") {
@@ -481,11 +582,11 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						long double W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
 					//length
 						regex_search(line, match, r_quotedfield14);
-						long double L=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double L=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tLength : " << L << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, active, mirrorx, R, subst, W, L)));
 				} else if(type=="MOPEN") {
@@ -495,7 +596,7 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width
 						regex_search(line, match, r_quotedfield12);
-						long double W=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, active, mirrorx, R, subst, W)));
 				} else if(type=="MRSTUB") {
@@ -505,15 +606,15 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//inner radius
 						regex_search(line, match, r_quotedfield12);
-						long double ri=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double ri=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tInner radius : " << ri << endl;
 					//outer radius
 						regex_search(line, match, r_quotedfield14);
-						long double ro=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double ro=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tOuter radius : " << ro << endl;
 					//alpha
 						regex_search(line, match, r_quotedfield16);
-						long double alpha=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
+						long double alpha=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tAlpha : " << alpha << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, active, mirrorx, R, subst, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
@@ -523,11 +624,11 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						long double W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W1=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						long double W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W2=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, active, mirrorx, R, subst, W1, W2)));
 				} else if(type=="MTEE") {
@@ -537,15 +638,15 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//width 1
 						regex_search(line, match, r_quotedfield12);
-						long double W1=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W1=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 1 : " << W1 << endl;
 					//width 2
 						regex_search(line, match, r_quotedfield14);
-						long double W2=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W2=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 2 : " << W2 << endl;
 					//width 3
 						regex_search(line, match, r_quotedfield16);
-						long double W3=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double W3=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 3 : " << W3 << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, active, mirrorx, R, subst, W1, W2, W3)));
 				} else if(type=="MVIA") {
@@ -555,7 +656,7 @@ void SchParser::parse_schematic(ifstream& f_sch, vector<string>& unprintables) {
 						cout << "\tSubstrat : " << subst << endl;
 					//diameter
 						regex_search(line, match, r_quotedfield12);
-						long double D=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), true);
+						long double D=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tDiameter : " << D << endl;
 					data.tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, active, mirrorx, R, subst, D)));
 					}
@@ -594,13 +695,10 @@ void SchParser::parse_netlist(ifstream& f_net) {
 			//find ielem->label
 				for(shared_ptr<Element> it : data.tab_all) {
 					if(it->getLabel()==label) {
-						if(type=="Eqn"
-						|| type=="SUBST"){
-							//to be complete
-						} else if(type=="MOPEN"
-							   || type=="MRSTUB"
-							   || type=="MSTUB"
-							   || type=="MVIA") {
+						if(type=="MOPEN"
+						|| type=="MRSTUB"
+						|| type=="MSTUB"
+						|| type=="MVIA") {
 							//net 1
 								regex_search(line, match, r_net1);
 								string net1=match.str(2);
@@ -720,7 +818,7 @@ void SchParser::warn_unprintable(vector<string> const& unprintables) {
 		}
 	}
 
-void SchParser::rm_tmp_files(initializer_list<string> args) {
+void SchParser::rm_tmp_files(initializer_list<string> const args) {
 	if(!data.keep_tmp_files) {
 		QProcess process_rm;
 		string str_cmd;
@@ -744,15 +842,15 @@ void SchParser::rm_tmp_files(initializer_list<string> args) {
 	}
 
 long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) {
-//convert suffix into multiplicator
-	static regex  const r_sci("^e(-?)([0-9]*)$");    //g1 signe    g2 exposant
+// Convert suffix into multiplicator
+	static regex  const r_sci("^e(-?|\\+?)([0-9]*)$");    // g1 signe    g2 exposant
 	smatch match;
 	long double multiplicator=1;
 
-//scientific suffix
+// Scientific suffix
 	if(s_sci!="") {
 		regex_search(s_sci, match, r_sci);
-		if(match.str(1)=="") {
+		if(match.str(1)=="" || match.str(1)=="+") {
 			for(int i=0;i<stoi(match.str(2));i++) {
 				multiplicator*=10;
 				}
@@ -763,7 +861,7 @@ long double SchParser::suffix(string const s_sci, string const s_eng, bool const
 			}
 		}
 
-//engineer suffix
+// Engineer suffix
 	if(s_eng=="E" || s_eng=="Em" || s_eng=="EHz" || s_eng=="EOhm" || s_eng=="EdBm") {
 		multiplicator*=1000000000000000000;
 	} else if(s_eng=="P" || s_eng=="Pm" || s_eng=="PHz" || s_eng=="POhm" || s_eng=="PdBm") {
@@ -817,5 +915,3 @@ string SchParser::mstub_shift(bool const xy, string const str, string const r) {
 	else if(r=="3") return(xy ? str : to_string(stoi(str)+10));
 	else return(str); // Never happens
 	}
-
-#pragma GCC diagnostic pop

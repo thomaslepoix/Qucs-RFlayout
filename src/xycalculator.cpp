@@ -92,11 +92,13 @@ void XyCalculator::resolve_pac_shapes(void) {
 	}
 
 void XyCalculator::place_elements(void) {
+	if(!data.tab_all.size())
+		return;
 
 //variables
 	vector<shared_ptr<Element>> tab_undone=data.tab_all;
 	stack<shared_ptr<Element>> buffer;
-	shared_ptr<Element> current=tab_undone[0];
+	shared_ptr<Element> current=tab_undone.front();
 	shared_ptr<Element> next=nullptr;
 
 	long double prev_xstep=0;
@@ -130,7 +132,7 @@ void XyCalculator::place_elements(void) {
 				cout << "Current label : " << current->getLabel() << endl;
 			} else {
 				if(tab_undone.size()) {
-					current=tab_undone[0];
+					current=tab_undone.front();
 					data.all_blocks.push_back(shared_ptr<Block>(new Block()));
 					add_to_block(data.all_blocks.back(), current);
 					cout << "End of a block : Next from undone elements" << endl;
@@ -403,8 +405,7 @@ void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_p
 
 int XyCalculator::add_to_block(shared_ptr<Block>& block, shared_ptr<Element> const& element) {
 //add geometric element if not already present
-	if(element->getType()=="Eqn"
-	|| element->getType()=="SUBST"
+	if(element->getType()=="SUBST"
 	|| element->getType()==".SP") {
 		return(1);
 		}

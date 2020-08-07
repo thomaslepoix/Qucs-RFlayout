@@ -34,20 +34,14 @@ LayoutWriter::LayoutWriter(Data& _data) :
 
 int LayoutWriter::run(vector<string>* out_names) {
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas" //below warning not ignorable with gcc
-#pragma GCC diagnostic ignored "-Wunknown-escape-sequence" //thrown by regex strings
-
 //variables
-	static regex const r_sch("\.sch$");
-	static regex const r_basename("^.*?([^\/]*)\.sch$"); // g1 basename
+	static regex const r_sch("\\.sch$");
+	static regex const r_basename("^.*?([^\\/]*)\\.sch$"); // g1 basename
 	static regex const r_out("(^.*?)\\/?$");
 	static regex const r_empty("^$");
 	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
 	string n_out=regex_replace(data.out_dir, r_empty, "./");
 	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1");
-
-#pragma GCC diagnostic pop
 
 //check
 	int ret=0;
@@ -135,9 +129,9 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 		}
 
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y);
-	if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
-	if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y);
-	if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
+	else if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
+	else if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y);
+	else if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
 	if(out_names) out_names->push_back(n_out); //success message to stdout in GUI mode
 
 	if(f_out.fail()) {
@@ -258,7 +252,7 @@ void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double co
 		if(!it->getActive())
 			continue;
 		type=it->getType();
-		if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+		if(type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="MCORN"
 				||type=="MCROSS"
@@ -323,7 +317,7 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 		if(!it->getActive())
 			continue;
 		type=it->getType();
-		if(type=="Eqn" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+		if(type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();
@@ -438,7 +432,7 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 		if(!it->getActive())
 			continue;
 		type=it->getType();
-		//if(type=="Eqn" || type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
+		//if(type=="Pac" || type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP")
 			//nothing to do
 		if(type=="MVIA") {
 			f_out << "    ha:via." << n++ << " {"
@@ -3122,7 +3116,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		if(!it->getActive())
 			continue;
 		type=it->getType();
-		if(type=="Eqn" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
+		if(type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="MCORN"
 		       || type=="MLIN") {
