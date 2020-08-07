@@ -36,9 +36,6 @@ Pac::Pac(string _label,
 	m_l(0.0)
 	{}
 
-Pac::~Pac() {
-	}
-
 string Pac::getDescriptor(void) {
 	return(m_descriptor);
 	}

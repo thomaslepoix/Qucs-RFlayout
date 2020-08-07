@@ -29,9 +29,6 @@ Mvia::Mvia(string _label,
 	m_d(_d)
 	{}
 
-Mvia::~Mvia() {
-	}
-
 string Mvia::getDescriptor(void) {
 	return(m_descriptor);
 	}

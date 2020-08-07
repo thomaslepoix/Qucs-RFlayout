@@ -33,9 +33,6 @@ Mgap::Mgap(string _label,
 	m_s(_s)
 	{}
 
-Mgap::~Mgap() {
-	}
-
 string Mgap::getDescriptor(void) {
 	return(m_descriptor);
 	}

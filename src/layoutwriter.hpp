@@ -39,6 +39,7 @@ private:
 
 public:
 	LayoutWriter(Data& _data);
+	~LayoutWriter(void)=default;
 	int run(std::vector<std::string>* out_names=nullptr);
 };
 

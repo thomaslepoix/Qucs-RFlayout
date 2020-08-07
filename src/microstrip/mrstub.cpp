@@ -37,9 +37,6 @@ Mrstub::Mrstub(string _label,
 	m_l=sqrt((m_ri*m_ri)-((m_w/2)*(m_w/2)));
 	}
 
-Mrstub::~Mrstub() {
-	}
-
 string Mrstub::getDescriptor(void) {
 	return(m_descriptor);
 	}

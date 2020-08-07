@@ -36,7 +36,7 @@ public :
 			long double _fstart,
 			long double _fstop,
 			unsigned long _n);
-	~Sp();
+	~Sp(void)=default;
 	std::string getDescriptor(void) override;
 	long double getFstart(void) override;
 	long double getFstop(void) override;

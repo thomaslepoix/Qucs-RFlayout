@@ -40,7 +40,7 @@ public :
 			std::string _subst,
 			long double _w1,
 			long double _w2);
-	~Mstep();
+	~Mstep(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW1(void) override;
 	long double getW2(void) override;

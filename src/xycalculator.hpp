@@ -50,6 +50,7 @@ private:
 
 public:
 	XyCalculator(Data& _data);
+	~XyCalculator(void)=default;
 
 	// Interface functions
 	int run(void);

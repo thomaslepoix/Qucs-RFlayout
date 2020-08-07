@@ -31,9 +31,6 @@ Mstep::Mstep(string _label,
 	m_w2(_w2)
 	{}
 
-Mstep::~Mstep() {
-	}
-
 string Mstep::getDescriptor(void) {
 	return(m_descriptor);
 	}

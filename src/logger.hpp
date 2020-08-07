@@ -27,6 +27,9 @@ class Loggable {
 private:
 	friend class Logger;
 	virtual void log(std::stringstream& in);
+public:
+	Loggable(void)=default;
+	~Loggable(void)=default;
 };
 
 class Logger {
@@ -45,6 +48,7 @@ public:
 	Loggable* obj=nullptr;
 
 	Logger(void);
+	~Logger(void)=default;
 	void set_mode(bool gui);
 };
 

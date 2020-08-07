@@ -36,6 +36,7 @@ private:
 
 public:
 	Converter(Data& data);
+	~Converter(void)=default;
 
 	void reset(std::string n_sch, std::string out_dir, std::string out_format);
 	void clear(void);

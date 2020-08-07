@@ -35,9 +35,6 @@ Mcross::Mcross(string _label,
 	m_w4(_w4)
 	{}
 
-Mcross::~Mcross() {
-	}
-
 string Mcross::getDescriptor(void) {
 	return(m_descriptor);
 	}

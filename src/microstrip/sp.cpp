@@ -33,9 +33,6 @@ Sp::Sp(string _label,
 	m_n(_n)
 	{}
 
-Sp::~Sp() {
-	}
-
 string Sp::getDescriptor(void) {
 	return(m_descriptor);
 	}

@@ -36,7 +36,7 @@ class MainWindow : public QMainWindow, public Loggable {
 
 public:
 	explicit MainWindow(Data& _data, QWidget* parent=0);
-	~MainWindow();
+	~MainWindow(void);
 
 private slots:
 	void on_pb_read_clicked(void);

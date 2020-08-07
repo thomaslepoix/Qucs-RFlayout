@@ -46,7 +46,7 @@ public :
 			long double _w1,
 			long double _w2,
 			long double _w3);
-	~Mtee();
+	~Mtee(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW1(void) override;
 	long double getW2(void) override;

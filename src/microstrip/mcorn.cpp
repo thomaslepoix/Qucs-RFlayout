@@ -29,9 +29,6 @@ Mcorn::Mcorn(string _label,
 	m_w(_w)
 	{}
 
-Mcorn::~Mcorn() {
-	}
-
 string Mcorn::getDescriptor(void) {
 	return(m_descriptor);
 	}

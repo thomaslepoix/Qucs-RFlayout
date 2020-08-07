@@ -50,7 +50,7 @@ public :
 			long double _w2,
 			long double _w3,
 			long double _w4);
-	~Mcross();
+	~Mcross(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW1(void) override;
 	long double getW2(void) override;

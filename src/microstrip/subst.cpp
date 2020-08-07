@@ -60,9 +60,6 @@ Subst::Subst(Subst const* _subst) :
 	m_margin(_subst->m_margin)
 	{}
 
-Subst::~Subst() {
-	}
-
 string Subst::getDescriptor(void) {
 	return(m_descriptor);
 	}

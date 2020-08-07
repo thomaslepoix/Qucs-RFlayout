@@ -42,7 +42,7 @@ public :
 			std::string _subst,
 			long double _w,
 			long double _l);
-	~Mlin();
+	~Mlin(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;

@@ -36,6 +36,7 @@ public:
 	long double margin;
 
 	Block(void);
+	~Block(void)=default;
 	void shift(long double const x, long double const y);
 	void set_extrem_pos(void);
 	void print_extrem_pos(void);

@@ -33,9 +33,6 @@ Mcoupled::Mcoupled(string _label,
 	m_s(_s)
 	{}
 
-Mcoupled::~Mcoupled() {
-	}
-
 string Mcoupled::getDescriptor(void) {
 	return(m_descriptor);
 	}

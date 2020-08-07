@@ -43,7 +43,7 @@ public :
 			long double _ri,
 			long double _ro,
 			long double _alpha);
-	~Mrstub();
+	~Mrstub(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;

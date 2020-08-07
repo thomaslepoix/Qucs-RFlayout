@@ -44,7 +44,7 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 		ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
 		}
 	
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow(void) {
 	delete ui;
 	}
 

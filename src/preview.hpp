@@ -32,7 +32,7 @@ class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 //	Q_OBJECT
 public :
 	explicit Preview(QWidget *parent=0);
-	~Preview();
+	~Preview(void)=default;
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
 	void resetView(void);
 

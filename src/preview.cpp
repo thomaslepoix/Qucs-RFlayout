@@ -25,9 +25,6 @@ using namespace std;
 Preview::Preview(QWidget* parent) : QGLWidget(parent), QOpenGLFunctions_2_0() {
 	}
 
-Preview::~Preview() {
-	}
-
 void Preview::initializeGL() {
 	initializeOpenGLFunctions();
 

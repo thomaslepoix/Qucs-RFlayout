@@ -48,7 +48,7 @@ public :
 			long double _w,
 			long double _l,
 			long double _s);
-	~Mcoupled();
+	~Mcoupled(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;

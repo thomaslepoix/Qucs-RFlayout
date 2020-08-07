@@ -34,9 +34,6 @@ Element::Element(string _label,
 	m_subst(_subst)
 	{}
 
-Element::~Element() {
-	}
-
 string Element::getLabel(void) {
 	return(m_label);
 	}

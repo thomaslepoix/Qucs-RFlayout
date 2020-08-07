@@ -29,9 +29,6 @@ Mopen::Mopen(string _label,
 	m_w(_w)
 	{}
 
-Mopen::~Mopen() {
-	}
-
 string Mopen::getDescriptor(void) {
 	return(m_descriptor);
 	}

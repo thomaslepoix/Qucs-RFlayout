@@ -45,7 +45,7 @@ public :
 			long double _z,
 			long double _p,
 			long double _f);
-	~Pac();
+	~Pac(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;

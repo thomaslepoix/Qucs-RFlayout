@@ -53,6 +53,7 @@ private:
 
 public:
 	SchParser(Data& _data);
+	~SchParser(void)=default;
 	int run(void);
 };
 

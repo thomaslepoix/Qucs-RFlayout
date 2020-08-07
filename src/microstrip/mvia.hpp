@@ -36,7 +36,7 @@ public :
 			short _r,
 			std::string _subst,
 			long double _d);
-	~Mvia();
+	~Mvia(void)=default;
 	std::string getDescriptor(void) override;
 	long double getD(void) override;
 	std::string getNet1(void) override;

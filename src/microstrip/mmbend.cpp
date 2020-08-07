@@ -29,9 +29,6 @@ Mmbend::Mmbend(string _label,
 	m_w(_w)
 	{}
 
-Mmbend::~Mmbend() {
-	}
-
 string Mmbend::getDescriptor(void) {
 	return(m_descriptor);
 	}

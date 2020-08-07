@@ -51,7 +51,7 @@ public :
 			long double _d,
 			unsigned int _margin_factor);
 	Subst(Subst const* _subst);
-	~Subst();
+	~Subst(void)=default;
 	std::string getDescriptor(void) override;
 	long double getL(void) override;
 	long double getW(void) override;

@@ -33,9 +33,6 @@ Mtee::Mtee(string _label,
 	m_w3(_w3)
 	{}
 
-Mtee::~Mtee() {
-	}
-
 string Mtee::getDescriptor(void) {
 	return(m_descriptor);
 	}

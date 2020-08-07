@@ -31,9 +31,6 @@ Mlin::Mlin(string _label,
 	m_l(_l)
 	{}
 
-Mlin::~Mlin() {
-	}
-
 string Mlin::getDescriptor(void) {
 	return(m_descriptor);
 	}
