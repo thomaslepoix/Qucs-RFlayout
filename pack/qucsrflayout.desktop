@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Qucs-RFlayout
+Exec=qucsrflayout
+Icon=qucsrflayout
+Type=Application
+Comment=Export Qucs RF schematics to KiCad layouts & OpenEMS scripts
+Categories=Education;Electronics;
