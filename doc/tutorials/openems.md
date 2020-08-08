@@ -200,7 +200,7 @@ octave lpf.m --only-postprocess --nf2ff-3d --nf2ff-frames 50 --nf2ff-delay 10
 
 ---
 
-You can also modify the angles step (in degree), reduce it to produce better diagrams or grow it to speed the nf2ff computation. 
+You can also modify the angles step (in degree), reduce it to produce better diagrams or grow it to speed the NF2FF computation. 
 
 ```sh
 octave lpf.m --only-postprocess --nf2ff-force --nf2ff-3d --nf2ff-anglestep 1
@@ -360,7 +360,7 @@ Here are the results comparaison Qucs / OpenEMS / Measure :
 
 ![stub_dpl](res/stub_dpl.svg)
 
-Note that the measure range is only 1GHz -> 3GHz.
+Note that the measure range is only 1GHz -> 3GHz, outer this range, the green curve is garbage.
 
 ### Move & resize ports : Center fed patch antenna example <a name="Move_&_resize_ports_Center_fed_patch_antenna_example"></a>
 ### Draw special geometries with Qucs components : Loop patch antenna example <a name="Draw_special_geometries_with_Qucs_components_Loop_patch_antenna_example"></a>
