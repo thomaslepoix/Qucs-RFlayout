@@ -3763,6 +3763,235 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n";
 
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "function h = oemsgen_plotVSWR(s, port_n, freq, markers, color, varargin)\n"
+	         "%\n"
+	         "% example:\n"
+	         "%   s11 = port{1}.uf.ref ./ port{1}.uf.inc;\n"
+	         "%   figure;\n"
+	         "%   oemsgen_plotVSWR(s11, '1', freq, 'g');\n"
+	         "%   drawnow;\n"
+	         "%\n"
+	         "\n"
+	         "\tlegend_out = false;\n"
+	         "\tfunit = 1e6;\n"
+	         "\tfunit_name = 'MHz';\n"
+	         "\n"
+	         "\ti = 1;\n"
+	         "\twhile i <= numel(varargin)\n"
+	         "\t\tif (strcmp(varargin{i}, 'legend_out')==1);\n"
+	         "\t\t\tlegend_out = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit')==1);\n"
+	         "\t\t\tfunit = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit_name')==1);\n"
+	         "\t\t\tfunit_name = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telse\n"
+	         "\t\t\twarning('openEMS:oemsgen_plotVSWR', ['unknown argument key: ''' varargin{i} '''']);\n"
+	         "\t\tendif\n"
+	         "\t\ti = i + 1;\n"
+	         "\tendwhile\n"
+	         "\n"
+	         "\thold on;\n"
+	         "\tgrid on;\n"
+	         "\tvswr = (1+(abs(s)))./(1-(abs(s)));\n"
+	         "\tplot(freq/funit, vswr, [color, '-'], 'Linewidth', 2);\n"
+	         "\tfor i = 1:numel(markers)\n"
+	         "\t\tvswr = vswr(find(freq == markers(i)));\n"
+	         "\t\tplot(freq(find(freq == markers(i)))/funit, vswr, ...\n"
+	         "\t\t\t[color, 'o;VSWR', port_n, ' @ ', num2str(freq(find(freq == markers(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
+	         "\t\t\t\"\\n\", num2str(vswr, '%.2f'), ...\n"
+	         "\t\t\t';'], 'linewidth', 2);\n"
+	         "\tendfor\n"
+	         "\tif legend_out\n"
+	         "\t\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif\n"
+	         "\ttitle(['VSWR', port_n]);\n"
+	         "\txlabel(['Frequency (', funit_name, ')']);\n"
+	         "\tylabel('VSWR');\n"
+	         "end\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "function h = oemsgen_plotFeedImpedance(Z, port_n, freq, markers, abs_color, im_color, re_color, varargin)\n"
+	         "%\n"
+	         "% example:\n"
+	         "%   z1 = port{1}.uf.tot./port{1}.if.tot;\n"
+	         "%   figure;\n"
+	         "%   oemsgen_plotFeedImpedance(z1, '1', freq, 'k', 'm', 'g');\n"
+	         "%   drawnow;\n"
+	         "%\n"
+	         "\n"
+	         "\tlegend_out = false;\n"
+	         "\tfunit = 1e6;\n"
+	         "\tfunit_name = 'MHz';\n"
+	         "\n"
+	         "\ti = 1;\n"
+	         "\twhile i <= numel(varargin)\n"
+	         "\t\tif (strcmp(varargin{i}, 'legend_out')==1);\n"
+	         "\t\t\tlegend_out = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit')==1);\n"
+	         "\t\t\tfunit = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit_name')==1);\n"
+	         "\t\t\tfunit_name = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telse\n"
+	         "\t\t\twarning('openEMS:oemsgen_plotFeedImpedance', ['unknown argument key: ''' varargin{i} '''']);\n"
+	         "\t\tendif\n"
+	         "\t\ti = i + 1;\n"
+	         "\tendwhile\n"
+	         "\n"
+	         "\thold on;\n"
+	         "\tgrid on;\n"
+	         "\tplot(freq/funit, abs(Z), [abs_color, '-;|Z', port_n, '|;'], 'Linewidth', 2);\n"
+	         "\tplot(freq/funit, imag(Z), [im_color, '--;Im(Z', port_n, ');'], 'Linewidth', 2);\n"
+	         "\tplot(freq/funit, real(Z), [re_color, '--;Re(Z', port_n, ');'], 'Linewidth', 2);\n"
+	         "\tfor i = 1:numel(markers)\n"
+	         "\t\tz = Z(find(freq == markers(i)));\n"
+	         "\t\tif imag(z) >= 0\n"
+	         "\t\t\tz_str = '+';\n"
+	         "\t\telse\n"
+	         "\t\t\tz_str = '';\n"
+	         "\t\tendif\n"
+	         "\t\tz_str = [num2str(real(z), '%.2f'), z_str, num2str(imag(z), '%.2f'), 'j'];\n"
+	         "\t\tplot(freq(find(freq == markers(i)))/funit, abs(z), ...\n"
+	         "\t\t\t[abs_color, 'o;Z', port_n, ' @ ', num2str(freq(find(freq == markers(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
+	         "\t\t\t\"\\n\", num2str(abs(z), '%.2f'), ' Ω ', z_str, ...\n"
+	         "\t\t\t';'], 'linewidth', 2);\n"
+	         "\t\tplot(freq(find(freq == markers(i)))/funit, imag(z), [im_color, 'o'], 'linewidth', 2);\n"
+	         "\t\tplot(freq(find(freq == markers(i)))/funit, real(z), [re_color, 'o'], 'linewidth', 2);\n"
+	         "\tendfor\n"
+	         "\tif legend_out\n"
+	         "\t\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif\n"
+	         "\ttitle(['Impedance Z', port_n]);\n"
+	         "\txlabel(['Frequency (', funit_name, ')']);\n"
+	         "\tylabel('Impedance (Ω)');\n"
+	         "end\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "function h = oemsgen_plotSParameters(s, names, freq, markers, colors, varargin)\n"
+	         "%\n"
+	         "% example:\n"
+	         "%   figure;\n"
+	         "%   oemsgen_plotSParameters({s11, s21}, {'s11', 's21'}, freq, markers, {'m', 'g'});\n"
+	         "%   drawnow;\n"
+	         "%\n"
+	         "\n"
+	         "\tlegend_out = false;\n"
+	         "\tfunit = 1e6;\n"
+	         "\tfunit_name = 'MHz';\n"
+	         "\n"
+	         "\ti = 1;\n"
+	         "\twhile i <= numel(varargin)\n"
+	         "\t\tif (strcmp(varargin{i}, 'legend_out')==1);\n"
+	         "\t\t\tlegend_out = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit')==1);\n"
+	         "\t\t\tfunit = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit_name')==1);\n"
+	         "\t\t\tfunit_name = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telse\n"
+	         "\t\t\twarning('openEMS:oemsgen_plotSParameters', ['unknown argument key: ''' varargin{i} '''']);\n"
+	         "\t\tendif\n"
+	         "\t\ti = i + 1;\n"
+	         "\tendwhile\n"
+	         "\n"
+	         "\tif numel(s) != numel(names) || numel(s) != numel(colors)\n"
+	         "\t\twarning('openEMS:oemsgen_plotSParameters', 'mismatch beteen s, names and colors parameters cell number');\n"
+	         "\tendif\n"
+	         "\n"
+	         "\thold on;\n"
+	         "\tgrid on;\n"
+	         "\tfor i = 1:numel(s)\n"
+	         "\t\tplot(freq/funit, 20*log10(abs(s{i})), [colors{i}, '-'], 'Linewidth', 2);\n"
+	         "\t\tfor j = 1:numel(markers)\n"
+	         "\t\t\tplot(freq(find(freq == markers(j)))/funit, ...\n"
+	         "\t\t\t\t20*log10(abs(s{i}(find(freq == markers(j))))), ...\n"
+	         "\t\t\t\t[colors{i}, 'o;', names{i}, ' @ ', num2str(freq(find(freq == markers(j)))/funit, '%.2f'), ' ', funit_name, ...\n"
+	         "\t\t\t\t\"\\n\", num2str(20*log10(abs(s{i}(find(freq == markers(j)))))), 'dB', ...\n"
+	         "\t\t\t\t';'], 'linewidth', 2);\n"
+	         "\t\tendfor\n"
+	         "\tendfor\n"
+	         "\tif legend_out\n"
+	         "\t\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif\n"
+	         "\ttitle('S parameters');\n"
+	         "\txlabel(['Frequency (', funit_name, ')']);\n"
+	         "\tylabel('S parameter (dB)');\n"
+	         "end\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n";
+
+	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "function h = oemsgen_plotSmithChart(s, names, freq, markers, color_order, varargin)\n"
+	         "%\n"
+	         "% example:\n"
+	         "%   color_order = [ ...\n"
+	         "%   \t[1, 0, 1]; ... % m\n"
+	         "%   \t[0, 1, 0]];    % g\n"
+	         "%   figure;\n"
+	         "%   oemsgen_plotSmithChart({s11, s21}, {'s11', 's21'}, freq, markers, color_order);\n"
+	         "%   drawnow;\n"
+	         "%\n"
+	         "\n"
+	         "\tlegend_out = false;\n"
+	         "\tfunit = 1e6;\n"
+	         "\tfunit_name = 'MHz';\n"
+	         "\n"
+	         "\ti = 1;\n"
+	         "\twhile i <= numel(varargin)\n"
+	         "\t\tif (strcmp(varargin{i}, 'legend_out')==1);\n"
+	         "\t\t\tlegend_out = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit')==1);\n"
+	         "\t\t\tfunit = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telseif (strcmp(varargin{i}, 'funit_name')==1);\n"
+	         "\t\t\tfunit_name = varargin{i+1};\n"
+	         "\t\t\ti = i + 1;\n"
+	         "\t\telse\n"
+	         "\t\t\twarning('openEMS:oemsgen_plotSmithChart', ['unknown argument key: ''' varargin{i} '''']);\n"
+	         "\t\tendif\n"
+	         "\t\ti = i + 1;\n"
+	         "\tendwhile\n"
+	         "\n"
+	         "\tif numel(s) != numel(names)\n"
+	         "\t\twarning('openEMS:oemsgen_plotSmithChart', 'mismatch beteen s and names parameters cell number');\n"
+	         "\tendif\n"
+	         "\n"
+	         "\tf_index = [];\n"
+	         "\tfor i = 1:numel(markers)\n"
+	         "\t\tf_index = [f_index, find(freq == markers(i))];\n"
+	         "\tendfor\n"
+	         "\n"
+	         "\tset(gca, 'ColorOrder', color_order, 'NextPlot', 'replacechildren');\n"
+	         "\n"
+	         "\tfirst = true;\n"
+	         "\tfor i = 1:numel(s)\n"
+	         "\t\tif first == true\n"
+	         "\t\t\tfirst = false;\n"
+	         "\t\t\th = plotSmith(s{i}, names{i}, freq, f_index);\n"
+	         "\t\telse\n"
+	         "\t\t\th = plotSmith(s{i}, names{i}, freq, f_index, 'nogrid');\n"
+	         "\t\tendif\n"
+	         "\t\tset(h, 'Linewidth', 2);\n"
+	         "\tendfor\n"
+	         "\tif legend_out\n"
+	         "\t\tlegend('Location', 'northeastoutside');\n"
+	         "\tendif\n"
+	         "end\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
+
 	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% POSTPROCESSING\n"
 	         "\n";
 
@@ -3881,34 +4110,32 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "%%%% PLOT S PARAMETERS\n"
-	         "figure;\n"
-	         "hold on;\n"
-	         "grid on;\n";
+	         "s = {};\n"
+	         "names = {};\n"
+	         "colors = {};\n";
+	color=0;
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
-		f_out << "if flag_active_port" << it.first << "\n";
-		color=0;
+		f_out << "if flag_active_port" << it.first << "\n"
+		         "\ts = {s{:}";
 		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
-			f_out << "\tplot(freq/funit, 20*log10(abs(s" << ut.first << it.first << ")), "
-			         "'" << colors[color++%color_max] << "-"/*";s" << ut.first << it.first << ";"*/"', 'Linewidth', 2);\n";
+			f_out << ", s" << ut.first << it.first;
 			}
-		color=0;
+		f_out << "};\n"
+		         "\tnames = {names{:}";
 		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
-			f_out << "\tfor i = 1:numel(f_select)\n"
-			         "\t\tplot(freq(find(freq == f_select(i)))/funit, ...\n"
-			         "\t\t\t20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i))))), ...\n"
-			         "\t\t\t['" << colors[color++%color_max] << "o;s" << ut.first << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
-			         "\t\t\t\"\\n\", num2str(20*log10(abs(s" << ut.first << it.first << "(find(freq == f_select(i)))))), 'dB', ...\n"
-			         "\t\t\t';'], 'linewidth', 2);\n"
-			         "\tendfor\n";
+			f_out << ", 's" << ut.first << it.first << "'";
 			}
-		f_out << "endif;\n";
+		f_out << "};\n"
+		         "\tcolors = {colors{:}";
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			f_out << ", '" << colors[color++%color_max] << "'";
+			}
+		f_out << "};\n"
+		         "endif\n";
 		}
-	f_out << "if flag_legend_out\n"
-	         "legend('Location', 'northeastoutside');\n"
-	         "endif % flag_legend_out\n"
-	         "title('S parameters');\n"
-	         "xlabel(['Frequency (', funit_name, ')']);\n"
-	         "ylabel('S parameter (dB)');\n"
+	f_out << "figure;\n"
+	         "oemsgen_plotSParameters(s, names, freq, f_select, colors, ...\n"
+	         "\t'legend_out', flag_legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	         "drawnow;\n"
 	         "print([path_result, '/', name, '-s', graphics_format]);\n"
 	         "\n";
@@ -3918,69 +4145,28 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "color_order_smith = [ ...\n"
 	         "\tcolor_order(1, :); ...\n"
 	         "\tcolor_order(2, :)];\n"
-
-	         "f_index = [];\n"
-	         "for i = 1:numel(f_select)\n"
-	         "\tf_index = [f_index, find(freq == f_select(i))];\n"
-	         "endfor\n"
-
-//	         "for i = 1:numel(f_select)\n"
-//	         "\t"
-	         "figure;\n"
-//	         "\t"
-	         "set(gca, 'ColorOrder', color_order_smith, 'NextPlot', 'replacechildren');\n"
-//	         "\t"
-	         "first = true;\n";
+	         "s = {};\n"
+	         "names = {};\n";
+	color=0;
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
-		bool is_first=true;
-//		f_out << "\t";
-		f_out << "if flag_active_port" << it.first << "\n";
+		f_out << "if flag_active_port" << it.first << "\n"
+		         "\ts = {s{:}";
 		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
-			if(is_first) {
-				is_first=false;
-//				f_out << "\t";
-				f_out << "if first == true\n"
-//				         "\t"
-				         "\t\tfirst = false;\n"
-//				         "\t"
-				         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index);\n"
-//				         "\t"
-//	//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)));\n"
-//				         "\t"
-				         "\telse\n"
-//				         "\t"
-				         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
-//				         "\t"
-//	//			         "\t\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
-//				         "\t"
-				         "\tendif\n"
-//				         "\t"
-				         "\tset(h, 'Linewidth', 2);\n";
-			} else {
-//				f_out << "\t";
-				f_out << "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, f_index, 'nogrid');\n"
-//				         "\t"
-//	//			         "\th = plotSmith(s" << ut.first << it.first << ", 's" << ut.first << it.first << "', freq, find(freq == f_select(i)), 'nogrid');\n"
-//				         "\t"
-				         "\tset(h, 'Linewidth', 2);\n";
-				}
+			f_out << ", s" << ut.first << it.first;
 			}
-//		f_out << "\t";
-		f_out << "endif\n";
+		f_out << "};\n"
+		         "\tnames = {names{:}";
+		for(pair<unsigned int, shared_ptr<Element>> ut : ports) {
+			f_out << ", 's" << ut.first << it.first << "'";
+			}
+		f_out << "};\n"
+		         "endif\n";
 		}
-//	f_out << "\t";
-	f_out << "if flag_legend_out\n"
-	         "legend('Location', 'northeastoutside');\n"
-	         "endif % flag_legend_out\n"
-//	         "\t"
+	f_out << "figure;\n"
+	         "oemsgen_plotSmithChart(s, names, freq, f_select, color_order_smith, ...\n"
+	         "\t'legend_out', flag_legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	         "drawnow;\n"
-//	         "\t"
-	         "print([path_result, '/', name, '-smith', ...\n"
-//	         "\t"
-//	//         "\t'@', num2str(f_select(i), frequency_format), ...\n"
-//	         "\t"
-	         "\tgraphics_format]);\n"
-//	         "endfor\n"
+	         "print([path_result, '/', name, '-smith', graphics_format]);\n"
 	         "\n";
 
 	color=6;
@@ -3988,42 +4174,10 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
 		f_out << "% Port " << it.first << "\n"
 		         "if flag_active_port" << it.first << "\n"
+		         "\tz" << it.first << " = port{" << it.first << "}.uf.tot./port{" << it.first << "}.if.tot;\n"
 		         "\tfigure;\n"
-		         "\thold on;\n"
-		         "\tgrid on;\n"
-		         "\tZ" << it.first << " = port{" << it.first << "}.uf.tot./port{" << it.first << "}.if.tot;\n";
-		f_out << "\tplot(freq/funit, abs(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "-;|Z" << it.first << "|;', 'Linewidth', 2);\n";
-		f_out << "\tplot(freq/funit, imag(Z" << it.first << "), "
-		         "'" << colors[color++%color_max] << "--;Im(Z" << it.first << ");', 'Linewidth', 2);\n";
-		f_out << "\tplot(freq/funit, real(Z" << it.first << "), "
-		         "'" << colors[color%color_max] << "--;Re(Z" << it.first << ");', 'Linewidth', 2);\n";
-
-		color=6;
-		f_out<< "\tfor i = 1:numel(f_select)\n"
-
-		         "\t\tz = Z" << it.first << "(find(freq == f_select(i)));\n"
-		         "\t\tif imag(z) >= 0\n"
-		         "\t\t\tz_str = '+';\n"
-		         "\t\telse\n"
-		         "\t\t\tz_str = '';\n"
-		         "\t\tendif\n"
-		         "\t\tz_str = [num2str(real(z), '%.2f'), z_str, num2str(imag(z), '%.2f'), 'j'];\n"
-
-		         "\t\tplot(freq(find(freq == f_select(i)))/funit, abs(z), ...\n"
-		         "\t\t\t['" << colors[color++%color_max] << "o;Z" << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
-		         "\t\t\t\"\\n\", num2str(abs(z), '%.2f'), ' Ω ', z_str, ...\n"
-		         "\t\t\t';'], 'linewidth', 2);\n";
-		f_out << "\t\tplot(freq(find(freq == f_select(i)))/funit, imag(z), '" << colors[color++%color_max] << "o', 'linewidth', 2);\n";
-		f_out << "\t\tplot(freq(find(freq == f_select(i)))/funit, real(z), '" << colors[color++%color_max] << "o', 'linewidth', 2);\n"
-		         "\tendfor\n"
-
-		         "\tif flag_legend_out\n"
-		         "\tlegend('Location', 'northeastoutside');\n"
-		         "\tendif % flag_legend_out\n"
-		         "\ttitle('Impedance Z" << it.first << "');\n"
-		         "\txlabel(['Frequency (', funit_name, ')']);\n"
-		         "\tylabel('Impedance (Ω)');\n"
+		         "\toemsgen_plotFeedImpedance(z" << it.first << ", '" << it.first << "', freq, f_select, '" << colors[color%color_max] << "', '" << colors[(color+1)%color_max] << "', '" << colors[(color+2)%color_max] << "', ...\n"
+		         "\t\t'legend_out', flag_legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 		         "\tdrawnow;\n"
 		         "\tprint([path_result, '/', name, '-z" << it.first << "', graphics_format]);\n"
 		         "endif\n"
@@ -4036,29 +4190,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		f_out << "% Port " << it.first << "\n"
 		         "if flag_active_port" << it.first << "\n"
 		         "\tfigure;\n"
-		         "\thold on;\n"
-		         "\tgrid on;\n"
-		         "\tvswr" << it.first << " = (1+(abs(s" << it.first << it.first << ")))./(1-(abs(s" << it.first << it.first << ")));\n"
-		         "\tplot(freq/funit, vswr" << it.first << ", "
-		         "'" << colors[color%color_max] << "-', 'Linewidth', 2);\n"
-		         "\tfor i = 1:numel(f_select)\n"
-		         "\t\tvswr = vswr" << it.first << "(find(freq == f_select(i)));\n"
-		         "\t\tplot(freq(find(freq == f_select(i)))/funit, vswr, ...\n"
-		         "\t\t\t['" << colors[color%color_max] << "o;VSWR" << it.first << " @ ', num2str(freq(find(freq == f_select(i)))/funit, '%.2f'), ' ', funit_name, ...\n"
-		         "\t\t\t\"\\n\", num2str(vswr, '%.2f'), ...\n"
-		         "\t\t\t';'], 'linewidth', 2);\n"
-		         "\tendfor\n"
-		         "\tif flag_legend_out\n"
-		         "\tlegend('Location', 'northeastoutside');\n"
-		         "\tendif % flag_legend_out\n"
-		         "\ttitle('VSWR" << it.first << "');\n"
-		         "\txlabel(['Frequency (', funit_name, ')']);\n"
-		         "\tylabel('VSWR');\n"
+		         "\toemsgen_plotVSWR(s" << it.first << it.first << ", '" << it.first << "', freq, f_select, '" << colors[color++%color_max] << "', ...\n"
+		         "\t\t'legend_out', flag_legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 		         "\tdrawnow;\n"
 		         "\tprint([path_result, '/', name, '-vswr" << it.first << "', graphics_format]);\n"
 		         "endif\n"
 		         "\n";
-		color=color+1%color_max;
 		}
 
 //	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
