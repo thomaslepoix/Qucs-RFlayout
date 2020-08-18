@@ -2779,6 +2779,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_preprocess = true;\n"
 	         "flag_postprocess = true;\n"
 	         "flag_legend_out = false;\n"
+	         "flag_conductingsheet = true;\n"
 	         "flag_nf2ff = true;\n"
 	         "flag_nf2ff_mode = 0;\n"
 	         "flag_nf2ff_3d = false;\n"
@@ -2827,7 +2828,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(\"\\t--no-gui               Do not open AppCSXCAD.\");\n"
 	         "\t\tdisp('');\n"
 	         "\t\tdisp('Preprocessing options:');\n"
-	         "\t\tdisp(\"\\t--no-dump              Do not dump Et field, Ht field, current and current density\");\n"
+	         "\t\tdisp(\"\\t--no-dump              Do not dump Et field, Ht field, current and current density.\");\n"
+	         "\t\tdisp(\"\\t--no-conductingsheet   Use 3D perfect metal boxes instead of 2D conducting sheets.\");\n"
 	         "\t\tdisp(\"\\t--no-highresmesh       No high resolution mesh for non orthogonal shapes.\");\n"
 	         "\t\tdisp(\"\\t--no-metalresmesh      No particular mesh lines (thirds rule) at metal resolution for orthogonal shapes.\");\n"
 	         "\t\tdisp(\"\\t--no-smoothmesh        Only particular mesh lines.\");\n"
@@ -2932,6 +2934,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\ti = i + 1;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-dump')\n"
 	         "\t\tflag_dump = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--no-conductingsheet')\n"
+	         "\t\tflag_conductingsheet = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-mesh')\n"
 	         "\t\tflag_mesh = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-highresmesh')\n"
@@ -3115,12 +3119,18 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", 0]);\n"
 //			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".metal');\n"
-//			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".metal', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
+//			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".metal', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t*unit);\n" //TODO thickness? wtf & not well tested
+			         "if flag_conductingsheet\n"
+			         "CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".ground', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t*unit);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".ground', 2, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h]);\n"
+			         "else % flag_conductingsheet\n"
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << ".ground');\n"
-			         "%CSX = AddConductingSheet(CSX, '" << it->getLabel() << ".ground', " << it->getLabel() << ".metal.cond, " << it->getLabel() << ".metal.t);\n" //TODO thickness? wtf & not well tested
-			         "CSX = AddBox(CSX, '" << it->getLabel() << ".ground', 1, ...\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << ".ground', 2, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", (-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t)], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", -" << it->getLabel() << ".substrate.h]);\n"
+			         "endif % flag_conductingsheet\n"
 			         "\n";
 			}
 		}
@@ -3138,11 +3148,19 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "endif % flag_preprocess\n" <<
 			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
 			         "if flag_preprocess\n"
+			         "if flag_conductingsheet\n"
+			         "CSX = AddConductingSheet(CSX, '" << it->getLabel() << "', " << it->getSubst() << ".metal.cond, " << it->getSubst() << ".metal.t*unit);\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 2, ...\n"
+//			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
+			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
+			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", 0]);\n"
+			         "else % flag_conductingsheet\n"
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
-			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 2, ...\n"
 //			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
+			         "endif % flag_conductingsheet\n"
 			         "\n";
 		} else if(type=="MCOUPLED") {
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
@@ -3150,11 +3168,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
 			         "if flag_preprocess\n"
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
-			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 2, ...\n"
 //			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getP(0, X, R, ABS)+offset_x << ", " << -(it->getP(0, Y, R, ABS)+offset_y) << ", 0], ...\n"
 			         "\t[" << it->getP(2, X, R, ABS)+offset_x << ", " << -(it->getP(2, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
-			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 2, ...\n"
 //			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getP(4, X, R, ABS)+offset_x << ", " << -(it->getP(4, Y, R, ABS)+offset_y) << ", 0], ...\n"
 			         "\t[" << it->getP(6, X, R, ABS)+offset_x << ", " << -(it->getP(6, Y, R, ABS)+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
@@ -3172,7 +3190,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				f_out << "p(1, " << i+1 << ") = " << it->getP(i, X, R, ABS)+offset_x << "; p(2, " << i+1 << ") = " << -(it->getP(i, Y, R, ABS)+offset_y) << ";\n";
 				}
 			f_out << "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
-			         "CSX = AddLinPoly(CSX, '" << it->getLabel() << "', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
+			         "CSX = AddLinPoly(CSX, '" << it->getLabel() << "', 2, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
 //			f_out << "CSX = AddLinPoly(CSX, '" << it->getSubst() << ".metal', 1, 2, 0, p, " << it->getSubst() << ".metal.t);\n"
 			         "\n";
 		} else if(type=="MVIA") {
@@ -3180,7 +3198,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			         "endif % flag_preprocess\n" <<
 			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
-			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 1, ...\n"
+			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 2, ...\n"
 //			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
 			         "\t[" << it->getX()+it->getD()/2+offset_x << ", " << -(it->getY()+it->getD()/2+offset_y) << ", (-" << it->getSubst() << ".substrate.h - " << it->getSubst() << ".metal.t)], ...\n"
 			         "\t[" << it->getX()-it->getD()/2+offset_x << ", " << -(it->getY()-it->getD()/2+offset_y) << ", " << it->getSubst() << ".metal.t]);\n"
@@ -3311,15 +3329,31 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	f_out << "mesh.z = [mesh.z, ...\n";
 	for(shared_ptr<Element> it : block.elements) {
-		type=it->getType();
-		if(type=="SUBST") {
+		if(it->getType()=="SUBST") {
+			f_out << "\t(-" << it->getLabel() << ".substrate.h/3), ...\n"
+			         "\t(-2*" << it->getLabel() << ".substrate.h/3), ...\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "if flag_conductingsheet\n"
+	         "mesh.z = [mesh.z, ...\n";
+	for(shared_ptr<Element> it : block.elements) {
+		if(it->getType()=="SUBST") {
+			f_out << "\t(0), ...\n"
+			         "\t(-" << it->getLabel() << ".substrate.h), ...\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "else % flag_conductingsheet\n"
+	         "mesh.z = [mesh.z, ...\n";
+	for(shared_ptr<Element> it : block.elements) {
+		if(it->getType()=="SUBST") {
 			f_out << "\t(" << it->getLabel() << ".metal.t/2), ...\n"
-			         "\t(-" << it->getLabel() << ".substrate.h/3), ...\n"
-			         "\t(-2*" << it->getLabel() << ".substrate.h/3), ...\n"
 			         "\t(-" << it->getLabel() << ".substrate.h - " << it->getLabel() << ".metal.t/2), ...\n";
 			}
 		}
-	f_out << "\t];\n";
+	f_out << "\t];\n"
+	         "endif % flag_conductingsheet\n";
 
 //	f_out << "mesh.z = linspace(" << -substrate.h-copper.h << ", "copper.h", 4);\n";
 
@@ -3360,10 +3394,17 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		         it.second->getLabel() << ".Z = (" << it.second->getZ() << ");\n" <<
 		         it.second->getLabel() << ".P = (" << it.second->getDbm() << ");\n" <<
 		         it.second->getLabel() << ".F = (" << it.second->getF() << ");\n" <<
+		         "if flag_conductingsheet\n"
+		         "[CSX port{" << it.second->getN() << "}] = AddLumpedPort(CSX, 5, " << it.second->getN() << ", " << it.second->getLabel() << ".Z, ...\n"
+		         "\t[" << it.second->getP(0, X, R, ABS)+offset_x << ", " << -(it.second->getP(0, Y, R, ABS)+offset_y) << ", (-" << it.second->getSubst() << ".substrate.h)" << "], ...\n"
+		         "\t[" << it.second->getP(2, X, R, ABS)+offset_x << ", " << -(it.second->getP(2, Y, R, ABS)+offset_y) << ", (0)" << "], ...\n"
+		         "\t[0 0 1], flag_active_port" << it.first << ");\n"
+		         "else % flag_conductingsheet\n"
 		         "[CSX port{" << it.second->getN() << "}] = AddLumpedPort(CSX, 5, " << it.second->getN() << ", " << it.second->getLabel() << ".Z, ...\n"
 		         "\t[" << it.second->getP(0, X, R, ABS)+offset_x << ", " << -(it.second->getP(0, Y, R, ABS)+offset_y) << ", (-" << it.second->getSubst() << ".substrate.h - " << it.second->getSubst() << ".metal.t)" << "], ...\n"
 		         "\t[" << it.second->getP(2, X, R, ABS)+offset_x << ", " << -(it.second->getP(2, Y, R, ABS)+offset_y) << ", (" << it.second->getSubst() << ".metal.t)" << "], ...\n"
 		         "\t[0 0 1], flag_active_port" << it.first << ");\n"
+		         "endif % flag_conductingsheet\n"
 		         "\n";
 		}
 
