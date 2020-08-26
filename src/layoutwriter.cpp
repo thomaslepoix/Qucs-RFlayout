@@ -84,7 +84,7 @@ int LayoutWriter::run(vector<string>* out_names) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
 					out=n_out+"-s"+to_string(++i)+data.out_format;
-					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
 
@@ -108,7 +108,7 @@ int LayoutWriter::run(vector<string>* out_names) {
 			prev=it;
 			}
 		out=n_out+"-s"+to_string(++i)+data.out_format;
-		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
 		Block block;
@@ -2788,6 +2788,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "flag_nf2ff_phistep = 5;\n"
 	         "flag_nf2ff_thetastep = 5;\n"
 	         "flag_dump = true;\n"
+	         "flag_mur = false;\n"
 	         "flag_mesh = true;\n"
 	         "flag_highresmesh = true;\n"
 	         "flag_metalresmesh = true;\n"
@@ -2834,6 +2835,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\tdisp(\"\\t--no-metalresmesh      No particular mesh lines (thirds rule) at metal resolution for orthogonal shapes.\");\n"
 	         "\t\tdisp(\"\\t--no-smoothmesh        Only particular mesh lines.\");\n"
 	         "\t\tdisp(\"\\t--no-mesh              Do not mesh any shape.\");\n"
+	         "\t\tdisp(\"\\t--mur                  Use MUR boundary condition instead of PML_8. Results and simulation time may significantly vary.\");\n"
 	         "\t\tdisp('');\n"
 	         "\t\tdisp('Postprocessing options:');\n"
 	         "\t\tdisp(\"\\t--legend-out           Put legend boxes outside graphics\");\n"
@@ -2934,6 +2936,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t\ti = i + 1;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-dump')\n"
 	         "\t\tflag_dump = false;\n"
+	         "\telseif strcmp(arg_list{i}, '--mur')\n"
+	         "\t\tflag_mur = true;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-conductingsheet')\n"
 	         "\t\tflag_conductingsheet = false;\n"
 	         "\telseif strcmp(arg_list{i}, '--no-mesh')\n"
@@ -3413,8 +3417,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "if flag_preprocess\n"
 	         "FDTD = InitFDTD('NrTS', time_res);\n"
 	         "FDTD = SetGaussExcite(FDTD, f0, fc);\n"
-	         "%BC = {'MUR' 'MUR' 'MUR' 'MUR' 'MUR' 'MUR'};\n"
-	         "BC = {'PML_8' 'PML_8' 'PML_8' 'PML_8' 'PML_8' 'PML_8'};\n"
+	         "if flag_mur\n"
+	         "\tBC = {'MUR', 'MUR', 'MUR', 'MUR', 'MUR', 'MUR'};\n"
+	         "else\n"
+	         "\tBC = {'PML_8', 'PML_8', 'PML_8', 'PML_8', 'PML_8', 'PML_8'};\n"
+	         "endif\n"
 	         "FDTD = SetBoundaryCond(FDTD, BC);\n"
 	         "endif % flag_preprocess\n"
 	         "\n";
