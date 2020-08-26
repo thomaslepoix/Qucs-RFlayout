@@ -3197,6 +3197,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			f_out << "% " << it->getLabel() << " : " << type << "\n"
 			         "endif % flag_preprocess\n" <<
 			         it->getLabel() << ".center = [" << it->getX()+offset_x << ", " << -(it->getY()+offset_y) << ", " << it->getSubst() << ".metal.t];\n"
+			         "if flag_preprocess\n"
 			         "CSX = AddMetal(CSX, '" << it->getLabel() << "');\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << "', 2, ...\n"
 //			         "CSX = AddBox(CSX, '" << it->getSubst() << ".metal', 1, ...\n"
