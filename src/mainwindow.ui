@@ -7,15 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>867</width>
-    <height>459</height>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Qucs-RFlayout</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="5" column="3" colspan="3">
+  <widget class="QWidget" name="w_main">
+   <layout class="QGridLayout" name="gl_main">
+    <item row="10" column="3" colspan="3">
      <widget class="QRadioButton" name="rb_export_each_block">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -27,9 +27,6 @@
     </item>
     <item row="1" column="4" colspan="2">
      <widget class="QCheckBox" name="cb_specify_netlist">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
       </property>
@@ -38,7 +35,7 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="12" column="0">
      <widget class="QLabel" name="l_output">
       <property name="text">
        <string>Output :</string>
@@ -55,13 +52,13 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="12" column="1">
      <widget class="QLineEdit" name="le_path_out"/>
     </item>
     <item row="2" column="2" colspan="4">
      <widget class="QTextBrowser" name="tb_log"/>
     </item>
-    <item row="4" column="3" colspan="3">
+    <item row="9" column="3" colspan="3">
      <widget class="QRadioButton" name="rb_export_each_subst">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -71,7 +68,86 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="2" colspan="2">
+    <item row="3" column="2" rowspan="5" colspan="4">
+     <widget class="QGroupBox" name="gb_oems">
+      <property name="title">
+       <string>OpenEMS parameters</string>
+      </property>
+      <layout class="QGridLayout" name="gl_oems">
+       <item row="3" column="2">
+        <widget class="QLabel" name="l_oems_highres_div">
+         <property name="toolTip">
+          <string>High mesh resolution divisor</string>
+         </property>
+         <property name="text">
+          <string>High res div :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="l_oems_metalres_div">
+         <property name="toolTip">
+          <string>Metal mesh resolution divisor</string>
+         </property>
+         <property name="text">
+          <string>Metal res div :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="l_oems_substres_div">
+         <property name="toolTip">
+          <string>Substrate mesh resolution divisor</string>
+         </property>
+         <property name="text">
+          <string>Subst res div :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QLabel" name="l_oems_timeres">
+         <property name="toolTip">
+          <string>Timestep number before forced simulation end</string>
+         </property>
+         <property name="text">
+          <string>Time res :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QLabel" name="l_oems_nf2ff_center">
+         <property name="toolTip">
+          <string>Far field radiation center
+Should be a component label</string>
+         </property>
+         <property name="text">
+          <string>NF2FF center :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="5">
+        <widget class="QLineEdit" name="le_oems_highres_div"/>
+       </item>
+       <item row="4" column="5">
+        <widget class="QLineEdit" name="le_oems_metalres_div"/>
+       </item>
+       <item row="5" column="5">
+        <widget class="QLineEdit" name="le_oems_substres_div"/>
+       </item>
+       <item row="6" column="5">
+        <widget class="QLineEdit" name="le_oems_timeres"/>
+       </item>
+       <item row="7" column="5">
+        <widget class="QLineEdit" name="le_oems_nf2ff_center">
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="12" column="2" colspan="2">
      <widget class="QPushButton" name="pb_browse_out">
       <property name="text">
        <string>Browse</string>
@@ -88,10 +164,10 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0" rowspan="5" colspan="2">
+    <item row="2" column="0" rowspan="10" colspan="2">
      <widget class="Preview" name="glw_preview" native="true"/>
     </item>
-    <item row="6" column="5">
+    <item row="11" column="5">
      <widget class="QComboBox" name="cb_format"/>
     </item>
     <item row="0" column="2" colspan="2">
@@ -101,14 +177,14 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="3" colspan="2">
+    <item row="11" column="3" colspan="2">
      <widget class="QLabel" name="l_format">
       <property name="text">
        <string>Format :</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="5">
+    <item row="12" column="5">
      <widget class="QPushButton" name="pb_write">
       <property name="text">
        <string>Write</string>
@@ -139,7 +215,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="3" colspan="3">
+    <item row="8" column="3" colspan="3">
      <widget class="QRadioButton" name="rb_export_whole">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>

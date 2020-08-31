@@ -40,6 +40,11 @@ public:
 private slots:
 	void on_cb_format_currentIndexChanged(QString const _out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
+	void on_le_oems_highres_div_textChanged(QString const oems_highres_div);
+	void on_le_oems_metalres_div_textChanged(QString const oems_metalres_div);
+	void on_le_oems_substres_div_textChanged(QString const oems_substres_div);
+	void on_le_oems_timeres_textChanged(QString const oems_timeres);
+	void on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center);
 	void on_le_path_in_returnPressed(void);
 	void on_le_path_in_textChanged(QString const _n_sch);
 	void on_le_path_net_textChanged(QString const _n_net);

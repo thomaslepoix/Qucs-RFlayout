@@ -46,10 +46,16 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
 	ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
 	ui->cb_specify_netlist->setCheckState((_data.n_net=="") ? Qt::Unchecked : Qt::Checked);
+	ui->le_oems_highres_div->setText(QString::number(data.oems_highres_div));
+	ui->le_oems_metalres_div->setText(QString::number(data.oems_metalres_div));
+	ui->le_oems_substres_div->setText(QString::number(data.oems_substres_div));
+	ui->le_oems_timeres->setText(QString::number(data.oems_timeres));
+	ui->le_oems_nf2ff_center->setText(QString::fromStdString(data.oems_nf2ff_center));
 	}
 
 //******************************************************************************
 void MainWindow::on_cb_format_currentIndexChanged(const QString _out_format) {
+	ui->gb_oems->setEnabled((_out_format==".m") ? true : false);
 	out_format=_out_format;
 	}
 
@@ -66,6 +72,30 @@ void MainWindow::on_cb_specify_netlist_stateChanged(int const state) {
 		ui->pb_browse_net->setEnabled(true);
 		data.n_net=n_net.toStdString();
 		}
+	}
+//******************************************************************************
+void MainWindow::on_le_oems_highres_div_textChanged(QString const oems_highres_div) {
+	data.oems_highres_div=(unsigned int) oems_highres_div.toFloat();
+	}
+
+//******************************************************************************
+void MainWindow::on_le_oems_metalres_div_textChanged(QString const oems_metalres_div) {
+	data.oems_metalres_div=(unsigned int) oems_metalres_div.toFloat();
+	}
+
+//******************************************************************************
+void MainWindow::on_le_oems_substres_div_textChanged(QString const oems_substres_div) {
+	data.oems_substres_div=(unsigned int) oems_substres_div.toFloat();
+	}
+
+//******************************************************************************
+void MainWindow::on_le_oems_timeres_textChanged(QString const oems_timeres) {
+	data.oems_timeres=(unsigned int) oems_timeres.toFloat();
+	}
+
+//******************************************************************************
+void MainWindow::on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center) {
+	data.oems_nf2ff_center=oems_nf2ff_center.toStdString();
 	}
 
 //******************************************************************************
