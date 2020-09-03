@@ -74,7 +74,7 @@
        <string>OpenEMS parameters</string>
       </property>
       <layout class="QGridLayout" name="gl_oems">
-       <item row="3" column="2">
+       <item row="1" column="2">
         <widget class="QLabel" name="l_oems_highres_div">
          <property name="toolTip">
           <string>High mesh resolution divisor</string>
@@ -84,7 +84,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="2" column="2">
         <widget class="QLabel" name="l_oems_metalres_div">
          <property name="toolTip">
           <string>Metal mesh resolution divisor</string>
@@ -94,7 +94,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
+       <item row="3" column="2">
         <widget class="QLabel" name="l_oems_substres_div">
          <property name="toolTip">
           <string>Substrate mesh resolution divisor</string>
@@ -104,7 +104,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
+       <item row="4" column="2">
         <widget class="QLabel" name="l_oems_timeres">
          <property name="toolTip">
           <string>Timestep number before forced simulation end</string>
@@ -114,7 +114,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
+       <item row="5" column="2">
         <widget class="QLabel" name="l_oems_nf2ff_center">
          <property name="toolTip">
           <string>Far field radiation center
@@ -125,19 +125,19 @@ Should be a component label</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="5">
+       <item row="1" column="5">
         <widget class="QLineEdit" name="le_oems_highres_div"/>
        </item>
-       <item row="4" column="5">
+       <item row="2" column="5">
         <widget class="QLineEdit" name="le_oems_metalres_div"/>
        </item>
-       <item row="5" column="5">
+       <item row="3" column="5">
         <widget class="QLineEdit" name="le_oems_substres_div"/>
        </item>
-       <item row="6" column="5">
+       <item row="4" column="5">
         <widget class="QLineEdit" name="le_oems_timeres"/>
        </item>
-       <item row="7" column="5">
+       <item row="5" column="5">
         <widget class="QLineEdit" name="le_oems_nf2ff_center">
          <property name="acceptDrops">
           <bool>true</bool>
