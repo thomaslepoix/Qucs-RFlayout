@@ -7,6 +7,7 @@
 
 QT += core gui opengl
 greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
+CONFIG += c++14
 
 isEmpty(PREFIX): PREFIX = /usr/local
 
