@@ -47,13 +47,16 @@ private slots:
 	void on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center);
 	void on_le_path_in_returnPressed(void);
 	void on_le_path_in_textChanged(QString const _n_sch);
+	void on_le_path_net_returnPressed(void);
 	void on_le_path_net_textChanged(QString const _n_net);
 	void on_le_path_out_returnPressed(void);
 	void on_le_path_out_textChanged(QString const _out_dir);
+	void on_pb_add_clicked(void);
 	void on_pb_browse_in_clicked(void);
 	void on_pb_browse_net_clicked(void);
 	void on_pb_browse_out_clicked(void);
 	void on_pb_read_clicked(void);
+	void on_pb_remove_clicked(void);
 	void on_pb_write_clicked(void);
 	void on_rb_export_each_block_toggled(bool const is_checked);
 	void on_rb_export_each_subst_toggled(bool const is_checked);
@@ -74,6 +77,10 @@ private:
 	QString out_format;
 	QString n_out;
 	QString openfile_path;
+
+	void add_action(QString const action_str="Shift port", QString const val1="", QString const val2="", QString const val3="");
+	void read(void);
+	void write(void);
 
 	void log(std::stringstream& in) override;
 };

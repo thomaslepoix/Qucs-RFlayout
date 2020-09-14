@@ -86,7 +86,6 @@ public:
 
 	Data(void);
 	~Data(void);
-	void clear(void);
 };
 
 #endif // DATA_HPP

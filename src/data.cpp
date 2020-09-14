@@ -109,12 +109,7 @@ Data::Data(void) :
 
 //******************************************************************************
 Data::~Data(void) {
-	clear();
-	}
-
-//******************************************************************************
-void Data::clear(void) {
-	all_blocks.clear();
+//	all_blocks.clear();
 	for(shared_ptr<Element> it : tab_all) {
 		it->prev=nullptr;
 		it->setAdjacent(1, nullptr, 0);
@@ -122,8 +117,8 @@ void Data::clear(void) {
 		it->setAdjacent(3, nullptr, 0);
 		it->setAdjacent(4, nullptr, 0);
 		}
-	tab_all.clear();
-	extrem_pos.fill(0.0);
-	is_volume_error=false;
-	volume_error.clear();
+//	tab_all.clear();
+//	extrem_pos.fill(0.0);
+//	is_volume_error=false;
+//	volume_error.clear();
 	}

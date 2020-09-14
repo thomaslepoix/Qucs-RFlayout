@@ -41,7 +41,7 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	ui->cb_format->addItem(tr(".kicad_mod"));
 	ui->cb_format->addItem(tr(".lht"));
 	ui->cb_format->addItem(tr(".m"));
-	ui->cb_format->setCurrentIndex(ui->cb_format->findText(QString::fromStdString(_data.out_format), Qt::MatchExactly));
+	ui->cb_format->setCurrentText(QString::fromStdString(_data.out_format));
 	ui->rb_export_whole->setChecked((_data.export_each_block || _data.export_each_subst) ? false : true);
 	ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
 	ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
@@ -51,6 +51,128 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	ui->le_oems_substres_div->setText(QString::number(data.oems_substres_div));
 	ui->le_oems_timeres->setText(QString::number(data.oems_timeres));
 	ui->le_oems_nf2ff_center->setText(QString::fromStdString(data.oems_nf2ff_center));
+	ui->tw_actions->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+
+	for(std::tuple<unsigned long, std::string, std::string> arg : data.port_shift_args) {
+		add_action("Shift port",
+			QString::number(get<0>(arg)),
+			QString::fromStdString(get<1>(arg)),
+			QString::fromStdString(get<2>(arg)));
+		}
+	for(std::tuple<unsigned long, std::string, std::string> arg : data.port_size_args) {
+		add_action("Resize port",
+			QString::number(get<0>(arg)),
+			QString::fromStdString(get<1>(arg)),
+			QString::fromStdString(get<2>(arg)));
+		}
+	for(std::string excluded : data.excluded_elements) {
+		add_action("Exclude", QString::fromStdString(excluded));
+		}
+	for(std::string used : data.used_elements) {
+		add_action("Use", QString::fromStdString(used));
+		}
+	}
+
+//******************************************************************************
+void MainWindow::add_action(QString const action_str, QString const val1, QString const val2, QString const val3) {
+	int row=ui->tw_actions->rowCount();
+	ui->tw_actions->insertRow(row);
+	ui->tw_actions->setCellWidget(row, 0, new QComboBox);
+	ui->tw_actions->setItem(row, 1, new QTableWidgetItem);
+	ui->tw_actions->setItem(row, 2, new QTableWidgetItem);
+	ui->tw_actions->setItem(row, 3, new QTableWidgetItem);
+
+	QComboBox* action=qobject_cast<QComboBox*>(ui->tw_actions->cellWidget(row, 0));
+	action->addItem(tr("Shift port"));
+	action->addItem(tr("Resize port"));
+	action->addItem(tr("Exclude"));
+	action->addItem(tr("Use"));
+
+	connect(action, &QComboBox::currentTextChanged, [this, action](QString const& text) {
+		int row=0;
+		bool is_found=false;
+
+		for(int i=0;i<ui->tw_actions->rowCount();i++) {
+			if(ui->tw_actions->cellWidget(i, 0)==action) {
+				row=i;
+				is_found=true;
+				break;
+				}
+			}
+		if(!is_found)
+			return;
+
+		if(text=="Shift port" || text=="Resize port") {
+			ui->tw_actions->item(row, 1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+			ui->tw_actions->item(row, 2)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+			ui->tw_actions->item(row, 3)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+		} else if(text=="Exclude" || text=="Use") {
+			ui->tw_actions->item(row, 1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+			ui->tw_actions->item(row, 2)->setFlags(Qt::NoItemFlags);
+			ui->tw_actions->item(row, 3)->setFlags(Qt::NoItemFlags);
+			}
+		ui->tw_actions->item(row, 1)->setText("");
+		ui->tw_actions->item(row, 2)->setText("");
+		ui->tw_actions->item(row, 3)->setText("");
+		});
+
+	action->setCurrentText(action_str);
+	if(action_str=="Shift port" || action_str=="Resize port") {
+		ui->tw_actions->item(row, 1)->setText(val1);
+		ui->tw_actions->item(row, 2)->setText(val2);
+		ui->tw_actions->item(row, 3)->setText(val3);
+	} else if(action_str=="Exclude" || action_str=="Use") {
+		ui->tw_actions->item(row, 1)->setText(val1);
+		}
+	}
+
+//******************************************************************************
+void MainWindow::read(void) {
+	ui->tb_log->clear();
+	if(n_sch=="") {
+		log_err << "ERROR : Nothing to read.\n";
+	} else {
+		converter.clear();
+		converter.reset(n_sch.toStdString(), n_net.toStdString(), out_dir.toStdString(), out_format.toStdString());
+
+		for(int i=0;i<ui->tw_actions->rowCount();i++) {
+			QString action_str=qobject_cast<QComboBox*>(ui->tw_actions->cellWidget(i, 0))->currentText();
+			if(action_str=="Shift port") {
+				data.port_shift_args.push_back(make_tuple(
+					ui->tw_actions->item(i, 1)->text().toLong(),
+					ui->tw_actions->item(i, 2)->text().toStdString(),
+					ui->tw_actions->item(i, 3)->text().toStdString()));
+			} else if(action_str=="Resize port") {
+				data.port_size_args.push_back(make_tuple(
+					ui->tw_actions->item(i, 1)->text().toLong(),
+					ui->tw_actions->item(i, 2)->text().toStdString(),
+					ui->tw_actions->item(i, 3)->text().toStdString()));
+			} else if(action_str=="Exclude") {
+				data.excluded_elements.push_back(ui->tw_actions->item(i, 1)->text().toStdString());
+			} else if(action_str=="Use") {
+				data.used_elements.push_back(ui->tw_actions->item(i, 1)->text().toStdString());
+				}
+			}
+
+		converter.read();
+		ui->glw_preview->set(converter.get_tab_all(), converter.get_extrem_pos());
+		}
+
+	}
+
+//******************************************************************************
+void MainWindow::write(void) {
+	vector<string> out_names;
+	if(converter.size()) {
+		converter.reset(n_sch.toStdString(), n_net.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		if(!converter.write(out_names)) {
+			for(string out : out_names) {
+				log_err << "Write : " << out << "\n";
+				}
+			}
+	} else {
+		log_err << "ERROR : Nothing to write.\n";
+		}
 	}
 
 //******************************************************************************
@@ -73,6 +195,7 @@ void MainWindow::on_cb_specify_netlist_stateChanged(int const state) {
 		data.n_net=n_net.toStdString();
 		}
 	}
+
 //******************************************************************************
 void MainWindow::on_le_oems_highres_div_textChanged(QString const oems_highres_div) {
 	data.oems_highres_div=(unsigned int) oems_highres_div.toFloat();
@@ -100,20 +223,17 @@ void MainWindow::on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_ce
 
 //******************************************************************************
 void MainWindow::on_le_path_in_returnPressed(void) {
-	ui->tb_log->clear();
-	if(n_sch=="") {
-		log_err << "ERROR : Nothing to read.\n";
-	} else {
-		converter.clear();
-		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		converter.read();
-		ui->glw_preview->set(converter.get_tab_all(), converter.get_extrem_pos());
-		}
+	read();
 	}
 
 //******************************************************************************
 void MainWindow::on_le_path_in_textChanged(QString const _n_sch) {
 	n_sch=_n_sch;
+	}
+
+//******************************************************************************
+void MainWindow::on_le_path_net_returnPressed(void) {
+	read();
 	}
 
 //******************************************************************************
@@ -124,22 +244,17 @@ void MainWindow::on_le_path_net_textChanged(QString const _n_net) {
 
 //******************************************************************************
 void MainWindow::on_le_path_out_returnPressed(void) {
-	vector<string> out_names;
-	if(converter.size()) {
-		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		if(!converter.write(out_names)) {
-			for(string out : out_names) {
-				log_err << "Write : " << out << "\n";
-				}
-			}
-	} else {
-		log_err << "ERROR : Nothing to write.\n";
-		}
+	write();
 	}
 
 //******************************************************************************
 void MainWindow::on_le_path_out_textChanged(QString const _out_dir) {
 	out_dir=_out_dir;
+	}
+
+//******************************************************************************
+void MainWindow::on_pb_add_clicked(void) {
+	add_action();
 	}
 
 //******************************************************************************
@@ -170,36 +285,23 @@ void MainWindow::on_pb_browse_net_clicked(void) {
 
 //******************************************************************************
 void MainWindow::on_pb_browse_out_clicked(void) {
-	out_dir=QFileDialog::getExistingDirectory(this, tr("Output directory"), "./", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	out_dir=QFileDialog::getExistingDirectory(this, tr("Output directory"), "./", QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 	ui->le_path_out->setText(out_dir);
 	}
 
 //******************************************************************************
 void MainWindow::on_pb_read_clicked(void) {
-	ui->tb_log->clear();
-	if(n_sch=="") {
-		log_err << "ERROR : Nothing to read.\n";
-	} else {
-		converter.clear();
-		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		converter.read();
-		ui->glw_preview->set(converter.get_tab_all(), converter.get_extrem_pos());
-		}
+	read();
+	}
+
+//******************************************************************************
+void MainWindow::on_pb_remove_clicked(void) {
+	ui->tw_actions->removeRow(ui->tw_actions->currentRow());
 	}
 
 //******************************************************************************
 void MainWindow::on_pb_write_clicked(void) {
-	vector<string> out_names;
-	if(converter.size()) {
-		converter.reset(n_sch.toStdString(), out_dir.toStdString(), out_format.toStdString());
-		if(!converter.write(out_names)) {
-			for(string out : out_names) {
-				log_err << "Write : " << out << "\n";
-				}
-			}
-	} else {
-		log_err << "ERROR : Nothing to write.\n";
-		}
+	write();
 	}
 
 //******************************************************************************

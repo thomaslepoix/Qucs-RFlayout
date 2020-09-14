@@ -15,16 +15,6 @@
   </property>
   <widget class="QWidget" name="w_main">
    <layout class="QGridLayout" name="gl_main">
-    <item row="10" column="3" colspan="3">
-     <widget class="QRadioButton" name="rb_export_each_block">
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
-      </property>
-      <property name="text">
-       <string>Each block in a file</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="4" colspan="2">
      <widget class="QCheckBox" name="cb_specify_netlist">
       <property name="focusPolicy">
@@ -33,12 +23,8 @@
       <property name="text">
        <string>Specify a netlist</string>
       </property>
-     </widget>
-    </item>
-    <item row="12" column="0">
-     <widget class="QLabel" name="l_output">
-      <property name="text">
-       <string>Output :</string>
+      <property name="toolTip">
+       <string>Specify a netlist to use instead of calling Qucs to create it from the schematic</string>
       </property>
      </widget>
     </item>
@@ -52,29 +38,85 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="1">
-     <widget class="QLineEdit" name="le_path_out"/>
-    </item>
     <item row="2" column="2" colspan="4">
      <widget class="QTextBrowser" name="tb_log"/>
     </item>
-    <item row="9" column="3" colspan="3">
-     <widget class="QRadioButton" name="rb_export_each_subst">
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+
+    <item row="3" column="2" rowspan="5" colspan="4">
+     <widget class="QGroupBox" name="gb_actions">
+      <property name="title">
+       <string>Actions</string>
       </property>
+      <layout class="QGridLayout" name="gl_actions">
+
+       <item row="0" column="0" rowspan="5" colspan="2">
+        <widget class="QTableWidget" name="tw_actions">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="columnCount">
+          <number>4</number>
+         </property>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderVisible">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>30</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>10</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Actions</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string/>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string/>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string/>
+          </property>
+         </column>
+        </widget>
+       </item>
+    <item row="6" column="0">
+     <widget class="QPushButton" name="pb_add">
       <property name="text">
-       <string>Each substrate in a file</string>
+       <string>Add</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="2" rowspan="5" colspan="4">
+    <item row="6" column="1">
+     <widget class="QPushButton" name="pb_remove">
+      <property name="text">
+       <string>Remove</string>
+      </property>
+     </widget>
+    </item>
+
+      </layout>
+     </widget>
+    </item>
+
+    <item row="8" column="2" rowspan="5" colspan="4">
      <widget class="QGroupBox" name="gb_oems">
       <property name="title">
        <string>OpenEMS parameters</string>
       </property>
       <layout class="QGridLayout" name="gl_oems">
-       <item row="1" column="2">
+       <item row="0" column="2">
         <widget class="QLabel" name="l_oems_highres_div">
          <property name="toolTip">
           <string>High mesh resolution divisor</string>
@@ -84,7 +126,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="1" column="2">
         <widget class="QLabel" name="l_oems_metalres_div">
          <property name="toolTip">
           <string>Metal mesh resolution divisor</string>
@@ -94,7 +136,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="2" column="2">
         <widget class="QLabel" name="l_oems_substres_div">
          <property name="toolTip">
           <string>Substrate mesh resolution divisor</string>
@@ -104,7 +146,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="3" column="2">
         <widget class="QLabel" name="l_oems_timeres">
          <property name="toolTip">
           <string>Timestep number before forced simulation end</string>
@@ -114,7 +156,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
+       <item row="4" column="2">
         <widget class="QLabel" name="l_oems_nf2ff_center">
          <property name="toolTip">
           <string>Far field radiation center
@@ -125,19 +167,19 @@ Should be a component label</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="5">
+       <item row="0" column="5">
         <widget class="QLineEdit" name="le_oems_highres_div"/>
        </item>
-       <item row="2" column="5">
+       <item row="1" column="5">
         <widget class="QLineEdit" name="le_oems_metalres_div"/>
        </item>
-       <item row="3" column="5">
+       <item row="2" column="5">
         <widget class="QLineEdit" name="le_oems_substres_div"/>
        </item>
-       <item row="4" column="5">
+       <item row="3" column="5">
         <widget class="QLineEdit" name="le_oems_timeres"/>
        </item>
-       <item row="5" column="5">
+       <item row="4" column="5">
         <widget class="QLineEdit" name="le_oems_nf2ff_center">
          <property name="acceptDrops">
           <bool>true</bool>
@@ -145,13 +187,6 @@ Should be a component label</string>
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="12" column="2" colspan="2">
-     <widget class="QPushButton" name="pb_browse_out">
-      <property name="text">
-       <string>Browse</string>
-      </property>
      </widget>
     </item>
     <item row="1" column="2" colspan="2">
@@ -164,30 +199,13 @@ Should be a component label</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0" rowspan="10" colspan="2">
+    <item row="2" column="0" rowspan="15" colspan="2">
      <widget class="Preview" name="glw_preview" native="true"/>
-    </item>
-    <item row="11" column="5">
-     <widget class="QComboBox" name="cb_format"/>
     </item>
     <item row="0" column="2" colspan="2">
      <widget class="QPushButton" name="pb_browse_in">
       <property name="text">
        <string>Browse</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="3" colspan="2">
-     <widget class="QLabel" name="l_format">
-      <property name="text">
-       <string>Format :</string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="5">
-     <widget class="QPushButton" name="pb_write">
-      <property name="text">
-       <string>Write</string>
       </property>
      </widget>
     </item>
@@ -215,16 +233,82 @@ Should be a component label</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="3" colspan="3">
-     <widget class="QRadioButton" name="rb_export_whole">
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+
+    <item row="13" column="2" rowspan="4" colspan="4">
+     <widget class="QGroupBox" name="gb_general">
+      <property name="title">
+       <string>General parameters</string>
       </property>
+      <layout class="QGridLayout" name="gl_general">
+       <item row="0" column="1" colspan="3">
+        <widget class="QRadioButton" name="rb_export_whole">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Whole layout in a file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="3">
+        <widget class="QRadioButton" name="rb_export_each_subst">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Each substrate in a file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3">
+        <widget class="QRadioButton" name="rb_export_each_block">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Each block in a file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLabel" name="l_format">
+         <property name="text">
+          <string>Format :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QComboBox" name="cb_format"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <item row="17" column="0">
+     <widget class="QLabel" name="l_output">
       <property name="text">
-       <string>Whole layout in a file</string>
+       <string>Output :</string>
       </property>
      </widget>
     </item>
+    <item row="17" column="1">
+     <widget class="QLineEdit" name="le_path_out"/>
+    </item>
+    <item row="17" column="2" colspan="2">
+     <widget class="QPushButton" name="pb_browse_out">
+      <property name="text">
+       <string>Browse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="17" column="5">
+     <widget class="QPushButton" name="pb_write">
+      <property name="text">
+       <string>Write</string>
+      </property>
+     </widget>
+    </item>
+
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">

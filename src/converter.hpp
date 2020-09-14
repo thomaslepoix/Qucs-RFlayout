@@ -39,7 +39,7 @@ public:
 	Converter(Data& data);
 	~Converter(void)=default;
 
-	void reset(std::string n_sch, std::string out_dir, std::string out_format);
+	void reset(std::string n_sch, std::string n_net, std::string out_dir, std::string out_format);
 	void clear(void);
 	int run(void);
 	int read(void);

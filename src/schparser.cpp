@@ -114,6 +114,8 @@ int SchParser::run(void) {
 	return(0);
 	}
 
+// Uncomplete feature. Could be usable on every elements
+// TODO why does if function without getP update?
 //******************************************************************************
 void SchParser::parse_port_shift_args(void) {
 	for(tuple<unsigned long, string, string> arg : data.port_shift_args) {
@@ -133,6 +135,7 @@ void SchParser::parse_port_shift_args(void) {
 					element->setShiftY(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
 
 					is_port_existant=true;
+					break;
 					}
 				}
 			}
@@ -155,7 +158,6 @@ void SchParser::parse_port_size_args(void) {
 					// g1 value    g2 suffix    g3 scientific    g4 engineer
 					// Does not care about negatives
 					static regex const r_port_size_arg("(\\+?[0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
-			break;
 
 					regex_search(get<1>(arg), match, r_port_size_arg);
 					element->setL(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
@@ -164,6 +166,7 @@ void SchParser::parse_port_size_args(void) {
 
 					dynamic_cast<Pac*>(element.get())->is_size_set=true;
 					is_port_existant=true;
+					break;
 					}
 				}
 			}
