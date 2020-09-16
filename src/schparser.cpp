@@ -127,7 +127,7 @@ void SchParser::parse_port_shift_args(void) {
 
 					// g1 value    g2 suffix    g3 scientific    g4 engineer
 					// Cares about negatives
-					static regex const r_port_shift_arg("((?:-?|\\+?)[0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+					static regex const r_port_shift_arg("((?:-?|\\+?)[0-9.]*)(([eE]-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
 
 					regex_search(get<1>(arg), match, r_port_shift_arg);
 					element->setShiftX(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
@@ -157,7 +157,7 @@ void SchParser::parse_port_size_args(void) {
 
 					// g1 value    g2 suffix    g3 scientific    g4 engineer
 					// Does not care about negatives
-					static regex const r_port_size_arg("(\\+?[0-9.]*)((e-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
+					static regex const r_port_size_arg("(\\+?[0-9.]*)(([eE]-?[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)");
 
 					regex_search(get<1>(arg), match, r_port_size_arg);
 					element->setL(stold(check_void(match.str(1)))*suffix(match.str(3), match.str(4), true));
@@ -282,7 +282,7 @@ void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double
 	static regex const r_indep("^<indep (.*) 1>$");
 
 	// g1 variable    g2 "()"    g3 value    g4 scientific
-	static regex const r_variable("<indep (.*) 1>\n  ((\\+?-?[0-9.]*)((e(?:-?|\\+?)[0-9]+)?))\n<\\/indep>");
+	static regex const r_variable("<indep (.*) 1>\n  ((\\+?-?[0-9.]*)(([eE](?:-?|\\+?)[0-9]+)?))\n<\\/indep>");
 
 	cout << endl << "Reading data file... " << endl;
 
@@ -356,12 +356,12 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 	static regex const r_quotedfield10_raw("^ ( ([^ ]+)){9}( \"([^\"]*)\" [0-1]{1}){1}"); //regex group 4
 
 	// g5 "()"    g6 value    g7 suffix    g8 scientific    g9 engineer    g10 variable
-	static regex const r_quotedfield10("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){0}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
-	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
-	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
-	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
-	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
-	static regex const r_quotedfield20("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){5}( \"(([0-9.]*)((e(?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield10("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){0}( \"(([0-9.]*)(([eE](?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield12("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){1}( \"(([0-9.]*)(([eE](?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield14("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){2}( \"(([0-9.]*)(([eE](?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield16("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){3}( \"(([0-9.]*)(([eE](?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield18("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){4}( \"(([0-9.]*)(([eE](?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
+	static regex const r_quotedfield20("^ ( ([^ ]+)){9}( \"[^\"]*\" [0-1]{1}){5}( \"(([0-9.]*)(([eE](?:-?|\\+?)[0-9]+)? ?([EPTGMkmunpfa]?(?:m?|(?:Hz)|(?:Ohm)?|(?:dBm)?))?)|([^\"]*))\"){1}");
 
 	// Read schematic <Components> </Components>
 	cout << endl << "Reading schematic... " << endl;
@@ -860,7 +860,7 @@ void SchParser::rm_tmp_files(initializer_list<string> const args) {
 // Convert suffix into multiplicator
 //******************************************************************************
 long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) {
-	static regex  const r_sci("^e(-?|\\+?)([0-9]*)$");    // g1 signe    g2 exposant
+	static regex  const r_sci("^[eE](-?|\\+?)([0-9]*)$");    // g1 signe    g2 exposant
 	smatch match;
 	long double multiplicator=1;
 
