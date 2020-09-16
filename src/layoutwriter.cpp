@@ -4577,7 +4577,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			 ) <<
 	         "\n"
 	         "t_postprocess_start = clock();\n"
-	         "oemsgen_postProcess('lpf', path_simulation, path_result, port, [1, 2], [1], fstart, fstop, points, ...\n"
+	         "oemsgen_postProcess('" << name << "', path_simulation, path_result, port, [1, 2], [1], fstart, fstop, points, ...\n"
 	         "\t'legend_out', flag_legend_out, ...\n"
 	         "\t'nf2ff', flag_nf2ff, ...\n"
 	         "\t'nf2ff_data', nf2ff, ...\n"
