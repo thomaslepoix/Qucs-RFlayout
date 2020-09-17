@@ -24,6 +24,7 @@
 #include "logger.hpp"
 #include "oemsmesh.hpp"
 #include "microstrip/element.hpp"
+#include "microstrip/pac.hpp"
 #include "microstrip/subst.hpp"
 #include "layoutwriter.hpp"
 using namespace std;
@@ -330,9 +331,10 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();
+			Pac* pac=dynamic_cast<Pac*>(it.get());
 			regex_search(label, match, r_pac);
 			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX()+offset_x << " " << it->getY()+offset_y
-			      << " " << it->getR() << ") (size 0.01 0.01) (layers F.Cu))\n";
+			      << " " << it->getR() << ") (size " << (pac->is_size_set ? it->getW() : 0.01) << " " << (pac->is_size_set ? it->getL() : 0.01) << ") (layers F.Cu))\n";
 		} else if(type=="MCORN"
 				||type=="MCROSS"
 				||type=="MMBEND"
