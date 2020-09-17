@@ -81,6 +81,7 @@ void XyCalculator::resolve_pac_shapes(void) {
 							}
 						}
 					}
+				break;
 				}
 			pac->setW(edge);
 			pac->setL(data.port_default_l);
@@ -142,12 +143,12 @@ void XyCalculator::place_elements(void) {
 					cout << endl;
 					cout << "Current label : " << current->getLabel() << endl;
 					}
-				if(current->getX()!=current->getX() || current->getY()!=current->getY()) {
+				if(current->getX(false)!=current->getX(false) || current->getY(false)!=current->getY(false)) {
 					// Reset position
 					current->setX(0);
 					current->setY(0);
-					cout << "Reset X : " << current->getX() << endl;
-					cout << "Reset Y : " << current->getY() << endl;
+					cout << "Reset X : " << current->getX(false) << endl;
+					cout << "Reset Y : " << current->getY(false) << endl;
 					}
 				}
 		} else {
@@ -167,16 +168,16 @@ void XyCalculator::place_elements(void) {
 			next=nullptr;
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
-			if(current->getX()!=current->getX() || current->getY()!=current->getY()) { // If position is -NaN
+			if(current->getX(false)!=current->getX(false) || current->getY(false)!=current->getY(false)) { // If position is -NaN
 				current->getStep(current_net, current_xstep, current_ystep);
 				cout << "Previous Xstep : " << prev_xstep << endl;
 				cout << "Previous Ystep : " << prev_ystep << endl;
 				cout << "Current Xstep : " << -1*current_xstep << endl;
 				cout << "Current Ystep : " << -1*current_ystep << endl;
-				current->setX((current->prev->getX())+(prev_xstep)-(current_xstep));
-				current->setY((current->prev->getY())+(prev_ystep)-(current_ystep));
-				cout << "X : " << current->getX() << endl;
-				cout << "Y : " << current->getY() << endl;
+				current->setX((current->prev->getX(false))+(prev_xstep)-(current_xstep));
+				current->setY((current->prev->getY(false))+(prev_ystep)-(current_ystep));
+				cout << "X : " << current->getX(false) << endl;
+				cout << "Y : " << current->getY(false) << endl;
 				}
 			}
 		}

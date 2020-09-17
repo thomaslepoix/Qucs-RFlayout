@@ -33,10 +33,10 @@ void Block::set_extrem_pos(void) {
 	//reset extrem_pos to a random existant point
 	for(shared_ptr<Element> it : elements) {
 		if(it->getNpoint()) {
-			extrem_pos[XMIN]=it->getP(1, X, R, ABS);
-			extrem_pos[XMAX]=it->getP(1, X, R, ABS);
-			extrem_pos[YMIN]=it->getP(1, Y, R, ABS);
-			extrem_pos[YMAX]=it->getP(1, Y, R, ABS);
+			extrem_pos[XMIN]=it->getP(1, X, R, ABS, false);
+			extrem_pos[XMAX]=it->getP(1, X, R, ABS, false);
+			extrem_pos[YMIN]=it->getP(1, Y, R, ABS, false);
+			extrem_pos[YMAX]=it->getP(1, Y, R, ABS, false);
 			break;
 			}
 		}
@@ -44,10 +44,10 @@ void Block::set_extrem_pos(void) {
 	for(shared_ptr<Element> it : elements) {
 		it->setP();
 		for(int i=0;i<it->getNpoint();i++) {
-			if(it->getP(i, X, R, ABS)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(i, X, R, ABS);
-			if(it->getP(i, X, R, ABS)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(i, X, R, ABS);
-			if(it->getP(i, Y, R, ABS)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(i, Y, R, ABS);
-			if(it->getP(i, Y, R, ABS)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(i, Y, R, ABS);
+			if(it->getP(i, X, R, ABS, false)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(i, X, R, ABS, false);
+			if(it->getP(i, X, R, ABS, false)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(i, X, R, ABS, false);
+			if(it->getP(i, Y, R, ABS, false)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(i, Y, R, ABS, false);
+			if(it->getP(i, Y, R, ABS, false)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(i, Y, R, ABS, false);
 			}
 		}
 	//set boundary
@@ -60,8 +60,8 @@ void Block::set_extrem_pos(void) {
 //******************************************************************************
 void Block::shift(long double const x, long double const y) {
 	for(shared_ptr<Element> it : elements) {
-		it->setX(it->getX()+x);
-		it->setY(it->getY()+y);
+		it->setX(it->getX(false)+x);
+		it->setY(it->getY(false)+y);
 		}
 	set_extrem_pos();
 	}

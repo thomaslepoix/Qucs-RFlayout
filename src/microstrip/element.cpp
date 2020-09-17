@@ -71,13 +71,13 @@ string Element::getSubst(void) {
 	}
 
 //******************************************************************************
-long double Element::getX(void) {
-	return(m_shift_x ? m_x+m_shift_x : m_x);
+long double Element::getX(bool const apply_shift) {
+	return(m_shift_x && apply_shift ? m_x+m_shift_x : m_x); // Avoid useless float calcul.
 	}
 
 //******************************************************************************
-long double Element::getY(void) {
-	return(m_shift_y ? m_y+m_shift_y : m_y);
+long double Element::getY(bool const apply_shift) {
+	return(m_shift_y && apply_shift ? m_y+m_shift_y : m_y); // Avoid useless float calcul.
 	}
 
 //******************************************************************************
@@ -267,7 +267,7 @@ int Element::getNpoint(void) {
 	}
 
 //******************************************************************************
-long double Element::getP(int /*_n*/, axis_t /*_xy*/, orientation_t /*_r*/, origin_t /*_abs*/) {
+long double Element::getP(int const /*_n*/, axis_t const /*_xy*/, orientation_t const /*_r*/, origin_t const /*_abs*/, bool const /*apply_shift*/) {
 	return(0);
 	}
 

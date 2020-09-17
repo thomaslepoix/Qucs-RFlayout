@@ -88,7 +88,7 @@ int Pac::getNpoint(void) {
 	}
 
 //******************************************************************************
-long double Pac::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
+long double Pac::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const apply_shift) {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -96,7 +96,7 @@ long double Pac::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
 	} else {
 		coord=tab_p[_n][_xy];
 		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	return(_abs ? coord+(_xy ? getY(apply_shift) : getX(apply_shift)) : coord);
 	}
 
 //******************************************************************************
@@ -176,10 +176,10 @@ int Pac::getOemsNcorelines(void) {
 //******************************************************************************
 int Pac::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
-		line.position=m_x;
+		line.position=getX();
 		line.direction=XMIN;
 	} else if(_n==1) {
-		line.position=m_y;
+		line.position=getX();
 		line.direction=YMIN;
 		}
 

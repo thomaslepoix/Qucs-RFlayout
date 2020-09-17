@@ -79,7 +79,7 @@ int Mrstub::getNpoint(void) {
 	}
 
 //******************************************************************************
-long double Mrstub::getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs) {
+long double Mrstub::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])

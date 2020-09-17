@@ -56,7 +56,7 @@ int Mcorn::getNpoint(void) {
 	}
 
 //******************************************************************************
-long double Mcorn::getP(int _n, axis_t _xy, orientation_t /*_r*/, origin_t _abs) {
+long double Mcorn::getP(int const _n, axis_t const _xy, orientation_t const /*_r*/, origin_t const _abs, bool const /*apply_shift*/) {
 	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
 	}
 

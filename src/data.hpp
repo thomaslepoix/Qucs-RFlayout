@@ -39,7 +39,9 @@ public:
 	Block(void);
 	~Block(void)=default;
 	void shift(long double const x, long double const y);
+//	void shift(long double const x, long double const y, bool const apply_shift); //TODO apply_shift : adapt subst size to shifted ports
 	void set_extrem_pos(void);
+//	void set_extrem_pos(bool const apply_shift=false); //TODO apply_shift : adapt subst size to shifted ports
 	void print_extrem_pos(void);
 	void print(void);
 };

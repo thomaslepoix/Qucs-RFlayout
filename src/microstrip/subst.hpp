@@ -64,7 +64,7 @@ public :
 	long double getD(void) override;
 	long double getMargin(void) override;
 	int getNpoint(void) override;
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
 	int setW(long double _w) override;
 	int setL(long double _l) override;
 	int setP(void) override;
