@@ -92,6 +92,7 @@ void MainWindow::add_action(QString const action_str, QString const val1, QStrin
 		int row=0;
 		bool is_found=false;
 
+		// Find row
 		for(int i=0;i<ui->tw_actions->rowCount();i++) {
 			if(ui->tw_actions->cellWidget(i, 0)==action) {
 				row=i;
@@ -102,15 +103,32 @@ void MainWindow::add_action(QString const action_str, QString const val1, QStrin
 		if(!is_found)
 			return;
 
-		if(text=="Shift port" || text=="Resize port") {
-			ui->tw_actions->item(row, 1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+		if(text=="Shift port") {
 			ui->tw_actions->item(row, 2)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
 			ui->tw_actions->item(row, 3)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
-		} else if(text=="Exclude" || text=="Use") {
-			ui->tw_actions->item(row, 1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+			ui->tw_actions->item(row, 1)->setToolTip("Number of port to shift");
+			ui->tw_actions->item(row, 2)->setToolTip("X shift (m)");
+			ui->tw_actions->item(row, 3)->setToolTip("Y shift (m)");
+		} else if(text=="Resize port") {
+			ui->tw_actions->item(row, 2)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+			ui->tw_actions->item(row, 3)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+			ui->tw_actions->item(row, 1)->setToolTip("Number of port to resize");
+			ui->tw_actions->item(row, 2)->setToolTip("X size (m)");
+			ui->tw_actions->item(row, 3)->setToolTip("Y size (m)");
+		} else if(text=="Exclude") {
 			ui->tw_actions->item(row, 2)->setFlags(Qt::NoItemFlags);
 			ui->tw_actions->item(row, 3)->setFlags(Qt::NoItemFlags);
+			ui->tw_actions->item(row, 1)->setToolTip("Label of element to exclude");
+			ui->tw_actions->item(row, 2)->setToolTip("");
+			ui->tw_actions->item(row, 3)->setToolTip("");
+		} else if(text=="Use") {
+			ui->tw_actions->item(row, 2)->setFlags(Qt::NoItemFlags);
+			ui->tw_actions->item(row, 3)->setFlags(Qt::NoItemFlags);
+			ui->tw_actions->item(row, 1)->setToolTip("Label of element not to exclude (exclude every others)");
+			ui->tw_actions->item(row, 2)->setToolTip("");
+			ui->tw_actions->item(row, 3)->setToolTip("");
 			}
+		ui->tw_actions->item(row, 1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
 		ui->tw_actions->item(row, 1)->setText("");
 		ui->tw_actions->item(row, 2)->setText("");
 		ui->tw_actions->item(row, 3)->setText("");
