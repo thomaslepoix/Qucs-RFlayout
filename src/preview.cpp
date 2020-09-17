@@ -75,7 +75,7 @@ void Preview::resizeGL(int width, int height) {
 ////////////////////////////////////////////////////////////////////////////////
 
 //******************************************************************************
-static void qNormalizeAngle(int &angle) {
+static void qNormalizeAngle(int& angle) {
 	while (angle < 0)
 		angle += 360 * 16;
 	while (angle > 360)
@@ -110,12 +110,12 @@ void Preview::setZRotation(int angle) {
 	}
 
 //******************************************************************************
-void Preview::mousePressEvent(QMouseEvent *event) {
+void Preview::mousePressEvent(QMouseEvent* event) {
 	lastPos = event->pos();
 	}
 
 //******************************************************************************
-void Preview::mouseMoveEvent(QMouseEvent *event) {
+void Preview::mouseMoveEvent(QMouseEvent* event) {
 	int dx = event->x() - lastPos.x();
 	int dy = event->y() - lastPos.y();
 
@@ -141,7 +141,7 @@ void Preview::mouseMoveEvent(QMouseEvent *event) {
 //this		SHIFT _	CTRL +	NONE |
 
 //******************************************************************************
-void Preview::wheelEvent(QWheelEvent *event) {
+void Preview::wheelEvent(QWheelEvent* event) {
 	if(flag_ctrl) {
 		factor+=(long double)event->delta()/240*fit_factor;
 		if(factor<0.0) factor=0.0;

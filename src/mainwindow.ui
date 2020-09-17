@@ -159,7 +159,8 @@
        <item row="4" column="2">
         <widget class="QLabel" name="l_oems_end_criteria">
          <property name="toolTip">
-          <string>Energy decay for normal simulation end</string>
+          <string>Energy decay for normal simulation end
+Should stay between 1e-3 (speed) and 1e-5 (precision)</string>
          </property>
          <property name="text">
           <string>End criteria :</string>

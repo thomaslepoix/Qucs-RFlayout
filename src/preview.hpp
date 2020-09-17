@@ -32,7 +32,7 @@
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 //	Q_OBJECT
 public :
-	explicit Preview(QWidget *parent=0);
+	explicit Preview(QWidget* parent=0);
 	~Preview(void)=default;
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
 	void resetView(void);
@@ -44,12 +44,12 @@ protected:
 	void paintGL();
 	void resizeGL(int width, int height);
 
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
-	void wheelEvent(QWheelEvent *event);
+	void mousePressEvent(QMouseEvent* event);
+	void mouseMoveEvent(QMouseEvent* event);
+	void wheelEvent(QWheelEvent* event);
 
-//	void keyPressEvent(QKeyEvent *event);
-//	void keyReleaseEvent(QKeyEvent *event);
+//	void keyPressEvent(QKeyEvent* event);
+//	void keyReleaseEvent(QKeyEvent* event);
 
 private:
 	enum t_color {orange, green};

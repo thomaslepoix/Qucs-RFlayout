@@ -135,7 +135,7 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 	else if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
-	if(out_names) out_names->push_back(n_out); //success message to stdout in GUI mode
+	if(out_names) out_names->push_back(n_out); // Success message to stdout in GUI mode
 
 	if(f_out.fail()) {
 		log_err << "ERROR : Error occured while writing " << n_out << "\n";
@@ -3021,7 +3021,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	         "path_result = '" << name << "_result';\n"
 	         "path_simulation = '" << name << "_simulation';\n"
-	         "Sim_CSX = '" << name << ".csx';\n"
+	         "csx_file = '" << name << ".csx';\n"
 	         "\n"
 
 	         "if flag_clean\n"
@@ -3468,15 +3468,15 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "%%%% RUN OPENEMS\n"
-	         "WriteOpenEMS([path_simulation '/' Sim_CSX], FDTD, CSX);\n"
+	         "WriteOpenEMS([path_simulation '/' csx_file], FDTD, CSX);\n"
 	         "t_preprocess_stop = clock();\n"
 	         "endif % flag_preprocess\n"
 	         "if flag_gui\n"
-	         "CSXGeomPlot([path_simulation '/' Sim_CSX]);\n"
+	         "CSXGeomPlot([path_simulation '/' csx_file]);\n"
 	         "endif % flag_gui\n"
 	         "if flag_process\n"
 	         "t_process_start = clock();\n"
-	         "RunOpenEMS(path_simulation, Sim_CSX);\n"
+	         "RunOpenEMS(path_simulation, csx_file);\n"
 	         "t_process_stop = clock();\n"
 	         "endif % flag_process\n"
 	         "\n";
