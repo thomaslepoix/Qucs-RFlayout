@@ -23,20 +23,16 @@
 using namespace std;
 
 //******************************************************************************
-MainWindow::MainWindow(Data& _data, QWidget *parent) :
+MainWindow::MainWindow(Data& _data, QWidget* parent) :
 		QMainWindow(parent),
 		ui(std::make_unique<Ui::MainWindow>()),
 		data(_data),
 		converter(_data),
-		n_sch(QString::fromStdString(_data.n_sch)),
-		n_net(QString::fromStdString(_data.n_net)),
-		out_dir(QString::fromStdString(_data.out_dir)),
-		out_format(QString::fromStdString(_data.out_format)),
 		openfile_path(QDir::currentPath()) {
 	ui->setupUi(this);
-	ui->le_path_in->setText(n_sch);
-	ui->le_path_net->setText(n_net);
-	ui->le_path_out->setText(out_dir);
+	ui->le_path_in->setText(QString::fromStdString(_data.n_sch));
+	ui->le_path_net->setText(QString::fromStdString(_data.n_net));
+	ui->le_path_out->setText(QString::fromStdString(_data.out_dir));
 	ui->cb_format->addItem(tr(".kicad_pcb"));
 	ui->cb_format->addItem(tr(".kicad_mod"));
 	ui->cb_format->addItem(tr(".lht"));
@@ -46,11 +42,12 @@ MainWindow::MainWindow(Data& _data, QWidget *parent) :
 	ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
 	ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
 	ui->cb_specify_netlist->setCheckState((_data.n_net=="") ? Qt::Unchecked : Qt::Checked);
+	ui->le_oems_end_criteria->setText(QString::fromStdString(data.oems_end_criteria));
 	ui->le_oems_highres_div->setText(QString::number(data.oems_highres_div));
 	ui->le_oems_metalres_div->setText(QString::number(data.oems_metalres_div));
+	ui->le_oems_nf2ff_center->setText(QString::fromStdString(data.oems_nf2ff_center));
 	ui->le_oems_substres_div->setText(QString::number(data.oems_substres_div));
 	ui->le_oems_timeres->setText(QString::number(data.oems_timeres));
-	ui->le_oems_nf2ff_center->setText(QString::fromStdString(data.oems_nf2ff_center));
 	ui->tw_actions->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
 	for(std::tuple<unsigned long, std::string, std::string> arg : data.port_shift_args) {
@@ -147,11 +144,10 @@ void MainWindow::add_action(QString const action_str, QString const val1, QStrin
 //******************************************************************************
 void MainWindow::read(void) {
 	ui->tb_log->clear();
-	if(n_sch=="") {
+	if(data.n_sch=="") {
 		log_err << "ERROR : Nothing to read.\n";
 	} else {
-		converter.clear();
-		converter.reset(n_sch.toStdString(), n_net.toStdString(), out_dir.toStdString(), out_format.toStdString());
+		converter.reset();
 
 		for(int i=0;i<ui->tw_actions->rowCount();i++) {
 			QString action_str=qobject_cast<QComboBox*>(ui->tw_actions->cellWidget(i, 0))->currentText();
@@ -182,7 +178,6 @@ void MainWindow::read(void) {
 void MainWindow::write(void) {
 	vector<string> out_names;
 	if(converter.size()) {
-		converter.reset(n_sch.toStdString(), n_net.toStdString(), out_dir.toStdString(), out_format.toStdString());
 		if(!converter.write(out_names)) {
 			for(string out : out_names) {
 				log_err << "Write : " << out << "\n";
@@ -194,9 +189,9 @@ void MainWindow::write(void) {
 	}
 
 //******************************************************************************
-void MainWindow::on_cb_format_currentIndexChanged(const QString _out_format) {
-	ui->gb_oems->setEnabled((_out_format==".m") ? true : false);
-	out_format=_out_format;
+void MainWindow::on_cb_format_currentIndexChanged(const QString out_format) {
+	ui->gb_oems->setEnabled((out_format==".m") ? true : false);
+	data.out_format=out_format.toStdString();
 	}
 
 //******************************************************************************
@@ -210,8 +205,13 @@ void MainWindow::on_cb_specify_netlist_stateChanged(int const state) {
 		ui->l_netlist->setEnabled(true);
 		ui->le_path_net->setEnabled(true);
 		ui->pb_browse_net->setEnabled(true);
-		data.n_net=n_net.toStdString();
+		data.n_net=ui->le_path_net->text().toStdString();
 		}
+	}
+
+//******************************************************************************
+void MainWindow::on_le_oems_end_criteria_textChanged(QString const oems_end_criteria) {
+	data.oems_end_criteria=oems_end_criteria.toStdString();
 	}
 
 //******************************************************************************
@@ -225,6 +225,11 @@ void MainWindow::on_le_oems_metalres_div_textChanged(QString const oems_metalres
 	}
 
 //******************************************************************************
+void MainWindow::on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center) {
+	data.oems_nf2ff_center=oems_nf2ff_center.toStdString();
+	}
+
+//******************************************************************************
 void MainWindow::on_le_oems_substres_div_textChanged(QString const oems_substres_div) {
 	data.oems_substres_div=(unsigned int) oems_substres_div.toFloat();
 	}
@@ -235,18 +240,13 @@ void MainWindow::on_le_oems_timeres_textChanged(QString const oems_timeres) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center) {
-	data.oems_nf2ff_center=oems_nf2ff_center.toStdString();
-	}
-
-//******************************************************************************
 void MainWindow::on_le_path_in_returnPressed(void) {
 	read();
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_in_textChanged(QString const _n_sch) {
-	n_sch=_n_sch;
+void MainWindow::on_le_path_in_textChanged(QString const n_sch) {
+	data.n_sch=n_sch.toStdString();
 	}
 
 //******************************************************************************
@@ -255,9 +255,8 @@ void MainWindow::on_le_path_net_returnPressed(void) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_net_textChanged(QString const _n_net) {
-	n_net=_n_net;
-	data.n_net=_n_net.toStdString();
+void MainWindow::on_le_path_net_textChanged(QString const n_net) {
+	data.n_net=n_net.toStdString();
 	}
 
 //******************************************************************************
@@ -266,8 +265,8 @@ void MainWindow::on_le_path_out_returnPressed(void) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_out_textChanged(QString const _out_dir) {
-	out_dir=_out_dir;
+void MainWindow::on_le_path_out_textChanged(QString const out_dir) {
+	data.out_dir=out_dir.toStdString();
 	}
 
 //******************************************************************************
@@ -277,7 +276,7 @@ void MainWindow::on_pb_add_clicked(void) {
 
 //******************************************************************************
 void MainWindow::on_pb_browse_in_clicked(void) {
-	n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), openfile_path, tr("Qucs schematic (*.sch)"));
+	QString n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), openfile_path, tr("Qucs schematic (*.sch)"));
 
 	if(!n_sch.length()) {
 		ui->le_path_in->setText("");
@@ -286,11 +285,12 @@ void MainWindow::on_pb_browse_in_clicked(void) {
 
 	openfile_path=QFileInfo(n_sch).path(); // Store path for next time.
 	ui->le_path_in->setText(n_sch);
+	data.n_sch=n_sch.toStdString();
 	}
 
 //******************************************************************************
 void MainWindow::on_pb_browse_net_clicked(void) {
-	n_net=QFileDialog::getOpenFileName(this, tr("Open netlist"), openfile_path, tr("Qucs netlist (*.net)"));
+	QString n_net=QFileDialog::getOpenFileName(this, tr("Open netlist"), openfile_path, tr("Qucs netlist (*.net)"));
 
 	if(!n_net.length()) {
 		ui->le_path_net->setText("");
@@ -299,12 +299,14 @@ void MainWindow::on_pb_browse_net_clicked(void) {
 
 	openfile_path=QFileInfo(n_net).path(); // Store path for next time.
 	ui->le_path_net->setText(n_net);
+	data.n_net=n_net.toStdString();
 	}
 
 //******************************************************************************
 void MainWindow::on_pb_browse_out_clicked(void) {
-	out_dir=QFileDialog::getExistingDirectory(this, tr("Output directory"), "./", QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
+	QString out_dir=QFileDialog::getExistingDirectory(this, tr("Output directory"), "./", QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 	ui->le_path_out->setText(out_dir);
+	data.out_dir=out_dir.toStdString();
 	}
 
 //******************************************************************************

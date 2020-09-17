@@ -24,7 +24,7 @@ using namespace std;
 Block::Block(void) :
 	elements(vector<shared_ptr<Element>>()),
 	subst(shared_ptr<Element>()),
-	extrem_pos({0.0, 0.0, 0.0, 0.0}),
+	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
 	margin(0.0)
 	{}
 
@@ -92,24 +92,46 @@ void Block::print(void) {
 
 //******************************************************************************
 Data::Data(void) :
-	extrem_pos({0.0, 0.0, 0.0, 0.0}),
+	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
+	is_volume_error(false),
 	out_format(".kicad_pcb"),
 	export_each_block(false),
 	export_each_subst(false),
 	keep_tmp_files(false),
-	is_volume_error(false),
 	subst_margin_factor(10),
 	port_default_l(0.2),
 	oems_boundary_factor(3),
 	oems_highres_div(200),
 	oems_metalres_div(60),
 	oems_substres_div(30),
-	oems_timeres(300000)
+	oems_timeres(300000),
+	oems_end_criteria("1e-4")
+	{}
+
+// Copy an object to a new object with all parameters set but no elements.
+//******************************************************************************
+Data::Data(Data const& data) :
+	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
+	is_volume_error(false),
+	n_sch(data.n_sch),
+	n_net(data.n_net),
+	out_dir(data.out_dir),
+	out_format(data.out_format),
+	export_each_block(data.export_each_block),
+	export_each_subst(data.export_each_subst),
+	keep_tmp_files(data.keep_tmp_files),
+	subst_margin_factor(data.subst_margin_factor),
+	port_default_l(data.port_default_l),
+	oems_boundary_factor(data.oems_boundary_factor),
+	oems_highres_div(data.oems_highres_div),
+	oems_metalres_div(data.oems_metalres_div),
+	oems_substres_div(data.oems_substres_div),
+	oems_timeres(data.oems_timeres),
+	oems_end_criteria(data.oems_end_criteria)
 	{}
 
 //******************************************************************************
 Data::~Data(void) {
-//	all_blocks.clear();
 	for(shared_ptr<Element> it : tab_all) {
 		it->prev=nullptr;
 		it->setAdjacent(1, nullptr, 0);
@@ -117,8 +139,4 @@ Data::~Data(void) {
 		it->setAdjacent(3, nullptr, 0);
 		it->setAdjacent(4, nullptr, 0);
 		}
-//	tab_all.clear();
-//	extrem_pos.fill(0.0);
-//	is_volume_error=false;
-//	volume_error.clear();
 	}

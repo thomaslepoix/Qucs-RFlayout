@@ -110,7 +110,7 @@
      </widget>
     </item>
 
-    <item row="8" column="2" rowspan="5" colspan="4">
+    <item row="8" column="2" rowspan="6" colspan="4">
      <widget class="QGroupBox" name="gb_oems">
       <property name="title">
        <string>OpenEMS parameters</string>
@@ -157,6 +157,16 @@
         </widget>
        </item>
        <item row="4" column="2">
+        <widget class="QLabel" name="l_oems_end_criteria">
+         <property name="toolTip">
+          <string>Energy decay for normal simulation end</string>
+         </property>
+         <property name="text">
+          <string>End criteria :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
         <widget class="QLabel" name="l_oems_nf2ff_center">
          <property name="toolTip">
           <string>Far field radiation center
@@ -180,6 +190,9 @@ Should be a component label</string>
         <widget class="QLineEdit" name="le_oems_timeres"/>
        </item>
        <item row="4" column="5">
+        <widget class="QLineEdit" name="le_oems_end_criteria"/>
+       </item>
+       <item row="5" column="5">
         <widget class="QLineEdit" name="le_oems_nf2ff_center">
          <property name="acceptDrops">
           <bool>true</bool>
@@ -199,7 +212,7 @@ Should be a component label</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0" rowspan="15" colspan="2">
+    <item row="2" column="0" rowspan="16" colspan="2">
      <widget class="Preview" name="glw_preview" native="true"/>
     </item>
     <item row="0" column="2" colspan="2">
@@ -234,7 +247,7 @@ Should be a component label</string>
      </widget>
     </item>
 
-    <item row="13" column="2" rowspan="4" colspan="4">
+    <item row="14" column="2" rowspan="4" colspan="4">
      <widget class="QGroupBox" name="gb_general">
       <property name="title">
        <string>General parameters</string>
@@ -284,24 +297,24 @@ Should be a component label</string>
      </widget>
     </item>
 
-    <item row="17" column="0">
+    <item row="18" column="0">
      <widget class="QLabel" name="l_output">
       <property name="text">
        <string>Output :</string>
       </property>
      </widget>
     </item>
-    <item row="17" column="1">
+    <item row="18" column="1">
      <widget class="QLineEdit" name="le_path_out"/>
     </item>
-    <item row="17" column="2" colspan="2">
+    <item row="18" column="2" colspan="2">
      <widget class="QPushButton" name="pb_browse_out">
       <property name="text">
        <string>Browse</string>
       </property>
      </widget>
     </item>
-    <item row="17" column="5">
+    <item row="18" column="5">
      <widget class="QPushButton" name="pb_write">
       <property name="text">
        <string>Write</string>

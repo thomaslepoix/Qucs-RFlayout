@@ -27,16 +27,8 @@ Converter::Converter(Data& _data) :
 	{}
 
 //******************************************************************************
-void Converter::reset(string n_sch, string n_net, string out_dir, string out_format) {
-	data.n_sch=n_sch;
-	data.n_net=n_net;
-	data.out_dir=out_dir;
-	data.out_format=out_format;
-	}
-
-//******************************************************************************
-void Converter::clear(void) {
-	data=Data();
+void Converter::reset(void) {
+	data=Data(data);
 	}
 
 //******************************************************************************

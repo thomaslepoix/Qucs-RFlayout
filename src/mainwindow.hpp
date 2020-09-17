@@ -38,19 +38,20 @@ public:
 	~MainWindow(void)=default;
 
 private slots:
-	void on_cb_format_currentIndexChanged(QString const _out_format);
+	void on_cb_format_currentIndexChanged(QString const out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
+	void on_le_oems_end_criteria_textChanged(QString const oems_end_criteria);
 	void on_le_oems_highres_div_textChanged(QString const oems_highres_div);
 	void on_le_oems_metalres_div_textChanged(QString const oems_metalres_div);
+	void on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center);
 	void on_le_oems_substres_div_textChanged(QString const oems_substres_div);
 	void on_le_oems_timeres_textChanged(QString const oems_timeres);
-	void on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center);
 	void on_le_path_in_returnPressed(void);
-	void on_le_path_in_textChanged(QString const _n_sch);
+	void on_le_path_in_textChanged(QString const n_sch);
 	void on_le_path_net_returnPressed(void);
-	void on_le_path_net_textChanged(QString const _n_net);
+	void on_le_path_net_textChanged(QString const n_net);
 	void on_le_path_out_returnPressed(void);
-	void on_le_path_out_textChanged(QString const _out_dir);
+	void on_le_path_out_textChanged(QString const out_dir);
 	void on_pb_add_clicked(void);
 	void on_pb_browse_in_clicked(void);
 	void on_pb_browse_net_clicked(void);
@@ -71,11 +72,6 @@ private:
 	Data& data;
 	Converter converter;
 
-	QString n_sch;
-	QString n_net;
-	QString out_dir;
-	QString out_format;
-	QString n_out;
 	QString openfile_path;
 
 	void add_action(QString const action_str="Shift port", QString const val1="", QString const val2="", QString const val3="");

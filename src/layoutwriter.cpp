@@ -3079,6 +3079,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "high_res = lambda / high_div;\n"
 	         "metal_res = lambda / metal_div;\n"
 	         "substrate_res = lambda / substrate_div;\n"
+	         "end_criteria = " << data.oems_end_criteria << ";\n"
 	         "\n";
 
 	f_out << "%%%% SUBSTRATES\n"
@@ -3419,7 +3420,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 
 	f_out << "%%%% SIMULATION\n"
 	         "if flag_preprocess\n"
-	         "FDTD = InitFDTD('NrTS', time_res);\n"
+	         "FDTD = InitFDTD('NrTS', time_res, 'EndCriteria', end_criteria);\n"
 	         "FDTD = SetGaussExcite(FDTD, f0, fc);\n"
 	         "if flag_mur\n"
 	         "\tBC = {'MUR', 'MUR', 'MUR', 'MUR', 'MUR', 'MUR'};\n"
