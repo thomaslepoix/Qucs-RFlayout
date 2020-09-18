@@ -18,6 +18,7 @@
 #include "converter.hpp"
 using namespace std;
 
+//******************************************************************************
 Converter::Converter(Data& _data) :
 	data(_data),
 	parser(_data),
@@ -25,16 +26,12 @@ Converter::Converter(Data& _data) :
 	layoutwriter(_data)
 	{}
 
-void Converter::reset(string n_sch, string out_dir, string out_format) {
-	data.n_sch=n_sch;
-	data.out_dir=out_dir;
-	data.out_format=out_format;
+//******************************************************************************
+void Converter::reset(void) {
+	data=Data(data);
 	}
 
-void Converter::clear(void) {
-	data.clear();
-	}
-
+//******************************************************************************
 int Converter::run(void) {
 	int ret;
 	if((ret=(parser.run()
@@ -47,6 +44,7 @@ int Converter::run(void) {
 	return(0);
 	}
 
+//******************************************************************************
 int Converter::read(void) {
 	int ret;
 	if((ret=(parser.run()
@@ -58,18 +56,22 @@ int Converter::read(void) {
 	return(0);
 	}
 
+//******************************************************************************
 int Converter::write(vector<string>& out_names) {
 	return(layoutwriter.run(&out_names));
 	}
 
+//******************************************************************************
 int Converter::size(void) {
 	return(data.tab_all.size());
 	 }
 
+//******************************************************************************
 vector<shared_ptr<Element>> const& Converter::get_tab_all(void) {
 	return(data.tab_all);
 	}
 
+//******************************************************************************
 array<long double, 4> const& Converter::get_extrem_pos(void) {
 	return(data.extrem_pos);
 	}

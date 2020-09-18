@@ -59,6 +59,7 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
     - Touchstone file (`.sxp`)
     - S parameters (Smith chart and orthogonal)
     - Feed point impedance
+    - Feed point VSWR
     - Azimuth & elevation far field radiation pattern (polar and orthogonal, normalized and in dBi)
     - 3D far field radiation pattern for multiple frequencies (animated `.gif`)
     - Electric & magnetic fields, current and current density in time domain (visible with Paraview)
@@ -163,8 +164,7 @@ qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
 - Microstrip only for now, coplanar waveguide ASAP.
 - Any other component cannot be converted into a geometric shape of metal by this tool.
 - Use one wire to connect only two components ports, use apropriate components to make tees or crosses.
-- Equations are not supported yet, avoid using variables in component fields.
-- QucsStudio schematics are supported but it is closed source and there are some incompatibilities so please prefer using Qucs.
+- QucsStudio schematics are supported (2.x versions only) but it is closed source and there are some incompatibilities so please prefer using Qucs.
 
 <br>
 

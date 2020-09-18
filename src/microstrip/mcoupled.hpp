@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mcoupled final : public Element {
 private :
 	std::string const m_descriptor="microstrip_coupled_lines";
@@ -48,7 +49,7 @@ public :
 			long double _w,
 			long double _l,
 			long double _s);
-	~Mcoupled();
+	~Mcoupled(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;
@@ -58,7 +59,7 @@ public :
 	std::string getNet3(void) override;
 	std::string getNet4(void) override;
 	int getNpoint(void) override;
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	void getEdge(int const _net, long double& edge, short& dir) override;
 	int getOemsNcorelines(void) override;

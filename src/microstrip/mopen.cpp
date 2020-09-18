@@ -18,6 +18,7 @@
 #include "mopen.hpp"
 using namespace std;
 
+//******************************************************************************
 Mopen::Mopen(string _label,
 			string _type,
 			bool _active,
@@ -29,26 +30,28 @@ Mopen::Mopen(string _label,
 	m_w(_w)
 	{}
 
-Mopen::~Mopen() {
-	}
-
+//******************************************************************************
 string Mopen::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Mopen::getW(void) {
 	return(m_w);
 	}
 
+//******************************************************************************
 string Mopen::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 int Mopen::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
+//******************************************************************************
 void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	edge=m_w;
 	switch(m_r) {
@@ -59,6 +62,7 @@ void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) {
 	if(_port==1) {
 		return(true);
@@ -67,6 +71,7 @@ bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) {
 		}
 	}
 
+//******************************************************************************
 int Mopen::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1:

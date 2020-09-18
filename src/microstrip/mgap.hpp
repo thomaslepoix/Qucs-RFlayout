@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mgap final : public Element {
 private :
 	std::string const m_descriptor="microstrip_gap";
@@ -38,7 +39,7 @@ public :
 			long double _w1,
 			long double _w2,
 			long double _s);
-	~Mgap();
+	~Mgap(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW1(void) override;
 	long double getW2(void) override;

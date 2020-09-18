@@ -18,6 +18,7 @@
 #include "mcorn.hpp"
 using namespace std;
 
+//******************************************************************************
 Mcorn::Mcorn(string _label,
 			string _type,
 			bool _active,
@@ -29,43 +30,49 @@ Mcorn::Mcorn(string _label,
 	m_w(_w)
 	{}
 
-Mcorn::~Mcorn() {
-	}
-
+//******************************************************************************
 string Mcorn::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Mcorn::getW(void) {
 	return(m_w);
 	}
 
+//******************************************************************************
 string Mcorn::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 string Mcorn::getNet2(void) {
 	return(m_net2);
 	}
 
+//******************************************************************************
 int Mcorn::getNpoint(void) {
 	return(m_npoint);
 	}
 
-long double Mcorn::getP(int _n, axis_t _xy, orientation_t /*_r*/, origin_t _abs) {
+//******************************************************************************
+long double Mcorn::getP(int const _n, axis_t const _xy, orientation_t const /*_r*/, origin_t const _abs, bool const /*apply_shift*/) {
 	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
 	}
 
+//******************************************************************************
 int Mcorn::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
+//******************************************************************************
 int Mcorn::setNet2(string _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
+//******************************************************************************
 int Mcorn::setP(void) {
 	tab_p[0][X]=-m_w/2;
 	tab_p[0][Y]= m_w/2;
@@ -78,6 +85,7 @@ int Mcorn::setP(void) {
 	return(0);
 	}
 
+//******************************************************************************
 void Mcorn::getStep(int const _net, long double& xstep, long double& ystep) {
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
@@ -146,6 +154,7 @@ void Mcorn::getStep(int const _net, long double& xstep, long double& ystep) {
 		}
 	}
 
+//******************************************************************************
 void Mcorn::getEdge(int const _net, long double& edge, short& dir) {
 	edge=m_w;
 	if(_net==1) {
@@ -174,10 +183,12 @@ void Mcorn::getEdge(int const _net, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 int Mcorn::getOemsNcorelines(void) {
 	return(2);
 	}
 
+//******************************************************************************
 int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n==0) {
 		switch(m_r) {
@@ -212,6 +223,7 @@ int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) {
 	if(_net==1
 	&&(adjacent1.first==nullptr
@@ -250,6 +262,7 @@ int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 bool Mcorn::isOemsMeshInterface(int const _port, long double const _w) {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
@@ -258,6 +271,7 @@ bool Mcorn::isOemsMeshInterface(int const _port, long double const _w) {
 		}
 	}
 
+//******************************************************************************
 int Mcorn::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1:

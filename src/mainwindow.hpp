@@ -21,51 +21,62 @@
 #include <QMainWindow>
 #include <QObject>
 
+#include <memory>
 #include <sstream>
 
 #include "converter.hpp"
 #include "data.hpp"
 #include "logger.hpp"
+#include "ui_mainwindow.h"
 
-namespace Ui {
-class MainWindow;
-} // namespace Ui
-
+//******************************************************************************
 class MainWindow : public QMainWindow, public Loggable {
 	Q_OBJECT
 
 public:
 	explicit MainWindow(Data& _data, QWidget* parent=0);
-	~MainWindow();
+	~MainWindow(void)=default;
 
 private slots:
-	void on_pb_read_clicked(void);
-	void on_le_path_in_textChanged(QString const _n_sch);
+	void on_cb_format_currentIndexChanged(QString const out_format);
+	void on_cb_specify_netlist_stateChanged(int const state);
+	void on_le_oems_end_criteria_textChanged(QString const oems_end_criteria);
+	void on_le_oems_highres_div_textChanged(QString const oems_highres_div);
+	void on_le_oems_metalres_div_textChanged(QString const oems_metalres_div);
+	void on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center);
+	void on_le_oems_substres_div_textChanged(QString const oems_substres_div);
+	void on_le_oems_timeres_textChanged(QString const oems_timeres);
 	void on_le_path_in_returnPressed(void);
-	void on_cb_format_currentIndexChanged(QString const _out_format);
-	void on_pb_browse_in_clicked(void);
-	void on_pb_browse_out_clicked(void);
-	void on_le_path_out_textChanged(QString const _out_dir);
+	void on_le_path_in_textChanged(QString const n_sch);
+	void on_le_path_net_returnPressed(void);
+	void on_le_path_net_textChanged(QString const n_net);
 	void on_le_path_out_returnPressed(void);
+	void on_le_path_out_textChanged(QString const out_dir);
+	void on_pb_add_clicked(void);
+	void on_pb_browse_in_clicked(void);
+	void on_pb_browse_net_clicked(void);
+	void on_pb_browse_out_clicked(void);
+	void on_pb_read_clicked(void);
+	void on_pb_remove_clicked(void);
 	void on_pb_write_clicked(void);
-	void on_rb_export_whole_toggled(bool const is_checked);
-	void on_rb_export_each_subst_toggled(bool const is_checked);
 	void on_rb_export_each_block_toggled(bool const is_checked);
+	void on_rb_export_each_subst_toggled(bool const is_checked);
+	void on_rb_export_whole_toggled(bool const is_checked);
 
 protected:
 	void keyPressEvent(QKeyEvent* event) override;
 	void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
-	Ui::MainWindow* ui;
+	std::unique_ptr<Ui::MainWindow> ui;
 	Data& data;
 	Converter converter;
 
-	QString n_sch;
-	QString out_dir;
-	QString out_format;
-	QString n_out;
 	QString openfile_path;
+
+	void add_action(QString const action_str="Shift port", QString const val1="", QString const val2="", QString const val3="");
+	void read(void);
+	void write(void);
 
 	void log(std::stringstream& in) override;
 };

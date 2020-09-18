@@ -93,7 +93,6 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/main.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.cpp"
-	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.cpp"
@@ -121,7 +120,6 @@ set( QUCS-RF-LAYOUT_SRCS
 
 set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.hpp"
-	"${CMAKE_SOURCE_DIR}/src/microstrip/eqn.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/subst.hpp"
@@ -170,7 +168,7 @@ target_compile_definitions( ${PROJECT_NAME}
 
 target_compile_features( ${PROJECT_NAME}
 	PRIVATE
-	cxx_std_11
+	cxx_std_14
 	)
 
 target_compile_options( ${PROJECT_NAME}

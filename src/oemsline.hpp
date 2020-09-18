@@ -25,6 +25,7 @@
 // required that both lines of a pair are contiguous in a OemsMesh.dir vector
 // Otherwise both will be printed as regular metal resolution lines
 
+//******************************************************************************
 struct OemsLine {
 	long double position;
 	int direction;

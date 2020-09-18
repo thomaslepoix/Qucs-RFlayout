@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Sp final : public Element {
 private :
 	std::string const m_descriptor="s_parameter_simulation";
@@ -36,7 +37,7 @@ public :
 			long double _fstart,
 			long double _fstop,
 			unsigned long _n);
-	~Sp();
+	~Sp(void)=default;
 	std::string getDescriptor(void) override;
 	long double getFstart(void) override;
 	long double getFstop(void) override;

@@ -24,12 +24,14 @@
 #include "oemsline.hpp"
 #include "microstrip/element.hpp"
 
+//******************************************************************************
 class OemsMesh {
 public:
 	std::vector<OemsLine> x;
 	std::vector<OemsLine> y;
 
 	OemsMesh(std::vector<std::shared_ptr<Element>>& elements);
+	~OemsMesh(void)=default;
 };
 
 #endif // OEMSMESH_HPP

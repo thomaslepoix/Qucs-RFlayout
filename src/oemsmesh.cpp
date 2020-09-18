@@ -20,6 +20,7 @@
 #include "oemsmesh.hpp"
 using namespace std;
 
+//******************************************************************************
 OemsMesh::OemsMesh(vector<shared_ptr<Element>>& elements) {
 	for(shared_ptr<Element> element : elements) {
 		for(int i=0;i<element->getOemsNcorelines();i++) {

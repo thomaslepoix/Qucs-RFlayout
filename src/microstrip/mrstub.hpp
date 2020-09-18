@@ -22,6 +22,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mrstub final : public Element {
 private :
 	std::string const m_descriptor="microstrip_radial_stub";
@@ -42,17 +43,17 @@ public :
 			std::string _subst,
 			long double _ri,
 			long double _ro,
-			short _alpha);
-	~Mrstub();
+			long double _alpha);
+	~Mrstub(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	long double getL(void) override;
 	long double getRi(void) override;
 	long double getRo(void) override;
-	short getAlpha(void) override;
+	long double getAlpha(void) override;
 	std::string getNet1(void) override;
 	int getNpoint(void) override;
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
 	void getEdge(int const _net, long double& edge, short& dir) override;
 	int getOemsNcorelines(void) override;
 	int getOemsMeshCore(int const _n, OemsLine& line) override;

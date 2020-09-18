@@ -18,6 +18,7 @@
 #include "mstep.hpp"
 using namespace std;
 
+//******************************************************************************
 Mstep::Mstep(string _label,
 			string _type,
 			bool _active,
@@ -31,39 +32,44 @@ Mstep::Mstep(string _label,
 	m_w2(_w2)
 	{}
 
-Mstep::~Mstep() {
-	}
-
+//******************************************************************************
 string Mstep::getDescriptor(void) {
 	return(m_descriptor);
 	}
 
+//******************************************************************************
 long double Mstep::getW1(void) {
 	return(m_w1);
 	}
 
+//******************************************************************************
 long double Mstep::getW2(void) {
 	return(m_w2);
 	}
 
+//******************************************************************************
 string Mstep::getNet1(void) {
 	return(m_net1);
 	}
 
+//******************************************************************************
 string Mstep::getNet2(void) {
 	return(m_net2);
 	}
 
+//******************************************************************************
 int Mstep::setNet1(string _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
+//******************************************************************************
 int Mstep::setNet2(string _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
+//******************************************************************************
 void Mstep::getEdge(int const _net, long double& edge, short& dir) {
 	if(_net==1) {
 		edge=m_w1;
@@ -84,10 +90,12 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) {
 		}
 	}
 
+//******************************************************************************
 int Mstep::getOemsNcorelines(void) {
 	return(1);
 	}
 
+//******************************************************************************
 int Mstep::getOemsMeshCore(int const _n, OemsLine& line) {
 	if(_n!=0 || m_w1==m_w2)
 		return(1);
@@ -129,6 +137,7 @@ int Mstep::getOemsMeshCore(int const _n, OemsLine& line) {
 	return(0);
 	}
 
+//******************************************************************************
 int Mstep::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1:

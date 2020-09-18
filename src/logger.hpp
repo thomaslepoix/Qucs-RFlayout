@@ -20,15 +20,19 @@
 
 #include <sstream>
 
-// Prefer log_err instead of cerr
-// Do not use std::endl or std::flush with logger objects
-
+// Inherit to make a class loggable in GUI mode. Then implement the 'log'
+// member function.
+//******************************************************************************
 class Loggable {
 private:
 	friend class Logger;
 	virtual void log(std::stringstream& in);
+public:
+	Loggable(void)=default;
+	~Loggable(void)=default;
 };
 
+//******************************************************************************
 class Logger {
 private:
 	typedef void (Logger::*func)(std::stringstream&);
@@ -45,11 +49,16 @@ public:
 	Loggable* obj=nullptr;
 
 	Logger(void);
+	~Logger(void)=default;
 	void set_mode(bool gui);
 };
 
+// Prefer log_err instead of cerr.
+// Do not use std::endl or std::flush with Logger objects.
+//******************************************************************************
 extern Logger log_err;
 
+//******************************************************************************
 template<typename T>
 Logger& operator<<(Logger& logger, T const& in) {
 	std::stringstream ss;

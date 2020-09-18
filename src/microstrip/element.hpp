@@ -26,11 +26,13 @@
 
 #include "oemsline.hpp"
 
+//******************************************************************************
 enum axis_t {X, Y};            // x axis / y axis
 enum orientation_t {NOR, R};   // no rotation / rotation
 enum origin_t {REL, ABS};      // relative / absolute
 enum {XMIN, XMAX, YMIN, YMAX}; // extrem_pos index
 
+//******************************************************************************
 class Element {
 protected:
 	std::string m_label;
@@ -54,7 +56,7 @@ public:
 			short _r,
 			short _nport,
 			std::string _subst);
-	virtual ~Element();
+	virtual ~Element(void)=default;
 	std::shared_ptr<Element> prev=nullptr;
 	std::string getLabel(void);
 	std::string getType(void);
@@ -63,8 +65,8 @@ public:
 	short getR(void);
 	short getNport(void);
 	std::string getSubst(void);
-	long double getX(void);
-	long double getY(void);
+	long double getX(bool const apply_shift=true);
+	long double getY(bool const apply_shift=true);
 	int setX(long double _x);
 	int setY(long double _y);
 	int setShiftX(long double _shift_x);
@@ -93,15 +95,15 @@ public:
 	virtual long double getTand(void);
 	virtual long double getRho(void);
 	virtual long double getMargin(void);
+	virtual long double getAlpha(void);
 	virtual unsigned long getN(void);
-	virtual short getAlpha(void);
 	virtual std::string getSimtype(void);
 	virtual std::string getNet1(void);
 	virtual std::string getNet2(void);
 	virtual std::string getNet3(void);
 	virtual std::string getNet4(void);
 	virtual int getNpoint(void);
-	virtual long double getP(int _n, axis_t _xy, orientation_t _r, origin_t _abs);
+	virtual long double getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const apply_shift=true);
 	virtual void getStep(int const _net, long double& xstep, long double& ystep);
 	virtual void getEdge(int const _net, long double& edge, short& dir);
 	virtual int getOemsNcorelines(void);

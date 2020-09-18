@@ -31,6 +31,7 @@ using namespace std;
 #define main not_main
 #endif // QRFL_UNITTEST
 
+//******************************************************************************
 int main(int argc, char* argv[]) {
 
 //variables
@@ -78,7 +79,9 @@ int main(int argc, char* argv[]) {
 				        "      --oems-highres-div INTEGER     OpenEMS high resolution mesh lambda divisor. Default is 200.\n"
 				        "      --oems-metalres-div INTEGER    OpenEMS metal resolution mesh lambda divisor. Default is 60.\n"
 				        "      --oems-substres-div INTEGER    OpenEMS substrate resolution mesh lambda divisor. Default is 30.\n"
-				        "      --oems-timeres INTEGER         Number of timesteps before OpenEMS stops simulation.\n"
+				        "      --oems-timeres INTEGER         Number of timesteps before OpenEMS stops simulation. Default is 300000.\n"
+				        "      --oems-end-criteria STRING     OpenEMS stops simulation when energy decayed to this value.\n"
+				        "                                     Should stay between 1e-3 (speed) and 1e-5 (precision). Default is 1e-4.\n"
 				        "      --oems-nf2ff-center STRING     Set the OpenEMS far field center. Must be a component label.\n";
 				return(0);
 			} else if(string(argv[i])=="--version") {
@@ -139,6 +142,9 @@ int main(int argc, char* argv[]) {
 			} else if(string(argv[i])=="--oems-timeres" && argv[i+1]) {
 				i++;
 				data.oems_timeres=atoi(argv[i]);
+			} else if(string(argv[i])=="--oems-end-criteria" && argv[i+1]) {
+				i++;
+				data.oems_end_criteria=string(argv[i]);
 			} else if(string(argv[i])=="--oems-nf2ff-center" && argv[i+1]) {
 				i++;
 				data.oems_nf2ff_center=string(argv[i]);

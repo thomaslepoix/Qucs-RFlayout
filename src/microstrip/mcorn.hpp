@@ -20,6 +20,7 @@
 
 #include "element.hpp"
 
+//******************************************************************************
 class Mcorn final : public Element {
 private :
 	std::string const m_descriptor="microstrip_corner";
@@ -40,13 +41,13 @@ public :
 			short _r,
 			std::string _subst,
 			long double _w);
-	~Mcorn();
+	~Mcorn(void)=default;
 	std::string getDescriptor(void) override;
 	long double getW(void) override;
 	std::string getNet1(void) override;
 	std::string getNet2(void) override;
 	int getNpoint(void) override;
-	long double getP(int _n, axis_t _xy, orientation_t _r=NOR, origin_t _abs=REL) override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	void getEdge(int const _net, long double& edge, short& dir) override;
 	int getOemsNcorelines(void) override;

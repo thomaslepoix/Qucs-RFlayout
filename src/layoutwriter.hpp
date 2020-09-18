@@ -25,6 +25,7 @@
 
 #include "data.hpp"
 
+//******************************************************************************
 class LayoutWriter {
 private:
 	Data& data;
@@ -32,13 +33,14 @@ private:
 	int check_m(void);
 	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::vector<std::string>* out_names);
 	//TODO array<long double, 2> offset ?
-	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y);
+	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
 	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
-	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y);
+	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
 	void write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
 
 public:
 	LayoutWriter(Data& _data);
+	~LayoutWriter(void)=default;
 	int run(std::vector<std::string>* out_names=nullptr);
 };
 

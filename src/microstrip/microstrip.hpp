@@ -18,7 +18,6 @@
 #ifndef MICROSTRIP_HPP
 #define MICROSTRIP_HPP
 
-#include "eqn.hpp"
 #include "pac.hpp"
 #include "sp.hpp"
 #include "subst.hpp"

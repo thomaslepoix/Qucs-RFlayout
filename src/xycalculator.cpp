@@ -26,20 +26,21 @@
 #include "xycalculator.hpp"
 using namespace std;
 
+//******************************************************************************
 XyCalculator::XyCalculator(Data& _data) :
 	data(_data)
 	{}
 
+//******************************************************************************
 int XyCalculator::run(void) {
-
-//check geometric coherence of the schematic
+	// Check geometric coherence of the schematic
 	if(check_intersection()) {
 		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
 		           "\tPlease use a component like a tee or a cross to avoid this.\n";
 		return(3);
 		}
 
-	//delete unconnected nets
+	// Delete unconnected nets
 	purge_nets();
 	populate_adjacents();
 	resolve_pac_shapes();
@@ -50,8 +51,9 @@ int XyCalculator::run(void) {
 	return(0);
 	}
 
-void XyCalculator::resolve_pac_shapes(void) {
 // Pac have no shape so they calc it from adjacent largest element
+//******************************************************************************
+void XyCalculator::resolve_pac_shapes(void) {
 	for(shared_ptr<Element> pac : data.tab_all) {
 		if(pac->getType()=="Pac" && dynamic_cast<Pac*>(pac.get())->is_size_set==false) {
 			long double edge=0;
@@ -79,6 +81,7 @@ void XyCalculator::resolve_pac_shapes(void) {
 							}
 						}
 					}
+				break;
 				}
 			pac->setW(edge);
 			pac->setL(data.port_default_l);
@@ -91,12 +94,15 @@ void XyCalculator::resolve_pac_shapes(void) {
 		}
 	}
 
+//******************************************************************************
 void XyCalculator::place_elements(void) {
+	if(!data.tab_all.size())
+		return;
 
-//variables
+// Variables
 	vector<shared_ptr<Element>> tab_undone=data.tab_all;
 	stack<shared_ptr<Element>> buffer;
-	shared_ptr<Element> current=tab_undone[0];
+	shared_ptr<Element> current=tab_undone.front();
 	shared_ptr<Element> next=nullptr;
 
 	long double prev_xstep=0;
@@ -106,7 +112,7 @@ void XyCalculator::place_elements(void) {
 	int nnets;
 	int current_net=0;
 
-//first element
+// First element
 	current->setX(0);
 	current->setY(0);
 	cout << endl << "Calculating elements positions..." << endl;
@@ -114,7 +120,7 @@ void XyCalculator::place_elements(void) {
 	data.all_blocks.push_back(shared_ptr<Block>(new Block()));
 	add_to_block(data.all_blocks.back(), current);
 
-//algorithm : find elements potitions
+// Algorithm : find elements potitions
 	while(tab_undone.size()) {
 		nnets=activenets(current);
 		cout << "Undone elements : " << tab_undone.size() << endl;
@@ -130,19 +136,19 @@ void XyCalculator::place_elements(void) {
 				cout << "Current label : " << current->getLabel() << endl;
 			} else {
 				if(tab_undone.size()) {
-					current=tab_undone[0];
+					current=tab_undone.front();
 					data.all_blocks.push_back(shared_ptr<Block>(new Block()));
 					add_to_block(data.all_blocks.back(), current);
 					cout << "End of a block : Next from undone elements" << endl;
 					cout << endl;
 					cout << "Current label : " << current->getLabel() << endl;
 					}
-				if(current->getX()!=current->getX() || current->getY()!=current->getY()) {
+				if(current->getX(false)!=current->getX(false) || current->getY(false)!=current->getY(false)) {
 					// Reset position
 					current->setX(0);
 					current->setY(0);
-					cout << "Reset X : " << current->getX() << endl;
-					cout << "Reset Y : " << current->getY() << endl;
+					cout << "Reset X : " << current->getX(false) << endl;
+					cout << "Reset Y : " << current->getY(false) << endl;
 					}
 				}
 		} else {
@@ -162,26 +168,27 @@ void XyCalculator::place_elements(void) {
 			next=nullptr;
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
-			if(current->getX()!=current->getX() || current->getY()!=current->getY()) { // If position is -NaN
+			if(current->getX(false)!=current->getX(false) || current->getY(false)!=current->getY(false)) { // If position is -NaN
 				current->getStep(current_net, current_xstep, current_ystep);
 				cout << "Previous Xstep : " << prev_xstep << endl;
 				cout << "Previous Ystep : " << prev_ystep << endl;
 				cout << "Current Xstep : " << -1*current_xstep << endl;
 				cout << "Current Ystep : " << -1*current_ystep << endl;
-				current->setX((current->prev->getX())+(prev_xstep)-(current_xstep));
-				current->setY((current->prev->getY())+(prev_ystep)-(current_ystep));
-				cout << "X : " << current->getX() << endl;
-				cout << "Y : " << current->getY() << endl;
+				current->setX((current->prev->getX(false))+(prev_xstep)-(current_xstep));
+				current->setY((current->prev->getY(false))+(prev_ystep)-(current_ystep));
+				cout << "X : " << current->getX(false) << endl;
+				cout << "Y : " << current->getY(false) << endl;
 				}
 			}
 		}
 	cout << "Calculating elements positons... OK" << endl;
 	}
 
+// Place element blocks regarding each other
+//******************************************************************************
 void XyCalculator::place_blocks(void) {
-//place element blocks regarding each other
 
-//store all substrates
+// Store all substrates
 	vector<shared_ptr<Element>> tab_subst;
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(it->getType()=="SUBST") {
@@ -193,7 +200,7 @@ void XyCalculator::place_blocks(void) {
 		data.volume_error += "ERROR : No substrate in the schematic.\n";
 		}
 
-//check block / subst coherence
+// Check block / subst coherence
 	cout << endl << "Analysing blocks... ";
 	for(shared_ptr<Block> block : data.all_blocks) {
 		vector<pair<string, int>> subst_in_block;
@@ -214,7 +221,7 @@ void XyCalculator::place_blocks(void) {
 				                  + "\" in : " + it->getLabel() + "\n";
 				}
 
-		//count each different subst occurences in a block
+		// Count each different subst occurences in a block
 			bool subst_registered=false;
 			for(pair<string, int> subst : subst_in_block) {
 				if(subst.first==it->getSubst()) {
@@ -228,7 +235,7 @@ void XyCalculator::place_blocks(void) {
 				}
 			}
 
-	//treat different occurences configurations
+	// Treat different occurences configurations
 		if(subst_in_block.size()==0
 		||(subst_in_block.size()==1
 		&& subst_in_block[0].first=="")) {
@@ -238,13 +245,13 @@ void XyCalculator::place_blocks(void) {
 			data.is_volume_error=true;
 			data.volume_error += "ERROR : Too many different substrates used in a block\n";
 		} else if(subst_in_block.size()==1) {
-			//assign a subst to block
+			// Assign a subst to block
 			for(shared_ptr<Element> subst : tab_subst) {
 				if(subst->getLabel()==subst_in_block[0].first) {
 					block->subst=subst;
 					}
 				}
-			//set pacs subst field to block subst
+			// Set pacs subst field to block subst
 			for(shared_ptr<Element> pac : block->elements) {
 				if(pac->getType()=="Pac") {
 					pac->setSubst(block->subst->getLabel());
@@ -254,9 +261,9 @@ void XyCalculator::place_blocks(void) {
 		}
 	cout << "OK" << endl;
 
-	sort_blocks(data.all_blocks, tab_subst); //sort by subst
+	sort_blocks(data.all_blocks, tab_subst); // Sort by subst
 
-//block placement
+// Block placement
 	cout << endl << "Calculating blocks positons..." << endl;
 	shared_ptr<Block> prev=nullptr;
 	axis_t vector=Y;
@@ -307,7 +314,7 @@ void XyCalculator::place_blocks(void) {
 		}
 	cout << "Calculating blocks positons... OK" << endl;
 
-//subst placement
+// Subst placement
 	cout << endl << "Calculating substrates positons..." << endl;
 	for(shared_ptr<Element> subst : tab_subst) {
 		array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
@@ -334,7 +341,7 @@ void XyCalculator::place_blocks(void) {
 		}
 
 
-//set global extrem_pos
+// Set global extrem_pos
 	for(shared_ptr<Block> block : data.all_blocks) {
 		if(block->extrem_pos[XMIN]-block->margin<data.extrem_pos[XMIN]) data.extrem_pos[XMIN]=block->extrem_pos[XMIN]-block->margin;
 		if(block->extrem_pos[XMAX]+block->margin>data.extrem_pos[XMAX]) data.extrem_pos[XMAX]=block->extrem_pos[XMAX]+block->margin;
@@ -351,7 +358,7 @@ void XyCalculator::place_blocks(void) {
 		}
 	cout << "Calculating substrates positons... OK" << endl;
 
-//translate to positive quarter
+// Translate to positive quarter
 	cout << endl << "Translating to positive quarter... ";
 	for(shared_ptr<Block> block : data.all_blocks) {
 		block->shift(-data.extrem_pos[XMIN], -data.extrem_pos[YMIN]);
@@ -361,14 +368,14 @@ void XyCalculator::place_blocks(void) {
 		subst->setY(subst->getY()-data.extrem_pos[YMIN]);
 		subst->setP();
 		}
-	//maximums first
+	// Maximums first
 	data.extrem_pos[XMAX]-=data.extrem_pos[XMIN];
 	data.extrem_pos[XMIN]-=data.extrem_pos[XMIN];
 	data.extrem_pos[YMAX]-=data.extrem_pos[YMIN];
 	data.extrem_pos[YMIN]-=data.extrem_pos[YMIN];
 	cout << "OK" << endl;
 
-//local subst placement
+// Local subst placement
 	cout << endl << "Calculating local substrates positons... ";
 	for(shared_ptr<Block> block : data.all_blocks) {
 		if(block->subst) {
@@ -384,6 +391,7 @@ void XyCalculator::place_blocks(void) {
 	cout << "OK" << endl;
 	}
 
+//******************************************************************************
 void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_ptr<Element>> substs) {
 	vector<shared_ptr<Block>> tmp_blocks;
 	for(shared_ptr<Element> subst : substs) {
@@ -401,10 +409,10 @@ void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_p
 	blocks.swap(tmp_blocks);
 	}
 
+// Add geometric element if not already present
+//******************************************************************************
 int XyCalculator::add_to_block(shared_ptr<Block>& block, shared_ptr<Element> const& element) {
-//add geometric element if not already present
-	if(element->getType()=="Eqn"
-	|| element->getType()=="SUBST"
+	if(element->getType()=="SUBST"
 	|| element->getType()==".SP") {
 		return(1);
 		}
@@ -417,6 +425,7 @@ int XyCalculator::add_to_block(shared_ptr<Block>& block, shared_ptr<Element> con
 	return(0);
 	}
 
+//******************************************************************************
 int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<Element> const& element) {
 	for(unsigned int i=0;i<elements.size();i++) {
 		if(elements[i]==element) {
@@ -427,8 +436,9 @@ int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<E
 	return(0);
 	}
 
+// Check if another element with this net exists
+//******************************************************************************
 bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const net) {
-//check if another element with this net exists
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(it!=element) {
 			if(it->getNet1()==net) return(1);
@@ -440,8 +450,9 @@ bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const ne
 	return(0);
 	}
 
+// Delete unconnected nets
+//******************************************************************************
 int XyCalculator::purge_nets(void) {
-//delete unconnected nets
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(purgefind(it, it->getNet1())==false) it->setNet1("");
 		if(purgefind(it, it->getNet2())==false) it->setNet2("");
@@ -451,8 +462,9 @@ int XyCalculator::purge_nets(void) {
 	return(0);
 	}
 
+// Delete blocks with only a non geometric element inside
+//******************************************************************************
 int XyCalculator::purge_blocks(void) {
-//delete blocks with only a non geometric element inside
 	for(unsigned int i=0;i<data.all_blocks.size();i++) {
 		if(data.all_blocks[i]->elements.size()==0) {
 			data.all_blocks.erase(data.all_blocks.begin()+i);
@@ -462,6 +474,7 @@ int XyCalculator::purge_blocks(void) {
 	return(0);
 	}
 
+//******************************************************************************
 bool XyCalculator::check_onenet(string const net) {
 	unsigned int count=0;
 	if(net!=""){
@@ -475,8 +488,9 @@ bool XyCalculator::check_onenet(string const net) {
 	return(count>2 ? 1 : 0);
 	}
 
+// Check if there are net intersections : more than 2 times the same net
+//******************************************************************************
 bool XyCalculator::check_intersection(void) {
-//check if there are net intersections : more than 2 times the same net
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(check_onenet(it->getNet1())==true) return(1);
 		if(check_onenet(it->getNet2())==true) return(1);
@@ -486,6 +500,7 @@ bool XyCalculator::check_intersection(void) {
 	return(0);
 	}
 
+//******************************************************************************
 int XyCalculator::activenets(shared_ptr<Element> const& element) {
 	int nlinks=0;
 	if(element->getNet1()!="") nlinks++;
@@ -495,6 +510,7 @@ int XyCalculator::activenets(shared_ptr<Element> const& element) {
 	return(nlinks);
 	}
 
+//******************************************************************************
 int XyCalculator::netmin(shared_ptr<Element> const& element) {
 	if(element->getNet1()!="") return(1);
 	if(element->getNet2()!="") return(2);
@@ -503,6 +519,7 @@ int XyCalculator::netmin(shared_ptr<Element> const& element) {
 	return(0);
 	}
 
+//******************************************************************************
 void XyCalculator::populate_adjacents(void) {
 	for(shared_ptr<Element> element : data.tab_all) {
 		for(shared_ptr<Element> it : data.tab_all) {
@@ -516,6 +533,7 @@ void XyCalculator::populate_adjacents(void) {
 		}
 	}
 
+//******************************************************************************
 int XyCalculator::get_port(shared_ptr<Element> const& element, string const net) {
 	if(net!="") {
 		if(element->getNet1()==net) return(1);
@@ -526,8 +544,9 @@ int XyCalculator::get_port(shared_ptr<Element> const& element, string const net)
 	return(0);
 	}
 
+// Find next element and delete link
+//******************************************************************************
 void XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net, shared_ptr<Element>& next) {
-//find next element and delete link
 	string net="";
 	if(current_net==1) {
 		net=current->getNet1();
