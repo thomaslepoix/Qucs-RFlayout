@@ -15,6 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
+
 #include "element.hpp"
 using namespace std;
 
@@ -32,7 +36,12 @@ Element::Element(string _label,
 	m_mirrorx(_mirrorx),
 	m_r(_r),
 	m_nport(_nport),
-	m_subst(_subst)
+	m_subst(_subst),
+	m_x(NAN),
+	m_y(NAN),
+	m_shift_x(0.0),
+	m_shift_y(0.0),
+	prev(nullptr)
 	{}
 
 //******************************************************************************
@@ -81,36 +90,36 @@ long double Element::getY(bool const apply_shift) {
 	}
 
 //******************************************************************************
-int Element::setX(long double _x) {
+int Element::setX(long double const _x) {
 	m_x=_x;
 	return(0);
 	}
 
 //******************************************************************************
-int Element::setY(long double _y) {
+int Element::setY(long double const _y) {
 	m_y=_y;
 	return(0);
 	}
 
 //******************************************************************************
-int Element::setShiftX(long double _shift_x) {
+int Element::setShiftX(long double const _shift_x) {
 	m_shift_x=_shift_x;
 	return(0);
 	}
 
 //******************************************************************************
-int Element::setShiftY(long double _shift_y) {
+int Element::setShiftY(long double const _shift_y) {
 	m_shift_y=_shift_y;
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::rotateX(long double _x, long double _y) {
+long double Element::rotateX(long double const _x, long double const _y) {
 	return(_x*cos((M_PI/180)*m_r)+_y*sin((M_PI/180)*m_r));
 	}
 
 //******************************************************************************
-long double Element::rotateY(long double _x, long double _y) {
+long double Element::rotateY(long double const _x, long double const _y) {
 	return(-_x*sin((M_PI/180)*m_r)+_y*cos((M_PI/180)*m_r));
 	}
 
@@ -309,42 +318,42 @@ int Element::setAdjacent(int const /*_port*/, shared_ptr<Element> const& /*eleme
 	}
 
 //******************************************************************************
-int Element::setW(long double /*_w*/) {
+int Element::setW(long double const /*_w*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setL(long double /*_l*/) {
+int Element::setL(long double const /*_l*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setR(short /*_r*/) {
+int Element::setR(short const /*_r*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setSubst(string /*_subst*/) {
+int Element::setSubst(string const /*_subst*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet1(string /*_net1*/) {
+int Element::setNet1(string const /*_net1*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet2(string /*_net2*/) {
+int Element::setNet2(string const /*_net2*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet3(string /*_net3*/) {
+int Element::setNet3(string const /*_net3*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet4(string /*_net4*/) {
+int Element::setNet4(string const /*_net4*/) {
 	return(1);
 	}
 

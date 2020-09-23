@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mcoupled::m_descriptor("microstrip_coupled_lines");
+
+//******************************************************************************
 Mcoupled::Mcoupled(string _label,
 			string _type,
 			bool _active,
@@ -92,25 +95,25 @@ long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _
 	}
 
 //******************************************************************************
-int Mcoupled::setNet1(string _net1) {
+int Mcoupled::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet2(string _net2) {
+int Mcoupled::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet3(string _net3) {
+int Mcoupled::setNet3(string const _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet4(string _net4) {
+int Mcoupled::setNet4(string const _net4) {
 	m_net4=_net4;
 	return(0);
 	}

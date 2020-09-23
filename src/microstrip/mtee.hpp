@@ -23,14 +23,14 @@
 //******************************************************************************
 class Mtee final : public Element {
 private :
-	std::string const m_descriptor="microstrip_tee";
+	static std::string const m_descriptor;
 	long double m_w1;
 	long double m_w2;
 	long double m_w3;
 	std::string m_net1;
 	std::string m_net2;
 	std::string m_net3;
-	static int const m_npoint=6;
+	static int constexpr m_npoint=6;
 	long double tab_p[m_npoint][2]={};
 
 	// first : element, second : element's port
@@ -64,9 +64,9 @@ public :
 	int getOemsMeshInterface(int const _net, OemsLine& line) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
-	int setNet3(std::string _net3) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
+	int setNet3(std::string const _net3) override;
 	int setP(void) override;
 };
 

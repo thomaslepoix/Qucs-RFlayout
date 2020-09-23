@@ -23,7 +23,7 @@
 //******************************************************************************
 class Sp final : public Element {
 private :
-	std::string const m_descriptor="s_parameter_simulation";
+	static std::string const m_descriptor;
 	std::string m_simtype;
 	long double m_fstart;
 	long double m_fstop;

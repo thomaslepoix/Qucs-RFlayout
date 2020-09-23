@@ -23,7 +23,7 @@
 //******************************************************************************
 class Mgap final : public Element {
 private :
-	std::string const m_descriptor="microstrip_gap";
+	static std::string const m_descriptor;
 	long double m_w1;
 	long double m_w2;
 	long double m_s;
@@ -49,8 +49,8 @@ public :
 	void getStep(int const _net, long double& xstep, long double& ystep) override;
 	void getEdge(int const _net, long double& edge, short& dir) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
 };
 
 #endif // MGAP_HPP

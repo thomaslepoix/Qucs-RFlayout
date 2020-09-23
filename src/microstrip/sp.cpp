@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Sp::m_descriptor("s_parameter_simulation");
+
+//******************************************************************************
 Sp::Sp(string _label,
 			string _type,
 			bool _mirrorx,

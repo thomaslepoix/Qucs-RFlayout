@@ -25,7 +25,7 @@
 //******************************************************************************
 class Subst final : public Element {
 private :
-	const std::string m_descriptor="substrat";
+	static std::string const m_descriptor;
 	long double m_w;
 	long double m_l;
 	long double m_er;
@@ -65,8 +65,8 @@ public :
 	long double getMargin(void) override;
 	int getNpoint(void) override;
 	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
-	int setW(long double _w) override;
-	int setL(long double _l) override;
+	int setW(long double const _w) override;
+	int setL(long double const _l) override;
 	int setP(void) override;
 };
 

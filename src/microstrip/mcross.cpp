@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mcross::m_descriptor("microstrip_cross");
+
+//******************************************************************************
 Mcross::Mcross(string _label,
 			string _type,
 			bool _active,
@@ -98,22 +101,22 @@ long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r,
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
-int Mcross::setNet1(string _net1) {
+int Mcross::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
-int Mcross::setNet2(string _net2) {
+int Mcross::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
-int Mcross::setNet3(string _net3) {
+int Mcross::setNet3(string const _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
-int Mcross::setNet4(string _net4) {
+int Mcross::setNet4(string const _net4) {
 	m_net4=_net4;
 	return(0);
 	}

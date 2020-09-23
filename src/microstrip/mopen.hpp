@@ -23,7 +23,7 @@
 //******************************************************************************
 class Mopen final : public Element {
 private :
-	std::string const m_descriptor="microstrip_open";
+	static std::string const m_descriptor;
 	long double m_w;
 	std::string m_net1;
 
@@ -44,7 +44,7 @@ public :
 	void getEdge(int const _net, long double& edge, short& dir) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string _net1) override;
+	int setNet1(std::string const _net1) override;
 };
 
 #endif // MOPEN_HPP

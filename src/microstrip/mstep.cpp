@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mstep::m_descriptor("microstrip_step");
+
+//******************************************************************************
 Mstep::Mstep(string _label,
 			string _type,
 			bool _active,
@@ -58,13 +61,13 @@ string Mstep::getNet2(void) {
 	}
 
 //******************************************************************************
-int Mstep::setNet1(string _net1) {
+int Mstep::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mstep::setNet2(string _net2) {
+int Mstep::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}

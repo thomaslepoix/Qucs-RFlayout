@@ -23,7 +23,7 @@
 //******************************************************************************
 class Pac final : public Element {
 private :
-	std::string const m_descriptor="ac_port";
+	static std::string const m_descriptor;
 	unsigned long m_n;
 	long double m_z;
 	long double m_p;
@@ -32,7 +32,7 @@ private :
 	long double m_l;
 	std::string m_net1;
 	std::string m_net2;
-	static int const m_npoint=4;
+	static int constexpr m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
 	bool is_size_set=false;
@@ -61,12 +61,12 @@ public :
 	void getEdge(int const _net, long double& edge, short& dir) override;
 	int getOemsNcorelines(void) override;
 	int getOemsMeshCore(int const _n, OemsLine& line) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
-	int setSubst(std::string _subst) override;
-	int setW(long double _w) override;
-	int setL(long double _l) override;
-	int setR(short _r) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
+	int setSubst(std::string const _subst) override;
+	int setW(long double const _w) override;
+	int setL(long double const _l) override;
+	int setR(short const _r) override;
 	int setP(void) override;
 };
 

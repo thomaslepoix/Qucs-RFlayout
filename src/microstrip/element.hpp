@@ -18,19 +18,16 @@
 #ifndef ELEMENT_HPP
 #define ELEMENT_HPP
 
-#define _USE_MATH_DEFINES
-
-#include <cmath>
 #include <memory>
 #include <string>
 
 #include "oemsline.hpp"
 
 //******************************************************************************
-enum axis_t {X, Y};            // x axis / y axis
-enum orientation_t {NOR, R};   // no rotation / rotation
-enum origin_t {REL, ABS};      // relative / absolute
-enum {XMIN, XMAX, YMIN, YMAX}; // extrem_pos index
+enum axis_t { X, Y };            // x axis / y axis
+enum orientation_t { NOR, R };   // no rotation / rotation
+enum origin_t { REL, ABS };      // relative / absolute
+enum { XMIN, XMAX, YMIN, YMAX }; // extrem_pos index
 
 //******************************************************************************
 class Element {
@@ -42,12 +39,12 @@ protected:
 	short m_r;
 	short m_nport;
 	std::string m_subst;
-    long double m_x=NAN;
-    long double m_y=NAN;
-	long double m_shift_x=0.0;
-	long double m_shift_y=0.0;
-	long double rotateX(long double _x, long double _y);
-	long double rotateY(long double _x, long double _y);
+	long double m_x;
+	long double m_y;
+	long double m_shift_x;
+	long double m_shift_y;
+	long double rotateX(long double const _x, long double const _y);
+	long double rotateY(long double const _x, long double const _y);
 public:
 	Element(std::string _label,
 			std::string _type,
@@ -57,7 +54,7 @@ public:
 			short _nport,
 			std::string _subst);
 	virtual ~Element(void)=default;
-	std::shared_ptr<Element> prev=nullptr;
+	std::shared_ptr<Element> prev;
 	std::string getLabel(void);
 	std::string getType(void);
 	bool getActive(void);
@@ -67,10 +64,10 @@ public:
 	std::string getSubst(void);
 	long double getX(bool const apply_shift=true);
 	long double getY(bool const apply_shift=true);
-	int setX(long double _x);
-	int setY(long double _y);
-	int setShiftX(long double _shift_x);
-	int setShiftY(long double _shift_y);
+	int setX(long double const _x);
+	int setY(long double const _y);
+	int setShiftX(long double const _shift_x);
+	int setShiftY(long double const _shift_y);
 
 	//default functions, to override
 	virtual std::string getDescriptor(void);
@@ -112,14 +109,14 @@ public:
 	virtual bool isOemsMeshInterface(int const _port, long double const _w);
 	virtual int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port);
 
-	virtual int setW(long double _w);
-	virtual int setL(long double _l);
-	virtual int setR(short _r);
-	virtual int setSubst(std::string _subst);
-	virtual int setNet1(std::string _net1);
-	virtual int setNet2(std::string _net2);
-	virtual int setNet3(std::string _net3);
-	virtual int setNet4(std::string _net4);
+	virtual int setW(long double const _w);
+	virtual int setL(long double const _l);
+	virtual int setR(short const _r);
+	virtual int setSubst(std::string const _subst);
+	virtual int setNet1(std::string const _net1);
+	virtual int setNet2(std::string const _net2);
+	virtual int setNet3(std::string const _net3);
+	virtual int setNet4(std::string const _net4);
 	virtual int setP(void);
 };
 

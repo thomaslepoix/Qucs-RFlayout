@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mtee::m_descriptor("microstrip_tee");
+
+//******************************************************************************
 Mtee::Mtee(string _label,
 			string _type,
 			bool _active,
@@ -87,19 +90,19 @@ long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, o
 	}
 
 //******************************************************************************
-int Mtee::setNet1(string _net1) {
+int Mtee::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mtee::setNet2(string _net2) {
+int Mtee::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Mtee::setNet3(string _net3) {
+int Mtee::setNet3(string const _net3) {
 	m_net3=_net3;
 	return(0);
 	}

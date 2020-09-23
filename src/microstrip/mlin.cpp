@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mlin::m_descriptor("microstrip_line");
+
+//******************************************************************************
 Mlin::Mlin(string _label,
 			string _type,
 			bool _active,
@@ -75,13 +78,13 @@ long double Mlin::getP(int const _n, axis_t const _xy, orientation_t const _r, o
 	}
 
 //******************************************************************************
-int Mlin::setNet1(string _net1) {
+int Mlin::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mlin::setNet2(string _net2) {
+int Mlin::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}

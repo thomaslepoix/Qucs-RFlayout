@@ -23,7 +23,7 @@
 //******************************************************************************
 class Mstep final : public Element {
 private :
-	std::string const m_descriptor="microstrip_step";
+	static std::string const m_descriptor;
 	long double m_w1;
 	long double m_w2;
 	std::string m_net1;
@@ -51,8 +51,8 @@ public :
 	int getOemsNcorelines(void) override;
 	int getOemsMeshCore(int const _n, OemsLine& line) override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
 };
 
 #endif // MSTEP_HPP

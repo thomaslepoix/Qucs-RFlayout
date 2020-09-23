@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mvia::m_descriptor("microstrip_via");
+
+//******************************************************************************
 Mvia::Mvia(string _label,
 			string _type,
 			bool _active,
@@ -46,7 +49,7 @@ string Mvia::getNet1(void) {
 	}
 
 //******************************************************************************
-int Mvia::setNet1(string _net1) {
+int Mvia::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}

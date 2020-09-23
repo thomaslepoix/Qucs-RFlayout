@@ -23,12 +23,12 @@
 //******************************************************************************
 class Mlin final : public Element {
 private :
-	std::string const m_descriptor="microstrip_line";
+	static std::string const m_descriptor;
 	long double m_w;
 	long double m_l;
 	std::string m_net1;
 	std::string m_net2;
-	static int const m_npoint=4;
+	static int constexpr m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 
 	// first : element, second : element's port
@@ -58,8 +58,8 @@ public :
 	int getOemsMeshInterface(int const _net, OemsLine& line) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
 	int setP(void) override;
 };
 

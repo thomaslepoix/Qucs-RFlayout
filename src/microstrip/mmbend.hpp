@@ -23,11 +23,11 @@
 //******************************************************************************
 class Mmbend final : public Element {
 private :
-	std::string const m_descriptor="microstrip_mittered_bend";
+	static std::string const m_descriptor;
 	long double m_w;
 	std::string m_net1;
 	std::string m_net2;
-	static int const m_npoint=3;
+	static int constexpr m_npoint=3;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mmbend(std::string _label,
@@ -49,8 +49,8 @@ public :
 	int getOemsNcorelines(void) override;
 	int getOemsMeshCore(int const _n, OemsLine& line) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
 	int setP(void) override;
 };
 

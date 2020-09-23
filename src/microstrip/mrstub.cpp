@@ -21,6 +21,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mrstub::m_descriptor("microstrip_radial_stub");
+
+//******************************************************************************
 Mrstub::Mrstub(string _label,
 			string _type,
 			bool _active,
@@ -91,7 +94,7 @@ long double Mrstub::getP(int const _n, axis_t const _xy, orientation_t const _r,
 	}
 
 //******************************************************************************
-int Mrstub::setNet1(string _net1) {
+int Mrstub::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}

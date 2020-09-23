@@ -23,7 +23,7 @@
 //******************************************************************************
 class Mcross final : public Element {
 private :
-	std::string const m_descriptor="microstrip_cross";
+	static std::string const m_descriptor;
 	long double m_w1;
 	long double m_w2;
 	long double m_w3;
@@ -70,10 +70,10 @@ public :
 	int getOemsMeshInterface(int const _net, OemsLine& line) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
-	int setNet3(std::string _net3) override;
-	int setNet4(std::string _net4) override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
+	int setNet3(std::string const _net3) override;
+	int setNet4(std::string const _net4) override;
 	int setP(void) override;
 };
 

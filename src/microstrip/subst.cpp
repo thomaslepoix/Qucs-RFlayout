@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Subst::m_descriptor("substrat");
+
+//******************************************************************************
 Subst::Subst(string _label,
 			string _type,
 			bool _mirrorx,
@@ -129,13 +132,13 @@ long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, 
 	}
 
 //******************************************************************************
-int Subst::setW(long double _w) {
+int Subst::setW(long double const _w) {
 	m_w=_w;
 	return(0);
 	}
 
 //******************************************************************************
-int Subst::setL(long double _l) {
+int Subst::setL(long double const _l) {
 	m_l=_l;
 	return(0);
 	}

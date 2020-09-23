@@ -19,6 +19,9 @@
 using namespace std;
 
 //******************************************************************************
+string const Mopen::m_descriptor("microstrip_open");
+
+//******************************************************************************
 Mopen::Mopen(string _label,
 			string _type,
 			bool _active,
@@ -46,7 +49,7 @@ string Mopen::getNet1(void) {
 	}
 
 //******************************************************************************
-int Mopen::setNet1(string _net1) {
+int Mopen::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}

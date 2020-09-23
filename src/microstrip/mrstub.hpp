@@ -25,14 +25,14 @@
 //******************************************************************************
 class Mrstub final : public Element {
 private :
-	std::string const m_descriptor="microstrip_radial_stub";
+	static std::string const m_descriptor;
 	long double m_w;
 	long double m_l;
 	long double m_ri;
 	long double m_ro;
 	long double m_alpha;
 	std::string m_net1;
-	static int const m_npoint=53;
+	static int constexpr m_npoint=53;
 	long double tab_p[m_npoint][2]={};
 public :
 	Mrstub(std::string _label,
@@ -58,7 +58,7 @@ public :
 	int getOemsNcorelines(void) override;
 	int getOemsMeshCore(int const _n, OemsLine& line) override;
 	bool isOemsMeshInterface(int const _port, long double const _w) override;
-	int setNet1(std::string _net1) override;
+	int setNet1(std::string const _net1) override;
 	int setP(void) override;
 };
 
