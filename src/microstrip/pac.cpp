@@ -22,15 +22,15 @@ using namespace std;
 string const Pac::m_descriptor("ac_port");
 
 //******************************************************************************
-Pac::Pac(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			unsigned long _n,
-			long double _z,
-			long double _p,
-			long double _f) :
+Pac::Pac(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			unsigned long const _n,
+			long double const _z,
+			long double const _p,
+			long double const _f) :
 	Element(_label, _type, _active, _mirrorx, _r, 2, ""),
 	m_n(_n),
 	m_z(_z),

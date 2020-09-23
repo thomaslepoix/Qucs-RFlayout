@@ -22,16 +22,16 @@ using namespace std;
 string const Mcross::m_descriptor("microstrip_cross");
 
 //******************************************************************************
-Mcross::Mcross(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w1,
-			long double _w2,
-			long double _w3,
-			long double _w4) :
+Mcross::Mcross(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _w3,
+			long double const _w4) :
 	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
 	m_w1(_w1),
 	m_w2(_w2),

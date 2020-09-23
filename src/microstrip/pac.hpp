@@ -37,15 +37,15 @@ private :
 public :
 	bool is_size_set=false;
 
-	Pac(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			unsigned long _n,
-			long double _z,
-			long double _p,
-			long double _f);
+	Pac(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			unsigned long const _n,
+			long double const _z,
+			long double const _p,
+			long double const _f);
 	~Pac(void)=default;
 	std::string getDescriptor(void) const override;
 	long double getW(void) const override;

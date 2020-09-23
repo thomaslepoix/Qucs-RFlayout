@@ -46,13 +46,13 @@ protected:
 	long double rotateX(long double const _x, long double const _y) const;
 	long double rotateY(long double const _x, long double const _y) const;
 public:
-	Element(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			short _nport,
-			std::string _subst);
+	Element(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			short const _nport,
+			std::string const _subst);
 	virtual ~Element(void)=default;
 	std::shared_ptr<Element> prev;
 	std::string getLabel(void) const;

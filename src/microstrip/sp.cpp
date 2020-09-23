@@ -22,14 +22,14 @@ using namespace std;
 string const Sp::m_descriptor("s_parameter_simulation");
 
 //******************************************************************************
-Sp::Sp(string _label,
-			string _type,
-			bool _mirrorx,
-			short _r,
-			std::string _simtype,
-			long double _fstart,
-			long double _fstop,
-			unsigned long _n) :
+Sp::Sp(string const _label,
+			string const _type,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _simtype,
+			long double const _fstart,
+			long double const _fstop,
+			unsigned long const _n) :
 	Element(_label, _type, true, _mirrorx, _r, 0, ""),
 	m_simtype(_simtype),
 	m_fstart(_fstart),

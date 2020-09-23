@@ -22,14 +22,14 @@ using namespace std;
 string const Mlin::m_descriptor("microstrip_line");
 
 //******************************************************************************
-Mlin::Mlin(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w,
-			long double _l) :
+Mlin::Mlin(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w,
+			long double const _l) :
 	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w(_w),
 	m_l(_l)

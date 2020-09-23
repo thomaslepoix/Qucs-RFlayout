@@ -30,13 +30,13 @@ private :
 	static int constexpr m_npoint=3;
 	long double tab_p[m_npoint][2]={};
 public :
-	Mmbend(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			std::string _subst,
-			long double _w);
+	Mmbend(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _subst,
+			long double const _w);
 	~Mmbend(void)=default;
 	std::string getDescriptor(void) const override;
 	long double getW(void) const override;

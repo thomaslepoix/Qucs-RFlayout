@@ -41,16 +41,16 @@ private :
 	std::pair<std::shared_ptr<Element>, int> adjacent3;
 	std::pair<std::shared_ptr<Element>, int> adjacent4;
 public :
-	Mcross(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			std::string _subst,
-			long double _w1,
-			long double _w2,
-			long double _w3,
-			long double _w4);
+	Mcross(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _w3,
+			long double const _w4);
 	~Mcross(void)=default;
 	std::string getDescriptor(void) const override;
 	long double getW1(void) const override;

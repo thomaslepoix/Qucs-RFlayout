@@ -22,17 +22,17 @@ using namespace std;
 string const Subst::m_descriptor("substrat");
 
 //******************************************************************************
-Subst::Subst(string _label,
-			string _type,
-			bool _mirrorx,
-			short _r,
-			long double _er,
-			long double _h,
-			long double _t,
-			long double _tand,
-			long double _rho,
-			long double _d,
-			unsigned int _margin_factor) :
+Subst::Subst(string const _label,
+			string const _type,
+			bool const _mirrorx,
+			short const _r,
+			long double const _er,
+			long double const _h,
+			long double const _t,
+			long double const _tand,
+			long double const _rho,
+			long double const _d,
+			unsigned int const _margin_factor) :
 	Element(_label, _type, true, _mirrorx, _r, 0, ""),
 	m_w(0.0),
 	m_l(0.0),

@@ -24,15 +24,15 @@ using namespace std;
 string const Mrstub::m_descriptor("microstrip_radial_stub");
 
 //******************************************************************************
-Mrstub::Mrstub(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _ri,
-			long double _ro,
-			long double _alpha) :
+Mrstub::Mrstub(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _ri,
+			long double const _ro,
+			long double const _alpha) :
 	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
 	m_w(2*_ri*sin((M_PI/180)*(_alpha/2))),
 	m_l(sqrt((_ri*_ri)-((m_w/2)*(m_w/2)))),

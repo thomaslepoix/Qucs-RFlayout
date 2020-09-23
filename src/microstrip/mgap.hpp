@@ -30,15 +30,15 @@ private :
 	std::string m_net1;
 	std::string m_net2;
 public :
-	Mgap(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			std::string _subst,
-			long double _w1,
-			long double _w2,
-			long double _s);
+	Mgap(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _s);
 	~Mgap(void)=default;
 	std::string getDescriptor(void) const override;
 	long double getW1(void) const override;

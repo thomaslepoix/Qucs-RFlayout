@@ -23,13 +23,13 @@
 using namespace std;
 
 //******************************************************************************
-Element::Element(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			short _nport,
-			string _subst) :
+Element::Element(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			short const _nport,
+			string const _subst) :
 	m_label(_label),
 	m_type(_type),
 	m_active(_active),

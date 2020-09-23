@@ -22,15 +22,15 @@ using namespace std;
 string const Mcoupled::m_descriptor("microstrip_coupled_lines");
 
 //******************************************************************************
-Mcoupled::Mcoupled(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w,
-			long double _l,
-			long double _s) :
+Mcoupled::Mcoupled(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w,
+			long double const _l,
+			long double const _s) :
 	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
 	m_w(_w),
 	m_l(_l),

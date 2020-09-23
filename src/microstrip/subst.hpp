@@ -40,17 +40,17 @@ private :
 public :
 	std::array<long double, 4> extrem_pos;
 
-	Subst(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			long double _er,
-			long double _h,
-			long double _t,
-			long double _tand,
-			long double _rho,
-			long double _d,
-			unsigned int _margin_factor);
+	Subst(std::string const _label,
+			std::string const _type,
+			bool const _mirrorx,
+			short const _r,
+			long double const _er,
+			long double const _h,
+			long double const _t,
+			long double const _tand,
+			long double const _rho,
+			long double const _d,
+			unsigned int const _margin_factor);
 	Subst(Subst const* _subst);
 	~Subst(void)=default;
 	std::string getDescriptor(void) const override;

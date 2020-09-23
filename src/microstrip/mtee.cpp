@@ -22,15 +22,15 @@ using namespace std;
 string const Mtee::m_descriptor("microstrip_tee");
 
 //******************************************************************************
-Mtee::Mtee(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w1,
-			long double _w2,
-			long double _w3) :
+Mtee::Mtee(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _w3) :
 	Element(_label, _type, _active, _mirrorx, _r, 3, _subst),
 	m_w1(_w1),
 	m_w2(_w2),

@@ -29,14 +29,14 @@ private :
 	long double const m_fstop;
 	unsigned long const m_n;
 public :
-	Sp(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			std::string _simtype,
-			long double _fstart,
-			long double _fstop,
-			unsigned long _n);
+	Sp(std::string const _label,
+			std::string const _type,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _simtype,
+			long double const _fstart,
+			long double const _fstop,
+			unsigned long const _n);
 	~Sp(void)=default;
 	std::string getDescriptor(void) const override;
 	long double getFstart(void) const override;

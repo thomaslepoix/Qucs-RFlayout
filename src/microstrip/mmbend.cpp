@@ -22,13 +22,13 @@ using namespace std;
 string const Mmbend::m_descriptor("microstrip_mittered_bend");
 
 //******************************************************************************
-Mmbend::Mmbend(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w) :
+Mmbend::Mmbend(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w) :
 	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w(_w)
 	{}
