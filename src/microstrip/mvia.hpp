@@ -24,7 +24,7 @@
 class Mvia final : public Element {
 private :
 	static std::string const m_descriptor;
-	long double m_d;
+	long double const m_d;
 	std::string m_net1;
 
 	// first : element, second : element's port
@@ -38,14 +38,14 @@ public :
 			std::string _subst,
 			long double _d);
 	~Mvia(void)=default;
-	std::string getDescriptor(void) override;
-	long double getD(void) override;
-	std::string getNet1(void) override;
-	void getEdge(int const _net, long double& edge, short& dir) override;
-	int getOemsNcorelines(void) override;
-	int getOemsMeshCore(int const _n, OemsLine& line) override;
-	int getOemsMeshInterface(int const _net, OemsLine& line) override;
-	bool isOemsMeshInterface(int const _port, long double const _w) override;
+	std::string getDescriptor(void) const override;
+	long double getD(void) const override;
+	std::string getNet1(void) const override;
+	void getEdge(int const _net, long double& edge, short& dir) const override;
+	int getOemsNcorelines(void) const override;
+	int getOemsMeshCore(int const _n, OemsLine& line) const override;
+	int getOemsMeshInterface(int const _net, OemsLine& line) const override;
+	bool isOemsMeshInterface(int const _port, long double const _w) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string const _net1) override;
 };

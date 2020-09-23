@@ -34,32 +34,32 @@ Mcorn::Mcorn(string _label,
 	{}
 
 //******************************************************************************
-string Mcorn::getDescriptor(void) {
+string Mcorn::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcorn::getW(void) {
+long double Mcorn::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mcorn::getNet1(void) {
+string Mcorn::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcorn::getNet2(void) {
+string Mcorn::getNet2(void) const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mcorn::getNpoint(void) {
+int Mcorn::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mcorn::getP(int const _n, axis_t const _xy, orientation_t const /*_r*/, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mcorn::getP(int const _n, axis_t const _xy, orientation_t const /*_r*/, origin_t const _abs, bool const /*apply_shift*/) const {
 	return(_abs ? tab_p[_n][_xy]+(_xy ? m_y : m_x) : tab_p[_n][_xy]);
 	}
 
@@ -89,7 +89,7 @@ int Mcorn::setP(void) {
 	}
 
 //******************************************************************************
-void Mcorn::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mcorn::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
 			xstep= - m_w/2;
@@ -158,7 +158,7 @@ void Mcorn::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mcorn::getEdge(int const _net, long double& edge, short& dir) {
+void Mcorn::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1) {
 		switch(m_r) {
@@ -187,12 +187,12 @@ void Mcorn::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mcorn::getOemsNcorelines(void) {
+int Mcorn::getOemsNcorelines(void) const {
 	return(2);
 	}
 
 //******************************************************************************
-int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		switch(m_r) {
 			case 0:   line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
@@ -227,7 +227,7 @@ int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if(_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w)))) {
@@ -266,7 +266,7 @@ int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mcorn::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mcorn::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
 	} else {

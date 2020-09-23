@@ -34,17 +34,17 @@ Mopen::Mopen(string _label,
 	{}
 
 //******************************************************************************
-string Mopen::getDescriptor(void) {
+string Mopen::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mopen::getW(void) {
+long double Mopen::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mopen::getNet1(void) {
+string Mopen::getNet1(void) const {
 	return(m_net1);
 	}
 
@@ -55,7 +55,7 @@ int Mopen::setNet1(string const _net1) {
 	}
 
 //******************************************************************************
-void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
+void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	edge=m_w;
 	switch(m_r) {
 		case 0: dir=XMIN; break;
@@ -66,7 +66,7 @@ void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) {
+bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) const {
 	if(_port==1) {
 		return(true);
 	} else {

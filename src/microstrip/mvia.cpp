@@ -34,17 +34,17 @@ Mvia::Mvia(string _label,
 	{}
 
 //******************************************************************************
-string Mvia::getDescriptor(void) {
+string Mvia::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mvia::getD(void) {
+long double Mvia::getD(void) const {
 	return(m_d);
 	}
 
 //******************************************************************************
-string Mvia::getNet1(void) {
+string Mvia::getNet1(void) const {
 	return(m_net1);
 	}
 
@@ -55,7 +55,7 @@ int Mvia::setNet1(string const _net1) {
 	}
 
 //******************************************************************************
-void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
+void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	edge=m_d;
 	switch(m_r) {
 		case 0: dir=XMIN; break;
@@ -66,12 +66,12 @@ void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mvia::getOemsNcorelines(void) {
+int Mvia::getOemsNcorelines(void) const {
 	return(3);
 	}
 
 //******************************************************************************
-int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mvia::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		switch(m_r) {
 			case 0:   line.position=m_y+m_d/2; line.direction=YMAX; break;
@@ -104,7 +104,7 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if(_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_d)))) {
@@ -125,7 +125,7 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mvia::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mvia::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_d ? true : false);
 	} else {

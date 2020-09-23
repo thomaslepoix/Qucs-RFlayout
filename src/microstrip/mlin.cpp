@@ -36,37 +36,37 @@ Mlin::Mlin(string _label,
 	{}
 
 //******************************************************************************
-string Mlin::getDescriptor(void) {
+string Mlin::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mlin::getW(void) {
+long double Mlin::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mlin::getL(void) {
+long double Mlin::getL(void) const {
 	return(m_l);
 	}
 
 //******************************************************************************
-string Mlin::getNet1(void) {
+string Mlin::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mlin::getNet2(void) {
+string Mlin::getNet2(void) const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mlin::getNpoint(void) {
+int Mlin::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mlin::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mlin::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -103,7 +103,7 @@ int Mlin::setP(void) {
 	}
 
 //******************************************************************************
-void Mlin::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mlin::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_r==0) {
 		if(_net==1) {
 			xstep= - m_l/2;
@@ -140,7 +140,7 @@ void Mlin::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mlin::getEdge(int const _net, long double& edge, short& dir) {
+void Mlin::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1) {
 		switch(m_r) {
@@ -160,12 +160,12 @@ void Mlin::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mlin::getOemsNcorelines(void) {
+int Mlin::getOemsNcorelines(void) const {
 	return(2);
 	}
 
 //******************************************************************************
-int Mlin::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mlin::getOemsMeshCore(int const _n, OemsLine& line) const {
 /*	axis_t axis;
 	switch(m_r) {
 		case  0: case 180: axis=Y; break;
@@ -200,7 +200,7 @@ int Mlin::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) const {
 /*	axis_t axis;
 	switch(m_r) {
 		case  0: case 180: axis=X; break;
@@ -239,7 +239,7 @@ int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mlin::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mlin::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
 	} else {

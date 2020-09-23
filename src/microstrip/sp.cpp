@@ -38,26 +38,26 @@ Sp::Sp(string _label,
 	{}
 
 //******************************************************************************
-string Sp::getDescriptor(void) {
+string Sp::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Sp::getFstart(void) {
+long double Sp::getFstart(void) const {
 	return(m_fstart);
 	}
 
 //******************************************************************************
-long double Sp::getFstop(void) {
+long double Sp::getFstop(void) const {
 	return(m_fstop);
 	}
 
 //******************************************************************************
-string Sp::getSimtype(void) {
+string Sp::getSimtype(void) const {
 	return(m_simtype);
 	}
 
 //******************************************************************************
-unsigned long Sp::getN(void) {
+unsigned long Sp::getN(void) const {
 	return(m_n);
 	}

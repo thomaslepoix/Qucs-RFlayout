@@ -34,55 +34,55 @@ Mrstub::Mrstub(string _label,
 			long double _ro,
 			long double _alpha) :
 	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
+	m_w(2*_ri*sin((M_PI/180)*(_alpha/2))),
+	m_l(sqrt((_ri*_ri)-((m_w/2)*(m_w/2)))),
 	m_ri(_ri),
 	m_ro(_ro),
-	m_alpha(_alpha){
-	m_w=2*m_ri*sin((M_PI/180)*(m_alpha/2));
-	m_l=sqrt((m_ri*m_ri)-((m_w/2)*(m_w/2)));
-	}
+	m_alpha(_alpha)
+	{}
 
 //******************************************************************************
-string Mrstub::getDescriptor(void) {
+string Mrstub::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mrstub::getW(void) {
+long double Mrstub::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mrstub::getL(void) {
+long double Mrstub::getL(void) const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Mrstub::getRi(void) {
+long double Mrstub::getRi(void) const {
 	return(m_ri);
 	}
 
 //******************************************************************************
-long double Mrstub::getRo(void) {
+long double Mrstub::getRo(void) const {
 	return(m_ro);
 	}
 
 //******************************************************************************
-long double Mrstub::getAlpha(void) {
+long double Mrstub::getAlpha(void) const {
 	return(m_alpha);
 	}
 
 //******************************************************************************
-string Mrstub::getNet1(void) {
+string Mrstub::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-int Mrstub::getNpoint(void) {
+int Mrstub::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mrstub::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mrstub::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -125,7 +125,7 @@ int Mrstub::setP(void) {
 	}
 
 //******************************************************************************
-void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) {
+void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	edge=m_w;
 	if(m_mirrorx==0) {
 		switch(m_r) {
@@ -145,12 +145,12 @@ void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mrstub::getOemsNcorelines(void) {
+int Mrstub::getOemsNcorelines(void) const {
 	return(4);
 	}
 
 //******************************************************************************
-int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		if(m_mirrorx==0) {
 			switch(m_r) {
@@ -211,7 +211,7 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mrstub::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mrstub::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_w ? true : false);
 	} else {

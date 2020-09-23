@@ -36,27 +36,27 @@ Mstep::Mstep(string _label,
 	{}
 
 //******************************************************************************
-string Mstep::getDescriptor(void) {
+string Mstep::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mstep::getW1(void) {
+long double Mstep::getW1(void) const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mstep::getW2(void) {
+long double Mstep::getW2(void) const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-string Mstep::getNet1(void) {
+string Mstep::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mstep::getNet2(void) {
+string Mstep::getNet2(void) const {
 	return(m_net2);
 	}
 
@@ -73,7 +73,7 @@ int Mstep::setNet2(string const _net2) {
 	}
 
 //******************************************************************************
-void Mstep::getEdge(int const _net, long double& edge, short& dir) {
+void Mstep::getEdge(int const _net, long double& edge, short& dir) const {
 	if(_net==1) {
 		edge=m_w1;
 		switch(m_r) {
@@ -94,12 +94,12 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mstep::getOemsNcorelines(void) {
+int Mstep::getOemsNcorelines(void) const {
 	return(1);
 	}
 
 //******************************************************************************
-int Mstep::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n!=0 || m_w1==m_w2)
 		return(1);
 

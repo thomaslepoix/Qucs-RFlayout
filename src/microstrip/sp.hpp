@@ -24,10 +24,10 @@
 class Sp final : public Element {
 private :
 	static std::string const m_descriptor;
-	std::string m_simtype;
-	long double m_fstart;
-	long double m_fstop;
-	unsigned long m_n;
+	std::string const m_simtype;
+	long double const m_fstart;
+	long double const m_fstop;
+	unsigned long const m_n;
 public :
 	Sp(std::string _label,
 			std::string _type,
@@ -38,11 +38,11 @@ public :
 			long double _fstop,
 			unsigned long _n);
 	~Sp(void)=default;
-	std::string getDescriptor(void) override;
-	long double getFstart(void) override;
-	long double getFstop(void) override;
-	std::string getSimtype(void) override;
-	unsigned long getN(void) override;
+	std::string getDescriptor(void) const override;
+	long double getFstart(void) const override;
+	long double getFstop(void) const override;
+	std::string getSimtype(void) const override;
+	unsigned long getN(void) const override;
 };
 
 #endif // SP_HPP

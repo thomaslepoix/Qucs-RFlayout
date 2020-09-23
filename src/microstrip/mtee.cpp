@@ -38,47 +38,47 @@ Mtee::Mtee(string _label,
 	{}
 
 //******************************************************************************
-string Mtee::getDescriptor(void) {
+string Mtee::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mtee::getW1(void) {
+long double Mtee::getW1(void) const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mtee::getW2(void) {
+long double Mtee::getW2(void) const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mtee::getW3(void) {
+long double Mtee::getW3(void) const {
 	return(m_w3);
 	}
 
 //******************************************************************************
-string Mtee::getNet1(void) {
+string Mtee::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mtee::getNet2(void) {
+string Mtee::getNet2(void) const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mtee::getNet3(void) {
+string Mtee::getNet3(void) const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-int Mtee::getNpoint(void) {
+int Mtee::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1])
@@ -135,7 +135,7 @@ int Mtee::setP(void) {
 	}
 
 //******************************************************************************
-void Mtee::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mtee::getStep(int const _net, long double& xstep, long double& ystep) const {
 	long double Wlong=0;
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
@@ -237,7 +237,7 @@ void Mtee::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mtee::getEdge(int const _net, long double& edge, short& dir) {
+void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 	if(_net==1) {
 		edge=m_w1;
 		switch(m_r) {
@@ -275,7 +275,7 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mtee::getOemsNcorelines(void) {
+int Mtee::getOemsNcorelines(void) const {
 	if(m_w1==m_w2){
 		return(1);
 	} else {
@@ -284,7 +284,7 @@ int Mtee::getOemsNcorelines(void) {
 	}
 
 //******************************************************************************
-int Mtee::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		if(m_mirrorx==0) {
 			switch(m_r) {
@@ -335,7 +335,7 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if(_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w1)))) {
@@ -383,7 +383,7 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mtee::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mtee::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_w1 ? true : false);
 	} else if(_port==2) {

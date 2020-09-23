@@ -24,10 +24,10 @@
 class Mcross final : public Element {
 private :
 	static std::string const m_descriptor;
-	long double m_w1;
-	long double m_w2;
-	long double m_w3;
-	long double m_w4;
+	long double const m_w1;
+	long double const m_w2;
+	long double const m_w3;
+	long double const m_w4;
 	std::string m_net1;
 	std::string m_net2;
 	std::string m_net3;
@@ -52,23 +52,23 @@ public :
 			long double _w3,
 			long double _w4);
 	~Mcross(void)=default;
-	std::string getDescriptor(void) override;
-	long double getW1(void) override;
-	long double getW2(void) override;
-	long double getW3(void) override;
-	long double getW4(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	std::string getNet3(void) override;
-	std::string getNet4(void) override;
-	int getNpoint(void) override;
-	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
-	void getStep(int const _net, long double& xstep, long double& ystep) override;
-	void getEdge(int const _net, long double& edge, short& dir) override;
-	int getOemsNcorelines(void) override;
-	int getOemsMeshCore(int const _n, OemsLine& line) override;
-	int getOemsMeshInterface(int const _net, OemsLine& line) override;
-	bool isOemsMeshInterface(int const _port, long double const _w) override;
+	std::string getDescriptor(void) const override;
+	long double getW1(void) const override;
+	long double getW2(void) const override;
+	long double getW3(void) const override;
+	long double getW4(void) const override;
+	std::string getNet1(void) const override;
+	std::string getNet2(void) const override;
+	std::string getNet3(void) const override;
+	std::string getNet4(void) const override;
+	int getNpoint(void) const override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
+	void getStep(int const _net, long double& xstep, long double& ystep) const override;
+	void getEdge(int const _net, long double& edge, short& dir) const override;
+	int getOemsNcorelines(void) const override;
+	int getOemsMeshCore(int const _n, OemsLine& line) const override;
+	int getOemsMeshInterface(int const _net, OemsLine& line) const override;
+	bool isOemsMeshInterface(int const _port, long double const _w) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string const _net1) override;
 	int setNet2(std::string const _net2) override;

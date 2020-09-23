@@ -38,32 +38,32 @@ Mgap::Mgap(string _label,
 	{}
 
 //******************************************************************************
-string Mgap::getDescriptor(void) {
+string Mgap::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mgap::getW1(void) {
+long double Mgap::getW1(void) const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mgap::getW2(void) {
+long double Mgap::getW2(void) const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mgap::getS(void) {
+long double Mgap::getS(void) const {
 	return(m_s);
 	}
 
 //******************************************************************************
-string Mgap::getNet1(void) {
+string Mgap::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mgap::getNet2(void) {
+string Mgap::getNet2(void) const {
 	return(m_net2);
 	}
 
@@ -80,7 +80,7 @@ int Mgap::setNet2(string const _net2) {
 	}
 
 //******************************************************************************
-void Mgap::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mgap::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_r==0) {
 		if(_net==1) {
 			xstep= - m_s/2;
@@ -117,7 +117,7 @@ void Mgap::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mgap::getEdge(int const _net, long double& edge, short& dir) {
+void Mgap::getEdge(int const _net, long double& edge, short& dir) const {
 	if(_net==1) {
 		edge=m_w1;
 		switch(m_r) {
@@ -138,7 +138,7 @@ void Mgap::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-bool Mgap::isOemsMeshInterface(int const _port, long double const /*_w*/) {
+bool Mgap::isOemsMeshInterface(int const _port, long double const /*_w*/) const {
 	if(_port==1 || _port==2) {
 		return(true);
 	} else {

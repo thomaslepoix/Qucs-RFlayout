@@ -38,52 +38,52 @@ Mcoupled::Mcoupled(string _label,
 	{}
 
 //******************************************************************************
-string Mcoupled::getDescriptor(void) {
+string Mcoupled::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcoupled::getW(void) {
+long double Mcoupled::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mcoupled::getL(void) {
+long double Mcoupled::getL(void) const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Mcoupled::getS(void) {
+long double Mcoupled::getS(void) const {
 	return(m_s);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet1(void) {
+string Mcoupled::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet2(void) {
+string Mcoupled::getNet2(void) const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet3(void) {
+string Mcoupled::getNet3(void) const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet4(void) {
+string Mcoupled::getNet4(void) const {
 	return(m_net4);
 	}
 
 //******************************************************************************
-int Mcoupled::getNpoint(void) {
+int Mcoupled::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -140,7 +140,7 @@ int Mcoupled::setP(void) {
 	}
 
 //******************************************************************************
-void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
 			xstep= - m_l/2;
@@ -257,7 +257,7 @@ void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mcoupled::getEdge(int const _net, long double& edge, short& dir) {
+void Mcoupled::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1 || _net==4) {
 		switch(m_r) {
@@ -277,12 +277,12 @@ void Mcoupled::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsNcorelines(void) {
+int Mcoupled::getOemsNcorelines(void) const {
 	return(3);
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mcoupled::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		switch(m_r) {
 			case 0:   line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
@@ -322,7 +322,7 @@ int Mcoupled::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mcoupled::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if((_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w))))
@@ -358,7 +358,7 @@ int Mcoupled::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mcoupled::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mcoupled::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2 || _port==3 || _port==4) {
 		return(_w>m_w ? true : false);
 	} else {

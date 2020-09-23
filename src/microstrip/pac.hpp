@@ -24,10 +24,10 @@
 class Pac final : public Element {
 private :
 	static std::string const m_descriptor;
-	unsigned long m_n;
-	long double m_z;
-	long double m_p;
-	long double m_f;
+	unsigned long const m_n;
+	long double const m_z;
+	long double const m_p;
+	long double const m_f;
 	long double m_w;
 	long double m_l;
 	std::string m_net1;
@@ -47,20 +47,20 @@ public :
 			long double _p,
 			long double _f);
 	~Pac(void)=default;
-	std::string getDescriptor(void) override;
-	long double getW(void) override;
-	long double getL(void) override;
-	long double getZ(void) override;
-	long double getDbm(void) override;	//m_p
-	long double getF(void) override;
-	unsigned long getN(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	int getNpoint(void) override;
-	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
-	void getEdge(int const _net, long double& edge, short& dir) override;
-	int getOemsNcorelines(void) override;
-	int getOemsMeshCore(int const _n, OemsLine& line) override;
+	std::string getDescriptor(void) const override;
+	long double getW(void) const override;
+	long double getL(void) const override;
+	long double getZ(void) const override;
+	long double getDbm(void) const override;	//m_p
+	long double getF(void) const override;
+	unsigned long getN(void) const override;
+	std::string getNet1(void) const override;
+	std::string getNet2(void) const override;
+	int getNpoint(void) const override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
+	void getEdge(int const _net, long double& edge, short& dir) const override;
+	int getOemsNcorelines(void) const override;
+	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int setNet1(std::string const _net1) override;
 	int setNet2(std::string const _net2) override;
 	int setSubst(std::string const _subst) override;

@@ -24,8 +24,8 @@
 class Mstep final : public Element {
 private :
 	static std::string const m_descriptor;
-	long double m_w1;
-	long double m_w2;
+	long double const m_w1;
+	long double const m_w2;
 	std::string m_net1;
 	std::string m_net2;
 
@@ -42,14 +42,14 @@ public :
 			long double _w1,
 			long double _w2);
 	~Mstep(void)=default;
-	std::string getDescriptor(void) override;
-	long double getW1(void) override;
-	long double getW2(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	void getEdge(int const _net, long double& edge, short& dir) override;
-	int getOemsNcorelines(void) override;
-	int getOemsMeshCore(int const _n, OemsLine& line) override;
+	std::string getDescriptor(void) const override;
+	long double getW1(void) const override;
+	long double getW2(void) const override;
+	std::string getNet1(void) const override;
+	std::string getNet2(void) const override;
+	void getEdge(int const _net, long double& edge, short& dir) const override;
+	int getOemsNcorelines(void) const override;
+	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string const _net1) override;
 	int setNet2(std::string const _net2) override;

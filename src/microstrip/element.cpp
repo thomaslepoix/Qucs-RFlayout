@@ -45,47 +45,47 @@ Element::Element(string _label,
 	{}
 
 //******************************************************************************
-string Element::getLabel(void) {
+string Element::getLabel(void) const {
 	return(m_label);
 	}
 
 //******************************************************************************
-string Element::getType(void) {
+string Element::getType(void) const {
 	return(m_type);
 	}
 
 //******************************************************************************
-bool Element::getActive(void) {
+bool Element::getActive(void) const {
 	return(m_active);
 	}
 
 //******************************************************************************
-bool Element::getMirrorx(void) {
+bool Element::getMirrorx(void) const {
 	return(m_mirrorx);
 	}
 
 //******************************************************************************
-short Element::getR(void) {
+short Element::getR(void) const {
 	return(m_r);
 	}
 
 //******************************************************************************
-short Element::getNport(void) {
+short Element::getNport(void) const {
 	return(m_nport);
 	}
 
 //******************************************************************************
-string Element::getSubst(void) {
+string Element::getSubst(void) const {
 	return(m_subst);
 	}
 
 //******************************************************************************
-long double Element::getX(bool const apply_shift) {
+long double Element::getX(bool const apply_shift) const {
 	return(m_shift_x && apply_shift ? m_x+m_shift_x : m_x); // Avoid useless float calcul.
 	}
 
 //******************************************************************************
-long double Element::getY(bool const apply_shift) {
+long double Element::getY(bool const apply_shift) const {
 	return(m_shift_y && apply_shift ? m_y+m_shift_y : m_y); // Avoid useless float calcul.
 	}
 
@@ -114,201 +114,201 @@ int Element::setShiftY(long double const _shift_y) {
 	}
 
 //******************************************************************************
-long double Element::rotateX(long double const _x, long double const _y) {
+long double Element::rotateX(long double const _x, long double const _y) const {
 	return(_x*cos((M_PI/180)*m_r)+_y*sin((M_PI/180)*m_r));
 	}
 
 //******************************************************************************
-long double Element::rotateY(long double const _x, long double const _y) {
+long double Element::rotateY(long double const _x, long double const _y) const {
 	return(-_x*sin((M_PI/180)*m_r)+_y*cos((M_PI/180)*m_r));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
 //******************************************************************************
-string Element::getDescriptor(void) {
+string Element::getDescriptor(void) const {
 	return("");
 	}
 
 //******************************************************************************
-long double Element::getW(void) {
+long double Element::getW(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW1(void) {
+long double Element::getW1(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW2(void) {
+long double Element::getW2(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW3(void) {
+long double Element::getW3(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW4(void) {
+long double Element::getW4(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getL(void) {
+long double Element::getL(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getD(void) {
+long double Element::getD(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getS(void) {
+long double Element::getS(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getRi(void) {
+long double Element::getRi(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getRo(void) {
+long double Element::getRo(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getZ(void) {
+long double Element::getZ(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getDbm(void) {
+long double Element::getDbm(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getF(void) {
+long double Element::getF(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getFstart(void) {
+long double Element::getFstart(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getFstop(void) {
+long double Element::getFstop(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getEr(void) {
+long double Element::getEr(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getH(void) {
+long double Element::getH(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getT(void) {
+long double Element::getT(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getTand(void) {
+long double Element::getTand(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getRho(void) {
+long double Element::getRho(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getMargin(void) {
+long double Element::getMargin(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getAlpha(void) {
+long double Element::getAlpha(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-unsigned long Element::getN(void) {
+unsigned long Element::getN(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-string Element::getSimtype(void) {
+string Element::getSimtype(void) const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet1(void) {
+string Element::getNet1(void) const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet2(void) {
+string Element::getNet2(void) const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet3(void) {
+string Element::getNet3(void) const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet4(void) {
+string Element::getNet4(void) const {
 	return("");
 	}
 
 //******************************************************************************
-int Element::getNpoint(void) {
+int Element::getNpoint(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getP(int const /*_n*/, axis_t const /*_xy*/, orientation_t const /*_r*/, origin_t const /*_abs*/, bool const /*apply_shift*/) {
+long double Element::getP(int const /*_n*/, axis_t const /*_xy*/, orientation_t const /*_r*/, origin_t const /*_abs*/, bool const /*apply_shift*/) const {
 	return(0);
 	}
 
 //******************************************************************************
-void Element::getStep(int const /*_net*/, long double& xstep, long double& ystep) {
+void Element::getStep(int const /*_net*/, long double& xstep, long double& ystep) const {
 	xstep=0;
 	ystep=0;
 	}
 
 //******************************************************************************
-void Element::getEdge(int const /*_net*/, long double& edge, short& dir) {
+void Element::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	edge=0;
 	dir=0;
 	}
 
 //******************************************************************************
-int Element::getOemsNcorelines(void) {
+int Element::getOemsNcorelines(void) const {
 	return(0);
 	}
 
 //******************************************************************************
-int Element::getOemsMeshCore(int const /*_n*/, OemsLine& /*line*/) {
+int Element::getOemsMeshCore(int const /*_n*/, OemsLine& /*line*/) const {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::getOemsMeshInterface(int const /*_net*/, OemsLine& /*line*/) {
+int Element::getOemsMeshInterface(int const /*_net*/, OemsLine& /*line*/) const {
 	return(1);
 	}
 
 //******************************************************************************
-bool Element::isOemsMeshInterface(int const /*_port*/, long double const /*_w*/) {
+bool Element::isOemsMeshInterface(int const /*_port*/, long double const /*_w*/) const {
 	return(false);
 	}
 

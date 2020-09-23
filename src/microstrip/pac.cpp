@@ -41,57 +41,57 @@ Pac::Pac(string _label,
 	{}
 
 //******************************************************************************
-string Pac::getDescriptor(void) {
+string Pac::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Pac::getW(void) {
+long double Pac::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Pac::getL(void) {
+long double Pac::getL(void) const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Pac::getZ(void) {
+long double Pac::getZ(void) const {
 	return(m_z);
 	}
 
 //******************************************************************************
-long double Pac::getDbm(void) {
+long double Pac::getDbm(void) const {
 	return(m_p);
 	}
 
 //******************************************************************************
-long double Pac::getF(void) {
+long double Pac::getF(void) const {
 	return(m_f);
 	}
 
 //******************************************************************************
-unsigned long Pac::getN(void) {
+unsigned long Pac::getN(void) const {
 	return(m_n);
 	}
 
 //******************************************************************************
-string Pac::getNet1(void) {
+string Pac::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Pac::getNet2(void) {
+string Pac::getNet2(void) const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Pac::getNpoint(void) {
+int Pac::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Pac::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const apply_shift) {
+long double Pac::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const apply_shift) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -103,7 +103,7 @@ long double Pac::getP(int const _n, axis_t const _xy, orientation_t const _r, or
 	}
 
 //******************************************************************************
-void Pac::getEdge(int const _net, long double& edge, short& dir) {
+void Pac::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1) {
 		switch(m_r) {
@@ -172,12 +172,12 @@ int Pac::setP(void) {
 	}
 
 //******************************************************************************
-int Pac::getOemsNcorelines(void) {
+int Pac::getOemsNcorelines(void) const {
 	return(2);
 	}
 
 //******************************************************************************
-int Pac::getOemsMeshCore(int const _n, OemsLine& line) {
+int Pac::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		line.position=getX();
 		line.direction=XMIN;

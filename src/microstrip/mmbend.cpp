@@ -34,32 +34,32 @@ Mmbend::Mmbend(string _label,
 	{}
 
 //******************************************************************************
-string Mmbend::getDescriptor(void) {
+string Mmbend::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mmbend::getW(void) {
+long double Mmbend::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mmbend::getNet1(void) {
+string Mmbend::getNet1(void) const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mmbend::getNet2(void) {
+string Mmbend::getNet2(void) const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mmbend::getNpoint(void) {
+int Mmbend::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -103,7 +103,7 @@ int Mmbend::setP(void) {
 	}
 
 //******************************************************************************
-void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
 			xstep= - m_w/2;
@@ -172,7 +172,7 @@ void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mmbend::getEdge(int const _net, long double& edge, short& dir) {
+void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1) {
 		switch(m_r) {
@@ -201,12 +201,12 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mmbend::getOemsNcorelines(void) {
+int Mmbend::getOemsNcorelines(void) const {
 	return(4);
 	}
 
 //******************************************************************************
-int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		if(m_mirrorx==0) {
 			switch(m_r) {
@@ -265,7 +265,7 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
 	} else {

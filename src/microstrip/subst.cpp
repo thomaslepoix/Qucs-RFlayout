@@ -66,62 +66,62 @@ Subst::Subst(Subst const* _subst) :
 	{}
 
 //******************************************************************************
-string Subst::getDescriptor(void) {
+string Subst::getDescriptor(void) const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Subst::getL(void) {
+long double Subst::getL(void) const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Subst::getW(void) {
+long double Subst::getW(void) const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Subst::getEr(void){
+long double Subst::getEr(void) const {
 	return(m_er);
 	}
 
 //******************************************************************************
-long double Subst::getH(void){
+long double Subst::getH(void) const {
 	return(m_h);
 	}
 
 //******************************************************************************
-long double Subst::getT(void){
+long double Subst::getT(void) const {
 	return(m_t);
 	}
 
 //******************************************************************************
-long double Subst::getTand(void){
+long double Subst::getTand(void) const {
 	return(m_tand);
 	}
 
 //******************************************************************************
-long double Subst::getRho(void){
+long double Subst::getRho(void) const {
 	return(m_rho);
 	}
 
 //******************************************************************************
-long double Subst::getD(void) {
+long double Subst::getD(void) const {
 	return(m_d);
 	}
 
 //******************************************************************************
-long double Subst::getMargin(void) {
+long double Subst::getMargin(void) const {
 	return(m_margin);
 	}
 
 //******************************************************************************
-int Subst::getNpoint(void) {
+int Subst::getNpoint(void) const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y]) : rotateX(tab_p[_n][X], tab_p[_n][Y]);
