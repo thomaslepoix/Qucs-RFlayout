@@ -270,10 +270,10 @@ void LayoutWriter::write_kicad_pcb(Block& block, ofstream& f_out, long double co
 				||type=="MTEE") {///////////////////////////////////////////////
 			f_out << "  (module " << it->getType() << " (layer F.Cu) (tedit 0) (tstamp 0)\n"
 			         "    (at " << it->getX()+offset_x << " " << it->getY()+offset_y << " " << it->getR() << ")\n"
-			         "    (fp_text reference " << it->getLabel() << " (at 0 0.5) (layer F.SilkS)\n"
+			         "    (fp_text reference " << it->getLabel() << " (at 0 0.5) (layer F.SilkS) hide\n"
 			         "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
 			         "    )\n"
-			         "    (fp_text value " << it->getDescriptor() << " (at 0 -0.5) (layer F.Fab)\n"
+			         "    (fp_text value " << it->getDescriptor() << " (at 0 -0.5) (layer F.Fab) hide\n"
 			         "      (effects (font (size 0.25 0.25) (thickness 0.05)))\n"
 			         "    )\n";
 			if(type=="MCOUPLED") {//////////////////////////////////////////////
