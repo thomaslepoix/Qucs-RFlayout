@@ -1,5 +1,5 @@
 /***************************************************************************
-                               parser.hpp
+                               schparser.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -44,13 +44,13 @@ private:
 	void parse_schematic_components(std::ifstream& f_sch, std::vector<std::pair<std::string, long double>>& variables, std::vector<std::string>& unprintables);
 	void parse_netlist(std::ifstream& f_net);
 
-	void warn_unprintable(std::vector<std::string> const& unprintables);
+	void warn_unprintable(std::vector<std::string> const& unprintables) const;
 	void rm_tmp_files(std::initializer_list<std::string> const args);
 
-	long double suffix(std::string const s_sci, std::string const s_eng, bool const is_length);
-	long double process_field(std::vector<std::pair<std::string, long double>> const& variables, std::string const variable, std::string const value, std::string const s_sci, std::string const s_eng, std::string const label, bool const is_length);
-	std::string check_void(std::string const match, std::string const label="");
-	std::string mstub_shift(bool const xy, std::string const str, std::string const r);
+	long double suffix(std::string const s_sci, std::string const s_eng, bool const is_length) const;
+	long double process_field(std::vector<std::pair<std::string, long double>> const& variables, std::string const variable, std::string const value, std::string const s_sci, std::string const s_eng, std::string const label, bool const is_length) const;
+	std::string check_void(std::string const match, std::string const label="") const;
+	std::string mstub_shift(bool const xy, std::string const str, std::string const r) const;
 
 public:
 	SchParser(Data& _data);

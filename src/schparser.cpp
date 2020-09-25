@@ -1,5 +1,5 @@
 /***************************************************************************
-                               parser.cpp
+                               schparser.cpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -260,7 +260,7 @@ int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
 	}
 
 //******************************************************************************
-long double SchParser::process_field(vector<pair<string, long double>> const& variables, string const variable, string const value, string const s_sci, string const s_eng, string const label, bool const is_length) {
+long double SchParser::process_field(vector<pair<string, long double>> const& variables, string const variable, string const value, string const s_sci, string const s_eng, string const label, bool const is_length) const {
 	if(variable!="") {
 		for(pair<string, long double> it : variables) {
 			if(it.first==variable) {
@@ -822,7 +822,7 @@ void SchParser::parse_netlist(ifstream& f_net) {
 	}
 
 //******************************************************************************
-void SchParser::warn_unprintable(vector<string> const& unprintables) {
+void SchParser::warn_unprintable(vector<string> const& unprintables) const {
 	if(unprintables.size()) {
 		log_err << "WARNING : Schematic contains some unprintable transmission lines";
 		for(string element : unprintables) {
@@ -859,7 +859,7 @@ void SchParser::rm_tmp_files(initializer_list<string> const args) {
 
 // Convert suffix into multiplicator
 //******************************************************************************
-long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) {
+long double SchParser::suffix(string const s_sci, string const s_eng, bool const is_length) const {
 	static regex  const r_sci("^[eE](-?|\\+?)([0-9]*)$");    // g1 signe    g2 exposant
 	smatch match;
 	long double multiplicator=1;
@@ -914,7 +914,7 @@ long double SchParser::suffix(string const s_sci, string const s_eng, bool const
 	}
 
 //******************************************************************************
-string SchParser::check_void(string const match, string const label) {
+string SchParser::check_void(string const match, string const label) const {
 	if(match=="") {
 		if(label!="") {
 			log_err << "WARNING : Void field in component " << label << " -> Assigned to 0\n";
@@ -926,7 +926,7 @@ string SchParser::check_void(string const match, string const label) {
 	}
 
 //******************************************************************************
-string SchParser::mstub_shift(bool const xy, string const str, string const r) {
+string SchParser::mstub_shift(bool const xy, string const str, string const r) const {
 	if(r=="0")      return(xy ? to_string(stoi(str)-10) : str);
 	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
 	else if(r=="2") return(xy ? to_string(stoi(str)+10) : str);

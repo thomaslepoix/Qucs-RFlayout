@@ -30,7 +30,7 @@
 
 //******************************************************************************
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
-//	Q_OBJECT
+	Q_OBJECT
 public :
 	explicit Preview(QWidget* parent=0);
 	~Preview(void)=default;
@@ -52,7 +52,7 @@ protected:
 //	void keyReleaseEvent(QKeyEvent* event);
 
 private:
-	enum t_color {orange, green};
+	enum t_color { orange, green };
 	void drawAll(void);
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color);
 

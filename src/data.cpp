@@ -67,7 +67,7 @@ void Block::shift(long double const x, long double const y) {
 	}
 
 //******************************************************************************
-void Block::print_extrem_pos(void) {
+void Block::print_extrem_pos(void) const {
 	cout << "\tXmin : " << extrem_pos[XMIN] << "\n"
 	        "\tXmax : " << extrem_pos[XMAX] << "\n"
 	        "\tYmin : " << extrem_pos[YMIN] << "\n"
@@ -75,7 +75,7 @@ void Block::print_extrem_pos(void) {
 	}
 
 //******************************************************************************
-void Block::print(void) {
+void Block::print(void) const {
 	cout << "Elements :" << endl;
 	for(shared_ptr<Element> it : elements) {
 		cout << "\t" << it->getLabel() << "\t" << it->getType() << endl;
