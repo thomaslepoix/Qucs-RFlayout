@@ -38,32 +38,32 @@ Mgap::Mgap(string const _label,
 	{}
 
 //******************************************************************************
-string Mgap::getDescriptor(void) const {
+string Mgap::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mgap::getW1(void) const {
+long double Mgap::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mgap::getW2(void) const {
+long double Mgap::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mgap::getS(void) const {
+long double Mgap::getS() const {
 	return(m_s);
 	}
 
 //******************************************************************************
-string Mgap::getNet1(void) const {
+string Mgap::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mgap::getNet2(void) const {
+string Mgap::getNet2() const {
 	return(m_net2);
 	}
 

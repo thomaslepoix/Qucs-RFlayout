@@ -33,8 +33,8 @@ class SchParser {
 private:
 	Data& data;
 
-	void parse_port_shift_args(void);
-	void parse_port_size_args(void);
+	void parse_port_shift_args();
+	void parse_port_size_args();
 
 	int check_qucsstudio(std::ifstream& f_sch, std::string& n_tmp, bool& is_qucsstudio);
 	int generate_netlist(std::string const& n_sch, std::string const& n_net);
@@ -54,8 +54,8 @@ private:
 
 public:
 	SchParser(Data& _data);
-	~SchParser(void)=default;
-	int run(void);
+	~SchParser()=default;
+	int run();
 };
 
 #ifdef QRFL_UNITTEST

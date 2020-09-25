@@ -33,7 +33,7 @@ SchParser::SchParser(Data& _data) :
 	{}
 
 //******************************************************************************
-int SchParser::run(void) {
+int SchParser::run() {
 	int ret;
 	string n_sch;
 	string n_net;
@@ -117,7 +117,7 @@ int SchParser::run(void) {
 // Uncomplete feature. Could be usable on every elements
 // TODO why does if function without getP update?
 //******************************************************************************
-void SchParser::parse_port_shift_args(void) {
+void SchParser::parse_port_shift_args() {
 	for(tuple<unsigned long, string, string> arg : data.port_shift_args) {
 		bool is_port_existant=false;
 		for(shared_ptr<Element> element : data.tab_all) {
@@ -147,7 +147,7 @@ void SchParser::parse_port_shift_args(void) {
 	}
 
 //******************************************************************************
-void SchParser::parse_port_size_args(void) {
+void SchParser::parse_port_size_args() {
 	for(tuple<unsigned long, string, string> arg : data.port_size_args) {
 		bool is_port_existant=false;
 		for(shared_ptr<Element> element : data.tab_all) {

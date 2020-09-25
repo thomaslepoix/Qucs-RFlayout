@@ -28,8 +28,8 @@ private:
 	friend class Logger;
 	virtual void log(std::stringstream& in);
 public:
-	Loggable(void)=default;
-	~Loggable(void)=default;
+	Loggable()=default;
+	~Loggable()=default;
 };
 
 //******************************************************************************
@@ -48,8 +48,8 @@ private:
 public:
 	Loggable* obj=nullptr;
 
-	Logger(void);
-	~Logger(void)=default;
+	Logger();
+	~Logger()=default;
 	void set_mode(bool gui);
 };
 

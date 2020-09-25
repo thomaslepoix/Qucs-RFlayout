@@ -40,52 +40,52 @@ Mcross::Mcross(string const _label,
 	{}
 
 //******************************************************************************
-string Mcross::getDescriptor(void) const {
+string Mcross::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcross::getW1(void) const {
+long double Mcross::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mcross::getW2(void) const {
+long double Mcross::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mcross::getW3(void) const {
+long double Mcross::getW3() const {
 	return(m_w3);
 	}
 
 //******************************************************************************
-long double Mcross::getW4(void) const {
+long double Mcross::getW4() const {
 	return(m_w4);
 	}
 
 //******************************************************************************
-string Mcross::getNet1(void) const {
+string Mcross::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcross::getNet2(void) const {
+string Mcross::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mcross::getNet3(void) const {
+string Mcross::getNet3() const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-string Mcross::getNet4(void) const {
+string Mcross::getNet4() const {
 	return(m_net4);
 	}
 
 //******************************************************************************
-int Mcross::getNpoint(void) const {
+int Mcross::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -122,7 +122,7 @@ int Mcross::setNet4(string const _net4) {
 	}
 
 //******************************************************************************
-int Mcross::setP(void) {
+int Mcross::setP() {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at top left, clockwise
 	signed short s1;
@@ -426,7 +426,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mcross::getOemsNcorelines(void) const {
+int Mcross::getOemsNcorelines() const {
 	if(m_w1==m_w3 || m_w2==m_w4){
 		return(0);
 	} else {

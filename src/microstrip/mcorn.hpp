@@ -41,23 +41,23 @@ public :
 			short const _r,
 			std::string const _subst,
 			long double const _w);
-	~Mcorn(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getW(void) const override;
-	std::string getNet1(void) const override;
-	std::string getNet2(void) const override;
-	int getNpoint(void) const override;
+	~Mcorn()=default;
+	std::string getDescriptor() const override;
+	long double getW() const override;
+	std::string getNet1() const override;
+	std::string getNet2() const override;
+	int getNpoint() const override;
 	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
 	void getStep(int const _net, long double& xstep, long double& ystep) const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
-	int getOemsNcorelines(void) const override;
+	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int getOemsMeshInterface(int const _net, OemsLine& line) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string const _net1) override;
 	int setNet2(std::string const _net2) override;
-	int setP(void) override;
+	int setP() override;
 };
 
 #endif // MCORN_HPP

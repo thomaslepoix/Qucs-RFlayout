@@ -33,9 +33,9 @@ class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
 	Q_OBJECT
 public :
 	explicit Preview(QWidget* parent=0);
-	~Preview(void)=default;
+	~Preview()=default;
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
-	void resetView(void);
+	void resetView();
 
 	void setFCtrl(bool _flag_ctrl);
 	void setFShift(bool _flag_shift);
@@ -53,7 +53,7 @@ protected:
 
 private:
 	enum t_color { orange, green };
-	void drawAll(void);
+	void drawAll();
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color);
 
 	void drawcube();

@@ -37,12 +37,12 @@ public :
 			long double const _fstart,
 			long double const _fstop,
 			unsigned long const _n);
-	~Sp(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getFstart(void) const override;
-	long double getFstop(void) const override;
-	std::string getSimtype(void) const override;
-	unsigned long getN(void) const override;
+	~Sp()=default;
+	std::string getDescriptor() const override;
+	long double getFstart() const override;
+	long double getFstop() const override;
+	std::string getSimtype() const override;
+	unsigned long getN() const override;
 };
 
 #endif // SP_HPP

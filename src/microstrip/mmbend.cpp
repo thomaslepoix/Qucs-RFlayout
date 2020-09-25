@@ -34,27 +34,27 @@ Mmbend::Mmbend(string const _label,
 	{}
 
 //******************************************************************************
-string Mmbend::getDescriptor(void) const {
+string Mmbend::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mmbend::getW(void) const {
+long double Mmbend::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mmbend::getNet1(void) const {
+string Mmbend::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mmbend::getNet2(void) const {
+string Mmbend::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mmbend::getNpoint(void) const {
+int Mmbend::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -83,7 +83,7 @@ int Mmbend::setNet2(string const _net2) {
 	}
 
 //******************************************************************************
-int Mmbend::setP(void) {
+int Mmbend::setP() {
 	signed short s1; //= m_mirror ? -1 :  1;
 	signed short s2; //= m_mirror ?  1 : -1;
 	if(m_mirrorx) {
@@ -201,7 +201,7 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mmbend::getOemsNcorelines(void) const {
+int Mmbend::getOemsNcorelines() const {
 	return(4);
 	}
 

@@ -37,10 +37,10 @@ public :
 			short const _r,
 			std::string const _subst,
 			long double const _w);
-	~Mopen(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getW(void) const override;
-	std::string getNet1(void) const override;
+	~Mopen()=default;
+	std::string getDescriptor() const override;
+	long double getW() const override;
+	std::string getNet1() const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;

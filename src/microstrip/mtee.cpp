@@ -38,42 +38,42 @@ Mtee::Mtee(string const _label,
 	{}
 
 //******************************************************************************
-string Mtee::getDescriptor(void) const {
+string Mtee::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mtee::getW1(void) const {
+long double Mtee::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mtee::getW2(void) const {
+long double Mtee::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mtee::getW3(void) const {
+long double Mtee::getW3() const {
 	return(m_w3);
 	}
 
 //******************************************************************************
-string Mtee::getNet1(void) const {
+string Mtee::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mtee::getNet2(void) const {
+string Mtee::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mtee::getNet3(void) const {
+string Mtee::getNet3() const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-int Mtee::getNpoint(void) const {
+int Mtee::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -108,7 +108,7 @@ int Mtee::setNet3(string const _net3) {
 	}
 
 //******************************************************************************
-int Mtee::setP(void) {
+int Mtee::setP() {
 	signed short s1; //= m_mirror ? -1 :  1;
 	signed short s2; //= m_mirror ?  1 : -1;
 	long double Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
@@ -275,7 +275,7 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mtee::getOemsNcorelines(void) const {
+int Mtee::getOemsNcorelines() const {
 	if(m_w1==m_w2){
 		return(1);
 	} else {

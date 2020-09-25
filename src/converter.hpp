@@ -37,16 +37,16 @@ private:
 
 public:
 	Converter(Data& data);
-	~Converter(void)=default;
+	~Converter()=default;
 
-	void reset(void);
-	int run(void);
-	int read(void);
+	void reset();
+	int run();
+	int read();
 	int write(std::vector<std::string>& out_names);
-	int size(void);
+	int size();
 
-	std::vector<std::shared_ptr<Element>> const& get_tab_all(void);
-	std::array<long double, 4> const& get_extrem_pos(void);
+	std::vector<std::shared_ptr<Element>> const& get_tab_all();
+	std::array<long double, 4> const& get_extrem_pos();
 };
 
 #endif // CONVERTER_HPP

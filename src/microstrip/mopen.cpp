@@ -34,17 +34,17 @@ Mopen::Mopen(string const _label,
 	{}
 
 //******************************************************************************
-string Mopen::getDescriptor(void) const {
+string Mopen::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mopen::getW(void) const {
+long double Mopen::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mopen::getNet1(void) const {
+string Mopen::getNet1() const {
 	return(m_net1);
 	}
 

@@ -46,20 +46,20 @@ public :
 			long double const _z,
 			long double const _p,
 			long double const _f);
-	~Pac(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getW(void) const override;
-	long double getL(void) const override;
-	long double getZ(void) const override;
-	long double getDbm(void) const override;	//m_p
-	long double getF(void) const override;
-	unsigned long getN(void) const override;
-	std::string getNet1(void) const override;
-	std::string getNet2(void) const override;
-	int getNpoint(void) const override;
+	~Pac()=default;
+	std::string getDescriptor() const override;
+	long double getW() const override;
+	long double getL() const override;
+	long double getZ() const override;
+	long double getDbm() const override;	//m_p
+	long double getF() const override;
+	unsigned long getN() const override;
+	std::string getNet1() const override;
+	std::string getNet2() const override;
+	int getNpoint() const override;
 	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
-	int getOemsNcorelines(void) const override;
+	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int setNet1(std::string const _net1) override;
 	int setNet2(std::string const _net2) override;
@@ -67,7 +67,7 @@ public :
 	int setW(long double const _w) override;
 	int setL(long double const _l) override;
 	int setR(short const _r) override;
-	int setP(void) override;
+	int setP() override;
 };
 
 #endif // PAC_HPP

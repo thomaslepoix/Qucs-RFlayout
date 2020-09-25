@@ -166,7 +166,7 @@ void Preview::setFShift(bool _flag_shift) {
 ////////////////////////////////////////////////////////////////////////////////
 
 //******************************************************************************
-void Preview::resetView(void) {
+void Preview::resetView() {
 	xRot=0;
 	yRot=0;
 	zRot=0;
@@ -187,7 +187,7 @@ void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double
 	}
 
 //******************************************************************************
-void Preview::drawAll(void) {
+void Preview::drawAll() {
 	glScalef(factor, factor, factor);
 	for(shared_ptr<Element> it : tab_all) {
 		if(!it->getActive())

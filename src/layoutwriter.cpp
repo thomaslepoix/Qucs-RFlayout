@@ -2707,7 +2707,7 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 	}
 
 //******************************************************************************
-int LayoutWriter::check_m(void) {
+int LayoutWriter::check_m() {
 	if(data.is_volume_error) {
 		log_err << data.volume_error;
 		return(1);

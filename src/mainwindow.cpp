@@ -142,7 +142,7 @@ void MainWindow::add_action(QString const action_str, QString const val1, QStrin
 	}
 
 //******************************************************************************
-void MainWindow::read(void) {
+void MainWindow::read() {
 	ui->tb_log->clear();
 	if(data.n_sch=="") {
 		log_err << "ERROR : Nothing to read.\n";
@@ -175,7 +175,7 @@ void MainWindow::read(void) {
 	}
 
 //******************************************************************************
-void MainWindow::write(void) {
+void MainWindow::write() {
 	vector<string> out_names;
 	if(converter.size()) {
 		if(!converter.write(out_names)) {
@@ -240,7 +240,7 @@ void MainWindow::on_le_oems_timeres_textChanged(QString const oems_timeres) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_in_returnPressed(void) {
+void MainWindow::on_le_path_in_returnPressed() {
 	read();
 	}
 
@@ -250,7 +250,7 @@ void MainWindow::on_le_path_in_textChanged(QString const n_sch) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_net_returnPressed(void) {
+void MainWindow::on_le_path_net_returnPressed() {
 	read();
 	}
 
@@ -260,7 +260,7 @@ void MainWindow::on_le_path_net_textChanged(QString const n_net) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_out_returnPressed(void) {
+void MainWindow::on_le_path_out_returnPressed() {
 	write();
 	}
 
@@ -270,12 +270,12 @@ void MainWindow::on_le_path_out_textChanged(QString const out_dir) {
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_add_clicked(void) {
+void MainWindow::on_pb_add_clicked() {
 	add_action();
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_browse_in_clicked(void) {
+void MainWindow::on_pb_browse_in_clicked() {
 	QString n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), openfile_path, tr("Qucs schematic (*.sch)"));
 
 	if(!n_sch.length()) {
@@ -289,7 +289,7 @@ void MainWindow::on_pb_browse_in_clicked(void) {
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_browse_net_clicked(void) {
+void MainWindow::on_pb_browse_net_clicked() {
 	QString n_net=QFileDialog::getOpenFileName(this, tr("Open netlist"), openfile_path, tr("Qucs netlist (*.net)"));
 
 	if(!n_net.length()) {
@@ -303,24 +303,24 @@ void MainWindow::on_pb_browse_net_clicked(void) {
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_browse_out_clicked(void) {
+void MainWindow::on_pb_browse_out_clicked() {
 	QString out_dir=QFileDialog::getExistingDirectory(this, tr("Output directory"), "./", QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 	ui->le_path_out->setText(out_dir);
 	data.out_dir=out_dir.toStdString();
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_read_clicked(void) {
+void MainWindow::on_pb_read_clicked() {
 	read();
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_remove_clicked(void) {
+void MainWindow::on_pb_remove_clicked() {
 	ui->tw_actions->removeRow(ui->tw_actions->currentRow());
 	}
 
 //******************************************************************************
-void MainWindow::on_pb_write_clicked(void) {
+void MainWindow::on_pb_write_clicked() {
 	write();
 	}
 

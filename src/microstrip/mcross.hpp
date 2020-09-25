@@ -51,21 +51,21 @@ public :
 			long double const _w2,
 			long double const _w3,
 			long double const _w4);
-	~Mcross(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getW1(void) const override;
-	long double getW2(void) const override;
-	long double getW3(void) const override;
-	long double getW4(void) const override;
-	std::string getNet1(void) const override;
-	std::string getNet2(void) const override;
-	std::string getNet3(void) const override;
-	std::string getNet4(void) const override;
-	int getNpoint(void) const override;
+	~Mcross()=default;
+	std::string getDescriptor() const override;
+	long double getW1() const override;
+	long double getW2() const override;
+	long double getW3() const override;
+	long double getW4() const override;
+	std::string getNet1() const override;
+	std::string getNet2() const override;
+	std::string getNet3() const override;
+	std::string getNet4() const override;
+	int getNpoint() const override;
 	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
 	void getStep(int const _net, long double& xstep, long double& ystep) const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
-	int getOemsNcorelines(void) const override;
+	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int getOemsMeshInterface(int const _net, OemsLine& line) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
@@ -74,7 +74,7 @@ public :
 	int setNet2(std::string const _net2) override;
 	int setNet3(std::string const _net3) override;
 	int setNet4(std::string const _net4) override;
-	int setP(void) override;
+	int setP() override;
 };
 
 #endif // MCROSS_HPP

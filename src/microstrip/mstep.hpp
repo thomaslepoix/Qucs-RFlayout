@@ -41,14 +41,14 @@ public :
 			std::string const _subst,
 			long double const _w1,
 			long double const _w2);
-	~Mstep(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getW1(void) const override;
-	long double getW2(void) const override;
-	std::string getNet1(void) const override;
-	std::string getNet2(void) const override;
+	~Mstep()=default;
+	std::string getDescriptor() const override;
+	long double getW1() const override;
+	long double getW2() const override;
+	std::string getNet1() const override;
+	std::string getNet2() const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
-	int getOemsNcorelines(void) const override;
+	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string const _net1) override;

@@ -34,27 +34,27 @@ Mcorn::Mcorn(string const _label,
 	{}
 
 //******************************************************************************
-string Mcorn::getDescriptor(void) const {
+string Mcorn::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcorn::getW(void) const {
+long double Mcorn::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mcorn::getNet1(void) const {
+string Mcorn::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcorn::getNet2(void) const {
+string Mcorn::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mcorn::getNpoint(void) const {
+int Mcorn::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -76,7 +76,7 @@ int Mcorn::setNet2(string const _net2) {
 	}
 
 //******************************************************************************
-int Mcorn::setP(void) {
+int Mcorn::setP() {
 	tab_p[0][X]=-m_w/2;
 	tab_p[0][Y]= m_w/2;
 	tab_p[1][X]= m_w/2;
@@ -187,7 +187,7 @@ void Mcorn::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mcorn::getOemsNcorelines(void) const {
+int Mcorn::getOemsNcorelines() const {
 	return(2);
 	}
 

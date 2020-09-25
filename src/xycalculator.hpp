@@ -30,11 +30,11 @@ private:
 	Data& data;
 
 	// Main functions
-	bool check_intersection(void);
-	void populate_adjacents(void);
-	void resolve_pac_shapes(void);
-	void place_elements(void);
-	void place_blocks(void);
+	bool check_intersection();
+	void populate_adjacents();
+	void resolve_pac_shapes();
+	void place_elements();
+	void place_blocks();
 
 	// Toolbox functions
 	int get_port(std::shared_ptr<Element> const& element, std::string const net);
@@ -42,8 +42,8 @@ private:
 	int add_to_block(std::shared_ptr<Block>& block, std::shared_ptr<Element> const& element);
 	int tab_remove(std::vector<std::shared_ptr<Element>>& elements, std::shared_ptr<Element> const& element);
 	bool purgefind(std::shared_ptr<Element> const& element, std::string const net);
-	int purge_nets(void);
-	int purge_blocks(void);
+	int purge_nets();
+	int purge_blocks();
 	bool check_onenet(std::string const net);
 	int activenets(std::shared_ptr<Element> const& element);
 	int netmin(std::shared_ptr<Element> const& element);
@@ -51,10 +51,10 @@ private:
 
 public:
 	XyCalculator(Data& _data);
-	~XyCalculator(void)=default;
+	~XyCalculator()=default;
 
 	// Interface functions
-	int run(void);
+	int run();
 };
 
 #endif // XYCALCULATOR_HPP

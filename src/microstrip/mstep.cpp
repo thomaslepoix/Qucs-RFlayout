@@ -36,27 +36,27 @@ Mstep::Mstep(string const _label,
 	{}
 
 //******************************************************************************
-string Mstep::getDescriptor(void) const {
+string Mstep::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mstep::getW1(void) const {
+long double Mstep::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mstep::getW2(void) const {
+long double Mstep::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-string Mstep::getNet1(void) const {
+string Mstep::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mstep::getNet2(void) const {
+string Mstep::getNet2() const {
 	return(m_net2);
 	}
 
@@ -94,7 +94,7 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mstep::getOemsNcorelines(void) const {
+int Mstep::getOemsNcorelines() const {
 	return(1);
 	}
 

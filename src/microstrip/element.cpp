@@ -45,37 +45,37 @@ Element::Element(string const _label,
 	{}
 
 //******************************************************************************
-string Element::getLabel(void) const {
+string Element::getLabel() const {
 	return(m_label);
 	}
 
 //******************************************************************************
-string Element::getType(void) const {
+string Element::getType() const {
 	return(m_type);
 	}
 
 //******************************************************************************
-bool Element::getActive(void) const {
+bool Element::getActive() const {
 	return(m_active);
 	}
 
 //******************************************************************************
-bool Element::getMirrorx(void) const {
+bool Element::getMirrorx() const {
 	return(m_mirrorx);
 	}
 
 //******************************************************************************
-short Element::getR(void) const {
+short Element::getR() const {
 	return(m_r);
 	}
 
 //******************************************************************************
-short Element::getNport(void) const {
+short Element::getNport() const {
 	return(m_nport);
 	}
 
 //******************************************************************************
-string Element::getSubst(void) const {
+string Element::getSubst() const {
 	return(m_subst);
 	}
 
@@ -126,152 +126,152 @@ long double Element::rotateY(long double const _x, long double const _y) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 //******************************************************************************
-string Element::getDescriptor(void) const {
+string Element::getDescriptor() const {
 	return("");
 	}
 
 //******************************************************************************
-long double Element::getW(void) const {
+long double Element::getW() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW1(void) const {
+long double Element::getW1() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW2(void) const {
+long double Element::getW2() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW3(void) const {
+long double Element::getW3() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getW4(void) const {
+long double Element::getW4() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getL(void) const {
+long double Element::getL() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getD(void) const {
+long double Element::getD() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getS(void) const {
+long double Element::getS() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getRi(void) const {
+long double Element::getRi() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getRo(void) const {
+long double Element::getRo() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getZ(void) const {
+long double Element::getZ() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getDbm(void) const {
+long double Element::getDbm() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getF(void) const {
+long double Element::getF() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getFstart(void) const {
+long double Element::getFstart() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getFstop(void) const {
+long double Element::getFstop() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getEr(void) const {
+long double Element::getEr() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getH(void) const {
+long double Element::getH() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getT(void) const {
+long double Element::getT() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getTand(void) const {
+long double Element::getTand() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getRho(void) const {
+long double Element::getRho() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getMargin(void) const {
+long double Element::getMargin() const {
 	return(0);
 	}
 
 //******************************************************************************
-long double Element::getAlpha(void) const {
+long double Element::getAlpha() const {
 	return(0);
 	}
 
 //******************************************************************************
-unsigned long Element::getN(void) const {
+unsigned long Element::getN() const {
 	return(0);
 	}
 
 //******************************************************************************
-string Element::getSimtype(void) const {
+string Element::getSimtype() const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet1(void) const {
+string Element::getNet1() const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet2(void) const {
+string Element::getNet2() const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet3(void) const {
+string Element::getNet3() const {
 	return("");
 	}
 
 //******************************************************************************
-string Element::getNet4(void) const {
+string Element::getNet4() const {
 	return("");
 	}
 
 //******************************************************************************
-int Element::getNpoint(void) const {
+int Element::getNpoint() const {
 	return(0);
 	}
 
@@ -293,7 +293,7 @@ void Element::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Element::getOemsNcorelines(void) const {
+int Element::getOemsNcorelines() const {
 	return(0);
 	}
 
@@ -358,6 +358,6 @@ int Element::setNet4(string const /*_net4*/) {
 	}
 
 //******************************************************************************
-int Element::setP(void) {
+int Element::setP() {
 	return(1);
 	}

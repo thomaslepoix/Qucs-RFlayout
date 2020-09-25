@@ -36,14 +36,14 @@ public:
 	std::array<long double, 4> boundary;   // extrem_pos with margin
 	long double margin;
 
-	Block(void);
-	~Block(void)=default;
+	Block();
+	~Block()=default;
 	void shift(long double const x, long double const y);
 //	void shift(long double const x, long double const y, bool const apply_shift); //TODO apply_shift : adapt subst size to shifted ports
-	void set_extrem_pos(void);
+	void set_extrem_pos();
 //	void set_extrem_pos(bool const apply_shift=false); //TODO apply_shift : adapt subst size to shifted ports
-	void print_extrem_pos(void) const;
-	void print(void) const;
+	void print_extrem_pos() const;
+	void print() const;
 };
 
 //******************************************************************************
@@ -92,10 +92,10 @@ public:
 	std::string oems_end_criteria;
 	std::string oems_nf2ff_center;
 
-	Data(void);
+	Data();
 	Data(Data const& data);
 	Data& operator=(Data const&)=default;
-	~Data(void);
+	~Data();
 };
 
 #endif // DATA_HPP

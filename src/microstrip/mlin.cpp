@@ -36,32 +36,32 @@ Mlin::Mlin(string const _label,
 	{}
 
 //******************************************************************************
-string Mlin::getDescriptor(void) const {
+string Mlin::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mlin::getW(void) const {
+long double Mlin::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mlin::getL(void) const {
+long double Mlin::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-string Mlin::getNet1(void) const {
+string Mlin::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mlin::getNet2(void) const {
+string Mlin::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mlin::getNpoint(void) const {
+int Mlin::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -90,7 +90,7 @@ int Mlin::setNet2(string const _net2) {
 	}
 
 //******************************************************************************
-int Mlin::setP(void) {
+int Mlin::setP() {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= m_w/2;
 	tab_p[1][X]= m_l/2;
@@ -160,7 +160,7 @@ void Mlin::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mlin::getOemsNcorelines(void) const {
+int Mlin::getOemsNcorelines() const {
 	return(2);
 	}
 

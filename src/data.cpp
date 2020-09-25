@@ -21,7 +21,7 @@
 using namespace std;
 
 //******************************************************************************
-Block::Block(void) :
+Block::Block() :
 	elements(vector<shared_ptr<Element>>()),
 	subst(shared_ptr<Element>()),
 	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
@@ -29,7 +29,7 @@ Block::Block(void) :
 	{}
 
 //******************************************************************************
-void Block::set_extrem_pos(void) {
+void Block::set_extrem_pos() {
 	//reset extrem_pos to a random existant point
 	for(shared_ptr<Element> it : elements) {
 		if(it->getNpoint()) {
@@ -67,7 +67,7 @@ void Block::shift(long double const x, long double const y) {
 	}
 
 //******************************************************************************
-void Block::print_extrem_pos(void) const {
+void Block::print_extrem_pos() const {
 	cout << "\tXmin : " << extrem_pos[XMIN] << "\n"
 	        "\tXmax : " << extrem_pos[XMAX] << "\n"
 	        "\tYmin : " << extrem_pos[YMIN] << "\n"
@@ -75,7 +75,7 @@ void Block::print_extrem_pos(void) const {
 	}
 
 //******************************************************************************
-void Block::print(void) const {
+void Block::print() const {
 	cout << "Elements :" << endl;
 	for(shared_ptr<Element> it : elements) {
 		cout << "\t" << it->getLabel() << "\t" << it->getType() << endl;
@@ -91,7 +91,7 @@ void Block::print(void) const {
 	}
 
 //******************************************************************************
-Data::Data(void) :
+Data::Data() :
 	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
 	is_volume_error(false),
 	out_format(".kicad_pcb"),
@@ -131,7 +131,7 @@ Data::Data(Data const& data) :
 	{}
 
 //******************************************************************************
-Data::~Data(void) {
+Data::~Data() {
 	for(shared_ptr<Element> it : tab_all) {
 		it->prev=nullptr;
 		it->setAdjacent(1, nullptr, 0);

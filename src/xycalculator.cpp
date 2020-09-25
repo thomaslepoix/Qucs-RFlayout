@@ -32,7 +32,7 @@ XyCalculator::XyCalculator(Data& _data) :
 	{}
 
 //******************************************************************************
-int XyCalculator::run(void) {
+int XyCalculator::run() {
 	// Check geometric coherence of the schematic
 	if(check_intersection()) {
 		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
@@ -53,7 +53,7 @@ int XyCalculator::run(void) {
 
 // Pac have no shape so they calc it from adjacent largest element
 //******************************************************************************
-void XyCalculator::resolve_pac_shapes(void) {
+void XyCalculator::resolve_pac_shapes() {
 	for(shared_ptr<Element> pac : data.tab_all) {
 		if(pac->getType()=="Pac" && dynamic_cast<Pac*>(pac.get())->is_size_set==false) {
 			long double edge=0;
@@ -95,7 +95,7 @@ void XyCalculator::resolve_pac_shapes(void) {
 	}
 
 //******************************************************************************
-void XyCalculator::place_elements(void) {
+void XyCalculator::place_elements() {
 	if(!data.tab_all.size())
 		return;
 
@@ -186,7 +186,7 @@ void XyCalculator::place_elements(void) {
 
 // Place element blocks regarding each other
 //******************************************************************************
-void XyCalculator::place_blocks(void) {
+void XyCalculator::place_blocks() {
 
 // Store all substrates
 	vector<shared_ptr<Element>> tab_subst;
@@ -452,7 +452,7 @@ bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const ne
 
 // Delete unconnected nets
 //******************************************************************************
-int XyCalculator::purge_nets(void) {
+int XyCalculator::purge_nets() {
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(purgefind(it, it->getNet1())==false) it->setNet1("");
 		if(purgefind(it, it->getNet2())==false) it->setNet2("");
@@ -464,7 +464,7 @@ int XyCalculator::purge_nets(void) {
 
 // Delete blocks with only a non geometric element inside
 //******************************************************************************
-int XyCalculator::purge_blocks(void) {
+int XyCalculator::purge_blocks() {
 	for(unsigned int i=0;i<data.all_blocks.size();i++) {
 		if(data.all_blocks[i]->elements.size()==0) {
 			data.all_blocks.erase(data.all_blocks.begin()+i);
@@ -490,7 +490,7 @@ bool XyCalculator::check_onenet(string const net) {
 
 // Check if there are net intersections : more than 2 times the same net
 //******************************************************************************
-bool XyCalculator::check_intersection(void) {
+bool XyCalculator::check_intersection() {
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(check_onenet(it->getNet1())==true) return(1);
 		if(check_onenet(it->getNet2())==true) return(1);
@@ -520,7 +520,7 @@ int XyCalculator::netmin(shared_ptr<Element> const& element) {
 	}
 
 //******************************************************************************
-void XyCalculator::populate_adjacents(void) {
+void XyCalculator::populate_adjacents() {
 	for(shared_ptr<Element> element : data.tab_all) {
 		for(shared_ptr<Element> it : data.tab_all) {
 			if(it!=element) {

@@ -42,42 +42,42 @@ Mrstub::Mrstub(string const _label,
 	{}
 
 //******************************************************************************
-string Mrstub::getDescriptor(void) const {
+string Mrstub::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mrstub::getW(void) const {
+long double Mrstub::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mrstub::getL(void) const {
+long double Mrstub::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Mrstub::getRi(void) const {
+long double Mrstub::getRi() const {
 	return(m_ri);
 	}
 
 //******************************************************************************
-long double Mrstub::getRo(void) const {
+long double Mrstub::getRo() const {
 	return(m_ro);
 	}
 
 //******************************************************************************
-long double Mrstub::getAlpha(void) const {
+long double Mrstub::getAlpha() const {
 	return(m_alpha);
 	}
 
 //******************************************************************************
-string Mrstub::getNet1(void) const {
+string Mrstub::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-int Mrstub::getNpoint(void) const {
+int Mrstub::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -100,7 +100,7 @@ int Mrstub::setNet1(string const _net1) {
 	}
 
 //******************************************************************************
-int Mrstub::setP(void) {
+int Mrstub::setP() {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at bottom right, clockwise
 	int div=m_npoint-5; // -4 fixed points, -1 number -> index
@@ -145,7 +145,7 @@ void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mrstub::getOemsNcorelines(void) const {
+int Mrstub::getOemsNcorelines() const {
 	return(4);
 	}
 

@@ -30,7 +30,7 @@ class LayoutWriter {
 private:
 	Data& data;
 
-	int check_m(void);
+	int check_m();
 	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::vector<std::string>* out_names);
 	//TODO array<long double, 2> offset ?
 	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
@@ -40,7 +40,7 @@ private:
 
 public:
 	LayoutWriter(Data& _data);
-	~LayoutWriter(void)=default;
+	~LayoutWriter()=default;
 	int run(std::vector<std::string>* out_names=nullptr);
 };
 

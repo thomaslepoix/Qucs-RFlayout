@@ -66,57 +66,57 @@ Subst::Subst(Subst const* _subst) :
 	{}
 
 //******************************************************************************
-string Subst::getDescriptor(void) const {
+string Subst::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Subst::getL(void) const {
+long double Subst::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Subst::getW(void) const {
+long double Subst::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Subst::getEr(void) const {
+long double Subst::getEr() const {
 	return(m_er);
 	}
 
 //******************************************************************************
-long double Subst::getH(void) const {
+long double Subst::getH() const {
 	return(m_h);
 	}
 
 //******************************************************************************
-long double Subst::getT(void) const {
+long double Subst::getT() const {
 	return(m_t);
 	}
 
 //******************************************************************************
-long double Subst::getTand(void) const {
+long double Subst::getTand() const {
 	return(m_tand);
 	}
 
 //******************************************************************************
-long double Subst::getRho(void) const {
+long double Subst::getRho() const {
 	return(m_rho);
 	}
 
 //******************************************************************************
-long double Subst::getD(void) const {
+long double Subst::getD() const {
 	return(m_d);
 	}
 
 //******************************************************************************
-long double Subst::getMargin(void) const {
+long double Subst::getMargin() const {
 	return(m_margin);
 	}
 
 //******************************************************************************
-int Subst::getNpoint(void) const {
+int Subst::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -144,7 +144,7 @@ int Subst::setL(long double const _l) {
 	}
 
 //******************************************************************************
-int Subst::setP(void) {
+int Subst::setP() {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= m_w/2;
 	tab_p[1][X]= m_l/2;

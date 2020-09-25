@@ -39,13 +39,13 @@ public :
 			long double const _w1,
 			long double const _w2,
 			long double const _s);
-	~Mgap(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getW1(void) const override;
-	long double getW2(void) const override;
-	long double getS(void) const override;
-	std::string getNet1(void) const override;
-	std::string getNet2(void) const override;
+	~Mgap()=default;
+	std::string getDescriptor() const override;
+	long double getW1() const override;
+	long double getW2() const override;
+	long double getS() const override;
+	std::string getNet1() const override;
+	std::string getNet2() const override;
 	void getStep(int const _net, long double& xstep, long double& ystep) const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;

@@ -52,22 +52,22 @@ public :
 			long double const _d,
 			unsigned int const _margin_factor);
 	Subst(Subst const* _subst);
-	~Subst(void)=default;
-	std::string getDescriptor(void) const override;
-	long double getL(void) const override;
-	long double getW(void) const override;
-	long double getEr(void) const override;
-	long double getH(void) const override;
-	long double getT(void) const override;
-	long double getTand(void) const override;
-	long double getRho(void) const override;
-	long double getD(void) const override;
-	long double getMargin(void) const override;
-	int getNpoint(void) const override;
+	~Subst()=default;
+	std::string getDescriptor() const override;
+	long double getL() const override;
+	long double getW() const override;
+	long double getEr() const override;
+	long double getH() const override;
+	long double getT() const override;
+	long double getTand() const override;
+	long double getRho() const override;
+	long double getD() const override;
+	long double getMargin() const override;
+	int getNpoint() const override;
 	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
 	int setW(long double const _w) override;
 	int setL(long double const _l) override;
-	int setP(void) override;
+	int setP() override;
 };
 
 #endif // SUBST_HPP

@@ -31,7 +31,7 @@ public:
 	std::vector<OemsLine> y;
 
 	OemsMesh(std::vector<std::shared_ptr<Element>>& elements);
-	~OemsMesh(void)=default;
+	~OemsMesh()=default;
 };
 
 #endif // OEMSMESH_HPP

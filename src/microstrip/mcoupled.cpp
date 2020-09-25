@@ -38,47 +38,47 @@ Mcoupled::Mcoupled(string const _label,
 	{}
 
 //******************************************************************************
-string Mcoupled::getDescriptor(void) const {
+string Mcoupled::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcoupled::getW(void) const {
+long double Mcoupled::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mcoupled::getL(void) const {
+long double Mcoupled::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Mcoupled::getS(void) const {
+long double Mcoupled::getS() const {
 	return(m_s);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet1(void) const {
+string Mcoupled::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet2(void) const {
+string Mcoupled::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet3(void) const {
+string Mcoupled::getNet3() const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet4(void) const {
+string Mcoupled::getNet4() const {
 	return(m_net4);
 	}
 
 //******************************************************************************
-int Mcoupled::getNpoint(void) const {
+int Mcoupled::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -119,7 +119,7 @@ int Mcoupled::setNet4(string const _net4) {
 	}
 
 //******************************************************************************
-int Mcoupled::setP(void) {
+int Mcoupled::setP() {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= (m_s/2+m_w);
 	tab_p[1][X]= m_l/2;
@@ -277,7 +277,7 @@ void Mcoupled::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsNcorelines(void) const {
+int Mcoupled::getOemsNcorelines() const {
 	return(3);
 	}
 

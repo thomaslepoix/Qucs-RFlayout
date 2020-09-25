@@ -34,17 +34,17 @@ Mvia::Mvia(string const _label,
 	{}
 
 //******************************************************************************
-string Mvia::getDescriptor(void) const {
+string Mvia::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mvia::getD(void) const {
+long double Mvia::getD() const {
 	return(m_d);
 	}
 
 //******************************************************************************
-string Mvia::getNet1(void) const {
+string Mvia::getNet1() const {
 	return(m_net1);
 	}
 
@@ -66,7 +66,7 @@ void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Mvia::getOemsNcorelines(void) const {
+int Mvia::getOemsNcorelines() const {
 	return(3);
 	}
 

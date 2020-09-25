@@ -41,52 +41,52 @@ Pac::Pac(string const _label,
 	{}
 
 //******************************************************************************
-string Pac::getDescriptor(void) const {
+string Pac::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Pac::getW(void) const {
+long double Pac::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Pac::getL(void) const {
+long double Pac::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Pac::getZ(void) const {
+long double Pac::getZ() const {
 	return(m_z);
 	}
 
 //******************************************************************************
-long double Pac::getDbm(void) const {
+long double Pac::getDbm() const {
 	return(m_p);
 	}
 
 //******************************************************************************
-long double Pac::getF(void) const {
+long double Pac::getF() const {
 	return(m_f);
 	}
 
 //******************************************************************************
-unsigned long Pac::getN(void) const {
+unsigned long Pac::getN() const {
 	return(m_n);
 	}
 
 //******************************************************************************
-string Pac::getNet1(void) const {
+string Pac::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Pac::getNet2(void) const {
+string Pac::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Pac::getNpoint(void) const {
+int Pac::getNpoint() const {
 	return(m_npoint);
 	}
 
@@ -159,7 +159,7 @@ int Pac::setR(short const _r) {
 	}
 
 //******************************************************************************
-int Pac::setP(void) {
+int Pac::setP() {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= m_w/2;
 	tab_p[1][X]= m_l/2;
@@ -172,7 +172,7 @@ int Pac::setP(void) {
 	}
 
 //******************************************************************************
-int Pac::getOemsNcorelines(void) const {
+int Pac::getOemsNcorelines() const {
 	return(2);
 	}
 
