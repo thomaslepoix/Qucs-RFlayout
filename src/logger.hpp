@@ -26,7 +26,7 @@
 class Loggable {
 private:
 	friend class Logger;
-	virtual void log(std::stringstream& in);
+	virtual void log(std::stringstream& in)=0;
 public:
 	Loggable()=default;
 	~Loggable()=default;

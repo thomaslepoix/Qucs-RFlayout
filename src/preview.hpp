@@ -39,11 +39,8 @@ public :
 
 	void setFCtrl(bool _flag_ctrl);
 	void setFShift(bool _flag_shift);
-protected:
-	void initializeGL();
-	void paintGL();
-	void resizeGL(int width, int height);
 
+protected:
 	void mousePressEvent(QMouseEvent* event);
 	void mouseMoveEvent(QMouseEvent* event);
 	void wheelEvent(QWheelEvent* event);
@@ -55,6 +52,10 @@ private:
 	enum t_color { orange, green };
 	void drawAll();
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color);
+
+	void initializeGL() override;
+	void paintGL() override;
+	void resizeGL(int width, int height) override;
 
 	void drawcube();
 	void drawtriangle();
