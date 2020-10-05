@@ -178,7 +178,7 @@ void SchParser::parse_port_size_args() {
 	}
 
 //******************************************************************************
-int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstudio) {
+int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstudio) const {
 	string line;
 	smatch match;
 
@@ -243,7 +243,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 	}
 
 //******************************************************************************
-int SchParser::generate_netlist(string const& n_sch, string const& n_net) {
+int SchParser::generate_netlist(string const& n_sch, string const& n_net) const {
 	cout << endl << "Generating netlist... ";
 	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
 	QProcess process_qucs;
@@ -275,7 +275,7 @@ long double SchParser::process_field(vector<pair<string, long double>> const& va
 	}
 
 //******************************************************************************
-void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double>>& variables) {
+void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double>>& variables) const {
 	string line;
 	string text;
 	smatch match;
@@ -313,7 +313,7 @@ void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double
 	}
 
 //******************************************************************************
-void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& is_there_eqn) {
+void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& is_there_eqn) const {
 	string line;
 	smatch match;
 
@@ -834,7 +834,7 @@ void SchParser::warn_unprintable(vector<string> const& unprintables) const {
 	}
 
 //******************************************************************************
-void SchParser::rm_tmp_files(initializer_list<string> const args) {
+void SchParser::rm_tmp_files(initializer_list<string> const args) const {
 	if(!data.keep_tmp_files) {
 		QProcess process_rm;
 		string str_cmd;

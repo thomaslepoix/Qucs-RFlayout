@@ -57,21 +57,21 @@ int Converter::read() {
 	}
 
 //******************************************************************************
-int Converter::write(vector<string>& out_names) {
+int Converter::write(vector<string>& out_names) const {
 	return(layoutwriter.run(&out_names));
 	}
 
 //******************************************************************************
-int Converter::size() {
+int Converter::size() const {
 	return(data.tab_all.size());
 	 }
 
 //******************************************************************************
-vector<shared_ptr<Element>> const& Converter::get_tab_all() {
+vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
 	return(data.tab_all);
 	}
 
 //******************************************************************************
-array<long double, 4> const& Converter::get_extrem_pos() {
+array<long double, 4> const& Converter::get_extrem_pos() const {
 	return(data.extrem_pos);
 	}

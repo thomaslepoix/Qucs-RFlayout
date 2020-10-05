@@ -438,7 +438,7 @@ int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<E
 
 // Check if another element with this net exists
 //******************************************************************************
-bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const net) {
+bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const net) const {
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(it!=element) {
 			if(it->getNet1()==net) return(1);
@@ -475,7 +475,7 @@ int XyCalculator::purge_blocks() {
 	}
 
 //******************************************************************************
-bool XyCalculator::check_onenet(string const net) {
+bool XyCalculator::check_onenet(string const net) const {
 	unsigned int count=0;
 	if(net!=""){
 		for(shared_ptr<Element> it : data.tab_all) {
@@ -490,7 +490,7 @@ bool XyCalculator::check_onenet(string const net) {
 
 // Check if there are net intersections : more than 2 times the same net
 //******************************************************************************
-bool XyCalculator::check_intersection() {
+bool XyCalculator::check_intersection() const {
 	for(shared_ptr<Element> it : data.tab_all) {
 		if(check_onenet(it->getNet1())==true) return(1);
 		if(check_onenet(it->getNet2())==true) return(1);
@@ -501,7 +501,7 @@ bool XyCalculator::check_intersection() {
 	}
 
 //******************************************************************************
-int XyCalculator::activenets(shared_ptr<Element> const& element) {
+int XyCalculator::activenets(shared_ptr<Element> const& element) const {
 	int nlinks=0;
 	if(element->getNet1()!="") nlinks++;
 	if(element->getNet2()!="") nlinks++;
@@ -511,7 +511,7 @@ int XyCalculator::activenets(shared_ptr<Element> const& element) {
 	}
 
 //******************************************************************************
-int XyCalculator::netmin(shared_ptr<Element> const& element) {
+int XyCalculator::netmin(shared_ptr<Element> const& element) const {
 	if(element->getNet1()!="") return(1);
 	if(element->getNet2()!="") return(2);
 	if(element->getNet3()!="") return(3);
@@ -534,7 +534,7 @@ void XyCalculator::populate_adjacents() {
 	}
 
 //******************************************************************************
-int XyCalculator::get_port(shared_ptr<Element> const& element, string const net) {
+int XyCalculator::get_port(shared_ptr<Element> const& element, string const net) const {
 	if(net!="") {
 		if(element->getNet1()==net) return(1);
 		if(element->getNet2()==net) return(2);

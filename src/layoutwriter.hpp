@@ -28,20 +28,20 @@
 //******************************************************************************
 class LayoutWriter {
 private:
-	Data& data;
+	Data const& data;
 
-	int check_m();
-	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::vector<std::string>* out_names);
+	int check_m() const;
+	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::vector<std::string>* out_names) const;
 	//TODO array<long double, 2> offset ?
-	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
-	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
-	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
-	void write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name);
+	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
+	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
+	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
+	void write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 
 public:
-	LayoutWriter(Data& _data);
+	LayoutWriter(Data const& _data);
 	~LayoutWriter()=default;
-	int run(std::vector<std::string>* out_names=nullptr);
+	int run(std::vector<std::string>* out_names=nullptr) const;
 };
 
 #endif // LAYOUTWRITER_HPP
