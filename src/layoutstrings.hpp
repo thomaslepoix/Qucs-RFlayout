@@ -23,8 +23,10 @@
 //******************************************************************************
 struct oems_m {
 	oems_m()=delete;
+	static std::string const write_touchstone_m; // From CTB v0.0.35 tarball
 	static std::string const plotFF3D_frames;
 	static std::string const plotSmith;
+	static std::string const oemsgen_cli;
 	static std::string const oemsgen_plotVSWR;
 	static std::string const oemsgen_plotFeedImpedance;
 	static std::string const oemsgen_plotSParameters;
