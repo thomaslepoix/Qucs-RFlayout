@@ -32,10 +32,21 @@
 //******************************************************************************
 class MainWindow : public QMainWindow, public Loggable {
 	Q_OBJECT
+private:
+	std::unique_ptr<Ui::MainWindow> ui;
+	Data& data;
+	Converter converter;
 
-public:
-	explicit MainWindow(Data& _data, QWidget* parent=0);
-	~MainWindow()=default;
+	QString openfile_path;
+
+	void add_action(QString const action_str="Shift port", QString const val1="", QString const val2="", QString const val3="");
+	void read();
+	void write();
+
+	void keyPressEvent(QKeyEvent* event) override;
+	void keyReleaseEvent(QKeyEvent* event) override;
+
+	void log(std::stringstream& in) override;
 
 private slots:
 	void on_cb_format_currentIndexChanged(QString const out_format);
@@ -63,22 +74,9 @@ private slots:
 	void on_rb_export_each_subst_toggled(bool const is_checked);
 	void on_rb_export_whole_toggled(bool const is_checked);
 
-protected:
-	void keyPressEvent(QKeyEvent* event) override;
-	void keyReleaseEvent(QKeyEvent* event) override;
-
-private:
-	std::unique_ptr<Ui::MainWindow> ui;
-	Data& data;
-	Converter converter;
-
-	QString openfile_path;
-
-	void add_action(QString const action_str="Shift port", QString const val1="", QString const val2="", QString const val3="");
-	void read();
-	void write();
-
-	void log(std::stringstream& in) override;
+public:
+	explicit MainWindow(Data& _data, QWidget* parent=0);
+	~MainWindow()=default;
 };
 
 #endif // MAINWINDOW_HPP

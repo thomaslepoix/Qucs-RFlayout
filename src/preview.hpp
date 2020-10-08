@@ -40,11 +40,6 @@ public :
 	void setFCtrl(bool _flag_ctrl);
 	void setFShift(bool _flag_shift);
 
-protected:
-	void mousePressEvent(QMouseEvent* event);
-	void mouseMoveEvent(QMouseEvent* event);
-	void wheelEvent(QWheelEvent* event);
-
 //	void keyPressEvent(QKeyEvent* event);
 //	void keyReleaseEvent(QKeyEvent* event);
 
@@ -59,6 +54,10 @@ private:
 
 	void drawcube();
 	void drawtriangle();
+
+	void mousePressEvent(QMouseEvent* event) override;
+	void mouseMoveEvent(QMouseEvent* event) override;
+	void wheelEvent(QWheelEvent* event) override;
 
     void setXRotation(int angle);
     void setYRotation(int angle);
