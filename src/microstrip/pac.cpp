@@ -182,7 +182,7 @@ int Pac::getOemsMeshCore(int const _n, OemsLine& line) const {
 		line.position=getX();
 		line.direction=XMIN;
 	} else if(_n==1) {
-		line.position=getX();
+		line.position=getY();
 		line.direction=YMIN;
 		}
 

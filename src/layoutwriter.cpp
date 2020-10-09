@@ -863,6 +863,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CLI\n"
+	         "\n"
 	         "cli = oemsgen_cli(argv(), '" << name << "', [";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
 		f_out << it.first << (it==ports.back() ? "" : ", ");
@@ -1309,7 +1310,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% POSTPROCESSING\n"
 	         "\n";
 
-	f_out << "% NF2FF center should be placed at the center of the radiating element.\n" <<
+	f_out << "if cli.postprocess\n"
+	         "% NF2FF center should be placed at the center of the radiating element.\n" <<
 	         (data.oems_nf2ff_center!=""
 	         ? "%nf2ff.center = [(max(mesh.x)-min(mesh.x))/2, (max(mesh.y)-min(mesh.y))/2, 0];\n"
 	           "nf2ff.center = " + data.oems_nf2ff_center + ".center;\n"
@@ -1334,6 +1336,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t'f_max', cli.f_max, ...\n"
 	         "\t'f_equal', cli.f_equal_s, cli.f_equal_v);\n"
 	         "t_postprocess_stop = clock();\n"
+	         "endif % cli.postprocess\n"
 	         "\n";
 
 	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SYSTEM\n"
