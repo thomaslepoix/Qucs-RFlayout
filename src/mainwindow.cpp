@@ -33,11 +33,12 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 	ui->le_path_in->setText(QString::fromStdString(_data.n_sch));
 	ui->le_path_net->setText(QString::fromStdString(_data.n_net));
 	ui->le_path_out->setText(QString::fromStdString(_data.out_dir));
+	QString out_format(QString::fromStdString(_data.out_format));
 	ui->cb_format->addItem(tr(".kicad_pcb"));
 	ui->cb_format->addItem(tr(".kicad_mod"));
 	ui->cb_format->addItem(tr(".lht"));
 	ui->cb_format->addItem(tr(".m"));
-	ui->cb_format->setCurrentText(QString::fromStdString(_data.out_format));
+	ui->cb_format->setCurrentText(out_format);
 	ui->rb_export_whole->setChecked((_data.export_each_block || _data.export_each_subst) ? false : true);
 	ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
 	ui->rb_export_each_block->setChecked((_data.export_each_block) ? true : false);
