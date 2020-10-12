@@ -1,5 +1,5 @@
 /***************************************************************************
-                               oemsline.hpp
+                               oemsline.cpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,27 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OEMSLINE_HPP
-#define OEMSLINE_HPP
-
-#include <memory>
-#include <string>
-
-// High resolution meshlines work by pair. To be printed as hres lines, it is
-// required that both lines of a pair are contiguous in a OemsMesh.dir vector
-// Otherwise both will be printed as regular metal resolution lines
+#include "oemsline.hpp"
 
 //******************************************************************************
-struct OemsLine {
-	long double position;
-	int direction;
-	bool third_rule;
-	bool high_res=false;
-	std::string label;
-	std::string type;
-};
-
-//******************************************************************************
-bool operator<(OemsLine const& a, OemsLine const& b);
-
-#endif // OEMSLINE_HPP
+bool operator<(OemsLine const& a, OemsLine const& b) {
+	return(a.position<b.position ? true : false);
+	}

@@ -91,6 +91,7 @@ public:
 	unsigned int oems_timeres;
 	std::string oems_end_criteria;
 	std::string oems_nf2ff_center;
+	bool oems_sort_metalresmesh;
 
 	Data();
 	Data(Data const& data);

@@ -95,6 +95,7 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/data.cpp"
 	"${CMAKE_SOURCE_DIR}/src/schparser.cpp"
 	"${CMAKE_SOURCE_DIR}/src/xycalculator.cpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsline.cpp"
 	"${CMAKE_SOURCE_DIR}/src/oemsmesh.cpp"
 	"${CMAKE_SOURCE_DIR}/src/layoutstrings.cpp"
 	"${CMAKE_SOURCE_DIR}/src/layoutwriter.cpp"

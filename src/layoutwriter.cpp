@@ -802,7 +802,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	long double extrem_pos_zmin=0.0;
 	long double extrem_pos_zmax=0.0;
 
-	OemsMesh mesh(block.elements);
+	OemsMesh const mesh(block.elements, data.oems_sort_metalresmesh);
 
 	// Need to store ports ordered.
 	vector<pair<unsigned int, shared_ptr<Element>>> ports;
@@ -819,6 +819,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n"
 	         "clear;\n"
 	         "close all;\n"
+	         "% Uncomment to use the Debian 10 openems package\n"
 	         "%pkg load openems;\n"
 	         "%pkg load csxcad;\n"
 	         "\n";
@@ -1128,8 +1129,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		} else {
 			if(line->third_rule) {
 				switch(line->direction) {
-					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
-					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : <\n"; break;
+					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : >\n"; break;
 					}
 			} else {
 				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
@@ -1145,8 +1146,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		} else {
 			if(line->third_rule) {
 				switch(line->direction) {
-					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
-					case YMAX: f_out << "\t(" << -line->position << " - 2*metal_res/3), (" << -line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << "\n"; break;
+					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : ^\n"; break;
+					case YMAX: f_out << "\t(" << -line->position << " - 2*metal_res/3), (" << -line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : v\n"; break;
 					}
 			} else {
 				f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
