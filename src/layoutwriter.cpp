@@ -1080,9 +1080,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			f_out << ") / high_res))), ... % " << line->label << " : " << line->type << "\n";
 			}
 		}
-	f_out << "\t];\n";
-
-	f_out << "mesh.y = [mesh.y, ...\n";
+	f_out << "\t];\n"
+	         "mesh.y = [mesh.y, ...\n";
 	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
 		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
 			f_out << "\t(linspace(";
@@ -1121,12 +1120,34 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "% Standard metal resolution mesh for orthogonal shapes\n"
+	         "% First column : outer line, Second column : inner line (thirds rule)\n"
+	         "% Last symbol : edge direction (from inner side to outer side)\n"
+	         "if cli.metalresmesh || cli.keep_portlines\n"
+	         "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else if(line->type=="Pac") {
+			f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "mesh.y = [mesh.y, ...\n";
+	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
+		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else if(line->type=="Pac") {
+			f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "endif % cli.metalresmesh || cli.keep_portlines\n"
 	         "if cli.metalresmesh\n"
 	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
 		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
 			advance(line, 1); // Skip the pair
-		} else {
+		} else if(line->type!="Pac") {
 			if(line->third_rule) {
 				switch(line->direction) {
 					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : <\n"; break;
@@ -1137,13 +1158,12 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				}
 			}
 		}
-	f_out << "\t];\n";
-
-	f_out << "mesh.y = [mesh.y, ...\n";
+	f_out << "\t];\n"
+	         "mesh.y = [mesh.y, ...\n";
 	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
 		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
 			advance(line, 1); // Skip the pair
-		} else {
+		} else if(line->type!="Pac") {
 			if(line->third_rule) {
 				switch(line->direction) {
 					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : ^\n"; break;
@@ -1154,9 +1174,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				}
 			}
 		}
-	f_out << "\t];\n";
-
-	f_out << "mesh.z = [mesh.z, ...\n";
+	f_out << "\t];\n"
+	         "mesh.z = [mesh.z, ...\n";
 	for(shared_ptr<Element> it : block.elements) {
 		if(it->getType()=="SUBST") {
 			f_out << "\t(-" << it->getLabel() << ".substrate.h/3), ...\n"
