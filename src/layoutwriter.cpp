@@ -1272,27 +1272,32 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "%%%% DUMPS\n"
-	         "if cli.preprocess\n"
-	         "if cli.dump\n";
+	         "if cli.preprocess\n";
 	for(shared_ptr<Element> it : block.elements) {
 		if(it->getType()=="SUBST") {
 			f_out << "% " << it->getLabel() << " ET\n"
+			         "if cli.dump_et\n"
 			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Et', 'DumpType', 0);\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Et', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "endif % cli.dump_et\n"
 			         "% " << it->getLabel() << " HT\n"
+			         "if cli.dump_ht\n"
 			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Ht', 'DumpType', 1);\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Ht', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "endif % cli.dump_ht\n"
 			         "% " << it->getLabel() << " CURRENT\n"
+			         "if cli.dump_jt\n"
 			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Jt', 'DumpType', 2, 'DumpMode', 0);\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Jt', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "endif % cli.dump_jt\n"
 			         "% " << it->getLabel() << " CURRENT DENSITY\n"
+			         "if cli.dump_cdt\n"
 			         "CSX = AddDump(CSX, '" << it->getLabel() << ".Cdt', 'DumpType', 3);\n"
 			         "CSX = AddBox(CSX, '" << it->getLabel() << ".Cdt', 0, " << it->getLabel() << ".dump.start, " << it->getLabel() << ".dump.stop);\n"
+			         "endif % cli.dump_cdt\n"
 			         "\n";
 			}
 		}
-	f_out << "endif % cli.dump\n"
-	         "\n";
 
 	f_out << "%%%% RUN OPENEMS\n"
 	         "WriteOpenEMS([cli.path_simulation '/' csx_file], FDTD, CSX);\n"
