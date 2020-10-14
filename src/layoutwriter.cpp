@@ -1354,7 +1354,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\t'nf2ff_3d_thetastep', cli.nf2ff_thetastep, ...\n"
 	         "\t'nf2ff_3d_frames', cli.nf2ff_frames, ...\n"
 	         "\t'nf2ff_3d_delay', cli.nf2ff_delay, ...\n"
-	         "\t'nf2ff_3d_dump', cli.dump, ...\n"
+	         "\t'nf2ff_3d_dump', cli.dump_ff3d, ...\n"
 	         "\t'nf2ff_3d_dump_unit', unit, ...\n"
 	         "\t'f_select', cli.f, ...\n"
 	         "\t'f_min', cli.f_min, ...\n"
