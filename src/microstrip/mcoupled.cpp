@@ -278,7 +278,7 @@ void Mcoupled::getEdge(int const _net, long double& edge, short& dir) const {
 
 //******************************************************************************
 int Mcoupled::getOemsNcorelines() const {
-	return(3);
+	return(4);
 	}
 
 //******************************************************************************
