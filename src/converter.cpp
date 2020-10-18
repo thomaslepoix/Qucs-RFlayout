@@ -27,12 +27,12 @@ Converter::Converter(Data& _data) :
 	{}
 
 //******************************************************************************
-void Converter::reset(void) {
+void Converter::reset() {
 	data=Data(data);
 	}
 
 //******************************************************************************
-int Converter::run(void) {
+int Converter::run() {
 	int ret;
 	if((ret=(parser.run()
 	|| xycalculator.run()
@@ -45,7 +45,7 @@ int Converter::run(void) {
 	}
 
 //******************************************************************************
-int Converter::read(void) {
+int Converter::read() {
 	int ret;
 	if((ret=(parser.run()
 	|| xycalculator.run()
@@ -57,21 +57,21 @@ int Converter::read(void) {
 	}
 
 //******************************************************************************
-int Converter::write(vector<string>& out_names) {
+int Converter::write(vector<string>& out_names) const {
 	return(layoutwriter.run(&out_names));
 	}
 
 //******************************************************************************
-int Converter::size(void) {
+int Converter::size() const {
 	return(data.tab_all.size());
 	 }
 
 //******************************************************************************
-vector<shared_ptr<Element>> const& Converter::get_tab_all(void) {
+vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
 	return(data.tab_all);
 	}
 
 //******************************************************************************
-array<long double, 4> const& Converter::get_extrem_pos(void) {
+array<long double, 4> const& Converter::get_extrem_pos() const {
 	return(data.extrem_pos);
 	}

@@ -91,7 +91,7 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 #########################################################################SOURCES
 set( QUCS-RF-LAYOUT_SRCS
-	"${CMAKE_SOURCE_DIR}/src/main.cpp"
+	"${CMAKE_SOURCE_DIR}/src/logger.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.cpp"
@@ -107,18 +107,21 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mstep.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mtee.cpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mvia.cpp"
+	"${CMAKE_SOURCE_DIR}/src/data.cpp"
 	"${CMAKE_SOURCE_DIR}/src/schparser.cpp"
 	"${CMAKE_SOURCE_DIR}/src/xycalculator.cpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsline.cpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsmesh.cpp"
+	"${CMAKE_SOURCE_DIR}/src/layoutstrings.cpp"
 	"${CMAKE_SOURCE_DIR}/src/layoutwriter.cpp"
 	"${CMAKE_SOURCE_DIR}/src/converter.cpp"
-	"${CMAKE_SOURCE_DIR}/src/mainwindow.cpp"
 	"${CMAKE_SOURCE_DIR}/src/preview.cpp"
-	"${CMAKE_SOURCE_DIR}/src/logger.cpp"
-	"${CMAKE_SOURCE_DIR}/src/data.cpp"
-	"${CMAKE_SOURCE_DIR}/src/oemsmesh.cpp"
+	"${CMAKE_SOURCE_DIR}/src/mainwindow.cpp"
+	"${CMAKE_SOURCE_DIR}/src/main.cpp"
 	)
 
 set( QUCS-RF-LAYOUT_HDRS
+	"${CMAKE_SOURCE_DIR}/src/logger.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/element.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/pac.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/sp.hpp"
@@ -135,16 +138,16 @@ set( QUCS-RF-LAYOUT_HDRS
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mtee.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/mvia.hpp"
 	"${CMAKE_SOURCE_DIR}/src/microstrip/microstrip.hpp"
+	"${CMAKE_SOURCE_DIR}/src/data.hpp"
 	"${CMAKE_SOURCE_DIR}/src/schparser.hpp"
 	"${CMAKE_SOURCE_DIR}/src/xycalculator.hpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsline.hpp"
+	"${CMAKE_SOURCE_DIR}/src/oemsmesh.hpp"
+	"${CMAKE_SOURCE_DIR}/src/layoutstrings.hpp"
 	"${CMAKE_SOURCE_DIR}/src/layoutwriter.hpp"
 	"${CMAKE_SOURCE_DIR}/src/converter.hpp"
-	"${CMAKE_SOURCE_DIR}/src/mainwindow.hpp"
 	"${CMAKE_SOURCE_DIR}/src/preview.hpp"
-	"${CMAKE_SOURCE_DIR}/src/logger.hpp"
-	"${CMAKE_SOURCE_DIR}/src/data.hpp"
-	"${CMAKE_SOURCE_DIR}/src/oemsmesh.hpp"
-	"${CMAKE_SOURCE_DIR}/src/oemsline.hpp"
+	"${CMAKE_SOURCE_DIR}/src/mainwindow.hpp"
 	)
 
 ##########################################################################TARGET

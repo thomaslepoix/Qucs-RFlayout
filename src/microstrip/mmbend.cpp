@@ -19,44 +19,47 @@
 using namespace std;
 
 //******************************************************************************
-Mmbend::Mmbend(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w) :
+string const Mmbend::m_descriptor("microstrip_mittered_bend");
+
+//******************************************************************************
+Mmbend::Mmbend(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w) :
 	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w(_w)
 	{}
 
 //******************************************************************************
-string Mmbend::getDescriptor(void) {
+string Mmbend::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mmbend::getW(void) {
+long double Mmbend::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mmbend::getNet1(void) {
+string Mmbend::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mmbend::getNet2(void) {
+string Mmbend::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mmbend::getNpoint(void) {
+int Mmbend::getNpoint() const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -68,19 +71,19 @@ long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r,
 	}
 
 //******************************************************************************
-int Mmbend::setNet1(string _net1) {
+int Mmbend::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mmbend::setNet2(string _net2) {
+int Mmbend::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Mmbend::setP(void) {
+int Mmbend::setP() {
 	signed short s1; //= m_mirror ? -1 :  1;
 	signed short s2; //= m_mirror ?  1 : -1;
 	if(m_mirrorx) {
@@ -100,7 +103,7 @@ int Mmbend::setP(void) {
 	}
 
 //******************************************************************************
-void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
 			xstep= - m_w/2;
@@ -169,7 +172,7 @@ void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mmbend::getEdge(int const _net, long double& edge, short& dir) {
+void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1) {
 		switch(m_r) {
@@ -198,12 +201,12 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mmbend::getOemsNcorelines(void) {
+int Mmbend::getOemsNcorelines() const {
 	return(4);
 	}
 
 //******************************************************************************
-int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		if(m_mirrorx==0) {
 			switch(m_r) {
@@ -262,7 +265,7 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
 	} else {

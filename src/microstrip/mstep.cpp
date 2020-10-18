@@ -19,58 +19,61 @@
 using namespace std;
 
 //******************************************************************************
-Mstep::Mstep(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w1,
-			long double _w2) :
+string const Mstep::m_descriptor("microstrip_step");
+
+//******************************************************************************
+Mstep::Mstep(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w1,
+			long double const _w2) :
 	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
 	m_w1(_w1),
 	m_w2(_w2)
 	{}
 
 //******************************************************************************
-string Mstep::getDescriptor(void) {
+string Mstep::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mstep::getW1(void) {
+long double Mstep::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mstep::getW2(void) {
+long double Mstep::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-string Mstep::getNet1(void) {
+string Mstep::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mstep::getNet2(void) {
+string Mstep::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-int Mstep::setNet1(string _net1) {
+int Mstep::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mstep::setNet2(string _net2) {
+int Mstep::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-void Mstep::getEdge(int const _net, long double& edge, short& dir) {
+void Mstep::getEdge(int const _net, long double& edge, short& dir) const {
 	if(_net==1) {
 		edge=m_w1;
 		switch(m_r) {
@@ -91,12 +94,12 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mstep::getOemsNcorelines(void) {
+int Mstep::getOemsNcorelines() const {
 	return(1);
 	}
 
 //******************************************************************************
-int Mstep::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n!=0 || m_w1==m_w2)
 		return(1);
 

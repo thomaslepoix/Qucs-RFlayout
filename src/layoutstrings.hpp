@@ -1,5 +1,5 @@
 /***************************************************************************
-                               mopen.hpp
+                               layoutstrings.hpp
                              ------------------
     begin                : Thu Oct 25 2018
     copyright            : (C) 2018 by Thomas Lepoix
@@ -15,36 +15,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MOPEN_HPP
-#define MOPEN_HPP
+#ifndef LAYOUTSTRINGS_HPP
+#define LAYOUTSTRINGS_HPP
 
-#include "element.hpp"
+#include <string>
 
 //******************************************************************************
-class Mopen final : public Element {
-private :
-	static std::string const m_descriptor;
-	long double const m_w;
-	std::string m_net1;
-
-	// first : element, second : element's port
-	std::pair<std::shared_ptr<Element>, int> adjacent1;
-public :
-	Mopen(std::string const _label,
-			std::string const _type,
-			bool const _active,
-			bool const _mirrorx,
-			short const _r,
-			std::string const _subst,
-			long double const _w);
-	~Mopen()=default;
-	std::string getDescriptor() const override;
-	long double getW() const override;
-	std::string getNet1() const override;
-	void getEdge(int const _net, long double& edge, short& dir) const override;
-	bool isOemsMeshInterface(int const _port, long double const _w) const override;
-	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string const _net1) override;
+struct oems_m {
+	oems_m()=delete;
+	static std::string const write_touchstone_m; // From CTB v0.0.35 tarball
+	static std::string const plotFF3D_frames;
+	static std::string const plotSmith;
+	static std::string const oemsgen_cli;
+	static std::string const oemsgen_plotVSWR;
+	static std::string const oemsgen_plotFeedImpedance;
+	static std::string const oemsgen_plotSParameters;
+	static std::string const oemsgen_plotSmithChart;
+	static std::string const oemsgen_postProcess;
 };
 
-#endif // MOPEN_HPP
+//******************************************************************************
+struct pcbrnd_lht {
+	pcbrnd_lht()=delete;
+	static std::string const fonts;
+};
+
+#endif // LAYOUTSTRINGS_HPP

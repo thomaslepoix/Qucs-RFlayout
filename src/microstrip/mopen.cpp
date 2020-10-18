@@ -19,40 +19,43 @@
 using namespace std;
 
 //******************************************************************************
-Mopen::Mopen(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w) :
+string const Mopen::m_descriptor("microstrip_open");
+
+//******************************************************************************
+Mopen::Mopen(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w) :
 	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
 	m_w(_w)
 	{}
 
 //******************************************************************************
-string Mopen::getDescriptor(void) {
+string Mopen::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mopen::getW(void) {
+long double Mopen::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-string Mopen::getNet1(void) {
+string Mopen::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-int Mopen::setNet1(string _net1) {
+int Mopen::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
+void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	edge=m_w;
 	switch(m_r) {
 		case 0: dir=XMIN; break;
@@ -63,7 +66,7 @@ void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) {
+bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) const {
 	if(_port==1) {
 		return(true);
 	} else {

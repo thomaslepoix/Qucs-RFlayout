@@ -19,15 +19,18 @@
 using namespace std;
 
 //******************************************************************************
-Mtee::Mtee(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w1,
-			long double _w2,
-			long double _w3) :
+string const Mtee::m_descriptor("microstrip_tee");
+
+//******************************************************************************
+Mtee::Mtee(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _w3) :
 	Element(_label, _type, _active, _mirrorx, _r, 3, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
@@ -35,47 +38,47 @@ Mtee::Mtee(string _label,
 	{}
 
 //******************************************************************************
-string Mtee::getDescriptor(void) {
+string Mtee::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mtee::getW1(void) {
+long double Mtee::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mtee::getW2(void) {
+long double Mtee::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mtee::getW3(void) {
+long double Mtee::getW3() const {
 	return(m_w3);
 	}
 
 //******************************************************************************
-string Mtee::getNet1(void) {
+string Mtee::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mtee::getNet2(void) {
+string Mtee::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mtee::getNet3(void) {
+string Mtee::getNet3() const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-int Mtee::getNpoint(void) {
+int Mtee::getNpoint() const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1])
@@ -87,25 +90,25 @@ long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, o
 	}
 
 //******************************************************************************
-int Mtee::setNet1(string _net1) {
+int Mtee::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mtee::setNet2(string _net2) {
+int Mtee::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Mtee::setNet3(string _net3) {
+int Mtee::setNet3(string const _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
 //******************************************************************************
-int Mtee::setP(void) {
+int Mtee::setP() {
 	signed short s1; //= m_mirror ? -1 :  1;
 	signed short s2; //= m_mirror ?  1 : -1;
 	long double Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
@@ -132,7 +135,7 @@ int Mtee::setP(void) {
 	}
 
 //******************************************************************************
-void Mtee::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mtee::getStep(int const _net, long double& xstep, long double& ystep) const {
 	long double Wlong=0;
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
@@ -234,7 +237,7 @@ void Mtee::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mtee::getEdge(int const _net, long double& edge, short& dir) {
+void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 	if(_net==1) {
 		edge=m_w1;
 		switch(m_r) {
@@ -272,7 +275,7 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mtee::getOemsNcorelines(void) {
+int Mtee::getOemsNcorelines() const {
 	if(m_w1==m_w2){
 		return(1);
 	} else {
@@ -281,7 +284,7 @@ int Mtee::getOemsNcorelines(void) {
 	}
 
 //******************************************************************************
-int Mtee::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		if(m_mirrorx==0) {
 			switch(m_r) {
@@ -332,7 +335,7 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if(_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w1)))) {
@@ -380,7 +383,7 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mtee::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mtee::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_w1 ? true : false);
 	} else if(_port==2) {

@@ -82,7 +82,9 @@ int main(int argc, char* argv[]) {
 				        "      --oems-timeres INTEGER         Number of timesteps before OpenEMS stops simulation. Default is 300000.\n"
 				        "      --oems-end-criteria STRING     OpenEMS stops simulation when energy decayed to this value.\n"
 				        "                                     Should stay between 1e-3 (speed) and 1e-5 (precision). Default is 1e-4.\n"
-				        "      --oems-nf2ff-center STRING     Set the OpenEMS far field center. Must be a component label.\n";
+				        "      --oems-nf2ff-center STRING     Set the OpenEMS far field center. Must be a component label.\n"
+				        "      --oems-sort-metalresmesh       Order metal resolution mesh lines by edge coordinate.\n"
+				        "                                     Default is grouped by component label.\n";
 				return(0);
 			} else if(string(argv[i])=="--version") {
 				cout << "Qucs-RFlayout " << VERSION << endl;
@@ -148,6 +150,8 @@ int main(int argc, char* argv[]) {
 			} else if(string(argv[i])=="--oems-nf2ff-center" && argv[i+1]) {
 				i++;
 				data.oems_nf2ff_center=string(argv[i]);
+			} else if(string(argv[i])=="--oems-sort-metalresmesh") {
+				data.oems_sort_metalresmesh=true;
 			} else if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 				verbose=true;
 			} else if(string(argv[i])=="-G") {

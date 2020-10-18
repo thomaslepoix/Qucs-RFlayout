@@ -24,10 +24,6 @@ using namespace std;
 Logger log_err;
 
 //******************************************************************************
-void Loggable::log(stringstream& /*in*/) {
-	}
-
-//******************************************************************************
 void Logger::func_cli(stringstream& in) {
 	cerr << in.str();
 	}
@@ -43,7 +39,7 @@ void Logger::print(stringstream& in) {
 	}
 
 //******************************************************************************
-Logger::Logger(void) : f(&Logger::func_cli) {
+Logger::Logger() : f(&Logger::func_cli) {
 	}
 
 //******************************************************************************

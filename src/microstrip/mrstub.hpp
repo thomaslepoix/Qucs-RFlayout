@@ -25,41 +25,41 @@
 //******************************************************************************
 class Mrstub final : public Element {
 private :
-	std::string const m_descriptor="microstrip_radial_stub";
-	long double m_w;
-	long double m_l;
-	long double m_ri;
-	long double m_ro;
-	long double m_alpha;
+	static std::string const m_descriptor;
+	long double const m_w;
+	long double const m_l;
+	long double const m_ri;
+	long double const m_ro;
+	long double const m_alpha;
 	std::string m_net1;
-	static int const m_npoint=53;
+	static int constexpr m_npoint=53;
 	long double tab_p[m_npoint][2]={};
 public :
-	Mrstub(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			std::string _subst,
-			long double _ri,
-			long double _ro,
-			long double _alpha);
-	~Mrstub(void)=default;
-	std::string getDescriptor(void) override;
-	long double getW(void) override;
-	long double getL(void) override;
-	long double getRi(void) override;
-	long double getRo(void) override;
-	long double getAlpha(void) override;
-	std::string getNet1(void) override;
-	int getNpoint(void) override;
-	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
-	void getEdge(int const _net, long double& edge, short& dir) override;
-	int getOemsNcorelines(void) override;
-	int getOemsMeshCore(int const _n, OemsLine& line) override;
-	bool isOemsMeshInterface(int const _port, long double const _w) override;
-	int setNet1(std::string _net1) override;
-	int setP(void) override;
+	Mrstub(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _subst,
+			long double const _ri,
+			long double const _ro,
+			long double const _alpha);
+	~Mrstub()=default;
+	std::string getDescriptor() const override;
+	long double getW() const override;
+	long double getL() const override;
+	long double getRi() const override;
+	long double getRo() const override;
+	long double getAlpha() const override;
+	std::string getNet1() const override;
+	int getNpoint() const override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
+	void getEdge(int const _net, long double& edge, short& dir) const override;
+	int getOemsNcorelines() const override;
+	int getOemsMeshCore(int const _n, OemsLine& line) const override;
+	bool isOemsMeshInterface(int const _port, long double const _w) const override;
+	int setNet1(std::string const _net1) override;
+	int setP() override;
 };
 
 #endif // MRSTUB_HPP

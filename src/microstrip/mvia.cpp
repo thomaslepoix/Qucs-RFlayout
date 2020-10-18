@@ -19,40 +19,43 @@
 using namespace std;
 
 //******************************************************************************
-Mvia::Mvia(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _d) :
+string const Mvia::m_descriptor("microstrip_via");
+
+//******************************************************************************
+Mvia::Mvia(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _d) :
 	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
 	m_d(_d)
 	{}
 
 //******************************************************************************
-string Mvia::getDescriptor(void) {
+string Mvia::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mvia::getD(void) {
+long double Mvia::getD() const {
 	return(m_d);
 	}
 
 //******************************************************************************
-string Mvia::getNet1(void) {
+string Mvia::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-int Mvia::setNet1(string _net1) {
+int Mvia::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
+void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 	edge=m_d;
 	switch(m_r) {
 		case 0: dir=XMIN; break;
@@ -63,12 +66,12 @@ void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mvia::getOemsNcorelines(void) {
+int Mvia::getOemsNcorelines() const {
 	return(3);
 	}
 
 //******************************************************************************
-int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mvia::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		switch(m_r) {
 			case 0:   line.position=m_y+m_d/2; line.direction=YMAX; break;
@@ -101,7 +104,7 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if(_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_d)))) {
@@ -122,7 +125,7 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mvia::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mvia::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_d ? true : false);
 	} else {

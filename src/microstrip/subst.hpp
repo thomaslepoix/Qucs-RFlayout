@@ -25,49 +25,49 @@
 //******************************************************************************
 class Subst final : public Element {
 private :
-	const std::string m_descriptor="substrat";
+	static std::string const m_descriptor;
 	long double m_w;
 	long double m_l;
-	long double m_er;
-	long double m_h;
-	long double m_t;
-	long double m_tand;
-	long double m_rho;
-	long double m_d;
-	long double m_margin;
+	long double const m_er;
+	long double const m_h;
+	long double const m_t;
+	long double const m_tand;
+	long double const m_rho;
+	long double const m_d;
+	long double const m_margin;
 	static const int m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
 	std::array<long double, 4> extrem_pos;
 
-	Subst(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			long double _er,
-			long double _h,
-			long double _t,
-			long double _tand,
-			long double _rho,
-			long double _d,
-			unsigned int _margin_factor);
+	Subst(std::string const _label,
+			std::string const _type,
+			bool const _mirrorx,
+			short const _r,
+			long double const _er,
+			long double const _h,
+			long double const _t,
+			long double const _tand,
+			long double const _rho,
+			long double const _d,
+			unsigned int const _margin_factor);
 	Subst(Subst const* _subst);
-	~Subst(void)=default;
-	std::string getDescriptor(void) override;
-	long double getL(void) override;
-	long double getW(void) override;
-	long double getEr(void) override;
-	long double getH(void) override;
-	long double getT(void) override;
-	long double getTand(void) override;
-	long double getRho(void) override;
-	long double getD(void) override;
-	long double getMargin(void) override;
-	int getNpoint(void) override;
-	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) override;
-	int setW(long double _w) override;
-	int setL(long double _l) override;
-	int setP(void) override;
+	~Subst()=default;
+	std::string getDescriptor() const override;
+	long double getL() const override;
+	long double getW() const override;
+	long double getEr() const override;
+	long double getH() const override;
+	long double getT() const override;
+	long double getTand() const override;
+	long double getRho() const override;
+	long double getD() const override;
+	long double getMargin() const override;
+	int getNpoint() const override;
+	long double getP(int const _n, axis_t const _xy, orientation_t const _r=NOR, origin_t const _abs=REL, bool const apply_shift=true) const override;
+	int setW(long double const _w) override;
+	int setL(long double const _l) override;
+	int setP() override;
 };
 
 #endif // SUBST_HPP

@@ -28,7 +28,7 @@ TARGET = $$PWD/out/qucsrflayout
 TEMPLATE = app
 
 SOURCES += \
-	$$PWD/src/main.cpp \
+	$$PWD/src/logger.cpp \
 	$$PWD/src/microstrip/element.cpp \
 	$$PWD/src/microstrip/pac.cpp \
 	$$PWD/src/microstrip/sp.cpp \
@@ -44,17 +44,20 @@ SOURCES += \
 	$$PWD/src/microstrip/mstep.cpp \
 	$$PWD/src/microstrip/mtee.cpp \
 	$$PWD/src/microstrip/mvia.cpp \
+	$$PWD/src/data.cpp \
 	$$PWD/src/schparser.cpp \
 	$$PWD/src/xycalculator.cpp \
+	$$PWD/src/oemsline.cpp \
+	$$PWD/src/oemsmesh.cpp \
+	$$PWD/src/layoutstrings.cpp \
 	$$PWD/src/layoutwriter.cpp \
 	$$PWD/src/converter.cpp \
-	$$PWD/src/mainwindow.cpp \
 	$$PWD/src/preview.cpp \
-	$$PWD/src/logger.cpp \
-	$$PWD/src/data.cpp \
-	$$PWD/src/oemsmesh.cpp
+	$$PWD/src/mainwindow.cpp \
+	$$PWD/src/main.cpp
 
 HEADERS += \
+	$$PWD/src/logger.hpp \
 	$$PWD/src/microstrip/element.hpp \
 	$$PWD/src/microstrip/pac.hpp \
 	$$PWD/src/microstrip/sp.hpp \
@@ -70,16 +73,16 @@ HEADERS += \
 	$$PWD/src/microstrip/mstep.hpp \
 	$$PWD/src/microstrip/mtee.hpp \
 	$$PWD/src/microstrip/mvia.hpp \
+	$$PWD/src/data.hpp \
 	$$PWD/src/schparser.hpp \
 	$$PWD/src/xycalculator.hpp \
+	$$PWD/src/oemsline.hpp \
+	$$PWD/src/oemsmesh.hpp \
+	$$PWD/src/layoutstrings.hpp \
 	$$PWD/src/layoutwriter.hpp \
 	$$PWD/src/converter.hpp \
-	$$PWD/src/mainwindow.hpp \
 	$$PWD/src/preview.hpp \
-	$$PWD/src/logger.hpp \
-	$$PWD/src/data.hpp \
-	$$PWD/src/oemsmesh.hpp \
-	$$PWD/src/oemsline.hpp
+	$$PWD/src/mainwindow.hpp
 
 FORMS += \
 	$$PWD/src/mainwindow.ui

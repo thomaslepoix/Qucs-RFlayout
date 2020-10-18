@@ -35,4 +35,7 @@ struct OemsLine {
 	std::string type;
 };
 
+//******************************************************************************
+bool operator<(OemsLine const& a, OemsLine const& b);
+
 #endif // OEMSLINE_HPP

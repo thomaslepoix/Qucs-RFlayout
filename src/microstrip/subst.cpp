@@ -19,17 +19,20 @@
 using namespace std;
 
 //******************************************************************************
-Subst::Subst(string _label,
-			string _type,
-			bool _mirrorx,
-			short _r,
-			long double _er,
-			long double _h,
-			long double _t,
-			long double _tand,
-			long double _rho,
-			long double _d,
-			unsigned int _margin_factor) :
+string const Subst::m_descriptor("substrat");
+
+//******************************************************************************
+Subst::Subst(string const _label,
+			string const _type,
+			bool const _mirrorx,
+			short const _r,
+			long double const _er,
+			long double const _h,
+			long double const _t,
+			long double const _tand,
+			long double const _rho,
+			long double const _d,
+			unsigned int const _margin_factor) :
 	Element(_label, _type, true, _mirrorx, _r, 0, ""),
 	m_w(0.0),
 	m_l(0.0),
@@ -63,62 +66,62 @@ Subst::Subst(Subst const* _subst) :
 	{}
 
 //******************************************************************************
-string Subst::getDescriptor(void) {
+string Subst::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Subst::getL(void) {
+long double Subst::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Subst::getW(void) {
+long double Subst::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Subst::getEr(void){
+long double Subst::getEr() const {
 	return(m_er);
 	}
 
 //******************************************************************************
-long double Subst::getH(void){
+long double Subst::getH() const {
 	return(m_h);
 	}
 
 //******************************************************************************
-long double Subst::getT(void){
+long double Subst::getT() const {
 	return(m_t);
 	}
 
 //******************************************************************************
-long double Subst::getTand(void){
+long double Subst::getTand() const {
 	return(m_tand);
 	}
 
 //******************************************************************************
-long double Subst::getRho(void){
+long double Subst::getRho() const {
 	return(m_rho);
 	}
 
 //******************************************************************************
-long double Subst::getD(void) {
+long double Subst::getD() const {
 	return(m_d);
 	}
 
 //******************************************************************************
-long double Subst::getMargin(void) {
+long double Subst::getMargin() const {
 	return(m_margin);
 	}
 
 //******************************************************************************
-int Subst::getNpoint(void) {
+int Subst::getNpoint() const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y]) : rotateX(tab_p[_n][X], tab_p[_n][Y]);
@@ -129,19 +132,19 @@ long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, 
 	}
 
 //******************************************************************************
-int Subst::setW(long double _w) {
+int Subst::setW(long double const _w) {
 	m_w=_w;
 	return(0);
 	}
 
 //******************************************************************************
-int Subst::setL(long double _l) {
+int Subst::setL(long double const _l) {
 	m_l=_l;
 	return(0);
 	}
 
 //******************************************************************************
-int Subst::setP(void) {
+int Subst::setP() {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= m_w/2;
 	tab_p[1][X]= m_l/2;

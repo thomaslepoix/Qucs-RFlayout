@@ -19,16 +19,19 @@
 using namespace std;
 
 //******************************************************************************
-Mcross::Mcross(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w1,
-			long double _w2,
-			long double _w3,
-			long double _w4) :
+string const Mcross::m_descriptor("microstrip_cross");
+
+//******************************************************************************
+Mcross::Mcross(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _w3,
+			long double const _w4) :
 	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
 	m_w1(_w1),
 	m_w2(_w2),
@@ -37,57 +40,57 @@ Mcross::Mcross(string _label,
 	{}
 
 //******************************************************************************
-string Mcross::getDescriptor(void) {
+string Mcross::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcross::getW1(void) {
+long double Mcross::getW1() const {
 	return(m_w1);
 	}
 
 //******************************************************************************
-long double Mcross::getW2(void) {
+long double Mcross::getW2() const {
 	return(m_w2);
 	}
 
 //******************************************************************************
-long double Mcross::getW3(void) {
+long double Mcross::getW3() const {
 	return(m_w3);
 	}
 
 //******************************************************************************
-long double Mcross::getW4(void) {
+long double Mcross::getW4() const {
 	return(m_w4);
 	}
 
 //******************************************************************************
-string Mcross::getNet1(void) {
+string Mcross::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcross::getNet2(void) {
+string Mcross::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mcross::getNet3(void) {
+string Mcross::getNet3() const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-string Mcross::getNet4(void) {
+string Mcross::getNet4() const {
 	return(m_net4);
 	}
 
 //******************************************************************************
-int Mcross::getNpoint(void) {
+int Mcross::getNpoint() const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -98,28 +101,28 @@ long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r,
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
-int Mcross::setNet1(string _net1) {
+int Mcross::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
-int Mcross::setNet2(string _net2) {
+int Mcross::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
-int Mcross::setNet3(string _net3) {
+int Mcross::setNet3(string const _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
-int Mcross::setNet4(string _net4) {
+int Mcross::setNet4(string const _net4) {
 	m_net4=_net4;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcross::setP(void) {
+int Mcross::setP() {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at top left, clockwise
 	signed short s1;
@@ -218,7 +221,7 @@ int Mcross::setP(void) {
 	}
 
 //******************************************************************************
-void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mcross::getStep(int const _net, long double& xstep, long double& ystep) const {
 	long double Wlong=0;
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
@@ -368,7 +371,7 @@ void Mcross::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mcross::getEdge(int const _net, long double& edge, short& dir) {
+void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 	if(_net==1) {
 		edge=m_w1;
 		switch(m_r) {
@@ -423,7 +426,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mcross::getOemsNcorelines(void) {
+int Mcross::getOemsNcorelines() const {
 	if(m_w1==m_w3 || m_w2==m_w4){
 		return(0);
 	} else {
@@ -432,7 +435,7 @@ int Mcross::getOemsNcorelines(void) {
 	}
 
 //******************************************************************************
-int Mcross::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		if(m_w1>m_w3 && m_w2>m_w4) {
 			if(m_mirrorx==0) {
@@ -544,7 +547,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
 	long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
 
@@ -625,7 +628,7 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mcross::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mcross::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(m_w1==m_w3 || m_w2==m_w4) {
 		long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
 		long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;

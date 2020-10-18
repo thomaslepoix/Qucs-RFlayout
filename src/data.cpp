@@ -21,7 +21,7 @@
 using namespace std;
 
 //******************************************************************************
-Block::Block(void) :
+Block::Block() :
 	elements(vector<shared_ptr<Element>>()),
 	subst(shared_ptr<Element>()),
 	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
@@ -29,7 +29,7 @@ Block::Block(void) :
 	{}
 
 //******************************************************************************
-void Block::set_extrem_pos(void) {
+void Block::set_extrem_pos() {
 	//reset extrem_pos to a random existant point
 	for(shared_ptr<Element> it : elements) {
 		if(it->getNpoint()) {
@@ -67,7 +67,7 @@ void Block::shift(long double const x, long double const y) {
 	}
 
 //******************************************************************************
-void Block::print_extrem_pos(void) {
+void Block::print_extrem_pos() const {
 	cout << "\tXmin : " << extrem_pos[XMIN] << "\n"
 	        "\tXmax : " << extrem_pos[XMAX] << "\n"
 	        "\tYmin : " << extrem_pos[YMIN] << "\n"
@@ -75,7 +75,7 @@ void Block::print_extrem_pos(void) {
 	}
 
 //******************************************************************************
-void Block::print(void) {
+void Block::print() const {
 	cout << "Elements :" << endl;
 	for(shared_ptr<Element> it : elements) {
 		cout << "\t" << it->getLabel() << "\t" << it->getType() << endl;
@@ -91,7 +91,7 @@ void Block::print(void) {
 	}
 
 //******************************************************************************
-Data::Data(void) :
+Data::Data() :
 	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
 	is_volume_error(false),
 	out_format(".kicad_pcb"),
@@ -105,7 +105,8 @@ Data::Data(void) :
 	oems_metalres_div(60),
 	oems_substres_div(30),
 	oems_timeres(300000),
-	oems_end_criteria("1e-4")
+	oems_end_criteria("1e-4"),
+	oems_sort_metalresmesh(false)
 	{}
 
 // Copy an object to a new object with all parameters set but no elements.
@@ -127,11 +128,12 @@ Data::Data(Data const& data) :
 	oems_metalres_div(data.oems_metalres_div),
 	oems_substres_div(data.oems_substres_div),
 	oems_timeres(data.oems_timeres),
-	oems_end_criteria(data.oems_end_criteria)
+	oems_end_criteria(data.oems_end_criteria),
+	oems_sort_metalresmesh(data.oems_sort_metalresmesh)
 	{}
 
 //******************************************************************************
-Data::~Data(void) {
+Data::~Data() {
 	for(shared_ptr<Element> it : tab_all) {
 		it->prev=nullptr;
 		it->setAdjacent(1, nullptr, 0);

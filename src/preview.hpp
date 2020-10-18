@@ -30,34 +30,34 @@
 
 //******************************************************************************
 class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
-//	Q_OBJECT
+	Q_OBJECT
 public :
 	explicit Preview(QWidget* parent=0);
-	~Preview(void)=default;
+	~Preview()=default;
 	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
-	void resetView(void);
+	void resetView();
 
 	void setFCtrl(bool _flag_ctrl);
 	void setFShift(bool _flag_shift);
-protected:
-	void initializeGL();
-	void paintGL();
-	void resizeGL(int width, int height);
-
-	void mousePressEvent(QMouseEvent* event);
-	void mouseMoveEvent(QMouseEvent* event);
-	void wheelEvent(QWheelEvent* event);
 
 //	void keyPressEvent(QKeyEvent* event);
 //	void keyReleaseEvent(QKeyEvent* event);
 
 private:
-	enum t_color {orange, green};
-	void drawAll(void);
+	enum t_color { orange, green };
+	void drawAll();
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color);
+
+	void initializeGL() override;
+	void paintGL() override;
+	void resizeGL(int width, int height) override;
 
 	void drawcube();
 	void drawtriangle();
+
+	void mousePressEvent(QMouseEvent* event) override;
+	void mouseMoveEvent(QMouseEvent* event) override;
+	void wheelEvent(QWheelEvent* event) override;
 
     void setXRotation(int angle);
     void setYRotation(int angle);

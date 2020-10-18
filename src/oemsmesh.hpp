@@ -26,12 +26,15 @@
 
 //******************************************************************************
 class OemsMesh {
+private:
+	void sort(std::vector<OemsLine>& a);
+
 public:
 	std::vector<OemsLine> x;
 	std::vector<OemsLine> y;
 
-	OemsMesh(std::vector<std::shared_ptr<Element>>& elements);
-	~OemsMesh(void)=default;
+	OemsMesh(std::vector<std::shared_ptr<Element>>& elements, bool const _sort);
+	~OemsMesh()=default;
 };
 
 #endif // OEMSMESH_HPP

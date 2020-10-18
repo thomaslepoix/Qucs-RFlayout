@@ -33,20 +33,20 @@ private:
 	Data& data;
 	SchParser parser;
 	XyCalculator xycalculator;
-	LayoutWriter layoutwriter;
+	LayoutWriter const layoutwriter;
 
 public:
 	Converter(Data& data);
-	~Converter(void)=default;
+	~Converter()=default;
 
-	void reset(void);
-	int run(void);
-	int read(void);
-	int write(std::vector<std::string>& out_names);
-	int size(void);
+	void reset();
+	int run();
+	int read();
+	int write(std::vector<std::string>& out_names) const;
+	int size() const;
 
-	std::vector<std::shared_ptr<Element>> const& get_tab_all(void);
-	std::array<long double, 4> const& get_extrem_pos(void);
+	std::vector<std::shared_ptr<Element>> const& get_tab_all() const;
+	std::array<long double, 4> const& get_extrem_pos() const;
 };
 
 #endif // CONVERTER_HPP

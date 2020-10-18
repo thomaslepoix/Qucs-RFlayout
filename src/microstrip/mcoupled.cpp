@@ -19,15 +19,18 @@
 using namespace std;
 
 //******************************************************************************
-Mcoupled::Mcoupled(string _label,
-			string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			string _subst,
-			long double _w,
-			long double _l,
-			long double _s) :
+string const Mcoupled::m_descriptor("microstrip_coupled_lines");
+
+//******************************************************************************
+Mcoupled::Mcoupled(string const _label,
+			string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			string const _subst,
+			long double const _w,
+			long double const _l,
+			long double const _s) :
 	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
 	m_w(_w),
 	m_l(_l),
@@ -35,52 +38,52 @@ Mcoupled::Mcoupled(string _label,
 	{}
 
 //******************************************************************************
-string Mcoupled::getDescriptor(void) {
+string Mcoupled::getDescriptor() const {
 	return(m_descriptor);
 	}
 
 //******************************************************************************
-long double Mcoupled::getW(void) {
+long double Mcoupled::getW() const {
 	return(m_w);
 	}
 
 //******************************************************************************
-long double Mcoupled::getL(void) {
+long double Mcoupled::getL() const {
 	return(m_l);
 	}
 
 //******************************************************************************
-long double Mcoupled::getS(void) {
+long double Mcoupled::getS() const {
 	return(m_s);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet1(void) {
+string Mcoupled::getNet1() const {
 	return(m_net1);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet2(void) {
+string Mcoupled::getNet2() const {
 	return(m_net2);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet3(void) {
+string Mcoupled::getNet3() const {
 	return(m_net3);
 	}
 
 //******************************************************************************
-string Mcoupled::getNet4(void) {
+string Mcoupled::getNet4() const {
 	return(m_net4);
 	}
 
 //******************************************************************************
-int Mcoupled::getNpoint(void) {
+int Mcoupled::getNpoint() const {
 	return(m_npoint);
 	}
 
 //******************************************************************************
-long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) {
+long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
 	long double coord;
 	if(_r) {
 		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
@@ -92,31 +95,31 @@ long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _
 	}
 
 //******************************************************************************
-int Mcoupled::setNet1(string _net1) {
+int Mcoupled::setNet1(string const _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet2(string _net2) {
+int Mcoupled::setNet2(string const _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet3(string _net3) {
+int Mcoupled::setNet3(string const _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet4(string _net4) {
+int Mcoupled::setNet4(string const _net4) {
 	m_net4=_net4;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setP(void) {
+int Mcoupled::setP() {
 	tab_p[0][X]=-m_l/2;
 	tab_p[0][Y]= (m_s/2+m_w);
 	tab_p[1][X]= m_l/2;
@@ -137,7 +140,7 @@ int Mcoupled::setP(void) {
 	}
 
 //******************************************************************************
-void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) {
+void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) const {
 	if(m_mirrorx==0 && m_r==0) {
 		if(_net==1) {
 			xstep= - m_l/2;
@@ -254,7 +257,7 @@ void Mcoupled::getStep(int const _net, long double& xstep, long double& ystep) {
 	}
 
 //******************************************************************************
-void Mcoupled::getEdge(int const _net, long double& edge, short& dir) {
+void Mcoupled::getEdge(int const _net, long double& edge, short& dir) const {
 	edge=m_w;
 	if(_net==1 || _net==4) {
 		switch(m_r) {
@@ -274,12 +277,12 @@ void Mcoupled::getEdge(int const _net, long double& edge, short& dir) {
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsNcorelines(void) {
-	return(3);
+int Mcoupled::getOemsNcorelines() const {
+	return(4);
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsMeshCore(int const _n, OemsLine& line) {
+int Mcoupled::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n==0) {
 		switch(m_r) {
 			case 0:   line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
@@ -319,7 +322,7 @@ int Mcoupled::getOemsMeshCore(int const _n, OemsLine& line) {
 	}
 
 //******************************************************************************
-int Mcoupled::getOemsMeshInterface(int const _net, OemsLine& line) {
+int Mcoupled::getOemsMeshInterface(int const _net, OemsLine& line) const {
 	if((_net==1
 	&&(adjacent1.first==nullptr
 	||(adjacent1.first!=nullptr && adjacent1.first->isOemsMeshInterface(adjacent1.second, m_w))))
@@ -355,7 +358,7 @@ int Mcoupled::getOemsMeshInterface(int const _net, OemsLine& line) {
 	}
 
 //******************************************************************************
-bool Mcoupled::isOemsMeshInterface(int const _port, long double const _w) {
+bool Mcoupled::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2 || _port==3 || _port==4) {
 		return(_w>m_w ? true : false);
 	} else {

@@ -23,34 +23,34 @@
 //******************************************************************************
 class Mgap final : public Element {
 private :
-	std::string const m_descriptor="microstrip_gap";
-	long double m_w1;
-	long double m_w2;
-	long double m_s;
+	static std::string const m_descriptor;
+	long double const m_w1;
+	long double const m_w2;
+	long double const m_s;
 	std::string m_net1;
 	std::string m_net2;
 public :
-	Mgap(std::string _label,
-			std::string _type,
-			bool _active,
-			bool _mirrorx,
-			short _r,
-			std::string _subst,
-			long double _w1,
-			long double _w2,
-			long double _s);
-	~Mgap(void)=default;
-	std::string getDescriptor(void) override;
-	long double getW1(void) override;
-	long double getW2(void) override;
-	long double getS(void) override;
-	std::string getNet1(void) override;
-	std::string getNet2(void) override;
-	void getStep(int const _net, long double& xstep, long double& ystep) override;
-	void getEdge(int const _net, long double& edge, short& dir) override;
-	bool isOemsMeshInterface(int const _port, long double const _w) override;
-	int setNet1(std::string _net1) override;
-	int setNet2(std::string _net2) override;
+	Mgap(std::string const _label,
+			std::string const _type,
+			bool const _active,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _subst,
+			long double const _w1,
+			long double const _w2,
+			long double const _s);
+	~Mgap()=default;
+	std::string getDescriptor() const override;
+	long double getW1() const override;
+	long double getW2() const override;
+	long double getS() const override;
+	std::string getNet1() const override;
+	std::string getNet2() const override;
+	void getStep(int const _net, long double& xstep, long double& ystep) const override;
+	void getEdge(int const _net, long double& edge, short& dir) const override;
+	bool isOemsMeshInterface(int const _port, long double const _w) const override;
+	int setNet1(std::string const _net1) override;
+	int setNet2(std::string const _net2) override;
 };
 
 #endif // MGAP_HPP

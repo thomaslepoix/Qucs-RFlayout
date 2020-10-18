@@ -23,26 +23,26 @@
 //******************************************************************************
 class Sp final : public Element {
 private :
-	std::string const m_descriptor="s_parameter_simulation";
-	std::string m_simtype;
-	long double m_fstart;
-	long double m_fstop;
-	unsigned long m_n;
+	static std::string const m_descriptor;
+	std::string const m_simtype;
+	long double const m_fstart;
+	long double const m_fstop;
+	unsigned long const m_n;
 public :
-	Sp(std::string _label,
-			std::string _type,
-			bool _mirrorx,
-			short _r,
-			std::string _simtype,
-			long double _fstart,
-			long double _fstop,
-			unsigned long _n);
-	~Sp(void)=default;
-	std::string getDescriptor(void) override;
-	long double getFstart(void) override;
-	long double getFstop(void) override;
-	std::string getSimtype(void) override;
-	unsigned long getN(void) override;
+	Sp(std::string const _label,
+			std::string const _type,
+			bool const _mirrorx,
+			short const _r,
+			std::string const _simtype,
+			long double const _fstart,
+			long double const _fstop,
+			unsigned long const _n);
+	~Sp()=default;
+	std::string getDescriptor() const override;
+	long double getFstart() const override;
+	long double getFstop() const override;
+	std::string getSimtype() const override;
+	unsigned long getN() const override;
 };
 
 #endif // SP_HPP
