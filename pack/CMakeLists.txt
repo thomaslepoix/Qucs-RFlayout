@@ -90,15 +90,15 @@ set( CPACK_DEBIAN_FILE_NAME DEB-DEFAULT )
 set( CPACK_DEBIAN_PACKAGE_CONTROL_STRICT_PERMISSION TRUE )
 set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/thomaslepoix/Qucs-RFlayout" )
 set( CPACK_DEBIAN_PACKAGE_SECTION  "electronics" )
-set( CPACK_DEBIAN_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, openems" )
-set( CPACK_DEBIAN_PACKAGE_ENHANCES "qucs" )
+set( CPACK_DEBIAN_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, octave-openems" )
+set( CPACK_DEBIAN_PACKAGE_ENHANCES "qucs, octave-openems" )
 set( CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON )
 
 set( CPACK_RPM_FILE_NAME RPM-DEFAULT )
 set( CPACK_RPM_PACKAGE_LICENSE  "GPL-2.0" )
 set( CPACK_RPM_PACKAGE_URL      "https://github.com/thomaslepoix/Qucs-RFlayout" )
 set( CPACK_RPM_PACKAGE_GROUP    "Applications/Engineering" )
-set( CPACK_RPM_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, openems" )
+set( CPACK_RPM_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, octave-openEMS" )
 
 include( CPack )
 
