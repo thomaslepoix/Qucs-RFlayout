@@ -114,7 +114,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 		if(ret) return(ret);
 	} else {
 		Block block;
-		block.boundary=data.extrem_pos;
+		block.boundary=data.extrem_pos; //TODO
 		block.elements=data.tab_all;
 
 		n_out+=data.out_format;
@@ -1148,7 +1148,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "% Standard metal resolution mesh for orthogonal shapes\n"
 	         "% First column : outer line, Second column : inner line (thirds rule)\n"
 	         "% Last symbol : edge direction (from inner side to outer side)\n"
-	         "if cli.metalresmesh || cli.keep_portlines\n"
+//	         "if cli.metalresmesh || cli.keep_portlines\n"
+	         "if cli.metalresmesh\n"
 	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
 		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
@@ -1167,8 +1168,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			}
 		}
 	f_out << "\t];\n"
-	         "endif % cli.metalresmesh || cli.keep_portlines\n"
-	         "if cli.metalresmesh\n"
+//	         "endif % cli.metalresmesh || cli.keep_portlines\n"
+//	         "if cli.metalresmesh\n"
+	         "if cli.thirdsrule\n"
 	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
 		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
@@ -1201,6 +1203,10 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			}
 		}
 	f_out << "\t];\n"
+	         "else % cli.thirdsrule\n"
+	         "mesh.x = [mesh.x, " << block.extrem_pos[XMIN]+offset_x << ", " << block.extrem_pos[XMAX]+offset_x << "];\n"
+	         "mesh.y = [mesh.y, " << -(block.extrem_pos[YMIN]+offset_y) << ", " << -(block.extrem_pos[YMAX]+offset_y) << "];\n"
+	         "endif % cli.thirdsrule\n"
 	         "mesh.z = [mesh.z, ...\n";
 	for(shared_ptr<Element> it : block.elements) {
 		if(it->getType()=="SUBST") {
