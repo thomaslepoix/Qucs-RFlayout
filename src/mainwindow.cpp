@@ -49,6 +49,7 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 	ui->le_oems_nf2ff_center->setText(QString::fromStdString(data.oems_nf2ff_center));
 	ui->le_oems_substres_div->setText(QString::number(data.oems_substres_div));
 	ui->le_oems_timeres->setText(QString::number(data.oems_timeres));
+	ui->cb_oems_sort_metalresmesh->setCheckState(_data.oems_sort_metalresmesh ? Qt::Checked : Qt::Unchecked);
 	ui->tw_actions->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
 	for(std::tuple<unsigned long, std::string, std::string> arg : data.port_shift_args) {
@@ -207,6 +208,15 @@ void MainWindow::on_cb_specify_netlist_stateChanged(int const state) {
 		ui->le_path_net->setEnabled(true);
 		ui->pb_browse_net->setEnabled(true);
 		data.n_net=ui->le_path_net->text().toStdString();
+		}
+	}
+
+//******************************************************************************
+void MainWindow::on_cb_oems_sort_metalresmesh(int const state) {
+	if(state==Qt::Unchecked) {
+		data.oems_sort_metalresmesh=false;
+	} else if(state==Qt::Checked) {
+		data.oems_sort_metalresmesh=true;
 		}
 	}
 

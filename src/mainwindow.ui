@@ -15,6 +15,7 @@
   </property>
   <widget class="QWidget" name="w_main">
    <layout class="QGridLayout" name="gl_main">
+
     <item row="1" column="4" colspan="2">
      <widget class="QCheckBox" name="cb_specify_netlist">
       <property name="focusPolicy">
@@ -48,7 +49,6 @@
        <string>Actions</string>
       </property>
       <layout class="QGridLayout" name="gl_actions">
-
        <item row="0" column="0" rowspan="5" colspan="2">
         <widget class="QTableWidget" name="tw_actions">
          <property name="alternatingRowColors">
@@ -91,21 +91,20 @@
          </column>
         </widget>
        </item>
-    <item row="6" column="0">
-     <widget class="QPushButton" name="pb_add">
-      <property name="text">
-       <string>Add</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QPushButton" name="pb_remove">
-      <property name="text">
-       <string>Remove</string>
-      </property>
-     </widget>
-    </item>
-
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pb_add">
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pb_remove">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -115,94 +114,108 @@
       <property name="title">
        <string>OpenEMS parameters</string>
       </property>
-      <layout class="QGridLayout" name="gl_oems">
-       <item row="0" column="2">
-        <widget class="QLabel" name="l_oems_highres_div">
-         <property name="toolTip">
-          <string>High mesh resolution divisor</string>
-         </property>
-         <property name="text">
-          <string>High res div :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="l_oems_metalres_div">
-         <property name="toolTip">
-          <string>Metal mesh resolution divisor</string>
-         </property>
-         <property name="text">
-          <string>Metal res div :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="l_oems_substres_div">
-         <property name="toolTip">
-          <string>Substrate mesh resolution divisor</string>
-         </property>
-         <property name="text">
-          <string>Subst res div :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="l_oems_timeres">
-         <property name="toolTip">
-          <string>Timestep number before forced simulation end</string>
-         </property>
-         <property name="text">
-          <string>Time res :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="l_oems_end_criteria">
-         <property name="toolTip">
-          <string>Energy decay for normal simulation end
+      <layout class="QVBoxLayout" name="vl_oems">
+       <item row="0">
+        <layout class="QGridLayout" name="gl_oems">
+         <item row="0">
+          <widget class="QLabel" name="l_oems_highres_div">
+           <property name="toolTip">
+            <string>High mesh resolution divisor</string>
+           </property>
+           <property name="text">
+            <string>High res div :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1">
+          <widget class="QLabel" name="l_oems_metalres_div">
+           <property name="toolTip">
+            <string>Metal mesh resolution divisor</string>
+           </property>
+           <property name="text">
+            <string>Metal res div :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2">
+          <widget class="QLabel" name="l_oems_substres_div">
+           <property name="toolTip">
+            <string>Substrate mesh resolution divisor</string>
+           </property>
+           <property name="text">
+            <string>Subst res div :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3">
+          <widget class="QLabel" name="l_oems_timeres">
+           <property name="toolTip">
+            <string>Timestep number before forced simulation end</string>
+           </property>
+           <property name="text">
+            <string>Time res :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4">
+          <widget class="QLabel" name="l_oems_end_criteria">
+           <property name="toolTip">
+            <string>Energy decay for normal simulation end
 Should stay between 1e-3 (speed) and 1e-5 (precision)</string>
-         </property>
-         <property name="text">
-          <string>End criteria :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLabel" name="l_oems_nf2ff_center">
-         <property name="toolTip">
-          <string>Far field radiation center
+           </property>
+           <property name="text">
+            <string>End criteria :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5">
+          <widget class="QLabel" name="l_oems_nf2ff_center">
+           <property name="toolTip">
+            <string>Far field radiation center
 Should be a component label</string>
+           </property>
+           <property name="text">
+            <string>NF2FF center :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QLineEdit" name="le_oems_highres_div"/>
+         </item>
+         <item row="1" column="5">
+          <widget class="QLineEdit" name="le_oems_metalres_div"/>
+         </item>
+         <item row="2" column="5">
+          <widget class="QLineEdit" name="le_oems_substres_div"/>
+         </item>
+         <item row="3" column="5">
+          <widget class="QLineEdit" name="le_oems_timeres"/>
+         </item>
+         <item row="4" column="5">
+          <widget class="QLineEdit" name="le_oems_end_criteria"/>
+         </item>
+         <item row="5" column="5">
+          <widget class="QLineEdit" name="le_oems_nf2ff_center"/>
+         </item>
+        </layout>
+       </item>
+       <item row="1">
+        <widget class="QCheckBox" name="cb_oems_sort_metalresmesh">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>NF2FF center :</string>
+          <string>Sort metal res mesh lines</string>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="5">
-        <widget class="QLineEdit" name="le_oems_highres_div"/>
-       </item>
-       <item row="1" column="5">
-        <widget class="QLineEdit" name="le_oems_metalres_div"/>
-       </item>
-       <item row="2" column="5">
-        <widget class="QLineEdit" name="le_oems_substres_div"/>
-       </item>
-       <item row="3" column="5">
-        <widget class="QLineEdit" name="le_oems_timeres"/>
-       </item>
-       <item row="4" column="5">
-        <widget class="QLineEdit" name="le_oems_end_criteria"/>
-       </item>
-       <item row="5" column="5">
-        <widget class="QLineEdit" name="le_oems_nf2ff_center">
-         <property name="acceptDrops">
-          <bool>true</bool>
+         <property name="toolTip">
+          <string>Order metal resolution mesh lines by edge coordinate instead of component label</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
     </item>
+
     <item row="1" column="2" colspan="2">
      <widget class="QPushButton" name="pb_browse_net">
       <property name="enabled">
