@@ -61,13 +61,8 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			string out=n_out+"-b"+to_string(++i)+data.out_format;
 
 			Block block;
-			block.margin_boundary=it->margin_boundary;
-			block.margin_boundary[XMIN]-=it->subst_local->getMargin();
-			block.margin_boundary[XMAX]+=it->subst_local->getMargin();
-			block.margin_boundary[YMIN]-=it->subst_local->getMargin();
-			block.margin_boundary[YMAX]+=it->subst_local->getMargin();
-
 			block.elements=it->elements;
+			block.calcul_boundaries();
 			block.elements.push_back(it->subst_local);
 			for(shared_ptr<Element> element : data.tab_all) {
 				if(element->getType()==".SP")
@@ -85,18 +80,14 @@ int LayoutWriter::run(vector<string>* out_names) const {
 		for(shared_ptr<Block> it : data.all_blocks) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
+					// End & write
+					block.calcul_boundaries();
 					out=n_out+"-s"+to_string(++i)+data.out_format;
 					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
 
-				Subst* subst=dynamic_cast<Subst*>(it->subst.get());
-				block.margin_boundary=subst->substrate_boundary;
-				block.margin_boundary[XMIN]-=subst->getMargin();
-				block.margin_boundary[XMAX]+=subst->getMargin();
-				block.margin_boundary[YMIN]-=subst->getMargin();
-				block.margin_boundary[YMAX]+=subst->getMargin();
-
+				// Begin & feed
 				block.elements.clear();
 				block.elements=it->elements;
 				block.elements.push_back(it->subst);
@@ -105,18 +96,20 @@ int LayoutWriter::run(vector<string>* out_names) const {
 						block.elements.push_back(element);
 					}
 			} else {
+				// Middle feed
 				block.elements.insert(block.elements.end(), it->elements.begin(), it->elements.end());
 				}
 			prev=it;
 			}
+		// Last end & write
+		block.calcul_boundaries();
 		out=n_out+"-s"+to_string(++i)+data.out_format;
 		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
 		Block block;
-		block.metal_boundary=data.metal_boundary;
-		block.margin_boundary=data.margin_boundary;
 		block.elements=data.tab_all;
+		block.calcul_boundaries();
 
 		n_out+=data.out_format;
 		return(write(block, 0, 0, n_out, name, out_names));
@@ -1081,11 +1074,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case XMIN: f_out << "(" << line->position << " - 2*high_res/3), "; break;
-						case XMAX: f_out << "(" << line->position << " + 2*high_res/3), "; break;
+						case XMIN: f_out << "(" << line->position+offset_x << " - 2*high_res/3), "; break;
+						case XMAX: f_out << "(" << line->position+offset_x << " + 2*high_res/3), "; break;
 						}
 				} else {
-					f_out << "(" << line->position << "), ";
+					f_out << "(" << line->position+offset_x << "), ";
 					}
 				}
 			advance(line, -1);
@@ -1094,11 +1087,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case XMIN: f_out << "(" << line->position << " - 2*high_res/3)"; break;
-						case XMAX: f_out << "(" << line->position << " + 2*high_res/3)"; break;
+						case XMIN: f_out << "(" << line->position+offset_x << " - 2*high_res/3)"; break;
+						case XMAX: f_out << "(" << line->position+offset_x << " + 2*high_res/3)"; break;
 						}
 				} else {
-					f_out << "(" << line->position << ")";
+					f_out << "(" << line->position+offset_x << ")";
 					}
 				if(i==0) {
 					f_out << " - ";
@@ -1116,11 +1109,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3), "; break;
-						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3), "; break;
+						case YMIN: f_out << "(" << -(line->position+offset_y) << " + 2*high_res/3), "; break;
+						case YMAX: f_out << "(" << -(line->position+offset_y) << " - 2*high_res/3), "; break;
 						}
 				} else {
-					f_out << "(" << -line->position << "), ";
+					f_out << "(" << -(line->position+offset_y) << "), ";
 					}
 				}
 			advance(line, -1);
@@ -1129,11 +1122,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3)"; break;
-						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3)"; break;
+						case YMIN: f_out << "(" << -(line->position+offset_y) << " + 2*high_res/3)"; break;
+						case YMAX: f_out << "(" << -(line->position+offset_y) << " - 2*high_res/3)"; break;
 						}
 				} else {
-					f_out << "(" << line->position << ")";
+					f_out << "(" << -(line->position+offset_y) << ")";
 					}
 				if(i==0) {
 					f_out << " - ";
@@ -1156,7 +1149,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
 			advance(line, 1); // Skip the pair
 		} else if(line->type=="Pac") {
-			f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
+			f_out << "\t(" << line->position+offset_x << "), ... % " << line->label << " : " << line->type << "\n";
 			}
 		}
 	f_out << "\t];\n"
@@ -1165,7 +1158,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
 			advance(line, 1); // Skip the pair
 		} else if(line->type=="Pac") {
-			f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
+			f_out << "\t(" << -(line->position+offset_y) << ") ... % " << line->label << " : " << line->type << "\n";
 			}
 		}
 	f_out << "\t];\n"
@@ -1179,11 +1172,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		} else if(line->type!="Pac") {
 			if(line->third_rule) {
 				switch(line->direction) {
-					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : <\n"; break;
-					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : >\n"; break;
+					case XMIN: f_out << "\t(" << line->position+offset_x << " - 2*metal_res/3), (" << line->position+offset_x << " + metal_res/3), ... % " << line->label << " : " << line->type << " : <\n"; break;
+					case XMAX: f_out << "\t(" << line->position+offset_x << " + 2*metal_res/3), (" << line->position+offset_x << " - metal_res/3), ... % " << line->label << " : " << line->type << " : >\n"; break;
 					}
 			} else {
-				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
+				f_out << "\t(" << line->position+offset_x << "), ... % " << line->label << " : " << line->type << "\n";
 				}
 			}
 		}
@@ -1195,11 +1188,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		} else if(line->type!="Pac") {
 			if(line->third_rule) {
 				switch(line->direction) {
-					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : ^\n"; break;
-					case YMAX: f_out << "\t(" << -line->position << " - 2*metal_res/3), (" << -line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : v\n"; break;
+					case YMIN: f_out << "\t(" << -(line->position+offset_y) << " + 2*metal_res/3), (" << -(line->position+offset_y) << " - metal_res/3), ... % " << line->label << " : " << line->type << " : ^\n"; break;
+					case YMAX: f_out << "\t(" << -(line->position+offset_y) << " - 2*metal_res/3), (" << -(line->position+offset_y) << " + metal_res/3), ... % " << line->label << " : " << line->type << " : v\n"; break;
 					}
 			} else {
-				f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
+				f_out << "\t(" << -(line->position+offset_y) << ") ... % " << line->label << " : " << line->type << "\n";
 				}
 			}
 		}

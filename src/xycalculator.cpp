@@ -272,7 +272,7 @@ void XyCalculator::place_blocks() {
 		cout << "Block :" << endl;
 		block->print();
 		if(block->subst) block->margin=block->subst->getMargin();
-		block->set_extrem_pos();
+		block->calcul_boundaries();
 		if(prev) {
 			long double shift_x;
 			long double shift_y;
@@ -403,6 +403,7 @@ void XyCalculator::place_blocks() {
 		}
 	}
 
+// Order by subst, no subst at the end.
 //******************************************************************************
 void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_ptr<Element>> substs) {
 	vector<shared_ptr<Block>> tmp_blocks;

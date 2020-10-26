@@ -30,10 +30,11 @@ Block::Block() :
 	{}
 
 //******************************************************************************
-void Block::set_extrem_pos() {
+void Block::calcul_boundaries() {
 	// Reset metal_boundary to a random existant point
 	for(shared_ptr<Element> it : elements) {
-		if(it->getNpoint()) {
+		if(it->getNpoint()
+		&& it->getType()!="SUBST") {
 			metal_boundary[XMIN]=it->getP(1, X, R, ABS, false);
 			metal_boundary[XMAX]=it->getP(1, X, R, ABS, false);
 			metal_boundary[YMIN]=it->getP(1, Y, R, ABS, false);
@@ -44,6 +45,7 @@ void Block::set_extrem_pos() {
 	// Set metal_boundary
 	for(shared_ptr<Element> it : elements) {
 		it->setP();
+		if(it->getType()=="SUBST") continue;
 		for(int i=0;i<it->getNpoint();i++) {
 			if(it->getP(i, X, R, ABS, false)<metal_boundary[XMIN]) metal_boundary[XMIN]=it->getP(i, X, R, ABS, false);
 			if(it->getP(i, X, R, ABS, false)>metal_boundary[XMAX]) metal_boundary[XMAX]=it->getP(i, X, R, ABS, false);
@@ -64,7 +66,7 @@ void Block::shift(long double const x, long double const y) {
 		it->setX(it->getX(false)+x);
 		it->setY(it->getY(false)+y);
 		}
-	set_extrem_pos();
+	calcul_boundaries();
 	}
 
 //******************************************************************************
