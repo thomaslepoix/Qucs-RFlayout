@@ -31,9 +31,9 @@ class Block {
 public:
 	std::vector<std::shared_ptr<Element>> elements;
 	std::shared_ptr<Element> subst;
-	std::shared_ptr<Element> subst_local;
-	std::array<long double, 4> extrem_pos; // extrem coords of elements
-	std::array<long double, 4> boundary;   // extrem_pos with margin
+	std::shared_ptr<Element> subst_local; // Substrate adjusted to each block
+	std::array<long double, 4> metal_boundary;
+	std::array<long double, 4> margin_boundary;
 	long double margin;
 
 	Block();
@@ -59,7 +59,8 @@ public:
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_block;
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_subst;
 
-	std::array<long double, 4> extrem_pos; // extrem coords of elements (subst included) + margins
+	std::array<long double, 4> metal_boundary;
+	std::array<long double, 4> margin_boundary; // extrem coords of elements (subst included) + margins
 
 	bool is_volume_error; // is 3D representation possible?
 	std::string volume_error; // 3D error messages buffer

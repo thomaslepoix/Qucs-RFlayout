@@ -64,7 +64,7 @@ int Converter::write(vector<string>& out_names) const {
 //******************************************************************************
 int Converter::size() const {
 	return(data.tab_all.size());
-	 }
+	}
 
 //******************************************************************************
 vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
@@ -73,5 +73,5 @@ vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
 
 //******************************************************************************
 array<long double, 4> const& Converter::get_extrem_pos() const {
-	return(data.extrem_pos);
+	return(data.margin_boundary);
 	}

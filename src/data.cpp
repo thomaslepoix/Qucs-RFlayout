@@ -24,37 +24,38 @@ using namespace std;
 Block::Block() :
 	elements(vector<shared_ptr<Element>>()),
 	subst(shared_ptr<Element>()),
-	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
+	metal_boundary({ 0.0, 0.0, 0.0, 0.0 }),
+	margin_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	margin(0.0)
 	{}
 
 //******************************************************************************
 void Block::set_extrem_pos() {
-	//reset extrem_pos to a random existant point
+	// Reset metal_boundary to a random existant point
 	for(shared_ptr<Element> it : elements) {
 		if(it->getNpoint()) {
-			extrem_pos[XMIN]=it->getP(1, X, R, ABS, false);
-			extrem_pos[XMAX]=it->getP(1, X, R, ABS, false);
-			extrem_pos[YMIN]=it->getP(1, Y, R, ABS, false);
-			extrem_pos[YMAX]=it->getP(1, Y, R, ABS, false);
+			metal_boundary[XMIN]=it->getP(1, X, R, ABS, false);
+			metal_boundary[XMAX]=it->getP(1, X, R, ABS, false);
+			metal_boundary[YMIN]=it->getP(1, Y, R, ABS, false);
+			metal_boundary[YMAX]=it->getP(1, Y, R, ABS, false);
 			break;
 			}
 		}
-	//set extrem_pos
+	// Set metal_boundary
 	for(shared_ptr<Element> it : elements) {
 		it->setP();
 		for(int i=0;i<it->getNpoint();i++) {
-			if(it->getP(i, X, R, ABS, false)<extrem_pos[XMIN]) extrem_pos[XMIN]=it->getP(i, X, R, ABS, false);
-			if(it->getP(i, X, R, ABS, false)>extrem_pos[XMAX]) extrem_pos[XMAX]=it->getP(i, X, R, ABS, false);
-			if(it->getP(i, Y, R, ABS, false)<extrem_pos[YMIN]) extrem_pos[YMIN]=it->getP(i, Y, R, ABS, false);
-			if(it->getP(i, Y, R, ABS, false)>extrem_pos[YMAX]) extrem_pos[YMAX]=it->getP(i, Y, R, ABS, false);
+			if(it->getP(i, X, R, ABS, false)<metal_boundary[XMIN]) metal_boundary[XMIN]=it->getP(i, X, R, ABS, false);
+			if(it->getP(i, X, R, ABS, false)>metal_boundary[XMAX]) metal_boundary[XMAX]=it->getP(i, X, R, ABS, false);
+			if(it->getP(i, Y, R, ABS, false)<metal_boundary[YMIN]) metal_boundary[YMIN]=it->getP(i, Y, R, ABS, false);
+			if(it->getP(i, Y, R, ABS, false)>metal_boundary[YMAX]) metal_boundary[YMAX]=it->getP(i, Y, R, ABS, false);
 			}
 		}
-	//set boundary
-	boundary[XMIN]=extrem_pos[XMIN]-margin;
-	boundary[XMAX]=extrem_pos[XMAX]+margin;
-	boundary[YMIN]=extrem_pos[YMIN]-margin;
-	boundary[YMAX]=extrem_pos[YMAX]+margin;
+	// Set margin_boundary
+	margin_boundary[XMIN]=metal_boundary[XMIN]-margin;
+	margin_boundary[XMAX]=metal_boundary[XMAX]+margin;
+	margin_boundary[YMIN]=metal_boundary[YMIN]-margin;
+	margin_boundary[YMAX]=metal_boundary[YMAX]+margin;
 	}
 
 //******************************************************************************
@@ -68,10 +69,10 @@ void Block::shift(long double const x, long double const y) {
 
 //******************************************************************************
 void Block::print_extrem_pos() const {
-	cout << "\tXmin : " << extrem_pos[XMIN] << "\n"
-	        "\tXmax : " << extrem_pos[XMAX] << "\n"
-	        "\tYmin : " << extrem_pos[YMIN] << "\n"
-	        "\tYmax : " << extrem_pos[YMAX] << "\n";
+	cout << "\tXmin : " << metal_boundary[XMIN] << "\n"
+	        "\tXmax : " << metal_boundary[XMAX] << "\n"
+	        "\tYmin : " << metal_boundary[YMIN] << "\n"
+	        "\tYmax : " << metal_boundary[YMAX] << "\n";
 	}
 
 //******************************************************************************
@@ -92,7 +93,8 @@ void Block::print() const {
 
 //******************************************************************************
 Data::Data() :
-	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
+	metal_boundary({ 0.0, 0.0, 0.0, 0.0 }),
+	margin_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	is_volume_error(false),
 	out_format(".kicad_pcb"),
 	export_each_block(false),
@@ -112,7 +114,8 @@ Data::Data() :
 // Copy an object to a new object with all parameters set but no elements.
 //******************************************************************************
 Data::Data(Data const& data) :
-	extrem_pos({ 0.0, 0.0, 0.0, 0.0 }),
+	metal_boundary({ 0.0, 0.0, 0.0, 0.0 }),
+	margin_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	is_volume_error(false),
 	n_sch(data.n_sch),
 	n_net(data.n_net),

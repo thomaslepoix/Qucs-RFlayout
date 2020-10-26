@@ -61,11 +61,11 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			string out=n_out+"-b"+to_string(++i)+data.out_format;
 
 			Block block;
-			block.boundary=it->boundary;
-			block.boundary[XMIN]-=it->subst_local->getMargin();
-			block.boundary[XMAX]+=it->subst_local->getMargin();
-			block.boundary[YMIN]-=it->subst_local->getMargin();
-			block.boundary[YMAX]+=it->subst_local->getMargin();
+			block.margin_boundary=it->margin_boundary;
+			block.margin_boundary[XMIN]-=it->subst_local->getMargin();
+			block.margin_boundary[XMAX]+=it->subst_local->getMargin();
+			block.margin_boundary[YMIN]-=it->subst_local->getMargin();
+			block.margin_boundary[YMAX]+=it->subst_local->getMargin();
 
 			block.elements=it->elements;
 			block.elements.push_back(it->subst_local);
@@ -74,7 +74,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 					block.elements.push_back(element);
 				}
 
-			int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+			int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-b"+to_string(i), out_names);
 			if(ret) return(ret);
 			}
 	} else if(data.export_each_subst) {
@@ -86,16 +86,16 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
 					out=n_out+"-s"+to_string(++i)+data.out_format;
-					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-s"+to_string(i), out_names);
+					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
 
 				Subst* subst=dynamic_cast<Subst*>(it->subst.get());
-				block.boundary=subst->extrem_pos;
-				block.boundary[XMIN]-=subst->getMargin();
-				block.boundary[XMAX]+=subst->getMargin();
-				block.boundary[YMIN]-=subst->getMargin();
-				block.boundary[YMAX]+=subst->getMargin();
+				block.margin_boundary=subst->substrate_boundary;
+				block.margin_boundary[XMIN]-=subst->getMargin();
+				block.margin_boundary[XMAX]+=subst->getMargin();
+				block.margin_boundary[YMIN]-=subst->getMargin();
+				block.margin_boundary[YMAX]+=subst->getMargin();
 
 				block.elements.clear();
 				block.elements=it->elements;
@@ -110,11 +110,12 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			prev=it;
 			}
 		out=n_out+"-s"+to_string(++i)+data.out_format;
-		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-s"+to_string(i), out_names);
+		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
 		Block block;
-		block.boundary=data.extrem_pos; //TODO
+		block.metal_boundary=data.metal_boundary;
+		block.margin_boundary=data.margin_boundary;
 		block.elements=data.tab_all;
 
 		n_out+=data.out_format;
@@ -413,8 +414,8 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 	         " ha:meta {\n"
 	         "   ha:size {\n"
 	         "    thermal_scale = 0.500000\n"
-	         "    x = " << block.boundary[XMAX]+offset_x << "mm\n" //TODO
-	         "    y = " << block.boundary[YMAX]+offset_y << "mm\n"
+	         "    x = " << block.margin_boundary[XMAX]+offset_x << "mm\n" //TODO
+	         "    y = " << block.margin_boundary[YMAX]+offset_y << "mm\n"
 	         "    isle_area_nm2 = 200000000.000000\n"
 	         "   }\n"
 	         "   ha:cursor {\n"
@@ -1204,8 +1205,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		}
 	f_out << "\t];\n"
 	         "else % cli.thirdsrule\n"
-	         "mesh.x = [mesh.x, " << block.extrem_pos[XMIN]+offset_x << ", " << block.extrem_pos[XMAX]+offset_x << "];\n"
-	         "mesh.y = [mesh.y, " << -(block.extrem_pos[YMIN]+offset_y) << ", " << -(block.extrem_pos[YMAX]+offset_y) << "];\n"
+	         "mesh.x = [mesh.x, " << block.metal_boundary[XMIN]+offset_x << ", " << block.metal_boundary[XMAX]+offset_x << "];\n"
+	         "mesh.y = [mesh.y, " << -(block.metal_boundary[YMIN]+offset_y) << ", " << -(block.metal_boundary[YMAX]+offset_y) << "];\n"
 	         "endif % cli.thirdsrule\n"
 	         "mesh.z = [mesh.z, ...\n";
 	for(shared_ptr<Element> it : block.elements) {
@@ -1260,8 +1261,8 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 //	         "mesh.y = [mesh.y, (" << -(block.extrem_pos[YMIN]+offset_y) << "), (" << -(block.extrem_pos[YMAX]+offset_y) << ")];\n"
 //	         "mesh.z = [mesh.z, (" << extrem_pos_zmin << "), (" << extrem_pos_zmax << ")];\n"
 
-	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << " - lambda * " << data.oems_boundary_factor << "/4, " << block.boundary[XMAX]+offset_x << " + lambda * " << data.oems_boundary_factor << "/4];\n"
-	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n" //TODO
+	         "mesh.x = [mesh.x, " << block.margin_boundary[XMIN]+offset_x << " - lambda * " << data.oems_boundary_factor << "/4, " << block.margin_boundary[XMAX]+offset_x << " + lambda * " << data.oems_boundary_factor << "/4];\n"
+	         "mesh.y = [mesh.y, " << -(block.margin_boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.margin_boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n" //TODO
 	         "mesh.z = [mesh.z, " << extrem_pos_zmin << " - lambda * " << data.oems_boundary_factor << "/4, " << extrem_pos_zmax << " + lambda * " << data.oems_boundary_factor << "/4];\n"
 
 

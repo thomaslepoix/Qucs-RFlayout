@@ -42,7 +42,8 @@ Subst::Subst(string const _label,
 	m_tand(_tand),
 	m_rho(_rho),
 	m_d(_d),
-	m_margin(_margin_factor*_h)
+	m_margin(_margin_factor*_h),
+	substrate_boundary({ 0.0, 0.0, 0.0, 0.0 })
 	{}
 
 //******************************************************************************
@@ -62,7 +63,8 @@ Subst::Subst(Subst const* _subst) :
 	m_tand(_subst->m_tand),
 	m_rho(_subst->m_rho),
 	m_d(_subst->m_d),
-	m_margin(_subst->m_margin)
+	m_margin(_subst->m_margin),
+	substrate_boundary({ 0.0, 0.0, 0.0, 0.0 })
 	{}
 
 //******************************************************************************
@@ -153,9 +155,9 @@ int Subst::setP() {
 	tab_p[2][Y]=-m_w/2;
 	tab_p[3][X]=-m_l/2;
 	tab_p[3][Y]=-m_w/2;
-	extrem_pos[XMIN]=getP(0, X, R, ABS);
-	extrem_pos[XMAX]=getP(1, X, R, ABS);
-	extrem_pos[YMIN]=getP(2, Y, R, ABS);
-	extrem_pos[YMAX]=getP(0, Y, R, ABS);
+	substrate_boundary[XMIN]=getP(0, X, R, ABS);
+	substrate_boundary[XMAX]=getP(1, X, R, ABS);
+	substrate_boundary[YMIN]=getP(2, Y, R, ABS);
+	substrate_boundary[YMAX]=getP(0, Y, R, ABS);
 	return(0);
 	}

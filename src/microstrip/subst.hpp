@@ -38,7 +38,7 @@ private :
 	static const int m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
-	std::array<long double, 4> extrem_pos;
+	std::array<long double, 4> substrate_boundary;
 
 	Subst(std::string const _label,
 			std::string const _type,

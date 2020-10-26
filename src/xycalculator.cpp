@@ -283,18 +283,21 @@ void XyCalculator::place_blocks() {
 				is_new_subst=true;
 				cout << "Different substrate : margins doubled" << endl;
 				}
-			if(vector==X) {
+			switch(vector) {
+			case X: {
 				cout << "Shift vector : X" << endl;
-				shift_x=prev->extrem_pos[XMAX]-block->extrem_pos[XMIN];
-				shift_y=prev->extrem_pos[YMIN]-block->extrem_pos[YMIN];
+				shift_x=prev->metal_boundary[XMAX]-block->metal_boundary[XMIN];
+				shift_y=prev->metal_boundary[YMIN]-block->metal_boundary[YMIN];
 				if(is_new_subst) shift_x+=prev->margin+block->margin;
 				shift_x+=prev->margin+block->margin;
-			} else {
+				} break;
+			case Y: {
 				cout << "Shift vector : Y" << endl;
-				shift_y=prev->extrem_pos[YMAX]-block->extrem_pos[YMIN];
-				shift_x=prev->extrem_pos[XMIN]-block->extrem_pos[XMIN];
+				shift_y=prev->metal_boundary[YMAX]-block->metal_boundary[YMIN];
+				shift_x=prev->metal_boundary[XMIN]-block->metal_boundary[XMIN];
 				if(is_new_subst) shift_y+=prev->margin+block->margin;
 				shift_y+=prev->margin+block->margin;
+				} break;
 				}
 			//shift=set_margin(prev, block, data);
 			cout << "Xshift : " << shift_x << endl;
@@ -305,8 +308,8 @@ void XyCalculator::place_blocks() {
 			}
 
 		prev=block;
-		if(block->extrem_pos[XMAX]-block->extrem_pos[XMIN]
-		>= block->extrem_pos[YMAX]-block->extrem_pos[YMIN]) {
+		if(block->metal_boundary[XMAX]-block->metal_boundary[XMIN]
+		>= block->metal_boundary[YMAX]-block->metal_boundary[YMIN]) {
 			vector=Y;
 		} else {
 			vector=X;
@@ -317,20 +320,20 @@ void XyCalculator::place_blocks() {
 // Subst placement
 	cout << endl << "Calculating substrates positons..." << endl;
 	for(shared_ptr<Element> subst : tab_subst) {
-		array<long double, 4> extrem_pos={0.0, 0.0, 0.0, 0.0};
+		array<long double, 4> extrem_pos={ 0.0, 0.0, 0.0, 0.0 };
 		for(shared_ptr<Block> block : data.all_blocks) {
 			if(block->subst==subst) {
-				extrem_pos=block->extrem_pos;
+				extrem_pos=block->metal_boundary;
 				break;
 				}
-			data.extrem_pos=block->extrem_pos;
+			data.margin_boundary=block->metal_boundary;
 			}
 		for(shared_ptr<Block> block : data.all_blocks) {
 			if(block->subst==subst) {
-				if(block->extrem_pos[XMIN]<extrem_pos[XMIN]) extrem_pos[XMIN]=block->extrem_pos[XMIN];
-				if(block->extrem_pos[XMAX]>extrem_pos[XMAX]) extrem_pos[XMAX]=block->extrem_pos[XMAX];
-				if(block->extrem_pos[YMIN]<extrem_pos[YMIN]) extrem_pos[YMIN]=block->extrem_pos[YMIN];
-				if(block->extrem_pos[YMAX]>extrem_pos[YMAX]) extrem_pos[YMAX]=block->extrem_pos[YMAX];
+				if(block->metal_boundary[XMIN]<extrem_pos[XMIN]) extrem_pos[XMIN]=block->metal_boundary[XMIN];
+				if(block->metal_boundary[XMAX]>extrem_pos[XMAX]) extrem_pos[XMAX]=block->metal_boundary[XMAX];
+				if(block->metal_boundary[YMIN]<extrem_pos[YMIN]) extrem_pos[YMIN]=block->metal_boundary[YMIN];
+				if(block->metal_boundary[YMAX]>extrem_pos[YMAX]) extrem_pos[YMAX]=block->metal_boundary[YMAX];
 				}
 			}
 		subst->setL(extrem_pos[XMAX]-extrem_pos[XMIN]+2*subst->getMargin());
@@ -341,38 +344,38 @@ void XyCalculator::place_blocks() {
 		}
 
 
-// Set global extrem_pos
+// Set global boundaries
 	for(shared_ptr<Block> block : data.all_blocks) {
-		if(block->extrem_pos[XMIN]-block->margin<data.extrem_pos[XMIN]) data.extrem_pos[XMIN]=block->extrem_pos[XMIN]-block->margin;
-		if(block->extrem_pos[XMAX]+block->margin>data.extrem_pos[XMAX]) data.extrem_pos[XMAX]=block->extrem_pos[XMAX]+block->margin;
-		if(block->extrem_pos[YMIN]-block->margin<data.extrem_pos[YMIN]) data.extrem_pos[YMIN]=block->extrem_pos[YMIN]-block->margin;
-		if(block->extrem_pos[YMAX]+block->margin>data.extrem_pos[YMAX]) data.extrem_pos[YMAX]=block->extrem_pos[YMAX]+block->margin;
+		if(block->metal_boundary[XMIN]-block->margin<data.margin_boundary[XMIN]) data.margin_boundary[XMIN]=block->metal_boundary[XMIN]-block->margin;
+		if(block->metal_boundary[XMAX]+block->margin>data.margin_boundary[XMAX]) data.margin_boundary[XMAX]=block->metal_boundary[XMAX]+block->margin;
+		if(block->metal_boundary[YMIN]-block->margin<data.margin_boundary[YMIN]) data.margin_boundary[YMIN]=block->metal_boundary[YMIN]-block->margin;
+		if(block->metal_boundary[YMAX]+block->margin>data.margin_boundary[YMAX]) data.margin_boundary[YMAX]=block->metal_boundary[YMAX]+block->margin;
 		}
 
 	for(shared_ptr<Element> it : tab_subst) {
 		Subst* subst=dynamic_cast<Subst*>(it.get());
-		if(subst->extrem_pos[XMIN]-subst->getMargin()<data.extrem_pos[XMIN]) data.extrem_pos[XMIN]=subst->extrem_pos[XMIN]-subst->getMargin();
-		if(subst->extrem_pos[XMAX]+subst->getMargin()>data.extrem_pos[XMAX]) data.extrem_pos[XMAX]=subst->extrem_pos[XMAX]+subst->getMargin();
-		if(subst->extrem_pos[YMIN]-subst->getMargin()<data.extrem_pos[YMIN]) data.extrem_pos[YMIN]=subst->extrem_pos[YMIN]-subst->getMargin();
-		if(subst->extrem_pos[YMAX]+subst->getMargin()>data.extrem_pos[YMAX]) data.extrem_pos[YMAX]=subst->extrem_pos[YMAX]+subst->getMargin();
+		if(subst->substrate_boundary[XMIN]-subst->getMargin()<data.margin_boundary[XMIN]) data.margin_boundary[XMIN]=subst->substrate_boundary[XMIN]-subst->getMargin();
+		if(subst->substrate_boundary[XMAX]+subst->getMargin()>data.margin_boundary[XMAX]) data.margin_boundary[XMAX]=subst->substrate_boundary[XMAX]+subst->getMargin();
+		if(subst->substrate_boundary[YMIN]-subst->getMargin()<data.margin_boundary[YMIN]) data.margin_boundary[YMIN]=subst->substrate_boundary[YMIN]-subst->getMargin();
+		if(subst->substrate_boundary[YMAX]+subst->getMargin()>data.margin_boundary[YMAX]) data.margin_boundary[YMAX]=subst->substrate_boundary[YMAX]+subst->getMargin();
 		}
 	cout << "Calculating substrates positons... OK" << endl;
 
 // Translate to positive quarter
 	cout << endl << "Translating to positive quarter... ";
 	for(shared_ptr<Block> block : data.all_blocks) {
-		block->shift(-data.extrem_pos[XMIN], -data.extrem_pos[YMIN]);
+		block->shift(-data.margin_boundary[XMIN], -data.margin_boundary[YMIN]);
 		}
 	for(shared_ptr<Element> subst : tab_subst) {
-		subst->setX(subst->getX()-data.extrem_pos[XMIN]);
-		subst->setY(subst->getY()-data.extrem_pos[YMIN]);
+		subst->setX(subst->getX()-data.margin_boundary[XMIN]);
+		subst->setY(subst->getY()-data.margin_boundary[YMIN]);
 		subst->setP();
 		}
 	// Maximums first
-	data.extrem_pos[XMAX]-=data.extrem_pos[XMIN];
-	data.extrem_pos[XMIN]-=data.extrem_pos[XMIN];
-	data.extrem_pos[YMAX]-=data.extrem_pos[YMIN];
-	data.extrem_pos[YMIN]-=data.extrem_pos[YMIN];
+	data.margin_boundary[XMAX]-=data.margin_boundary[XMIN];
+	data.margin_boundary[XMIN]-=data.margin_boundary[XMIN];
+	data.margin_boundary[YMAX]-=data.margin_boundary[YMIN];
+	data.margin_boundary[YMIN]-=data.margin_boundary[YMIN];
 	cout << "OK" << endl;
 
 // Local subst placement
@@ -381,14 +384,23 @@ void XyCalculator::place_blocks() {
 		if(block->subst) {
 			Subst* subst=dynamic_cast<Subst*>(block->subst.get());
 			block->subst_local=shared_ptr<Element>(new Subst(subst));
-			block->subst_local->setL(block->boundary[XMAX]-block->boundary[XMIN]);//+2*block->subst_local->getMargin());
-			block->subst_local->setW(block->boundary[YMAX]-block->boundary[YMIN]);//+2*block->subst_local->getMargin());
-			block->subst_local->setX((block->boundary[XMAX]+block->boundary[XMIN])/2);
-			block->subst_local->setY((block->boundary[YMAX]+block->boundary[YMIN])/2);
+			block->subst_local->setL(block->margin_boundary[XMAX]-block->margin_boundary[XMIN]);//+2*block->subst_local->getMargin());
+			block->subst_local->setW(block->margin_boundary[YMAX]-block->margin_boundary[YMIN]);//+2*block->subst_local->getMargin());
+			block->subst_local->setX((block->margin_boundary[XMAX]+block->margin_boundary[XMIN])/2);
+			block->subst_local->setY((block->margin_boundary[YMAX]+block->margin_boundary[YMIN])/2);
 			block->subst_local->setP();
 			}
 		}
 	cout << "OK" << endl;
+
+// Set global metal boundary
+	for(shared_ptr<Block> block : data.all_blocks) {
+		if(block==data.all_blocks.front()) data.metal_boundary=block->metal_boundary;
+		if(block->metal_boundary[XMIN]<data.metal_boundary[XMIN]) data.metal_boundary[XMIN]=block->metal_boundary[XMIN];
+		if(block->metal_boundary[XMAX]>data.metal_boundary[XMAX]) data.metal_boundary[XMAX]=block->metal_boundary[XMAX];
+		if(block->metal_boundary[YMIN]<data.metal_boundary[YMIN]) data.metal_boundary[YMIN]=block->metal_boundary[YMIN];
+		if(block->metal_boundary[YMAX]>data.metal_boundary[YMAX]) data.metal_boundary[YMAX]=block->metal_boundary[YMAX];
+		}
 	}
 
 //******************************************************************************
