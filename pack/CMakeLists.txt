@@ -95,7 +95,7 @@ set( CPACK_DEBIAN_PACKAGE_ENHANCES "qucs, octave-openems" )
 set( CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON )
 
 set( CPACK_RPM_FILE_NAME RPM-DEFAULT )
-set( CPACK_RPM_PACKAGE_LICENSE  "GPL-2.0" )
+set( CPACK_RPM_PACKAGE_LICENSE  "GPL-3.0" )
 set( CPACK_RPM_PACKAGE_URL      "https://github.com/thomaslepoix/Qucs-RFlayout" )
 set( CPACK_RPM_PACKAGE_GROUP    "Applications/Engineering" )
 set( CPACK_RPM_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, octave-openEMS" )
