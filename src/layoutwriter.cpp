@@ -1154,7 +1154,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "% Standard metal resolution mesh for orthogonal shapes\n"
 	         "% First column : outer line, Second column : inner line (thirds rule)\n"
 	         "% Last symbol : edge direction (from inner side to outer side)\n"
-//	         "if cli.metalresmesh || cli.keep_portlines\n"
 	         "if cli.metalresmesh\n"
 	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
@@ -1174,8 +1173,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			}
 		}
 	f_out << "\t];\n"
-//	         "endif % cli.metalresmesh || cli.keep_portlines\n"
-//	         "if cli.metalresmesh\n"
 	         "if cli.thirdsrule\n"
 	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
@@ -1241,8 +1238,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "\t];\n"
 	         "endif % cli.conductingsheet\n";
 
-//	f_out << "mesh.z = linspace(" << -substrate.h-copper.h << ", "copper.h", 4);\n";
-
 	f_out << "if cli.smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, metal_res);\n"
 	         "endif % cli.smoothmesh\n"
@@ -1250,27 +1245,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endif % cli.mesh\n"
 	         "endif % cli.preprocess\n"
 	         "\n"
-//	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
-//	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
-//	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
-//	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
-//	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
 	         "% Boundary box\n"
 	         "if cli.mesh\n"
-//	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
-//	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
-//	         "mesh.z = [mesh.z, " << extrem_pos_zmin << ", " << extrem_pos_zmax << "];\n"
-
-	 //TODO WTF, no extrem_pos?
-//	         "mesh.x = [mesh.x, (" << block.extrem_pos[XMIN]+offset_x << "), (" << block.extrem_pos[XMAX]+offset_x << ")];\n"
-//	         "mesh.y = [mesh.y, (" << -(block.extrem_pos[YMIN]+offset_y) << "), (" << -(block.extrem_pos[YMAX]+offset_y) << ")];\n"
-//	         "mesh.z = [mesh.z, (" << extrem_pos_zmin << "), (" << extrem_pos_zmax << ")];\n"
-
 	         "mesh.x = [mesh.x, " << block.margin_boundary[XMIN]+offset_x << " - lambda * " << data.oems_boundary_factor << "/4, " << block.margin_boundary[XMAX]+offset_x << " + lambda * " << data.oems_boundary_factor << "/4];\n"
-	         "mesh.y = [mesh.y, " << -(block.margin_boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.margin_boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n" //TODO
+	         "mesh.y = [mesh.y, " << -(block.margin_boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.margin_boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n"
 	         "mesh.z = [mesh.z, " << extrem_pos_zmin << " - lambda * " << data.oems_boundary_factor << "/4, " << extrem_pos_zmax << " + lambda * " << data.oems_boundary_factor << "/4];\n"
-
-
 	         "if cli.smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, substrate_res);\n"
 	         "endif % cli.smoothmesh\n"
