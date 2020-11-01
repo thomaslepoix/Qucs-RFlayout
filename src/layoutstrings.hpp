@@ -31,6 +31,9 @@ struct oems_m {
 	static std::string const oemsgen_plotFeedImpedance;
 	static std::string const oemsgen_plotSParameters;
 	static std::string const oemsgen_plotSmithChart;
+	static std::string const oemsgen_plotPhaseResponse;
+	static std::string const oemsgen_plotPhaseDelay;
+	static std::string const oemsgen_plotGroupDelay;
 	static std::string const oemsgen_postProcess;
 };
 
