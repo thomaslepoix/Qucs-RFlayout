@@ -10,7 +10,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -38,7 +38,7 @@ private :
 	static const int m_npoint=4;
 	long double tab_p[m_npoint][2]={};
 public :
-	std::array<long double, 4> extrem_pos;
+	std::array<long double, 4> substrate_boundary;
 
 	Subst(std::string const _label,
 			std::string const _type,

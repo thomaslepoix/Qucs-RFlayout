@@ -10,7 +10,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -27,7 +27,7 @@
 enum axis_t { X, Y };            // x axis / y axis
 enum orientation_t { NOR, R };   // no rotation / rotation
 enum origin_t { REL, ABS };      // relative / absolute
-enum { XMIN, XMAX, YMIN, YMAX }; // extrem_pos index
+enum { XMIN, XMAX, YMIN, YMAX }; // boundary index
 
 //******************************************************************************
 class Element {

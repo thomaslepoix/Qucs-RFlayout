@@ -63,6 +63,8 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
     - S parameters (Smith chart and orthogonal)
     - Feed point impedance
     - Feed point VSWR
+    - Phase response (wrapped and unwrapped)
+    - Phase delay and group delay
     - Azimuth & elevation far field radiation pattern (polar and orthogonal, normalized and in dBi)
     - 3D far field radiation pattern for multiple frequencies (animated `.gif`)
     - Electric & magnetic fields, current and current density in time domain (visible with Paraview)

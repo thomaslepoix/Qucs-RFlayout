@@ -10,7 +10,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -31,17 +31,17 @@ class Block {
 public:
 	std::vector<std::shared_ptr<Element>> elements;
 	std::shared_ptr<Element> subst;
-	std::shared_ptr<Element> subst_local;
-	std::array<long double, 4> extrem_pos; // extrem coords of elements
-	std::array<long double, 4> boundary;   // extrem_pos with margin
+	std::shared_ptr<Element> subst_local; // Substrate adjusted to each block
+	std::array<long double, 4> metal_boundary;
+	std::array<long double, 4> margin_boundary;
 	long double margin;
 
 	Block();
 	~Block()=default;
 	void shift(long double const x, long double const y);
 //	void shift(long double const x, long double const y, bool const apply_shift); //TODO apply_shift : adapt subst size to shifted ports
-	void set_extrem_pos();
-//	void set_extrem_pos(bool const apply_shift=false); //TODO apply_shift : adapt subst size to shifted ports
+	void calcul_boundaries();
+//	void calcul_boundaries(bool const apply_shift=false); //TODO apply_shift : adapt subst size to shifted ports
 	void print_extrem_pos() const;
 	void print() const;
 };
@@ -59,7 +59,8 @@ public:
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_block;
 //	std::vector<std::vector<std::shared_ptr<Element>>> all_elem_subst;
 
-	std::array<long double, 4> extrem_pos; // extrem coords of elements (subst included) + margins
+	std::array<long double, 4> metal_boundary;
+	std::array<long double, 4> margin_boundary; // extrem coords of elements (subst included) + margins
 
 	bool is_volume_error; // is 3D representation possible?
 	std::string volume_error; // 3D error messages buffer

@@ -10,7 +10,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -61,20 +61,15 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			string out=n_out+"-b"+to_string(++i)+data.out_format;
 
 			Block block;
-			block.boundary=it->boundary;
-			block.boundary[XMIN]-=it->subst_local->getMargin();
-			block.boundary[XMAX]+=it->subst_local->getMargin();
-			block.boundary[YMIN]-=it->subst_local->getMargin();
-			block.boundary[YMAX]+=it->subst_local->getMargin();
-
 			block.elements=it->elements;
+			block.calcul_boundaries();
 			block.elements.push_back(it->subst_local);
 			for(shared_ptr<Element> element : data.tab_all) {
 				if(element->getType()==".SP")
 					block.elements.push_back(element);
 				}
 
-			int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-b"+to_string(i), out_names);
+			int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-b"+to_string(i), out_names);
 			if(ret) return(ret);
 			}
 	} else if(data.export_each_subst) {
@@ -85,18 +80,14 @@ int LayoutWriter::run(vector<string>* out_names) const {
 		for(shared_ptr<Block> it : data.all_blocks) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
+					// End & write
+					block.calcul_boundaries();
 					out=n_out+"-s"+to_string(++i)+data.out_format;
-					int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-s"+to_string(i), out_names);
+					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
 
-				Subst* subst=dynamic_cast<Subst*>(it->subst.get());
-				block.boundary=subst->extrem_pos;
-				block.boundary[XMIN]-=subst->getMargin();
-				block.boundary[XMAX]+=subst->getMargin();
-				block.boundary[YMIN]-=subst->getMargin();
-				block.boundary[YMAX]+=subst->getMargin();
-
+				// Begin & feed
 				block.elements.clear();
 				block.elements=it->elements;
 				block.elements.push_back(it->subst);
@@ -105,17 +96,20 @@ int LayoutWriter::run(vector<string>* out_names) const {
 						block.elements.push_back(element);
 					}
 			} else {
+				// Middle feed
 				block.elements.insert(block.elements.end(), it->elements.begin(), it->elements.end());
 				}
 			prev=it;
 			}
+		// Last end & write
+		block.calcul_boundaries();
 		out=n_out+"-s"+to_string(++i)+data.out_format;
-		int ret=write(block, -block.boundary[XMIN], -block.boundary[YMIN], out, name+"-s"+to_string(i), out_names);
+		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
 		Block block;
-		block.boundary=data.extrem_pos;
 		block.elements=data.tab_all;
+		block.calcul_boundaries();
 
 		n_out+=data.out_format;
 		return(write(block, 0, 0, n_out, name, out_names));
@@ -413,8 +407,8 @@ void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const of
 	         " ha:meta {\n"
 	         "   ha:size {\n"
 	         "    thermal_scale = 0.500000\n"
-	         "    x = " << block.boundary[XMAX]+offset_x << "mm\n" //TODO
-	         "    y = " << block.boundary[YMAX]+offset_y << "mm\n"
+	         "    x = " << block.margin_boundary[XMAX]+offset_x << "mm\n" //TODO
+	         "    y = " << block.margin_boundary[YMAX]+offset_y << "mm\n"
 	         "    isle_area_nm2 = 200000000.000000\n"
 	         "   }\n"
 	         "   ha:cursor {\n"
@@ -859,6 +853,18 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+	         oems_m::oemsgen_plotPhaseResponse +
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+	         oems_m::oemsgen_plotPhaseDelay +
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+	         oems_m::oemsgen_plotGroupDelay +
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+	         "\n"
+	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
 	         oems_m::oemsgen_postProcess +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n";
@@ -1080,11 +1086,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case XMIN: f_out << "(" << line->position << " - 2*high_res/3), "; break;
-						case XMAX: f_out << "(" << line->position << " + 2*high_res/3), "; break;
+						case XMIN: f_out << "(" << line->position+offset_x << " - 2*high_res/3), "; break;
+						case XMAX: f_out << "(" << line->position+offset_x << " + 2*high_res/3), "; break;
 						}
 				} else {
-					f_out << "(" << line->position << "), ";
+					f_out << "(" << line->position+offset_x << "), ";
 					}
 				}
 			advance(line, -1);
@@ -1093,11 +1099,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case XMIN: f_out << "(" << line->position << " - 2*high_res/3)"; break;
-						case XMAX: f_out << "(" << line->position << " + 2*high_res/3)"; break;
+						case XMIN: f_out << "(" << line->position+offset_x << " - 2*high_res/3)"; break;
+						case XMAX: f_out << "(" << line->position+offset_x << " + 2*high_res/3)"; break;
 						}
 				} else {
-					f_out << "(" << line->position << ")";
+					f_out << "(" << line->position+offset_x << ")";
 					}
 				if(i==0) {
 					f_out << " - ";
@@ -1115,11 +1121,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3), "; break;
-						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3), "; break;
+						case YMIN: f_out << "(" << -(line->position+offset_y) << " + 2*high_res/3), "; break;
+						case YMAX: f_out << "(" << -(line->position+offset_y) << " - 2*high_res/3), "; break;
 						}
 				} else {
-					f_out << "(" << -line->position << "), ";
+					f_out << "(" << -(line->position+offset_y) << "), ";
 					}
 				}
 			advance(line, -1);
@@ -1128,11 +1134,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 				advance(line, i);
 				if(line->third_rule) {
 					switch(line->direction) {
-						case YMIN: f_out << "(" << -line->position << " + 2*high_res/3)"; break;
-						case YMAX: f_out << "(" << -line->position << " - 2*high_res/3)"; break;
+						case YMIN: f_out << "(" << -(line->position+offset_y) << " + 2*high_res/3)"; break;
+						case YMAX: f_out << "(" << -(line->position+offset_y) << " - 2*high_res/3)"; break;
 						}
 				} else {
-					f_out << "(" << line->position << ")";
+					f_out << "(" << -(line->position+offset_y) << ")";
 					}
 				if(i==0) {
 					f_out << " - ";
@@ -1148,39 +1154,38 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "% Standard metal resolution mesh for orthogonal shapes\n"
 	         "% First column : outer line, Second column : inner line (thirds rule)\n"
 	         "% Last symbol : edge direction (from inner side to outer side)\n"
-	         "if cli.metalresmesh || cli.keep_portlines\n"
-	         "mesh.x = [mesh.x, ...\n";
-	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
-		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
-			advance(line, 1); // Skip the pair
-		} else if(line->type=="Pac") {
-			f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
-			}
-		}
-	f_out << "\t];\n"
-	         "mesh.y = [mesh.y, ...\n";
-	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
-		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
-			advance(line, 1); // Skip the pair
-		} else if(line->type=="Pac") {
-			f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
-			}
-		}
-	f_out << "\t];\n"
-	         "endif % cli.metalresmesh || cli.keep_portlines\n"
 	         "if cli.metalresmesh\n"
 	         "mesh.x = [mesh.x, ...\n";
 	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
 		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
 			advance(line, 1); // Skip the pair
+		} else if(line->type=="Pac") {
+			f_out << "\t(" << line->position+offset_x << "), ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "mesh.y = [mesh.y, ...\n";
+	for(auto line=begin(mesh.y);line<end(mesh.y);++line) {
+		if(line->high_res && next(line)!=end(mesh.y) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
+		} else if(line->type=="Pac") {
+			f_out << "\t(" << -(line->position+offset_y) << ") ... % " << line->label << " : " << line->type << "\n";
+			}
+		}
+	f_out << "\t];\n"
+	         "if cli.thirdsrule\n"
+	         "mesh.x = [mesh.x, ...\n";
+	for(auto line=begin(mesh.x);line<end(mesh.x);++line) {
+		if(line->high_res && next(line)!=end(mesh.x) && next(line)->high_res && line->label==next(line)->label) {
+			advance(line, 1); // Skip the pair
 		} else if(line->type!="Pac") {
 			if(line->third_rule) {
 				switch(line->direction) {
-					case XMIN: f_out << "\t(" << line->position << " - 2*metal_res/3), (" << line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : <\n"; break;
-					case XMAX: f_out << "\t(" << line->position << " + 2*metal_res/3), (" << line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : >\n"; break;
+					case XMIN: f_out << "\t(" << line->position+offset_x << " - 2*metal_res/3), (" << line->position+offset_x << " + metal_res/3), ... % " << line->label << " : " << line->type << " : <\n"; break;
+					case XMAX: f_out << "\t(" << line->position+offset_x << " + 2*metal_res/3), (" << line->position+offset_x << " - metal_res/3), ... % " << line->label << " : " << line->type << " : >\n"; break;
 					}
 			} else {
-				f_out << "\t(" << line->position << "), ... % " << line->label << " : " << line->type << "\n";
+				f_out << "\t(" << line->position+offset_x << "), ... % " << line->label << " : " << line->type << "\n";
 				}
 			}
 		}
@@ -1192,15 +1197,19 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 		} else if(line->type!="Pac") {
 			if(line->third_rule) {
 				switch(line->direction) {
-					case YMIN: f_out << "\t(" << -line->position << " + 2*metal_res/3), (" << -line->position << " - metal_res/3), ... % " << line->label << " : " << line->type << " : ^\n"; break;
-					case YMAX: f_out << "\t(" << -line->position << " - 2*metal_res/3), (" << -line->position << " + metal_res/3), ... % " << line->label << " : " << line->type << " : v\n"; break;
+					case YMIN: f_out << "\t(" << -(line->position+offset_y) << " + 2*metal_res/3), (" << -(line->position+offset_y) << " - metal_res/3), ... % " << line->label << " : " << line->type << " : ^\n"; break;
+					case YMAX: f_out << "\t(" << -(line->position+offset_y) << " - 2*metal_res/3), (" << -(line->position+offset_y) << " + metal_res/3), ... % " << line->label << " : " << line->type << " : v\n"; break;
 					}
 			} else {
-				f_out << "\t(" << -line->position << ") ... % " << line->label << " : " << line->type << "\n";
+				f_out << "\t(" << -(line->position+offset_y) << ") ... % " << line->label << " : " << line->type << "\n";
 				}
 			}
 		}
 	f_out << "\t];\n"
+	         "else % cli.thirdsrule\n"
+	         "mesh.x = [mesh.x, " << block.metal_boundary[XMIN]+offset_x << ", " << block.metal_boundary[XMAX]+offset_x << "];\n"
+	         "mesh.y = [mesh.y, " << -(block.metal_boundary[YMIN]+offset_y) << ", " << -(block.metal_boundary[YMAX]+offset_y) << "];\n"
+	         "endif % cli.thirdsrule\n"
 	         "mesh.z = [mesh.z, ...\n";
 	for(shared_ptr<Element> it : block.elements) {
 		if(it->getType()=="SUBST") {
@@ -1229,8 +1238,6 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	f_out << "\t];\n"
 	         "endif % cli.conductingsheet\n";
 
-//	f_out << "mesh.z = linspace(" << -substrate.h-copper.h << ", "copper.h", 4);\n";
-
 	f_out << "if cli.smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, metal_res);\n"
 	         "endif % cli.smoothmesh\n"
@@ -1238,27 +1245,11 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "endif % cli.mesh\n"
 	         "endif % cli.preprocess\n"
 	         "\n"
-//	         "mesh.x = [mesh.x, -SimBox(1)/2, SimBox(1)/2];\n"
-//	         "mesh.y = [mesh.y, -SimBox(2)/2, SimBox(2)/2];\n"
-//	         "mesh.x = [mesh.x, 0, SimBox(1)];\n"
-//	         "mesh.y = [mesh.y, 0, SimBox(2)];\n"
-//	         "mesh.z = [mesh.z, -SimBox(3)/2, SimBox(3)/2];\n"
 	         "% Boundary box\n"
 	         "if cli.mesh\n"
-//	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << ", " << block.boundary[XMAX]+offset_x << "];\n"
-//	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << ", " << -(block.boundary[YMAX]+offset_y) << "];\n" //TODO
-//	         "mesh.z = [mesh.z, " << extrem_pos_zmin << ", " << extrem_pos_zmax << "];\n"
-
-	 //TODO WTF, no extrem_pos?
-//	         "mesh.x = [mesh.x, (" << block.extrem_pos[XMIN]+offset_x << "), (" << block.extrem_pos[XMAX]+offset_x << ")];\n"
-//	         "mesh.y = [mesh.y, (" << -(block.extrem_pos[YMIN]+offset_y) << "), (" << -(block.extrem_pos[YMAX]+offset_y) << ")];\n"
-//	         "mesh.z = [mesh.z, (" << extrem_pos_zmin << "), (" << extrem_pos_zmax << ")];\n"
-
-	         "mesh.x = [mesh.x, " << block.boundary[XMIN]+offset_x << " - lambda * " << data.oems_boundary_factor << "/4, " << block.boundary[XMAX]+offset_x << " + lambda * " << data.oems_boundary_factor << "/4];\n"
-	         "mesh.y = [mesh.y, " << -(block.boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n" //TODO
+	         "mesh.x = [mesh.x, " << block.margin_boundary[XMIN]+offset_x << " - lambda * " << data.oems_boundary_factor << "/4, " << block.margin_boundary[XMAX]+offset_x << " + lambda * " << data.oems_boundary_factor << "/4];\n"
+	         "mesh.y = [mesh.y, " << -(block.margin_boundary[YMIN]+offset_y) << " + lambda * " << data.oems_boundary_factor << "/4, " << -(block.margin_boundary[YMAX]+offset_y) << " - lambda * " << data.oems_boundary_factor << "/4];\n"
 	         "mesh.z = [mesh.z, " << extrem_pos_zmin << " - lambda * " << data.oems_boundary_factor << "/4, " << extrem_pos_zmax << " + lambda * " << data.oems_boundary_factor << "/4];\n"
-
-
 	         "if cli.smoothmesh\n"
 	         "mesh = SmoothMesh(mesh, substrate_res);\n"
 	         "endif % cli.smoothmesh\n"

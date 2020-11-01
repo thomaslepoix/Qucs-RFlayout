@@ -10,7 +10,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -64,7 +64,7 @@ int Converter::write(vector<string>& out_names) const {
 //******************************************************************************
 int Converter::size() const {
 	return(data.tab_all.size());
-	 }
+	}
 
 //******************************************************************************
 vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
@@ -73,5 +73,5 @@ vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
 
 //******************************************************************************
 array<long double, 4> const& Converter::get_extrem_pos() const {
-	return(data.extrem_pos);
+	return(data.margin_boundary);
 	}

@@ -10,7 +10,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -51,6 +51,7 @@ private:
 private slots:
 	void on_cb_format_currentIndexChanged(QString const out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
+	void on_cb_oems_sort_metalresmesh(int const state);
 	void on_le_oems_end_criteria_textChanged(QString const oems_end_criteria);
 	void on_le_oems_highres_div_textChanged(QString const oems_highres_div);
 	void on_le_oems_metalres_div_textChanged(QString const oems_metalres_div);
