@@ -1,0 +1,83 @@
+name: Release Linux
+
+on:
+  workflow_dispatch:
+  release:
+    types: published
+
+env:
+  PACKAGE_NAME: qucs-rflayout
+
+jobs:
+  run:
+    strategy:
+      matrix:
+        os:
+          - name: ubuntu-20.04
+            distro: bullseye,focal
+          - name: ubuntu-18.04
+            distro: buster,bionic,cosmic,disco,eoan
+
+    runs-on: ${{ matrix.os.name }}
+
+    steps:
+    - name: Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y rpm qt5-default libqt5opengl5-dev texlive-xetex
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure
+      run: cmake -S . -B build
+
+    - name: Build program
+      run: cmake --build build
+
+    - name: Build doc
+      run: cmake --build build --target doc
+
+    - name: Package
+      run: cmake --build build --target package
+
+    - name: Deploy .deb on Bintray
+      run: |
+        curl \
+          -T build/out/qucsrflayout_${GITHUB_REF##*/}_amd64.deb \
+          --user thomaslepoix:${{ secrets.BINTRAY_API_KEY }} \
+          https://api.bintray.com/content/open-rflab/debian/${{ env.PACKAGE_NAME }}/${GITHUB_REF##*/}/pool/q/${{ env.PACKAGE_NAME }}/qucsrflayout_${GITHUB_REF##*/}_amd64.deb \
+          -H 'X-Bintray-Debian-Distribution: ${{ matrix.os.distro }}' \
+          -H 'X-Bintray-Debian-Component: main' \
+          -H 'X-Bintray-Debian-Architecture: amd64' \
+          -H 'X-Bintray-Publish: 1' \
+          -H 'X-Bintray-Override: 1'
+
+    - name: Extract informations
+      id: extract
+      shell: bash
+      run: |
+        echo "##[set-output name=tag;]$(echo ${GITHUB_REF##*/})"
+        echo "##[set-output name=upload_url;]$(curl -sL https://api.github.com/repos/thomaslepoix/Qucs-RFlayout/releases/tags/${GITHUB_REF##*/} | jq -r '.upload_url')"
+
+    - name: Deploy .tar.xz on Github
+      if: matrix.os.name == 'ubuntu-20.04'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.extract.outputs.upload_url }}
+        asset_path: build/out/qucsrflayout-${{ steps.extract.outputs.tag }}-x86_64.tar.xz
+        asset_name: qucsrflayout-${{ steps.extract.outputs.tag }}-x86_64.tar.xz
+        asset_content_type: application/x-xz-compressed-tar
+
+    - name: Deploy .rpm on Github
+      if: matrix.os.name == 'ubuntu-20.04'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.extract.outputs.upload_url }}
+        asset_path: build/out/qucsrflayout-${{ steps.extract.outputs.tag }}-1.x86_64.rpm
+        asset_name: qucsrflayout-${{ steps.extract.outputs.tag }}-1.x86_64.rpm
+        asset_content_type: application/x-rpm
