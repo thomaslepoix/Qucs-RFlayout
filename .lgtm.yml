@@ -1,0 +1,13 @@
+path_classifiers:
+  library:
+    - lib
+  docs:
+    - doc
+  tests:
+    - test
+extraction:
+  cpp:
+    prepare:
+      packages:
+        - qt5-default
+        - libqt5opengl5-dev
