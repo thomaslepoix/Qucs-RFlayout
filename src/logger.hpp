@@ -29,7 +29,7 @@ private:
 	virtual void log(std::stringstream& in)=0;
 public:
 	Loggable()=default;
-	~Loggable()=default;
+	virtual ~Loggable()=default;
 };
 
 //******************************************************************************

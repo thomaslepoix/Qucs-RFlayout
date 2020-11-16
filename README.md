@@ -1,8 +1,11 @@
-[![Travis build Status](https://travis-ci.org/thomaslepoix/Qucs-RFlayout.svg?branch=master)](https://travis-ci.org/thomaslepoix/Qucs-RFlayout)
 [![Liberapay patrons](https://img.shields.io/liberapay/patrons/thomaslepoix.svg?logo=liberapay)](https://liberapay.com/thomaslepoix/donate)
 [![Discord](https://img.shields.io/discord/616889479298547722?logo=discord)](https://discord.gg/P82fEmE)
 [![License](https://img.shields.io/github/license/thomaslepoix/Qucs-RFlayout)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/thomaslepoix/Qucs-RFlayout)](https://github.com/thomaslepoix/Qucs-RFlayout/releases/latest)
+
+[![Travis build Status](https://travis-ci.org/thomaslepoix/Qucs-RFlayout.svg?branch=master)](https://travis-ci.org/thomaslepoix/Qucs-RFlayout)
+[![LGTM alerts](https://img.shields.io/lgtm/alerts/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/alerts/)
+[![LGTM grade](https://img.shields.io/lgtm/grade/cpp/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/context:cpp)
 
 # Qucs-RFlayout
 
@@ -73,30 +76,38 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 <br>
 
-## Binary installation
+## Installation
 
-- Binary packages are available for both Linux and Windows, just checkout [releases](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
+### Dependencies
 
 - [Qucs](https://github.com/Qucs/qucs) is needed (even if you want to convert QucsStudio files), be sure it is installed and accessible from your `PATH` variable.
+- OpenEMS scripts dependencies :
+  - [OpenEMS](https://openems.de/index.php/OpenEMS#Installation) (`octave-openems` package available on Debian 10 based distros, `octave-openEMS` on openSUSE)
+  - [ImageMagick](https://imagemagick.org/script/download.php) (packages available on most distros)
 
-<br>
+### Binary installation
 
-## Build from sources
+- For Debian based distributions, a repository is available :
 
-### Linux
+```sh
+curl https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key --keyring /etc/apt/trusted.gpg.d/open-rflab.gpg add -
+echo "deb https://dl.bintray.com/open-rflab/debian $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/open-rflab.list
 
-- Install dependencies :
+sudo apt-get update
+sudo apt-get install qucsrflayout
+```
+
+- For RPM based distributions and Windows, you can download packages [here](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
+
+### Build from sources
+
+- Install build dependencies :
 
 ```sh
 sudo apt-get install qt5-default libqt5opengl5-dev texlive-xetex fonts-lato    # Debian
 ```
 
-- OpenEMS scripts dependencies :
-
-  - [OpenEMS](https://github.com/thliebig/openEMS-Project) (CTB is required, be sure to add the `addpath` lines to your `.octaverc` / `startup.m` file)
-  - ImageMagick
-
-- With CMake (You must use a modern version >= 3.11) :
+- Build :
 
 ```sh
 Qucs-RFlayout $
@@ -114,44 +125,6 @@ Qucs-RFlayout $
 
     # Classic way : install manually
     sudo make install
-```
-
-- Or if you don't have CMake, you can use QMake (Incomplete installation) :
-
-```sh
-Qucs-RFlayout $
-
-    mkdir build && cd build
-
-    qmake ..
-    make
-    sudo make install
-```
-
-### Windows
-
-- No build instructions available but it should work the regular way (CMake is prefered). You can also refer to binary installation or to the release process (cross compilation from Linux).
-
-<br>
-
-## Release process (using Docker)
-
-- Windows release process is based on cross compilation within an Arch Linux container (because Arch provides several libraries for MinGW, like Qt, Boost, etc. that most other distributions does not provide).
-
-- Unix releases process is wrapped in another container.
-
-```sh
-Qucs-RFlayout $
-
-    sudo docker build -f pack/Dockerfile.unix . -t qucsrflayout:unix
-    sudo docker build -f pack/Dockerfile.win32 . -t qucsrflayout:win32
-
-    sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:unix
-    sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:win32
-    sudo chown -R `id -un` build
-    sudo chgrp -R `id -gn` build
-
-    ls build/out
 ```
 
 <br>
