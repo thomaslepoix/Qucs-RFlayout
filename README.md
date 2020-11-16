@@ -17,7 +17,7 @@ A tool to produce layouts from Qucs RF schematic (microstrip only for now)
 -> `pcb-rnd-layout.lht` [OK]
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
--> `openEMS-script.m` [Alpha]
+-> `openEMS-script.m` [Beta]
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 -> `gmsh.geo` [ASAP]
@@ -73,20 +73,38 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 
 <br>
 
-## Build & Install
+## Installation
 
-- Install dependencies :
+### Dependencies
+
+- [Qucs](https://github.com/Qucs/qucs) is needed (even if you want to convert QucsStudio files), be sure it is installed and accessible from your `PATH` variable.
+- OpenEMS scripts dependencies :
+  - [OpenEMS](https://openems.de/index.php/OpenEMS#Installation) (`octave-openems` package available on Debian 10 based distros, `octave-openEMS` on openSUSE)
+  - [ImageMagick](https://imagemagick.org/script/download.php) (packages available on most distros)
+
+### Binary installation
+
+- For Debian based distributions, a repository is available :
+
+```sh
+curl https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key --keyring /etc/apt/trusted.gpg.d/open-rflab.gpg add -
+echo "deb https://dl.bintray.com/open-rflab/debian $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/open-rflab.list
+
+sudo apt-get update
+sudo apt-get install qucsrflayout
+```
+
+- For RPM based distributions and Windows, you can download packages [here](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
+
+### Build from sources
+
+- Install build dependencies :
 
 ```sh
 sudo apt-get install qt5-default libqt5opengl5-dev texlive-xetex fonts-lato    # Debian
 ```
 
-- OpenEMS scripts dependencies :
-
-  - [OpenEMS](https://github.com/thliebig/openEMS-Project) (CTB is required, be sure to add the `addpath` lines to your `.octaverc` / `startup.m` file)
-  - ImageMagick
-
-- With CMake (You must use a modern version >= 3.11) :
+- Build :
 
 ```sh
 Qucs-RFlayout $
@@ -103,18 +121,6 @@ Qucs-RFlayout $
     sudo dnf install ./qucsrflayout-*.rpm        # Fedora
 
     # Classic way : install manually
-    sudo make install
-```
-
-- Or if you don't have CMake, you can use QMake (Incomplete installation) :
-
-```sh
-Qucs-RFlayout $
-
-    mkdir build && cd build
-
-    qmake ..
-    make
     sudo make install
 ```
 
