@@ -110,7 +110,8 @@ Data::Data() :
 	oems_substres_div(30),
 	oems_timeres(300000),
 	oems_end_criteria("1e-4"),
-	oems_sort_metalresmesh(false)
+	oems_sort_metalresmesh(false),
+	oems_pkg(false)
 	{}
 
 // Copy an object to a new object with all parameters set but no elements.
@@ -134,7 +135,8 @@ Data::Data(Data const& data) :
 	oems_substres_div(data.oems_substres_div),
 	oems_timeres(data.oems_timeres),
 	oems_end_criteria(data.oems_end_criteria),
-	oems_sort_metalresmesh(data.oems_sort_metalresmesh)
+	oems_sort_metalresmesh(data.oems_sort_metalresmesh),
+	oems_pkg(data.oems_pkg)
 	{}
 
 //******************************************************************************

@@ -813,9 +813,9 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n"
 	         "clear;\n"
 	         "close all;\n"
-	         "% Uncomment to use the Debian 10 openems package\n"
-	         "%pkg load openems;\n"
-	         "%pkg load csxcad;\n"
+	         "% Uncomment to use the Debian 10 openems package\n" <<
+	         (data.oems_pkg ? "" : "%") << "pkg load openems;\n" <<
+	         (data.oems_pkg ? "" : "%") << "pkg load csxcad;\n"
 	         "\n";
 
 	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FUNCTIONS\n"
