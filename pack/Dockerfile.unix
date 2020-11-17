@@ -10,13 +10,16 @@ RUN apt update \
 		file \
 		cmake \
 		rpm \
-		qt5-default
+		qt5-default \
+		libqt5opengl5-dev \
+		texlive-xetex \
+		fonts-lato 
 
 WORKDIR /workdir/Qucs-RFlayout/build/out
 WORKDIR /workdir/Qucs-RFlayout/build/unix
 
 CMD cmake ../.. \
 	&& make \
+	&& make doc \
 	&& make package \
 	&& cp -r out ..
-
