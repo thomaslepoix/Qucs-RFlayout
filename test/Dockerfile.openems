@@ -1,0 +1,43 @@
+# Qucs-RFlayout $ sudo docker build -f test/Dockerfile.openems . -t qucsrflayout:openems
+# Qucs-RFlayout $ sudo docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:openems
+
+FROM debian:buster-slim
+
+RUN apt update \
+	&& apt install --yes \
+		build-essential \
+		git \
+		file \
+		cmake \
+		qt5-default \
+		libqt5opengl5-dev
+
+RUN mkdir -p /usr/share/man/man1 \
+	&& apt update \
+	&& apt install --yes \
+		octave-openems \
+		imagemagick
+
+WORKDIR /workdir/Qucs-RFlayout/build/out
+WORKDIR /workdir/Qucs-RFlayout/build/openems
+WORKDIR /workdir/Qucs-RFlayout/build/unix
+
+CMD cmake ../.. \
+	&& make \
+	&& make package \
+	&& apt install --yes ./out/qucsrflayout_*.deb \
+	&& cd ../openems \
+	&& qucsrflayout \
+		-i ../../test/lpf/lpf.sch \
+		-n ../../test/lpf/lpf.net \
+		-f .m \
+		-e P3 -e P4 -e P5 -e P6 \
+		--oems-metalres-div 105 \
+		--oems-pkg \
+	&& octave lpf.m \
+		--no-gui \
+		--batch \
+		--nf2ff \
+		--nf2ff-force \
+		--nf2ff-3d \
+		--nf2ff-frames 11
