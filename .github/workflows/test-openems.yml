@@ -1,0 +1,19 @@
+name: Test OpenEMS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build image
+      run: docker build . -f test/Dockerfile.openems -t qucsrflayout:openems
+
+    - name: Run image
+      run: docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:openems
