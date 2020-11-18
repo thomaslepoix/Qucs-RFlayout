@@ -1343,6 +1343,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "CSXGeomPlot([cli.path_simulation '/' csx_file]);\n"
 	         "endif % cli.gui\n"
 	         "if cli.process\n"
+	         "disp([\"\\nRunning openEMS. If you cannot cancel the simulation using CTRL+C, try to touch '\", cli.path_simulation, \"/ABORT' file.\"]);\n"
 	         "t_process_start = clock();\n"
 	         "RunOpenEMS(cli.path_simulation, csx_file);\n"
 	         "t_process_stop = clock();\n"
