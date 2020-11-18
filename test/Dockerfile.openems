@@ -26,6 +26,7 @@ CMD cmake ../.. \
 	&& make \
 	&& make package \
 	&& apt install --yes ./out/qucsrflayout_*.deb \
+	&& mkdir -p ../openems \
 	&& cd ../openems \
 	&& qucsrflayout \
 		-i ../../test/patch/patch.sch \
