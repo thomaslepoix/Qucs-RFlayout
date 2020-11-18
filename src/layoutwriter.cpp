@@ -1430,7 +1430,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "\n";
 
 	f_out << "if cli.postprocess\n"
-	         "if cli.batch\n"
+	         "if cli.batch == false\n"
 	         "disp(\"\\nTerminated, press any key to exit.\");\n"
 	         "pause();\n"
 	         "endif % cli.batch\n"
