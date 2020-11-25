@@ -50,6 +50,7 @@ add_dependencies( "doc" "oems_mesh" )
 
 install(
 	FILES
+		${GLOBAL_SCHEMATICS_FILES}
 		${TOPOLOGY_FILES}
 		${DETAIL_FILES}
 		${OEMS_MESH_FILES}

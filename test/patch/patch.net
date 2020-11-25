@@ -1,0 +1,10 @@
+# Qucs 0.0.19  /home/hernie/testputain/Qucs-RFlayout_4/test/patch/patch.sch
+
+SUBST:Subst1 er="4.7" h="1.55 mm" t="35 um" tand="0.02" rho="16.78e-9" D="0.15e-6"
+Eqn:Eqn1 S11_Patch="S[1,1]" dB_S11_Patch="dB(S11_Patch)" Export="yes"
+.SP:SP1 Type="log" Start="2 GHz" Stop="3 GHz" Points="400" Noise="no" NoiseIP="1" NoiseOP="2" saveCVs="no" saveAll="no"
+Pac:P1 _net0 gnd Num="1" Z="50 Ohm" P="0 dBm" f="1 GHz" Temp="26.85"
+MOPEN:MS2 _net1 Subst="Subst1" W="37.0218 mm" MSModel="Hammerstad" MSDispModel="Kirschning" Model="Kirschning"
+MLIN:MS3 _net2 _net1 Subst="Subst1" W="37.0218 mm" L="28.5288 mm" Model="Hammerstad" DispModel="Kirschning" Temp="26.85"
+MLIN:MS4 _net0 _net3 Subst="Subst1" W="2.78892 mm" L="16.621 mm" Model="Hammerstad" DispModel="Kirschning" Temp="26.85"
+MSTEP:MS5 _net2 _net3 Subst="Subst1" W1="37.0218 mm" W2="2.78892 mm" MSModel="Hammerstad" MSDispModel="Kirschning"

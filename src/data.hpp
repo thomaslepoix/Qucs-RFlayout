@@ -93,6 +93,7 @@ public:
 	std::string oems_end_criteria;
 	std::string oems_nf2ff_center;
 	bool oems_sort_metalresmesh;
+	bool oems_pkg;
 
 	Data();
 	Data(Data const& data);
