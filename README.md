@@ -90,7 +90,7 @@ French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2
 - For Debian based distributions, a repository is available :
 
 ```sh
-curl https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key --keyring /etc/apt/trusted.gpg.d/open-rflab.gpg add -
+curl -s https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key --keyring /etc/apt/trusted.gpg.d/open-rflab.gpg add -
 echo "deb https://dl.bintray.com/open-rflab/debian $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/open-rflab.list
 
 sudo apt-get update
