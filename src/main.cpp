@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
 		MainWindow w(data);
 		log_err.obj=&w;
 		log_err.set_mode(gui);
-		log_err << "WARNING : GUI and circuit preview are not up to date yet, take a look at the command line. ;)\n";
+		// log_err << "WARNING : GUI and circuit preview are not up to date yet, take a look at the command line. ;)\n";
 		w.show();
 		return(a.exec());
 
