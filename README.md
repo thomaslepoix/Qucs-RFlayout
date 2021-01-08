@@ -29,6 +29,8 @@ A tool to produce layouts from Qucs RF schematic (microstrip only for now)
 
 French documentation [here](https://github.com/thomaslepoix/ESTEI/blob/master/M2_CPP_Qucs-RFlayout/Qucs-RFlayout.pdf)
 
+This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-RFlab) project, if you are interrested in contributing or involved in an other `somewhat -> openems` converter please take a look.
+
 <br>
 
 ## Screenshots
