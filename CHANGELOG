@@ -1,4 +1,4 @@
-qucsrflayout (1.1.0)
+qucsrflayout (2.0.0)
 
   [ Fixed ]
   * Various fixes and improvements
@@ -18,7 +18,7 @@ qucsrflayout (1.1.0)
   * Supports export by block and substrate
   * Supports XDG desktop launcher
 
- -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  __ Oct 2020
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  11 Jan 2021
 
 qucsrflayout (1.0.1)
 
