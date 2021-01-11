@@ -833,45 +833,45 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" + 
-	         oems_m::oemsgen_cli +
+	         oems_m::oemshll_cli +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotVSWR +
+	         oems_m::oemshll_plotVSWR +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotFeedImpedance +
+	         oems_m::oemshll_plotFeedImpedance +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotSParameters +
+	         oems_m::oemshll_plotSParameters +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotSmithChart +
+	         oems_m::oemshll_plotSmithChart +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotPhaseResponse +
+	         oems_m::oemshll_plotPhaseResponse +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotPhaseDelay +
+	         oems_m::oemshll_plotPhaseDelay +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_plotGroupDelay +
+	         oems_m::oemshll_plotGroupDelay +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n"
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-	         oems_m::oemsgen_postProcess +
+	         oems_m::oemshll_postProcess +
 	         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 	         "\n";
 
 	f_out << "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CLI\n"
 	         "\n"
-	         "cli = oemsgen_cli(argv(), '" << name << "', [";
+	         "cli = oemshll_cli(argv(), '" << name << "', [";
 	for(pair<unsigned int, shared_ptr<Element>> it : ports) {
 		f_out << it.first << (it==ports.back() ? "" : ", ");
 		}
@@ -1362,7 +1362,7 @@ void LayoutWriter::write_m(Block& block, std::ofstream& f_out, long double const
 			 ) <<
 	         "\n"
 	         "t_postprocess_start = clock();\n"
-	         "oemsgen_postProcess('" << name << "', cli.path_simulation, cli.path_result, port, cli.ports_index, cli.active_ports, fstart, fstop, points, ...\n"
+	         "oemshll_postProcess('" << name << "', cli.path_simulation, cli.path_result, port, cli.ports_index, cli.active_ports, fstart, fstop, points, ...\n"
 	         "\t'legend_out', cli.legend_out, ...\n"
 	         "\t'nf2ff', cli.nf2ff, ...\n"
 	         "\t'nf2ff_data', nf2ff, ...\n"

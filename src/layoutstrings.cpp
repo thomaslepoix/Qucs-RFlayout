@@ -440,8 +440,8 @@ string const oems_m::plotSmith(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_cli(
-	"function cli = oemsgen_cli(args, name, ports_index, varargin)\n"
+string const oems_m::oemshll_cli(
+	"function cli = oemshll_cli(args, name, ports_index, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   args:         - Script arguments, should probably be 'argv()'.\n"
@@ -523,7 +523,7 @@ string const oems_m::oemsgen_cli(
 	"\t\tcli.path_simulation = varargin{i + 1};\n"
 	"\t\ti = i + 1;\n"
 	"\telse\n"
-	"\t\twarning('openEMS:oemsgen_cli', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\twarning('openEMS:oemshll_cli', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\tendif\n"
 	"\ti = i + 1;\n"
 	"endwhile\n"
@@ -791,8 +791,8 @@ string const oems_m::oemsgen_cli(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotVSWR(
-	"function h = oemsgen_plotVSWR(s, port_n, freq, markers, color, varargin)\n"
+string const oems_m::oemshll_plotVSWR(
+	"function h = oemshll_plotVSWR(s, port_n, freq, markers, color, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   s:              - S parameter, should be a reflection coefficient (Sxx, no Sxy).\n"
@@ -815,7 +815,7 @@ string const oems_m::oemsgen_plotVSWR(
 	"% example:\n"
 	"%   s11 = port{1}.uf.ref ./ port{1}.uf.inc;\n"
 	"%   figure;\n"
-	"%   oemsgen_plotVSWR(s11, '1', freq, 'g');\n"
+	"%   oemshll_plotVSWR(s11, '1', freq, 'g');\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -836,7 +836,7 @@ string const oems_m::oemsgen_plotVSWR(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotVSWR', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotVSWR', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
@@ -861,8 +861,8 @@ string const oems_m::oemsgen_plotVSWR(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotFeedImpedance(
-	"function h = oemsgen_plotFeedImpedance(Z, port_n, freq, markers, abs_color, im_color, re_color, varargin)\n"
+string const oems_m::oemshll_plotFeedImpedance(
+	"function h = oemshll_plotFeedImpedance(Z, port_n, freq, markers, abs_color, im_color, re_color, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   Z:              - Feed port impedance.\n"
@@ -890,7 +890,7 @@ string const oems_m::oemsgen_plotFeedImpedance(
 	"% example:\n"
 	"%   z1 = port{1}.uf.tot./port{1}.if.tot;\n"
 	"%   figure;\n"
-	"%   oemsgen_plotFeedImpedance(z1, '1', freq, 'k', 'm', 'g');\n"
+	"%   oemshll_plotFeedImpedance(z1, '1', freq, 'k', 'm', 'g');\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -911,7 +911,7 @@ string const oems_m::oemsgen_plotFeedImpedance(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotFeedImpedance', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotFeedImpedance', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
@@ -945,8 +945,8 @@ string const oems_m::oemsgen_plotFeedImpedance(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotSParameters(
-	"function h = oemsgen_plotSParameters(s, names, freq, markers, colors, varargin)\n"
+string const oems_m::oemshll_plotSParameters(
+	"function h = oemshll_plotSParameters(s, names, freq, markers, colors, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   s:              - S parameters cell array.\n"
@@ -969,7 +969,7 @@ string const oems_m::oemsgen_plotSParameters(
 	"%\n"
 	"% example:\n"
 	"%   figure;\n"
-	"%   oemsgen_plotSParameters({s11, s21}, {'s11', 's21'}, freq, markers, {'m', 'g'});\n"
+	"%   oemshll_plotSParameters({s11, s21}, {'s11', 's21'}, freq, markers, {'m', 'g'});\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -990,13 +990,13 @@ string const oems_m::oemsgen_plotSParameters(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotSParameters', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotSParameters', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
 	"\n"
 	"\tif numel(s) != numel(names) || numel(s) != numel(colors)\n"
-	"\t\twarning('openEMS:oemsgen_plotSParameters', 'mismatch beteen s, names and colors parameters cell number');\n"
+	"\t\twarning('openEMS:oemshll_plotSParameters', 'mismatch beteen s, names and colors parameters cell number');\n"
 	"\tendif\n"
 	"\n"
 	"\thold on;\n"
@@ -1020,8 +1020,8 @@ string const oems_m::oemsgen_plotSParameters(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotSmithChart(
-	"function h = oemsgen_plotSmithChart(s, names, freq, markers, color_order, varargin)\n"
+string const oems_m::oemshll_plotSmithChart(
+	"function h = oemshll_plotSmithChart(s, names, freq, markers, color_order, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   s:              - S parameters cell array.\n"
@@ -1047,7 +1047,7 @@ string const oems_m::oemsgen_plotSmithChart(
 	"%   \t[1, 0, 1]; ... % m\n"
 	"%   \t[0, 1, 0]];    % g\n"
 	"%   figure;\n"
-	"%   oemsgen_plotSmithChart({s11, s21}, {'s11', 's21'}, freq, markers, color_order);\n"
+	"%   oemshll_plotSmithChart({s11, s21}, {'s11', 's21'}, freq, markers, color_order);\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -1068,13 +1068,13 @@ string const oems_m::oemsgen_plotSmithChart(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotSmithChart', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotSmithChart', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
 	"\n"
 	"\tif numel(s) != numel(names)\n"
-	"\t\twarning('openEMS:oemsgen_plotSmithChart', 'mismatch beteen s and names parameters cell number');\n"
+	"\t\twarning('openEMS:oemshll_plotSmithChart', 'mismatch beteen s and names parameters cell number');\n"
 	"\tendif\n"
 	"\n"
 	"\tf_index = [];\n"
@@ -1100,8 +1100,8 @@ string const oems_m::oemsgen_plotSmithChart(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotPhaseResponse(
-	"function h = oemsgen_plotPhaseResponse(s, names, freq, markers, colors, varargin)\n"
+string const oems_m::oemshll_plotPhaseResponse(
+	"function h = oemshll_plotPhaseResponse(s, names, freq, markers, colors, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   s:              - S parameters cell array, should not be a reflection coefficient (Sxy, no Sxx).\n"
@@ -1126,7 +1126,7 @@ string const oems_m::oemsgen_plotPhaseResponse(
 	"%\n"
 	"% example:\n"
 	"%   figure;\n"
-	"%   oemsgen_plotPhaseResponse({s21, s31}, {'s21', 's31'}, freq, markers, {'m', 'g'});\n"
+	"%   oemshll_plotPhaseResponse({s21, s31}, {'s21', 's31'}, freq, markers, {'m', 'g'});\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -1152,7 +1152,7 @@ string const oems_m::oemsgen_plotPhaseResponse(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotPhaseResponse', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotPhaseResponse', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
@@ -1163,7 +1163,7 @@ string const oems_m::oemsgen_plotPhaseResponse(
 	"\t\twrap_str = 'unwrapped';\n"
 	"\tendif\n"
 	"\tif numel(s) != numel(names) || numel(s) != numel(colors)\n"
-	"\t\twarning('openEMS:oemsgen_plotPhaseResponse', 'mismatch beteen s, names and colors parameters cell number');\n"
+	"\t\twarning('openEMS:oemshll_plotPhaseResponse', 'mismatch beteen s, names and colors parameters cell number');\n"
 	"\tendif\n"
 	"\n"
 	"\thold on;\n"
@@ -1196,8 +1196,8 @@ string const oems_m::oemsgen_plotPhaseResponse(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotPhaseDelay(
-	"function h = oemsgen_plotPhaseDelay(s, names, freq, markers, colors, varargin)\n"
+string const oems_m::oemshll_plotPhaseDelay(
+	"function h = oemshll_plotPhaseDelay(s, names, freq, markers, colors, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   s:              - S parameters cell array, should not be a reflection coefficient (Sxy, no Sxx).\n"
@@ -1220,7 +1220,7 @@ string const oems_m::oemsgen_plotPhaseDelay(
 	"%\n"
 	"% example:\n"
 	"%   figure;\n"
-	"%   oemsgen_plotPhaseDelay({s21, s31}, {'s21', 's31'}, freq, markers, {'m', 'g'});\n"
+	"%   oemshll_plotPhaseDelay({s21, s31}, {'s21', 's31'}, freq, markers, {'m', 'g'});\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -1241,13 +1241,13 @@ string const oems_m::oemsgen_plotPhaseDelay(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotPhaseDelay', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotPhaseDelay', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
 	"\n"
 	"\tif numel(s) != numel(names) || numel(s) != numel(colors)\n"
-	"\t\twarning('openEMS:oemsgen_plotPhaseDelay', 'mismatch beteen s, names and colors parameters cell number');\n"
+	"\t\twarning('openEMS:oemshll_plotPhaseDelay', 'mismatch beteen s, names and colors parameters cell number');\n"
 	"\tendif\n"
 	"\n"
 	"\thold on;\n"
@@ -1272,8 +1272,8 @@ string const oems_m::oemsgen_plotPhaseDelay(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_plotGroupDelay(
-	"function h = oemsgen_plotGroupDelay(s, names, freq, markers, colors, varargin)\n"
+string const oems_m::oemshll_plotGroupDelay(
+	"function h = oemshll_plotGroupDelay(s, names, freq, markers, colors, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   s:              - S parameters cell array, should not be a reflection coefficient (Sxy, no Sxx).\n"
@@ -1296,7 +1296,7 @@ string const oems_m::oemsgen_plotGroupDelay(
 	"%\n"
 	"% example:\n"
 	"%   figure;\n"
-	"%   oemsgen_plotGroupDelay({s21, s31}, {'s21', 's31'}, freq, markers, {'m', 'g'});\n"
+	"%   oemshll_plotGroupDelay({s21, s31}, {'s21', 's31'}, freq, markers, {'m', 'g'});\n"
 	"%   drawnow;\n"
 	"%\n"
 	"% author: Thomas Lepoix\n"
@@ -1317,13 +1317,13 @@ string const oems_m::oemsgen_plotGroupDelay(
 	"\t\t\tfunit_name = varargin{i+1};\n"
 	"\t\t\ti = i + 1;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_plotGroupDelay', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_plotGroupDelay', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
 	"\n"
 	"\tif numel(s) != numel(names) || numel(s) != numel(colors)\n"
-	"\t\twarning('openEMS:oemsgen_plotGroupDelay', 'mismatch beteen s, names and colors parameters cell number');\n"
+	"\t\twarning('openEMS:oemshll_plotGroupDelay', 'mismatch beteen s, names and colors parameters cell number');\n"
 	"\tendif\n"
 	"\n"
 	"\thold on;\n"
@@ -1355,8 +1355,8 @@ string const oems_m::oemsgen_plotGroupDelay(
 	"end\n");
 
 //******************************************************************************
-string const oems_m::oemsgen_postProcess(
-	"function oemsgen_postProcess(name, path_simulation, path_result, port, port_index, active_ports, fstart, fstop, points, varargin)\n"
+string const oems_m::oemshll_postProcess(
+	"function oemshll_postProcess(name, path_simulation, path_result, port, port_index, active_ports, fstart, fstop, points, varargin)\n"
 	"%\n"
 	"% input:\n"
 	"%   name:            - Simulation name.\n"
@@ -1488,7 +1488,7 @@ string const oems_m::oemsgen_postProcess(
 	"\t\t\tf_equal_v = varargin{i+2};\n"
 	"\t\t\ti = i + 2;\n"
 	"\t\telse\n"
-	"\t\t\twarning('openEMS:oemsgen_postProcess', ['unknown argument key: ''' varargin{i} '''']);\n"
+	"\t\t\twarning('openEMS:oemshll_postProcess', ['unknown argument key: ''' varargin{i} '''']);\n"
 	"\t\tendif\n"
 	"\t\ti = i + 1;\n"
 	"\tendwhile\n"
@@ -1610,7 +1610,7 @@ string const oems_m::oemsgen_postProcess(
 	"\tendfor\n"
 	"endfor\n"
 	"figure;\n"
-	"oemsgen_plotSParameters(spara, names, freq, f_select, colors, ...\n"
+	"oemshll_plotSParameters(spara, names, freq, f_select, colors, ...\n"
 	"\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"drawnow;\n"
 	"print([path_result, '/', name, '-s', graphics_format]);\n"
@@ -1629,7 +1629,7 @@ string const oems_m::oemsgen_postProcess(
 	"\tendfor\n"
 	"endfor\n"
 	"figure;\n"
-	"oemsgen_plotSmithChart(spara, names, freq, f_select, color_order_smith, ...\n"
+	"oemshll_plotSmithChart(spara, names, freq, f_select, color_order_smith, ...\n"
 	"\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"drawnow;\n"
 	"print([path_result, '/', name, '-smith', graphics_format]);\n"
@@ -1652,7 +1652,7 @@ string const oems_m::oemsgen_postProcess(
 	"\t\tendfor\n"
 	"\tendfor\n"
 	"\tfigure;\n"
-	"\toemsgen_plotPhaseResponse(spara, names, freq, f_select, colors, ...\n"
+	"\toemshll_plotPhaseResponse(spara, names, freq, f_select, colors, ...\n"
 	"\t\t'wrap', false, ...\n"
 	"\t\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"\tdrawnow;\n"
@@ -1677,7 +1677,7 @@ string const oems_m::oemsgen_postProcess(
 	"\t\tendfor\n"
 	"\tendfor\n"
 	"\tfigure;\n"
-	"\toemsgen_plotPhaseResponse(spara, names, freq, f_select, colors, ...\n"
+	"\toemshll_plotPhaseResponse(spara, names, freq, f_select, colors, ...\n"
 	"\t\t'wrap', true, ...\n"
 	"\t\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"\tdrawnow;\n"
@@ -1702,7 +1702,7 @@ string const oems_m::oemsgen_postProcess(
 	"\t\tendfor\n"
 	"\tendfor\n"
 	"\tfigure;\n"
-	"\toemsgen_plotPhaseDelay(spara, names, freq, f_select, colors, ...\n"
+	"\toemshll_plotPhaseDelay(spara, names, freq, f_select, colors, ...\n"
 	"\t\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"\tdrawnow;\n"
 	"\tprint([path_result, '/', name, '-phase-delay', graphics_format]);\n"
@@ -1726,7 +1726,7 @@ string const oems_m::oemsgen_postProcess(
 	"\t\tendfor\n"
 	"\tendfor\n"
 	"\tfigure;\n"
-	"\toemsgen_plotGroupDelay(spara, names, freq, f_select, colors, ...\n"
+	"\toemshll_plotGroupDelay(spara, names, freq, f_select, colors, ...\n"
 	"\t\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"\tdrawnow;\n"
 	"\tprint([path_result, '/', name, '-group-delay', graphics_format]);\n"
@@ -1736,7 +1736,7 @@ string const oems_m::oemsgen_postProcess(
 	"for i = 1:numel(active_ports)\n"
 	"\tz = port{active_ports(i)}.uf.tot./port{active_ports(i)}.if.tot;\n"
 	"\tfigure;\n"
-	"\toemsgen_plotFeedImpedance(z, num2str(active_ports(i)), freq, f_select, 'k', 'm', 'g', ...\n"
+	"\toemshll_plotFeedImpedance(z, num2str(active_ports(i)), freq, f_select, 'k', 'm', 'g', ...\n"
 	"\t\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"\tdrawnow;\n"
 	"\tprint([path_result, '/', name, '-z', num2str(active_ports(i)), graphics_format]);\n"
@@ -1745,7 +1745,7 @@ string const oems_m::oemsgen_postProcess(
 	"%%%% PLOT PORT VSWR\n"
 	"for i = 1:numel(active_ports)\n"
 	"\tfigure;\n"
-	"\toemsgen_plotVSWR(s{active_ports(i), active_ports(i)}, num2str(active_ports(i)), freq, f_select, color_order_letter(i), ...\n"
+	"\toemshll_plotVSWR(s{active_ports(i), active_ports(i)}, num2str(active_ports(i)), freq, f_select, color_order_letter(i), ...\n"
 	"\t\t'legend_out', legend_out, 'funit', funit, 'funit_name', funit_name);\n"
 	"\tdrawnow;\n"
 	"\tprint([path_result, '/', name, '-vswr', num2str(active_ports(i)), graphics_format]);\n"
