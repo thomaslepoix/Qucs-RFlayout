@@ -26,15 +26,15 @@ struct oems_m {
 	static std::string const write_touchstone_m; // From CTB v0.0.35 tarball
 	static std::string const plotFF3D_frames;
 	static std::string const plotSmith;
-	static std::string const oemsgen_cli;
-	static std::string const oemsgen_plotVSWR;
-	static std::string const oemsgen_plotFeedImpedance;
-	static std::string const oemsgen_plotSParameters;
-	static std::string const oemsgen_plotSmithChart;
-	static std::string const oemsgen_plotPhaseResponse;
-	static std::string const oemsgen_plotPhaseDelay;
-	static std::string const oemsgen_plotGroupDelay;
-	static std::string const oemsgen_postProcess;
+	static std::string const oemshll_cli;
+	static std::string const oemshll_plotVSWR;
+	static std::string const oemshll_plotFeedImpedance;
+	static std::string const oemshll_plotSParameters;
+	static std::string const oemshll_plotSmithChart;
+	static std::string const oemshll_plotPhaseResponse;
+	static std::string const oemshll_plotPhaseDelay;
+	static std::string const oemshll_plotGroupDelay;
+	static std::string const oemshll_postProcess;
 };
 
 //******************************************************************************

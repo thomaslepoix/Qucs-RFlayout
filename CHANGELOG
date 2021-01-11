@@ -1,3 +1,25 @@
+qucsrflayout (2.0.0)
+
+  [ Fixed ]
+  * Various fixes and improvements
+    (Dominik Eyerly <https://github.com/dom11990>)
+    (natsfr <https://github.com/natsfr>)
+
+  [ Changed ]
+  * License is now GPL-3.0
+  * QucsStudio support dropped on 3.x.x versions
+
+  [ Added ]
+  * Supports output formats :
+    * .m : openEMS Octave script
+  * Supports moving and resizing ports
+  * Supports excluding or chosing components
+  * Supports using a specified netlist
+  * Supports export by block and substrate
+  * Supports XDG desktop launcher
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  11 Jan 2021
+
 qucsrflayout (1.0.1)
 
   [ Fixed ]
