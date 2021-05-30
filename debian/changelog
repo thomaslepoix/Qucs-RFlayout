@@ -1,0 +1,58 @@
+qucsrflayout (2.0.0-1) unstable; urgency=medium
+
+  [ Fixed ]
+  * Various fixes and improvements
+    (Dominik Eyerly <https://github.com/dom11990>)
+    (natsfr <https://github.com/natsfr>)
+
+  [ Changed ]
+  * License is now GPL-3.0
+  * QucsStudio support dropped on 3.x.x versions
+
+  [ Added ]
+  * Supports output formats :
+    * .m : openEMS Octave script
+  * Supports moving and resizing ports
+  * Supports excluding or chosing components
+  * Supports using a specified netlist
+  * Supports export by block and substrate
+  * Supports XDG desktop launcher
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Mon, 11 Jan 2021 00:00:00 +0100
+
+qucsrflayout (1.0.1-1) unstable; urgency=medium
+
+  [ Fixed ]
+  * Truncated decimal values in graphic mode only. (Closes: #4)
+
+  [ Added ]
+  * Changelog
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Fri, 17 Apr 2020 00:00:00 +0100
+
+qucsrflayout (1.0.0-1) unstable; urgency=medium
+
+  [ Added ]
+  * Supports Linux.
+  * Supports Windows (Benjamin Vernoux <https://github.com/bvernoux>).
+  * Requires Qucs installed.
+  * Supports QucsStudio schematics if Qucs is installed too.
+  * Supports output formats :
+    * .kicad_pcb : KiCad board
+    * .kicad_mod : KiCad module
+    * .lht : pcb-rnd board
+  * Supports microstrip components :
+    * MCORN
+    * MCOUPLED
+    * MCROSS
+    * MGAP
+    * MLIN
+    * MMBEND
+    * MOPEN
+    * MRSTUB
+    * MSTEP
+    * MTEE
+    * MVIA
+    * Pac
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Fri, 14 Feb 2020 00:00:00 +0100

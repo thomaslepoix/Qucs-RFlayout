@@ -1,0 +1,16 @@
+Source: qucsrflayout
+Section: electronics
+Priority: optional
+Maintainer: Thomas Lepoix <thomas.lepoix@protonmail.ch>
+Uploaders: Thomas Lepoix <thomas.lepoix@protonmail.ch>
+Homepage: https://github.com/thomaslepoix/Qucs-RFlayout
+Vcs-Git: https://github.com/thomaslepoix/Qucs-RFlayout
+Vcs-Browser: https://github.com/thomaslepoix/Qucs-RFlayout
+
+Package: qucsrflayout
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Suggests: qucs, kicad, pcb-rnd, octave-openems
+Enhances: qucs, octave-openems
+Description: A tool to produce layout from qucs RF schematics
+ (microstrip only for now).
