@@ -7,6 +7,8 @@
 [![LGTM alerts](https://img.shields.io/lgtm/alerts/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/alerts/)
 [![LGTM grade](https://img.shields.io/lgtm/grade/cpp/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/context:cpp)
 
+[![Package Debian](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Release%20Debian?label=package&logo=debian)](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout)
+
 # Qucs-RFlayout
 
 A tool to produce layouts from Qucs RF schematic (microstrip only for now)
@@ -87,46 +89,38 @@ This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-R
   - [OpenEMS](https://openems.de/index.php/OpenEMS#Installation) (`octave-openems` package available on Debian 10 based distros, `octave-openEMS` on openSUSE)
   - [ImageMagick](https://imagemagick.org/script/download.php) (packages available on most distros)
 
-### Binary installation
+### Package installation
 
-- For Debian based distributions, a repository is available :
+- For Debian based distributions, a [repository](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout) is available :
 
 ```sh
-curl -s https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key --keyring /etc/apt/trusted.gpg.d/open-rflab.gpg add -
-echo "deb https://dl.bintray.com/open-rflab/debian $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/open-rflab.list
+DEBIAN=Debian_10    # Use the underlying Debian version of your Debian-based distro
 
-sudo apt-get update
-sudo apt-get install qucsrflayout
+echo "deb http://download.opensuse.org/repositories/home:/thomaslepoix:/open-rflab/${DEBIAN}/ /" | sudo tee /etc/apt/sources.list.d/home:thomaslepoix:open-rflab.list
+curl -fsSL https://download.opensuse.org/repositories/home:thomaslepoix:open-rflab/${DEBIAN}/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_thomaslepoix_open-rflab.gpg > /dev/null
+
+sudo apt update
+sudo apt install qucsrflayout
 ```
 
 - For RPM based distributions and Windows, you can download packages [here](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
 
-### Build from sources
+### Installation from sources
 
-- Install build dependencies :
+- Debian way : Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout/tree/debian).
 
-```sh
-sudo apt-get install qt5-default libqt5opengl5-dev texlive-xetex fonts-lato    # Debian
-```
+- Classic way :
 
-- Build :
+The build-time dependencies are the following on Debian, check equivalents on your own (reports are welcome) for non Debian-based distros :
+
+`qt5-default`, `libqt5opengl5-dev`, `texlive-xetex`, `fonts-lato`
 
 ```sh
 Qucs-RFlayout $
 
-    mkdir build && cd build
-
-    cmake ..
-    make
-    make doc
-
-    # Prefered way : use your packet manager
-    make package
-    sudo apt-get install ./qucsrflayout_*.deb    # Debian
-    sudo dnf install ./qucsrflayout-*.rpm        # Fedora
-
-    # Classic way : install manually
-    sudo make install
+    cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release
+    cmake --build build
+    sudo cmake --build build --target install
 ```
 
 <br>
