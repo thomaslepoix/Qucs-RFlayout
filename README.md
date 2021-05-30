@@ -11,18 +11,17 @@ sudo apt install dpkg-dev
 
 git clone https://github.com/thomaslepoix/Qucs-RFlayout
 git clone https://github.com/thomaslepoix/Qucs-RFlayout -b debian debian --depth 1
-
 cd Qucs-RFlayout
-sed -i DESCRIPTION -e "s/Version: .*$/Version: $(git describe --tags)/g"
 
 git archive \
 	--format=tar.gz \
 	-o ../qucsrflayout_$(git describe --tags).orig.tar.gz \
 	--prefix=qucsrflayout-$(git describe --tags)/ \
-	$(git stash create)
+	HEAD
 
 mv ../debian/debian .
-sed -i debian/changelog -e "1i \
+[ $(git describe --tags) != $(git describe --tags --abbrev=0) ] \
+&& sed -i debian/changelog -e "1i \
 qucsrflayout ($(git describe --tags)-1) unstable; urgency=medium\n\n\
   * Package from upstream sources\n\n\
  -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  $(date -R)\n\
