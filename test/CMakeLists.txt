@@ -32,7 +32,7 @@ target_compile_definitions( unittest
 
 target_compile_features( unittest
 	PRIVATE
-	cxx_std_11
+	cxx_std_14
 	)
 
 target_compile_options( unittest
