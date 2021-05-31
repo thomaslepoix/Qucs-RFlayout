@@ -1,3 +1,10 @@
+qucsrflayout (2.0.1-1) unstable; urgency=medium
+
+  [ Changed ]
+  * Fix unittest build flag
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Mon, 31 May 2021 00:00:00 +0100
+
 qucsrflayout (2.0.0-1) unstable; urgency=medium
 
   [ Fixed ]
