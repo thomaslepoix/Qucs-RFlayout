@@ -43,18 +43,6 @@ jobs:
     - name: Package
       run: cmake --build build --target package
 
-    - name: Deploy .deb on Bintray
-      run: |
-        curl \
-          -T build/out/qucsrflayout_${GITHUB_REF##*/}_amd64.deb \
-          --user thomaslepoix:${{ secrets.BINTRAY_API_KEY }} \
-          https://api.bintray.com/content/open-rflab/debian/${{ env.PACKAGE_NAME }}/${GITHUB_REF##*/}/pool/q/${{ env.PACKAGE_NAME }}/qucsrflayout_${GITHUB_REF##*/}+${{ matrix.os.deb }}_amd64.deb \
-          -H 'X-Bintray-Debian-Distribution: ${{ matrix.os.distro }}' \
-          -H 'X-Bintray-Debian-Component: main' \
-          -H 'X-Bintray-Debian-Architecture: amd64' \
-          -H 'X-Bintray-Publish: 1' \
-          -H 'X-Bintray-Override: 1'
-
     - name: Extract informations
       id: extract
       shell: bash

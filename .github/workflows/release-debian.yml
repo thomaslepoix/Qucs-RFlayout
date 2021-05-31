@@ -1,0 +1,125 @@
+name: Release Debian
+
+on:
+  workflow_dispatch:
+
+env:
+  PACKAGE: qucsrflayout
+  OBS_USER: thomaslepoix
+  OBS_PROJECT: home:${OBS_USER}:open-rflab
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y dpkg-dev
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: debian
+
+    - name: Extract tag
+      id: extract
+      shell: bash
+      run: |
+        echo "##[set-output name=version;]$( \
+          head debian/changelog -n 1 \
+          | awk '{print $2}' \
+          | sed -e 's/(//g' -e 's/)//g' \
+          | awk -F - '{print $1}' \
+          )"
+        echo "##[set-output name=revision;]$( \
+          head debian/changelog -n 1 \
+          | awk '{print $2}' \
+          | sed -e 's/(//g' -e 's/)//g' \
+          | awk -F - '{print $2}' \
+          )"
+
+    - name: Download & fix origin tarball
+      run: |
+        REPO=$(echo ${GITHUB_REPOSITORY} | sed "s/${GITHUB_ACTOR}\///g")
+        wget \
+          ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/archive/refs/tags/${{ steps.extract.outputs.version }}.tar.gz \
+          -O ${REPO}_${{ steps.extract.outputs.version }}.orig.tar.gz
+        tar -xzvf ${REPO}_${{ steps.extract.outputs.version }}.orig.tar.gz
+        mv \
+          ${REPO}-${{ steps.extract.outputs.version }} \
+          ${{ env.PACKAGE }}-${{ steps.extract.outputs.version }}
+        tar -czvf \
+          ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz \
+          ${{ env.PACKAGE }}-${{ steps.extract.outputs.version }}
+        rm ${REPO}_${{ steps.extract.outputs.version }}.orig.tar.gz
+
+    - name: Untar & debianize
+      run: |
+        tar -xzvf ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz
+        mv debian ${{ env.PACKAGE }}-${{ steps.extract.outputs.version }}
+
+    - name: Package
+      run: dpkg-source -b ${{ env.PACKAGE }}-${{ steps.extract.outputs.version }}
+
+    - name: Remove old source package on OBS
+      run: |
+        INFOS="$( \
+          curl \
+            --user ${{ env.OBS_USER }}:${{ secrets.OBS_PASSWORD }} \
+            https://api.opensuse.org/source/${{ env.OBS_PROJECT }}/${{ env.PACKAGE }}/)"
+        OLD_DSC="$( \
+          echo "${INFOS}" \
+          | grep .dsc \
+          | awk '{print $2}' \
+          | sed -e 's/name="//g' -e 's/"$//g' \
+          )"
+        OLD_DEBIAN_TXZ="$( \
+          echo "${INFOS}" \
+          | grep .debian.tar.xz \
+          | awk '{print $2}' \
+          | sed -e 's/name="//g' -e 's/"$//g' \
+          )"
+        OLD_ORIG_TGZ="$( \
+          echo "${INFOS}" \
+          | grep .orig.tar.gz \
+          | awk '{print $2}' \
+          | sed -e 's/name="//g' -e 's/"$//g' \
+          )"
+        if [ "${OLD_DSC}" ]
+        then curl \
+          --user ${{ env.OBS_USER }}:${{ secrets.OBS_PASSWORD }} \
+          -X DELETE https://api.opensuse.org/source/${{ env.OBS_PROJECT }}/${{ env.PACKAGE }}/${OLD_DSC}
+        fi
+        if [ "${OLD_DEBIAN_TXZ}" ]
+        then curl \
+          --user ${{ env.OBS_USER }}:${{ secrets.OBS_PASSWORD }} \
+          -X DELETE https://api.opensuse.org/source/${{ env.OBS_PROJECT }}/${{ env.PACKAGE }}/${OLD_DEBIAN_TXZ}
+        fi
+        if [ "${OLD_ORIG_TGZ}" ]
+        then curl \
+          --user ${{ env.OBS_USER }}:${{ secrets.OBS_PASSWORD }} \
+          -X DELETE https://api.opensuse.org/source/${{ env.OBS_PROJECT }}/${{ env.PACKAGE }}/${OLD_ORIG_TGZ}
+        fi
+
+    - name: Deploy source package on OBS
+      run: |
+        FILES={
+        FILES+=${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}-${{ steps.extract.outputs.revision }}.dsc,
+        FILES+=${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}-${{ steps.extract.outputs.revision }}.debian.tar.xz,
+        FILES+=${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz
+        FILES+=}
+        curl \
+          --user ${{ env.OBS_USER }}:${{ secrets.OBS_PASSWORD }} \
+          https://api.opensuse.org/source/${{ env.OBS_PROJECT }}/${{ env.PACKAGE }}/ \
+          -T "${FILES}"
+
+    - name: Upload source package as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: source-package
+        path: |
+          ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}-${{ steps.extract.outputs.revision }}.dsc
+          ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}-${{ steps.extract.outputs.revision }}.debian.tar.xz
+          ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz
