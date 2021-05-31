@@ -40,11 +40,20 @@ jobs:
           | awk -F - '{print $2}' \
           )"
 
-    - name: Download origin tarball
+    - name: Download & fix origin tarball
       run: |
+        REPO=$(echo ${GITHUB_REPOSITORY} | sed "s/${GITHUB_ACTOR}\///g")
         wget \
           ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/archive/refs/tags/${{ steps.extract.outputs.version }}.tar.gz \
-          -O ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz
+          -O ${REPO}_${{ steps.extract.outputs.version }}.orig.tar.gz
+        tar -xzvf ${REPO}_${{ steps.extract.outputs.version }}.orig.tar.gz
+        mv \
+          ${REPO}-${{ steps.extract.outputs.version }} \
+          ${{ env.PACKAGE }}-${{ steps.extract.outputs.version }}
+        tar -czvf \
+          ${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz \
+          ${{ env.PACKAGE }}-${{ steps.extract.outputs.version }}
+        rm ${REPO}_${{ steps.extract.outputs.version }}.orig.tar.gz
 
     - name: Untar & debianize
       run: |
