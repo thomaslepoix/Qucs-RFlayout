@@ -1,0 +1,86 @@
+name: Test SonarCloud
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+#  schedule:
+#    cron: "0 13 * * 1" # Every monday at 13h
+
+env:
+  SONAR_SCANNER_VERSION: 4.6.2.2472
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Dependencies: APT"
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            qt5-default \
+            libqt5opengl5-dev
+#            texlive-xetex
+#            gcovr
+
+      - name: "Dependencies: Sonar"
+        run: |
+          mkdir -p /tmp/sonar
+          wget \
+            https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${{ env.SONAR_SCANNER_VERSION }}-linux.zip \
+            -O /tmp/sonar/sonar-scanner.zip
+          unzip \
+            -o /tmp/sonar/sonar-scanner.zip \
+            -d /tmp/sonar/
+          wget \
+            https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip \
+            -O /tmp/sonar/build-wrapper-linux-x86.zip
+          unzip \
+            -o /tmp/sonar/build-wrapper-linux-x86.zip \
+            -d /tmp/sonar/
+
+#      - name: "Dependencies: Catch2"
+#        run: |
+#          git clone https://github.com/catchorg/Catch2.git
+#          cd Catch2
+#          cmake -Bbuild -H. -DBUILD_TESTING=OFF
+#          sudo cmake --build build/ --target install
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure
+        run: |
+          cmake \
+            -S. \
+            -Bbuild
+#            -DCMAKE_BUILD_TYPE=Coverage \
+#            -DCMAKE_CXX_COMPILER=g++ \
+#            -DSONAR=ON
+
+      - name: Build
+        run: |
+          /tmp/sonar/build-wrapper-linux-x86/build-wrapper-linux-x86-64 \
+            --out-dir build_wrapper_output_directory \
+            cmake --build build
+#             --target unittest
+
+#      - name: Coverage
+#        run: cmake --build build --target coverage
+
+      - name: Scan
+        run: |
+          /tmp/sonar/sonar-scanner-${{ env.SONAR_SCANNER_VERSION }}-linux/bin/sonar-scanner \
+            -Dproject.settings=.sonar-project.properties \
+            -Dsonar.cfamily.build-wrapper-output=build_wrapper_output_directory \
+            -Dsonar.host.url="https://sonarcloud.io" \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.cfamily.threads=4 \
+            -Dsonar.cfamily.cache.enabled=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
