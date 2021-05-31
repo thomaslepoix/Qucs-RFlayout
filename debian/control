@@ -6,6 +6,13 @@ Uploaders: Thomas Lepoix <thomas.lepoix@protonmail.ch>
 Homepage: https://github.com/thomaslepoix/Qucs-RFlayout
 Vcs-Git: https://github.com/thomaslepoix/Qucs-RFlayout
 Vcs-Browser: https://github.com/thomaslepoix/Qucs-RFlayout
+Build-Depends:
+ debhelper,
+ cmake,
+ qt5-default,
+ libqt5opengl5-dev,
+ texlive-xetex,
+ fonts-lato
 
 Package: qucsrflayout
 Architecture: any
