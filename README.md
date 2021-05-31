@@ -9,6 +9,7 @@
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=thomaslepoix_Qucs-RFlayout&metric=alert_status)](https://sonarcloud.io/dashboard?id=thomaslepoix_Qucs-RFlayout)
 
 [![Package Debian](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Release%20Debian?label=package&logo=debian)](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout)
+[![Package Windows](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Release%20Windows?label=package&logo=windows)](https://github.com/thomaslepoix/Qucs-RFlayout/releases)
 
 # Qucs-RFlayout
 
