@@ -3,7 +3,7 @@ cmake_minimum_required( VERSION 3.12 )
 
 project( qucsrflayout
 	LANGUAGES CXX
-	VERSION 2.0.0
+	VERSION 2.0.1
 	DESCRIPTION "A tool to produce layout from qucs RF schematics (microstrip only for now)"
 #	HOMEPAGE_URL "https://github.com/thomaslepoix/Qucs-RFlayout"
 	)
@@ -190,4 +190,3 @@ install(
 add_subdirectory( "${CMAKE_SOURCE_DIR}/doc" )
 add_subdirectory( "${CMAKE_SOURCE_DIR}/test" )
 add_subdirectory( "${CMAKE_SOURCE_DIR}/pack" )
-
