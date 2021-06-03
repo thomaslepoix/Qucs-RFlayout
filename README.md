@@ -3,7 +3,6 @@
 [![License](https://img.shields.io/github/license/thomaslepoix/Qucs-RFlayout)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/thomaslepoix/Qucs-RFlayout)](https://github.com/thomaslepoix/Qucs-RFlayout/releases/latest)
 
-[![Travis build Status](https://travis-ci.org/thomaslepoix/Qucs-RFlayout.svg?branch=master)](https://travis-ci.org/thomaslepoix/Qucs-RFlayout)
 [![LGTM alerts](https://img.shields.io/lgtm/alerts/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/alerts/)
 [![LGTM grade](https://img.shields.io/lgtm/grade/cpp/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/context:cpp)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=thomaslepoix_Qucs-RFlayout&metric=alert_status)](https://sonarcloud.io/dashboard?id=thomaslepoix_Qucs-RFlayout)
