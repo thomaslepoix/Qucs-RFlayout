@@ -16,17 +16,17 @@ RUN	pacman -Sy --noconfirm \
 	&& mkdir /usr/x86_64-w64-mingw32/sys-root \
 	&& ln -s /usr/x86_64-w64-mingw32 /usr/x86_64-w64-mingw32/sys-root/mingw
 
-RUN pacman -Sy --noconfirm \
-		texlive-bin \
-		texlive-core \
-		texlive-latexextra \
-		ttf-lato
+#RUN pacman -Sy --noconfirm \
+#		texlive-bin \
+#		texlive-core \
+#		texlive-latexextra \
+#		ttf-lato
 
 WORKDIR /workdir/Qucs-RFlayout/build/out
 WORKDIR /workdir/Qucs-RFlayout/build/win32
 
+#	&& make doc \
 CMD x86_64-w64-mingw32-cmake ../.. \
 	&& make \
-	&& make doc \
 	&& make package \
 	&& cp -r out ..
