@@ -77,7 +77,7 @@ if( WIN32 )
 endif( WIN32 )
 
 set( CPACK_OUTPUT_FILE_PREFIX "${CMAKE_BINARY_DIR}/out" )
-set( CPACK_STRIP_FILES "bin/qucsrflayout" )
+set( CPACK_STRIP_FILES $<TARGET_FILE:${PROJECT_NAME}> )
 
 set( CPACK_PACKAGE_NAME    "qucsrflayout" )
 set( CPACK_PACKAGE_VERSION "${PROJECT_VERSION}" )
@@ -105,4 +105,3 @@ set( CPACK_RPM_PACKAGE_GROUP    "Applications/Engineering" )
 set( CPACK_RPM_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, octave-openEMS" )
 
 include( CPack )
-
