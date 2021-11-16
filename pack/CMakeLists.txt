@@ -73,7 +73,7 @@ if( UNIX AND NOT APPLE )
 	endif( RPMBUILD )
 endif( UNIX AND NOT APPLE )
 
-set( CPACK_STRIP_FILES "bin/qucsrflayout" )
+set( CPACK_STRIP_FILES $<TARGET_FILE:${PROJECT_NAME}> )
 
 set( CPACK_PACKAGE_NAME    "qucsrflayout" )
 set( CPACK_PACKAGE_VERSION "${PROJECT_VERSION}" )
@@ -101,4 +101,3 @@ set( CPACK_RPM_PACKAGE_GROUP    "Applications/Engineering" )
 set( CPACK_RPM_PACKAGE_SUGGESTS "qucs, kicad, pcb-rnd, octave-openEMS" )
 
 include( CPack )
-
