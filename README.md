@@ -3,13 +3,11 @@
 [![License](https://img.shields.io/github/license/thomaslepoix/Qucs-RFlayout)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/thomaslepoix/Qucs-RFlayout)](https://github.com/thomaslepoix/Qucs-RFlayout/releases/latest)
 
-[![LGTM alerts](https://img.shields.io/lgtm/alerts/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/alerts/)
-[![LGTM grade](https://img.shields.io/lgtm/grade/cpp/g/thomaslepoix/Qucs-RFlayout.svg?logo=lgtm)](https://lgtm.com/projects/g/thomaslepoix/Qucs-RFlayout/context:cpp)
-[![CodeQL](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Test%20CodeQL?label=CodeQL&logo=github)](https://github.com/thomaslepoix/Qucs-RFlayout/security/code-scanning?query=is%3Aopen+branch%3Amaster+tool%3ACodeQL)
+[![CodeQL](https://img.shields.io/github/actions/workflow/status/thomaslepoix/Qucs-RFlayout/test-codeql.yml?label=CodeQL&logo=github)](https://github.com/thomaslepoix/Qucs-RFlayout/security/code-scanning?query=is%3Aopen+branch%3Amaster+tool%3ACodeQL)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=thomaslepoix_Qucs-RFlayout&metric=alert_status)](https://sonarcloud.io/dashboard?id=thomaslepoix_Qucs-RFlayout)
 
-[![Package Debian](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Release%20Debian?label=package&logo=debian)](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout)
-[![Package Windows](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Release%20Windows?label=package&logo=windows)](https://github.com/thomaslepoix/Qucs-RFlayout/releases)
+[![Package Debian](https://img.shields.io/github/actions/workflow/status/thomaslepoix/Qucs-RFlayout/release-debian.yml?label=package&logo=debian)](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout)
+[![Package Windows](https://img.shields.io/github/actions/workflow/status/thomaslepoix/Qucs-RFlayout/release-windows.yml?label=package&logo=windows)](https://github.com/thomaslepoix/Qucs-RFlayout/releases)
 
 # Qucs-RFlayout
 
