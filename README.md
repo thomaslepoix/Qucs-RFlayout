@@ -1,4 +1,4 @@
-[![Package Debian](https://img.shields.io/github/workflow/status/thomaslepoix/Qucs-RFlayout/Release%20Debian?label=package&logo=debian)](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout)
+[![Package Debian](https://img.shields.io/github/actions/workflow/status/thomaslepoix/Qucs-RFlayout/release-debian.yml?label=package&logo=debian)](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout)
 
 # Qucs-RFlayout
 
