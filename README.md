@@ -2,6 +2,7 @@
 [![Discord](https://img.shields.io/discord/616889479298547722?logo=discord)](https://discord.gg/P82fEmE)
 [![License](https://img.shields.io/github/license/thomaslepoix/Qucs-RFlayout)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/thomaslepoix/Qucs-RFlayout)](https://github.com/thomaslepoix/Qucs-RFlayout/releases/latest)
+[![Nix](https://img.shields.io/static/v1?logo=nixos&logoColor=white&label=&message=Built%20with%20Nix&color=41439a)](https://builtwithnix.org/)
 
 [![CodeQL](https://img.shields.io/github/actions/workflow/status/thomaslepoix/Qucs-RFlayout/test-codeql.yml?label=CodeQL&logo=github)](https://github.com/thomaslepoix/Qucs-RFlayout/security/code-scanning?query=is%3Aopen+branch%3Amaster+tool%3ACodeQL)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=thomaslepoix_Qucs-RFlayout&metric=alert_status)](https://sonarcloud.io/dashboard?id=thomaslepoix_Qucs-RFlayout)
@@ -106,6 +107,12 @@ sudo apt install qucsrflayout
 - For RPM based distributions and Windows, you can download packages [here](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
 
 ### Installation from sources
+
+- Nix way (non-NixOS) :
+
+```sh
+nix profile install --impure 'github:thomaslepoix/Qucs-RFlayout#qucsrflayoutNixGL'
+```
 
 - Debian way : Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout/tree/debian).
 

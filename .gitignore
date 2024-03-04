@@ -1,5 +1,6 @@
-build/
-out/
+build
+out
+result
 *.o
 *.core
 ui_*.h
