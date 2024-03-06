@@ -23,7 +23,7 @@
 using namespace std;
 
 //******************************************************************************
-Preview::Preview(QWidget* parent) : QGLWidget(parent), QOpenGLFunctions_2_0() {
+Preview::Preview(QWidget* parent) : QOpenGLWidget(parent), QOpenGLFunctions_2_0() {
 	}
 
 //******************************************************************************
@@ -87,7 +87,7 @@ void Preview::setXRotation(int angle) {
     qNormalizeAngle(angle);
     if (angle != xRot) {
         xRot = angle;
-        updateGL();
+        update();
 		}
 	}
 
@@ -96,7 +96,7 @@ void Preview::setYRotation(int angle) {
     qNormalizeAngle(angle);
     if (angle != yRot) {
         yRot = angle;
-        updateGL();
+        update();
 		}
 	}
 
@@ -105,19 +105,19 @@ void Preview::setZRotation(int angle) {
     qNormalizeAngle(angle);
     if (angle != zRot) {
         zRot = angle;
-        updateGL();
+        update();
 		}
 	}
 
 //******************************************************************************
 void Preview::mousePressEvent(QMouseEvent* event) {
-	lastPos = event->pos();
+	lastPos = event->position();
 	}
 
 //******************************************************************************
 void Preview::mouseMoveEvent(QMouseEvent* event) {
-	int dx = event->x() - lastPos.x();
-	int dy = event->y() - lastPos.y();
+	int dx = event->position().x() - lastPos.x();
+	int dy = event->position().y() - lastPos.y();
 
 	if (event->buttons() & Qt::LeftButton) {
 		setXRotation(xRot + 8 * dy);
@@ -143,14 +143,14 @@ void Preview::mouseMoveEvent(QMouseEvent* event) {
 //******************************************************************************
 void Preview::wheelEvent(QWheelEvent* event) {
 	if(flag_ctrl) {
-		factor+=(long double)event->delta()/240*fit_factor;
+		factor+=(long double)event->angleDelta().y()/240*fit_factor;
 		if(factor<0.0) factor=0.0;
 	} else if(flag_shift) {
-		x_offset-=(long double)event->delta()/240*fit_x_offset;
+		x_offset-=(long double)event->angleDelta().y()/240*fit_x_offset;
 	} else {
-		y_offset-=(long double)event->delta()/240*fit_y_offset;
+		y_offset-=(long double)event->angleDelta().y()/240*fit_y_offset;
 		}
-	updateGL();
+	update();
 	}
 
 //******************************************************************************
@@ -173,7 +173,7 @@ void Preview::resetView() {
 	factor=fit_factor;
 	x_offset=fit_x_offset;
 	y_offset=fit_y_offset;
-	updateGL();
+	update();
 	}
 
 //******************************************************************************

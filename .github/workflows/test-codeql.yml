@@ -28,8 +28,9 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y \
-          qt5-default \
-          libqt5opengl5-dev
+          qt6-base-dev \
+          libqt6opengl6-dev \
+          libglu1-mesa-dev
 
     - name: Checkout
       uses: actions/checkout@v3

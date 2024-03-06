@@ -87,22 +87,12 @@ This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-R
 
 - [Qucs](https://github.com/Qucs/qucs) is needed (even if you want to convert QucsStudio files), be sure it is installed and accessible from your `PATH` variable.
 - OpenEMS scripts dependencies :
-  - [OpenEMS](https://openems.de/index.php/OpenEMS#Installation) (`octave-openems` package available on Debian 10 based distros, `octave-openEMS` on openSUSE)
+  - [OpenEMS](https://openems.de/index.php/OpenEMS#Installation) (`octave-openems` package available on Debian based distros, `octave-openEMS` on openSUSE)
   - [ImageMagick](https://imagemagick.org/script/download.php) (packages available on most distros)
 
 ### Package installation
 
-- For Debian based distributions, a [repository](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout) is available :
-
-```sh
-DEBIAN=Debian_10    # Use the underlying Debian version of your Debian-based distro
-
-echo "deb http://download.opensuse.org/repositories/home:/thomaslepoix:/open-rflab/${DEBIAN}/ /" | sudo tee /etc/apt/sources.list.d/home:thomaslepoix:open-rflab.list
-curl -fsSL https://download.opensuse.org/repositories/home:thomaslepoix:open-rflab/${DEBIAN}/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_thomaslepoix_open-rflab.gpg > /dev/null
-
-sudo apt update
-sudo apt install qucsrflayout
-```
+- For Debian based distributions, a repository is available [here](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout).
 
 - For RPM based distributions and Windows, you can download packages [here](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
 
@@ -120,7 +110,7 @@ nix profile install --impure 'github:thomaslepoix/Qucs-RFlayout#qucsrflayoutNixG
 
 The build-time dependencies are the following on Debian, check equivalents on your own (reports are welcome) for non Debian-based distros :
 
-`qt5-default`, `libqt5opengl5-dev`, `texlive-xetex`, `fonts-lato`
+`qt6-base-dev`, `libqt6opengl6-dev`, `texlive-xetex`, `fonts-lato`
 
 ```sh
 Qucs-RFlayout $

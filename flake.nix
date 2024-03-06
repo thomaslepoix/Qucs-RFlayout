@@ -44,7 +44,7 @@
       '';
     };
 
-    this-package = pkgs.libsForQt5.callPackage ./default.nix {};
+    this-package = pkgs.qt6.callPackage ./default.nix {};
 
   in {
     packages = rec {

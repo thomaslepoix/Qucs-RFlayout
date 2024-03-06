@@ -10,7 +10,7 @@ on:
 #    cron: "0 13 * * 1" # Every monday at 13h
 
 env:
-  SONAR_SCANNER_VERSION: 4.6.2.2472
+  SONAR_SCANNER_VERSION: 5.0.1.3006
 
 jobs:
   run:
@@ -21,8 +21,9 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-            qt5-default \
-            libqt5opengl5-dev
+            qt6-base-dev \
+            libqt6opengl6-dev \
+            libglu1-mesa-dev
 #            texlive-xetex
 #            gcovr
 

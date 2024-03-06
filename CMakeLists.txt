@@ -80,12 +80,12 @@ set( CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
 
 find_package( OpenGL REQUIRED )
 
-find_package( Qt5
+find_package( Qt6
 	COMPONENTS
-	Core    REQUIRED
-	Widgets REQUIRED
-	Gui     REQUIRED
-	OpenGL  REQUIRED
+	Core          REQUIRED
+	Gui           REQUIRED
+	OpenGLWidgets REQUIRED
+	Widgets       REQUIRED
 	)
 
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
@@ -188,9 +188,11 @@ target_include_directories( ${PROJECT_NAME}
 	)
 
 target_link_libraries( ${PROJECT_NAME}
-	Qt5::Core
-	Qt5::Gui
-	Qt5::OpenGL
+	PRIVATE
+	Qt6::Core
+	Qt6::Gui
+	Qt6::OpenGLWidgets
+	Qt6::Widgets
 	)
 
 set_target_properties( ${PROJECT_NAME} PROPERTIES

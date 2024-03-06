@@ -19,7 +19,7 @@
 #define PREVIEW_HPP
 
 #include <QtWidgets>
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QOpenGLFunctions_2_0>
 
 #include <array>
@@ -29,7 +29,7 @@
 #include "microstrip/element.hpp"
 
 //******************************************************************************
-class Preview : public QGLWidget, protected QOpenGLFunctions_2_0 {
+class Preview : public QOpenGLWidget, protected QOpenGLFunctions_2_0 {
 	Q_OBJECT
 public :
 	explicit Preview(QWidget* parent=0);
@@ -66,7 +66,7 @@ private:
     int xRot=0;
     int yRot=0;
     int zRot=0;
-	QPoint lastPos;
+	QPointF lastPos;
 
 	std::vector<std::shared_ptr<Element>> tab_all;
 	long double factor=1;

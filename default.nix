@@ -30,10 +30,6 @@ stdenv.mkDerivation {
     qtbase
   ];
 
-  cmakeFlags = [
-    "-DCPM_DISABLE=ON"
-  ];
-
   postBuild = lib.optionals withDoc ''
     export XDG_CACHE_HOME=$TMPDIR
     make doc
