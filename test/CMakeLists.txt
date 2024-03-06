@@ -54,12 +54,6 @@ target_link_libraries( unittest
 	$<$<CONFIG:Coverage>:-lgcov>
 	)
 
-qt5_use_modules( unittest
-	Core
-	Gui
-	OpenGL
-	)
-
 set_target_properties( unittest PROPERTIES
 	OUTPUT_NAME "unittest_qucsrflayout"
 #	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"

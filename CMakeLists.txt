@@ -78,14 +78,16 @@ set( CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
 
 #######################################################################EXTERNALS
 
-find_package( Qt5Core    REQUIRED )
-find_package( Qt5Widgets REQUIRED )
-find_package( Qt5Gui     REQUIRED )
-find_package( Qt5OpenGL  REQUIRED )
-find_package( OpenGL     REQUIRED )
+find_package( OpenGL REQUIRED )
 
-set( CMAKE_AUTOMOC ON )
-set( CMAKE_AUTOUIC ON )
+find_package( Qt5
+	COMPONENTS
+	Core    REQUIRED
+	Widgets REQUIRED
+	Gui     REQUIRED
+	OpenGL  REQUIRED
+	)
+
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 #########################################################################SOURCES
@@ -185,16 +187,18 @@ target_include_directories( ${PROJECT_NAME}
 	"${CMAKE_SOURCE_DIR}/src"
 	)
 
-qt5_use_modules( ${PROJECT_NAME}
-	Core
-	Gui
-	OpenGL
+target_link_libraries( ${PROJECT_NAME}
+	Qt5::Core
+	Qt5::Gui
+	Qt5::OpenGL
 	)
 
 set_target_properties( ${PROJECT_NAME} PROPERTIES
 	OUTPUT_NAME "qucsrflayout"
 #	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+	AUTOMOC ON
+	AUTOUIC ON
 	)
 
 install(
