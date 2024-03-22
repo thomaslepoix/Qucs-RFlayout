@@ -13,7 +13,19 @@ stdenv.mkDerivation {
   pname = "qucsrflayout";
   version = "2.0.0";
 
-  src = ./.;
+  src = lib.nix-filter {
+    root = ./.;
+    include = [
+      "cmake"
+      "src"
+      "doc"
+      "lib"
+      "pack"
+      "test"
+      "CMakeLists.txt"
+      "CHANGELOG"
+    ];
+  };
 
   nativeBuildInputs = [
     cmake

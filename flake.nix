@@ -8,6 +8,8 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
+    nix-filter.url = "github:numtide/nix-filter";
+
     nixGL = {
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,11 +20,13 @@
   outputs = { self
   , nixpkgs
   , flake-utils
+  , nix-filter
   , nixGL
   , ...
   }@args:
   flake-utils.lib.eachDefaultSystem (system:
   let
+    lib = nixpkgs.lib.extend nix-filter.overlays.default;
     pkgs = nixpkgs.legacyPackages.${system};
 
     nixGLWrapper = package: pkgs.stdenvNoCC.mkDerivation {
@@ -44,7 +48,7 @@
       '';
     };
 
-    this-package = pkgs.qt6.callPackage ./default.nix {};
+    this-package = pkgs.qt6.callPackage ./default.nix { inherit lib; };
 
   in {
     packages = rec {
