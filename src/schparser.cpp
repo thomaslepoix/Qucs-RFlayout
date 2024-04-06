@@ -17,6 +17,7 @@
 
 #include <QProcess>
 
+#include <array>
 #include <iostream>
 #include <regex>
 #include <string>
@@ -227,7 +228,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 			}
 		cout << "OK" << endl;
 		cout << "Temporary schematic file : " << n_tmp << endl;
-		
+
 		f_tmp.close();
 		f_sch.close();
 		f_sch.open(n_tmp.c_str());
@@ -244,18 +245,41 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 
 //******************************************************************************
 int SchParser::generate_netlist(string const& n_sch, string const& n_net) const {
-	cout << endl << "Generating netlist... ";
-	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
-	QProcess process_qucs;
-	process_qucs.startCommand(QString::fromStdString(net_gen));
-	if(!process_qucs.waitForFinished() || process_qucs.exitCode()) {
-		cout << "KO" << endl;
-		log_err << "ERROR : Problem calling Qucs : " << net_gen << "\n";
-		return(2);
+	static constexpr array<string, 2> to_try{"qucs", "qucs-s"};
+	string const args=" -n -i \""+n_sch+"\" -o \""+n_net+"\"";
+	bool is_done=false;
+
+	auto const run_qucs=[&](string const& binary) {
+		cout << "Trying " + binary + "... " ;
+		QProcess process_qucs;
+		process_qucs.startCommand(QString::fromStdString(binary + args));
+		if(!process_qucs.waitForFinished() || process_qucs.exitCode()) {
+			cout << "KO" << endl;
+			return(false);
+		} else {
+			cout << "OK" << endl;
+			is_done=true;
+			return(true);
+			}
+		};
+
+	cout << endl << "Generating netlist... " << endl;
+	if(!data.qucs_binary.empty()) {
+		run_qucs(data.qucs_binary);
 	} else {
-		cout << "OK" << endl;
-		return(0);
+		for(auto& binary : to_try) {
+			if(run_qucs(binary))
+				break;
+			}
 		}
+
+	if(is_done) {
+		cout << "Generating netlist... OK" << endl;
+		return(0);
+	}
+
+	log_err << "ERROR : Problem calling Qucs for generating netlist\n";
+	return(2);
 	}
 
 //******************************************************************************

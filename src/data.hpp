@@ -74,6 +74,7 @@ public:
 	std::vector<std::tuple<unsigned long, std::string, std::string>> port_size_args;
 
 	// Saved on reset
+	std::string qucs_binary;
 	std::string n_sch;
 	std::string n_net;
 	std::string out_dir;

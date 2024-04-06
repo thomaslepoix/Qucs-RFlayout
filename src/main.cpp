@@ -50,23 +50,25 @@ int main(int argc, char* argv[]) {
 				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME\n"
 				        "       " << argv[0] << " -G\n"
 				        "\n"
-				        "  -h, --help    Display this help and exit.\n"
-				        "      --version Display version information and exit.\n"
-				        "  -v, --verbose Verbose mode.\n"
-				        "  -G            GUI mode (no arguments equals to -G).\n"
-				        "  -i FILENAME   Use file as input schematic.\n"
-				        "  -o DIRNAME    Use directory as output.\n"
-				        "  -f FORMAT     Use format as output layout format.\n"
-				        "                FORMAT can be:\n"
-				        "                - .kicad_pcb    : KiCad layout (default format)\n"
-				        "                - .kicad_mod    : KiCad module\n"
-				        "                - .lht          : pcb-rnd layout\n"
-				        "                - .m            : OpenEMS Octave script\n"
-				        "  -n NETLIST    Specify a netlist to use instead of calling Qucs to create it from the schematic.\n"
-				        "                Useful when Qucs is not installed, if you use QucsStudio for example.\n"
-				        "  -s            Export each substrate in a different file.\n"
-				        "  -b            Export each block in a different file.\n"
-				        "  -k, --keep    Keep temporary files.\n"
+				        "  -h, --help      Display this help and exit.\n"
+				        "      --version   Display version information and exit.\n"
+				        "  -v, --verbose   Verbose mode.\n"
+				        "  -G              GUI mode (no arguments equals to -G).\n"
+				        "  -i FILENAME     Use file as input schematic.\n"
+				        "  -o DIRNAME      Use directory as output.\n"
+				        "  -f FORMAT       Use format as output layout format.\n"
+				        "                  FORMAT can be:\n"
+				        "                  - .kicad_pcb    : KiCad layout (default format)\n"
+				        "                  - .kicad_mod    : KiCad module\n"
+				        "                  - .lht          : pcb-rnd layout\n"
+				        "                  - .m            : OpenEMS Octave script\n"
+				        "  -n NETLIST      Specify a netlist to use instead of calling Qucs to create it from the schematic.\n"
+				        "                  Useful when Qucs is not installed, if you use QucsStudio for example.\n"
+				        "  -q, --qucs PATH Specify Qucs executable to call for netlist creation, otherwise qucs, then qucs-s will\n"
+				        "                  be tried regarding system PATH variable. PATH can be either a relative or absolute path.\n"
+				        "  -s              Export each substrate in a different file.\n"
+				        "  -b              Export each block in a different file.\n"
+				        "  -k, --keep      Keep temporary files.\n"
 				        "\n"
 				        "  -e, --exclude STRING               Exclude a component. Must be a component label.\n"
 				        "  -u, --use STRING                   Exclude all components except the used ones. Must be a component label.\n"
@@ -110,6 +112,9 @@ int main(int argc, char* argv[]) {
 			} else if(string(argv[i])=="-n" && argv[i+1]) {
 				i++;
 				data.n_net=string(argv[i]);
+			} else if((string(argv[i])=="-q" || string(argv[i])=="--qucs") && argv[i+1]) {
+				i++;
+				data.qucs_binary=string(argv[i]);
 			} else if(string(argv[i])=="-s") {
 				data.export_each_subst=true;
 			} else if(string(argv[i])=="-b") {

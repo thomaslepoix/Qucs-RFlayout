@@ -120,6 +120,7 @@ Data::Data(Data const& data) :
 	metal_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	margin_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	is_volume_error(false),
+	qucs_binary(data.qucs_binary),
 	n_sch(data.n_sch),
 	n_net(data.n_net),
 	out_dir(data.out_dir),

@@ -85,7 +85,7 @@ This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-R
 
 ### Dependencies
 
-- [Qucs](https://github.com/Qucs/qucs) is needed (even if you want to convert QucsStudio files), be sure it is installed and accessible from your `PATH` variable.
+- [Qucs](https://github.com/Qucs/qucs) or [Qucs-S](https://github.com/ra3xdh/qucs_s) is needed (even if you want to convert QucsStudio files), be sure it is installed and accessible from your `PATH` variable.
 - OpenEMS scripts dependencies :
   - [OpenEMS](https://openems.de/index.php/OpenEMS#Installation) (`octave-openems` package available on Debian based distros, `octave-openEMS` on openSUSE)
   - [ImageMagick](https://imagemagick.org/script/download.php) (packages available on most distros)
