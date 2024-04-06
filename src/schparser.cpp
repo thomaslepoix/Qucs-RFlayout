@@ -247,9 +247,8 @@ int SchParser::generate_netlist(string const& n_sch, string const& n_net) const 
 	cout << endl << "Generating netlist... ";
 	string net_gen="qucs -n -i \""+n_sch+"\" -o \""+n_net+"\"";
 	QProcess process_qucs;
-	process_qucs.start(QString::fromStdString(net_gen));
-	bool ret = process_qucs.waitForFinished();
-	if(ret==false || process_qucs.exitCode()) {
+	process_qucs.startCommand(QString::fromStdString(net_gen));
+	if(!process_qucs.waitForFinished() || process_qucs.exitCode()) {
 		cout << "KO" << endl;
 		log_err << "ERROR : Problem calling Qucs : " << net_gen << "\n";
 		return(2);
@@ -846,9 +845,8 @@ void SchParser::rm_tmp_files(initializer_list<string> const args) const {
 				}
 			}
 		if(str_cmd!="") {
-			process_rm.start(QString::fromStdString("rm"+str_cmd));
-			bool ret = process_rm.waitForFinished();
-			if(ret==false || process_rm.exitCode()) {
+			process_rm.startCommand(QString::fromStdString("rm"+str_cmd));
+			if(!process_rm.waitForFinished() || process_rm.exitCode()) {
 				log_err << "WARNING : Could not remove :" << str_log << "\n";
 			} else {
 				cout << "\nRemove temporary files :" << str_log << "\n";
