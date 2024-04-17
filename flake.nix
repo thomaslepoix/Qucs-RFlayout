@@ -37,6 +37,7 @@
       installPhase =
       let
         script = ''
+          #!/bin/sh
           exec ${nixGL.packages.${system}.nixGLDefault}/bin/nixGL ${package}/bin/${package.pname} "$@"
         '';
       in ''
