@@ -29,11 +29,11 @@ jobs:
       id: extract
       shell: bash
       run: |
-        echo "##[set-output name=tag;]$(echo ${GITHUB_REF##*/})"
-        echo "##[set-output name=upload_url;]$(curl -sL https://api.github.com/repos/thomaslepoix/Qucs-RFlayout/releases/tags/${GITHUB_REF##*/} | jq -r '.upload_url')"
+        echo "tag=$(echo ${GITHUB_REF##*/})" >> $GITHUB_OUTPUT
+        echo "upload_url=$(curl -sL https://api.github.com/repos/thomaslepoix/Qucs-RFlayout/releases/tags/${GITHUB_REF##*/} | jq -r '.upload_url')" >> $GITHUB_OUTPUT
 
     - name: Deploy .zip on Github
-      uses: actions/upload-release-asset@main
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:

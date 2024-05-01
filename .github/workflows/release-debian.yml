@@ -19,7 +19,7 @@ jobs:
         sudo apt install -y dpkg-dev
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: debian
 
@@ -27,18 +27,18 @@ jobs:
       id: extract
       shell: bash
       run: |
-        echo "##[set-output name=version;]$( \
+        echo "version=$( \
           head debian/changelog -n 1 \
           | awk '{print $2}' \
           | sed -e 's/(//g' -e 's/)//g' \
           | awk -F - '{print $1}' \
-          )"
-        echo "##[set-output name=revision;]$( \
+          )" >> $GITHUB_OUTPUT
+        echo "revision=$( \
           head debian/changelog -n 1 \
           | awk '{print $2}' \
           | sed -e 's/(//g' -e 's/)//g' \
           | awk -F - '{print $2}' \
-          )"
+          )" >> $GITHUB_OUTPUT
 
     - name: Download & fix origin tarball
       run: |
@@ -116,7 +116,7 @@ jobs:
           -T "${FILES}"
 
     - name: Upload source package as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: source-package
         path: |
