@@ -88,7 +88,7 @@
     this-package = pkgs.qt6.callPackage ./default.nix { inherit lib; };
     this-package-clang = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.clangStdenv; };
     this-package-gcc = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.gccStdenv; };
-    this-package-win = pkgs.pkgsCross.mingwW64.qt6.callPackage ./default.nix { inherit lib; withDoc = false; };
+    this-package-win = pkgs.pkgsCross.mingwW64.qt6.callPackage ./default.nix { inherit lib; inherit (pkgs) texlive; };
 
   in {
     packages = rec {
