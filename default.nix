@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , cmake
-, git
 , qtbase
 , wrapQtAppsHook
 , texlive
@@ -29,7 +28,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    git
     wrapQtAppsHook
   ] ++ lib.optionals withDoc [
     lato
@@ -47,7 +45,12 @@ stdenv.mkDerivation {
     make doc
   '';
 
-  enableParallelBuilding = true;
+  postInstall = lib.optionals stdenv.hostPlatform.isWindows ''
+    mkdir -p $out/bin/platforms
+    ln -t $out/bin/platforms -s ${qtbase}/lib/qt-6/plugins/platforms/qwindows.dll
+  '';
+
+  dontWrapQtApps = stdenv.hostPlatform.isWindows;
 
   QT_XCB_GL_INTEGRATION = "none";
 

@@ -49,13 +49,61 @@
       '';
     };
 
+    wineWrapper = package: pkgs.stdenvNoCC.mkDerivation {
+      inherit (package) pname version meta;
+      doCheck = false;
+      dontUnpack = true;
+      dontBuild = true;
+      installPhase =
+      let
+        script = ''
+          #!/bin/sh
+          exec ${pkgs.wine64}/bin/wine64 ${package}/bin/${package.pname}.exe "$@"
+        '';
+      in ''
+        mkdir -p $out/bin
+        printf '${script}' > $out/bin/${package.pname}
+        chmod +x $out/bin/${package.pname}
+        mkdir -p $out/share
+        ${pkgs.xorg.lndir}/bin/lndir -silent ${package}/share $out/share
+      '';
+    };
+
+    zipWrapper = package: pkgs.stdenvNoCC.mkDerivation {
+      inherit (package) pname version meta;
+      doCheck = false;
+      dontUnpack = true;
+      nativeBuildInputs = [ pkgs.zip ];
+      buildPhase = ''
+        cp -rL ${package} ${package.name}
+        chmod -R ug+w ${package.name}
+        zip -r ${package.name}.zip ${package.name}/*
+      '';
+      installPhase = ''
+        mkdir -p $out
+        mv ${package.name}.zip $out/
+      '';
+    };
+
     this-package = pkgs.qt6.callPackage ./default.nix { inherit lib; };
+    this-package-clang = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.clangStdenv; };
+    this-package-gcc = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.gccStdenv; };
+    this-package-win = pkgs.pkgsCross.mingwW64.qt6.callPackage ./default.nix { inherit lib; withDoc = false; };
 
   in {
     packages = rec {
       default = qucsrflayoutNixGL;
+      # Native
       qucsrflayout = this-package;
+      qucsrflayoutClang = this-package-clang;
+      qucsrflayoutGcc = this-package-gcc;
+      # Cross compiled
+      qucsrflayoutMingw64 = this-package-win;
+      # Wrappers
       qucsrflayoutNixGL = nixGLWrapper this-package;
+      qucsrflayoutWine64 = wineWrapper this-package-win;
+      # Bundles
+      qucsrflayoutMingw64Zip = zipWrapper this-package-win;
     };
 
     devShells = {

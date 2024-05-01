@@ -24,14 +24,14 @@ if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
 	set( HOST_LINUX TRUE )
 endif( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
 
-if( MINGW AND HOST_LINUX )
-	find_program( PELDD NAMES peldd )
-	if( PELDD )
-		message( STATUS "Found peldd: ${PELDD}" )
-	else( PELDD )
-		message( ERROR "Not found peldd: Please install https://github.com/gsauthof/pe-util" )
-	endif( PELDD )
-endif( MINGW AND HOST_LINUX )
+#if( MINGW AND HOST_LINUX )
+#	find_program( PELDD NAMES peldd )
+#	if( PELDD )
+#		message( STATUS "Found peldd: ${PELDD}" )
+#	else( PELDD )
+#		message( ERROR "Not found peldd: Please install https://github.com/gsauthof/pe-util" )
+#	endif( PELDD )
+#endif( MINGW AND HOST_LINUX )
 
 if( STATIC MATCHES TRUE )
 	find_program( CMAKE_CXX_CPPCHECK NAMES cppcheck )
@@ -209,28 +209,28 @@ install(
 	RUNTIME DESTINATION "bin" #"${CMAKE_INSTALL_BINDIR}"
 	)
 
-if( WIN32 )
-
-	if( MINGW AND HOST_LINUX )
-		set( MINGW_PATH "/usr/x86_64-w64-mingw32" )
-
-		add_custom_command(
-			TARGET ${PROJECT_NAME} POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/dist/platforms"
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different `${PELDD} -a "${CMAKE_BINARY_DIR}/qucsrflayout.exe" -w UxTheme.dll -w d3d11.dll -w dxgi.dll -w OPENGL32.dll -w USERENV.dll` "${CMAKE_BINARY_DIR}/dist"
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different "${MINGW_PATH}/lib/qt/plugins/platforms/qwindows.dll" "${CMAKE_BINARY_DIR}/dist/platforms"
-			COMMENT "Find additional DLLs"
-			)
+#if( WIN32 )
+#
+#	if( MINGW AND HOST_LINUX )
+#		set( MINGW_PATH "/usr/x86_64-w64-mingw32" )
+#
+#		add_custom_command(
+#			TARGET ${PROJECT_NAME} POST_BUILD
+#			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/dist/platforms"
+#			COMMAND ${CMAKE_COMMAND} -E copy_if_different `${PELDD} -a "${CMAKE_BINARY_DIR}/qucsrflayout.exe" -w UxTheme.dll -w d3d11.dll -w dxgi.dll -w OPENGL32.dll -w USERENV.dll` "${CMAKE_BINARY_DIR}/dist"
+#			COMMAND ${CMAKE_COMMAND} -E copy_if_different "${MINGW_PATH}/lib/qt/plugins/platforms/qwindows.dll" "${CMAKE_BINARY_DIR}/dist/platforms"
+#			COMMENT "Find additional DLLs"
+#			)
 #	else( MINGW AND HOST_LINUX )
 #		#  Use winqdeploy or a Microsoft equivalent of ldd to copy dlls
-	endif( MINGW AND HOST_LINUX )
-
-	install(
-		DIRECTORY "${CMAKE_BINARY_DIR}/dist/."
-		DESTINATION "bin"
-		)
-
-endif( WIN32 )
+#	endif( MINGW AND HOST_LINUX )
+#
+#	install(
+#		DIRECTORY "${CMAKE_BINARY_DIR}/dist/."
+#		DESTINATION "bin"
+#		)
+#
+#endif( WIN32 )
 
 ###########################################################################TOOLS
 

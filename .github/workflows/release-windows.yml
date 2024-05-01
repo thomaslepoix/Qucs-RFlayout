@@ -11,14 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Chekout
+      uses: actions/checkout@v4
 
-    - name: Build image
-      run: docker build . -f pack/Dockerfile.win32 -t qucsrflayout:win32
+    - name: 'Dependencies: Nix'
+      uses: cachix/install-nix-action@v26
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Run image
-      run: docker run -v $PWD:/workdir/Qucs-RFlayout -t qucsrflayout:win32
+    - name: Setup Nix cache
+      uses: DeterminateSystems/magic-nix-cache-action@v4
+
+    - name: Build
+      run: nix build -L --no-update-lock-file .#qucsrflayoutMingw64Zip
 
     - name: Extract informations
       id: extract
@@ -28,11 +33,11 @@ jobs:
         echo "##[set-output name=upload_url;]$(curl -sL https://api.github.com/repos/thomaslepoix/Qucs-RFlayout/releases/tags/${GITHUB_REF##*/} | jq -r '.upload_url')"
 
     - name: Deploy .zip on Github
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.extract.outputs.upload_url }}
-        asset_path: build/out/qucsrflayout-${{ steps.extract.outputs.tag }}-x86_64.zip
-        asset_name: qucsrflayout-${{ steps.extract.outputs.tag }}-x86_64.zip
+        asset_path: result/qucsrflayout-x86_64-w64-mingw32-${{ steps.extract.outputs.tag }}.zip
+        asset_name: qucsrflayout-${{ steps.extract.outputs.tag }}-x86_64-w64-mingw32.zip
         asset_content_type: application/zip
