@@ -353,6 +353,8 @@ void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& i
 			}
 		if(regex_search(line, match, r_dat)) {
 			if(match.str(2)=="") {
+				// TODO This just concat file.sch+file.dat if path is just a filename, without ./
+				// -> std::filesystem
 				n_dat=regex_replace(data.n_sch, r_path, "$1") + match.str(1);
 			} else {
 				n_dat=match.str(1);

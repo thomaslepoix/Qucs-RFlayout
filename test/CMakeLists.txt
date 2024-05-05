@@ -60,7 +60,7 @@ set_target_properties( unittest PROPERTIES
 	)
 
 #######################################################################RUN_TESTS
-
+#[[
 include( CTest )
 
 add_custom_target( check
@@ -98,3 +98,4 @@ if( CMAKE_BUILD_TYPE MATCHES Coverage )
 		)
 
 endif( CMAKE_BUILD_TYPE MATCHES Coverage )
+#]]

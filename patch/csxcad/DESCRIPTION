@@ -1,0 +1,10 @@
+Name: csxcad
+Version: 0.0.35
+Date: 2016-07-06
+Author: Thorsten Liebig
+Maintainer: Thomas Lepoix <thomas.lepoix@protonmail.ch>
+Title: A C++ library to describe geometrical objects
+Description: Signal processing tools, including filtering, windowing and display functions.
+Categories: Electromagnetics
+License: GPLv3
+Url: https://github.com/thliebig/CSXCAD
