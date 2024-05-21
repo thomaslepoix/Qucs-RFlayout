@@ -245,7 +245,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 
 //******************************************************************************
 int SchParser::generate_netlist(string const& n_sch, string const& n_net) const {
-	static constexpr array<string, 2> to_try{"qucs", "qucs-s"};
+	const array<string, 2> to_try{"qucs", "qucs-s"};
 	string const args=" -n -i \""+n_sch+"\" -o \""+n_net+"\"";
 	bool is_done=false;
 
