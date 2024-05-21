@@ -192,7 +192,7 @@ void MainWindow::write() {
 	}
 
 //******************************************************************************
-void MainWindow::on_cb_format_currentIndexChanged(const QString out_format) {
+void MainWindow::on_cb_format_currentTextChanged(const QString& out_format) {
 	ui->gb_oems->setEnabled((out_format==".m") ? true : false);
 	data.out_format=out_format.toStdString();
 	}
