@@ -65,8 +65,8 @@ int main(int argc, char* argv[]) {
 		for(int i=1;i<argc;i++) {
 			if(string(argv[i])=="-h" || string(argv[i])=="--help") {
 				cout << "Usage: " << argv[0] << " -i FILENAME.sch\n"
-				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]\n"
-				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME\n"
+				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht|.m|.svg]\n"
+				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht|.m|.svg] -o DIRNAME\n"
 #ifndef QRFL_MINIMAL
 				        "       " << argv[0] << " -G\n"
 #endif // QRFL_MINIMAL
@@ -85,6 +85,7 @@ int main(int argc, char* argv[]) {
 				        "                  - .kicad_mod    : KiCad module\n"
 				        "                  - .lht          : pcb-rnd layout\n"
 				        "                  - .m            : OpenEMS Octave script\n"
+						"                  - .svg          : SVG image\n"
 				        "  -n NETLIST      Specify a netlist to use instead of calling Qucs to create it from the schematic.\n"
 				        "                  Useful when Qucs is not installed, if you use QucsStudio for example.\n"
 				        "  -q, --qucs PATH Specify Qucs executable to call for netlist creation, otherwise qucs, then qucs-s will\n"
@@ -148,7 +149,8 @@ int main(int argc, char* argv[]) {
 				if(string(argv[i])==".kicad_pcb"
 				|| string(argv[i])==".kicad_mod"
 				|| string(argv[i])==".lht"
-				|| string(argv[i])==".m") {
+				|| string(argv[i])==".m"
+				|| string(argv[i])==".svg") {
 					data.out_format=string(argv[i]);
 				} else {
 					log_err << "ERROR : Invalid output format : " << argv[i] << "\n";

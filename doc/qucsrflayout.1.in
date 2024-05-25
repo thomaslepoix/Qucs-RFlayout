@@ -52,6 +52,8 @@ FORMAT can be:
 	\fB.lht\fR          : pcb-rnd layout
 .TP
 	\fB.m\fR            : OpenEMS Octave script
+.TP
+	\fB.svg\fR          : SVG image
 .RE
 .PD
 .TP
