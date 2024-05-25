@@ -38,6 +38,7 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 	ui->cb_format->addItem(tr(".kicad_mod"));
 	ui->cb_format->addItem(tr(".lht"));
 	ui->cb_format->addItem(tr(".m"));
+	ui->cb_format->addItem(tr(".svg"));
 	ui->cb_format->setCurrentText(out_format);
 	ui->rb_export_whole->setChecked((_data.export_each_block || _data.export_each_subst) ? false : true);
 	ui->rb_export_each_subst->setChecked((_data.export_each_subst && !_data.export_each_block) ? true : false);
@@ -192,7 +193,7 @@ void MainWindow::write() {
 	}
 
 //******************************************************************************
-void MainWindow::on_cb_format_currentIndexChanged(const QString out_format) {
+void MainWindow::on_cb_format_currentTextChanged(const QString& out_format) {
 	ui->gb_oems->setEnabled((out_format==".m") ? true : false);
 	data.out_format=out_format.toStdString();
 	}

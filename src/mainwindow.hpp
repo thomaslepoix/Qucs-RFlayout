@@ -49,7 +49,7 @@ private:
 	void log(std::stringstream& in) override;
 
 private slots:
-	void on_cb_format_currentIndexChanged(QString const out_format);
+	void on_cb_format_currentTextChanged(const QString&  out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
 	void on_cb_oems_pkg_stateChanged(int const state);
 	void on_cb_oems_sort_metalresmesh_stateChanged(int const state);
