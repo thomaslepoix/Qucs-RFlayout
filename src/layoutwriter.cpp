@@ -129,6 +129,7 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
+	else if(data.out_format==".svg") write_svg(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
 	if(out_names) out_names->push_back(n_out); // Success message to stdout in GUI mode
@@ -363,6 +364,46 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 
 	f_out << ")\n";
 	}
+
+//******************************************************************************
+void LayoutWriter::write_svg(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) const {
+	f_out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			 "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" << block.margin_boundary[XMAX]+ offset_x << "mm\" height=\"" << block.margin_boundary[YMAX]+offset_y << "mm\">\n";
+	f_out << "<g transform=\"scale(3.779527559)\">\n";
+	for(shared_ptr<Element> it : block.elements) {
+		if(!it->getActive())
+			continue;
+
+		string type = it->getType();
+		if(type == "SUBST" || type == "MGAP" || type == "MOPEN" || type == "MSTEP") {
+			//nothing to do
+		} else if(type == "Pac") {
+			Pac* pac = dynamic_cast<Pac*>(it.get());
+			f_out << "    <rect x=\"" << it->getX() + offset_x/2 << "\" y=\"" << it->getY() + offset_y << "\" width=\"" << (pac->is_size_set ? it->getW() : 0.01) << "\" height=\"" << (pac->is_size_set ? it->getL() : 0.01) << "\" fill=\"none\" stroke=\"black\"/>\n";
+		} else if(type == "MCORN" || type == "MCROSS" || type == "MMBEND" || type == "MLIN" || type == "MRSTUB" || type == "MTEE") {
+			f_out << "    <path d=\"";
+			for(int i = 0; i < it->getNpoint(); i++) {
+				f_out << (i == 0 ? "M" : "L") << it->getP(i, X, R, ABS) + offset_x/2 << " " << it->getP(i, Y, R, ABS) + offset_y << " ";
+			}
+			f_out << "Z\" fill=\"black\" stroke=\"none\"/>\n";
+		} else if(type == "MCOUPLED") {
+			f_out << "    <path d=\"";
+			for(int i = 0; i < it->getNpoint() / 2; i++) {
+				f_out << (i == 0 ? "M" : "L") << it->getP(i, X, R, ABS) + offset_x/2 << " " << it->getP(i, Y, R, ABS) + offset_y << " ";
+			}
+			f_out << "Z\" fill=\"black\" stroke=\"none\"/>\n";
+			f_out << "    <path d=\"";
+			for(int i = it->getNpoint() / 2; i < it->getNpoint(); i++) {
+				f_out << (i == it->getNpoint() / 2 ? "M" : "L") << it->getP(i, X, R, ABS) + offset_x/2 << " " << it->getP(i, Y, R, ABS) + offset_y << " ";
+			}
+			f_out << "Z\" fill=\"black\" stroke=\"none\"/>\n";
+		} else if(type == "MVIA") {
+			f_out << "    <circle cx=\"" << it->getX() + offset_x/2 << "\" cy=\"" << it->getY() + offset_y << "\" r=\"" << it->getD() / 2 << "\" fill=\"black\" stroke=\"none\"/>\n";
+		}
+	}
+	f_out << "</g>\n";
+	f_out << "</svg>\n";
+}
 
 //******************************************************************************
 void LayoutWriter::write_lht(Block& block, ofstream& f_out, long double const offset_x, long double const offset_y, string const& name) const {

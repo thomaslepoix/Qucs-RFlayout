@@ -35,6 +35,7 @@ private:
 	//TODO array<long double, 2> offset ?
 	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
+	void write_svg(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 	void write_lht(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 	void write_m(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 
