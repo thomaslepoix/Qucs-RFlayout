@@ -19,6 +19,7 @@
 #include <iostream>
 #include <iterator>
 #include <regex>
+#include <system_error>
 #include <utility>
 
 #include "layoutstrings.hpp"
@@ -39,13 +40,15 @@ LayoutWriter::LayoutWriter(Data const& _data) :
 int LayoutWriter::run(vector<string>* out_names) const {
 
 //variables
-	static regex const r_sch("\\.sch$");
-	static regex const r_basename("^.*?([^\\/]*)\\.sch$"); // g1 basename
-	static regex const r_out("(^.*?)\\/?$");
-	static regex const r_empty("^$");
-	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
-	string n_out=regex_replace(data.out_dir, r_empty, "./");
-	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1");
+//	static regex const r_sch("\\.sch$");
+//	static regex const r_basename("^.*?([^\\/]*)\\.sch$"); // g1 basename
+//	static regex const r_out("(^.*?)\\/?$");
+//	static regex const r_empty("^$");
+//	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
+	string const name=data.n_sch.stem();
+//	string n_out=regex_replace(data.out_dir, r_empty, "./");
+//	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1");
+	filesystem::path n_out=(data.out_dir.empty() ? "." : data.out_dir)/data.n_sch.stem();
 
 //check
 	int ret=0;
@@ -58,15 +61,17 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	if(data.export_each_block) {
 		unsigned int i=-1; // not a mistake
 		for(shared_ptr<Block> it : data.all_blocks) {
-			string out=n_out+"-b"+to_string(++i)+data.out_format;
+//			string out=n_out+"-b"+to_string(++i)+data.out_format;
+			filesystem::path out=n_out;
+			out+="-b"+to_string(++i)+data.out_format;
 
 			Block block;
 			block.elements=it->elements;
 			block.calcul_boundaries();
-			block.elements.push_back(it->subst_local);
+			block.elements.emplace_back(it->subst_local);
 			for(shared_ptr<Element> element : data.tab_all) {
 				if(element->getType()==".SP")
-					block.elements.push_back(element);
+					block.elements.emplace_back(element);
 				}
 
 			int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-b"+to_string(i), out_names);
@@ -75,14 +80,14 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	} else if(data.export_each_subst) {
 		unsigned int i=-1; // not a mistake
 		shared_ptr<Block> prev=nullptr;
-		string out;
+		filesystem::path out;
 		Block block;
 		for(shared_ptr<Block> it : data.all_blocks) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
 					// End & write
 					block.calcul_boundaries();
-					out=n_out+"-s"+to_string(++i)+data.out_format;
+					out=n_out.native()+"-s"+to_string(++i)+data.out_format;
 					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
@@ -90,10 +95,10 @@ int LayoutWriter::run(vector<string>* out_names) const {
 				// Begin & feed
 				block.elements.clear();
 				block.elements=it->elements;
-				block.elements.push_back(it->subst);
+				block.elements.emplace_back(it->subst);
 				for(shared_ptr<Element> element : data.tab_all) {
 					if(element->getType()==".SP")
-						block.elements.push_back(element);
+						block.elements.emplace_back(element);
 					}
 			} else {
 				// Middle feed
@@ -103,7 +108,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			}
 		// Last end & write
 		block.calcul_boundaries();
-		out=n_out+"-s"+to_string(++i)+data.out_format;
+		out=n_out.native()+"-s"+to_string(++i)+data.out_format;
 		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
@@ -119,9 +124,9 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	}
 
 //******************************************************************************
-int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, vector<string>* out_names) const {
+int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, filesystem::path const& n_out, string const& name, vector<string>* out_names) const {
 	cout << "Output layout : " << n_out << endl;
-	ofstream f_out(n_out.c_str());
+	ofstream f_out(n_out);
 	if(f_out.fail()) {
 		log_err << "ERROR : Unable to write " << n_out << "\n";
 		return(1);
@@ -130,7 +135,15 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y, name);
-	else if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
+	else if(data.out_format==".m") {
+		write_m(block, f_out, offset_x, offset_y, name);
+		error_code ret;
+		filesystem::permissions(n_out, filesystem::perms::owner_exec|filesystem::perms::group_exec|filesystem::perms::others_exec, filesystem::perm_options::add, ret);
+		if(ret) {
+			log_err << "ERROR : Error occured while setting " << n_out << " as executable\n";
+			return(1);
+			}
+		}
 	if(out_names) out_names->push_back(n_out); // Success message to stdout in GUI mode
 
 	if(f_out.fail()) {
@@ -306,7 +319,7 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 	string type;
 	string label;
 	smatch match;
-	regex r_pac("^P([0-9]*)$"); //g1 number // TODO getN() ?
+	static regex const r_pac("^P([0-9]*)$"); //g1 number // TODO getN() ?
 
 	f_out << "# Generated by Qucs-RFlayout from : " << name << ".sch\n"
 	         "\n"

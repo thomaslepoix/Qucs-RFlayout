@@ -94,10 +94,10 @@ int main(int argc, char* argv[]) {
 				return(0);
 			} else if(string(argv[i])=="-i" && argv[i+1]) {
 				i++;
-				data.n_sch=string(argv[i]);
+				data.n_sch=filesystem::path(argv[i]);
 			} else if(string(argv[i])=="-o" && argv[i+1]) {
 				i++;
-				data.out_dir=string(argv[i]);
+				data.out_dir=filesystem::path(argv[i]);
 			} else if(string(argv[i])=="-f" && argv[i+1]) {
 				i++;
 				if(string(argv[i])==".kicad_pcb"
@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
 					}
 			} else if(string(argv[i])=="-n" && argv[i+1]) {
 				i++;
-				data.n_net=string(argv[i]);
+				data.n_net=filesystem::path(argv[i]);
 			} else if((string(argv[i])=="-q" || string(argv[i])=="--qucs") && argv[i+1]) {
 				i++;
 				data.qucs_binary=string(argv[i]);

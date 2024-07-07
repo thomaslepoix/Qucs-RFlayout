@@ -1,5 +1,28 @@
 {
   "nodes": {
+    "cmake-utils": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": [
+          "flake-utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1670861522,
+        "narHash": "sha256-MWz/q4fJHda9DHI//I5rwBf3iGLhWWjgkTCqk0YeECM=",
+        "owner": "conformism",
+        "repo": "cmake-utils",
+        "rev": "c624a146e8df4ada7eda5ab268ce1c02b94ab40d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "conformism",
+        "repo": "cmake-utils",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -58,21 +81,20 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1714253743,
-        "narHash": "sha256-mdTQw2XlariysyScCv2tTE45QSU9v/ezLcHJ22f0Nxc=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "58a1abdbae3217ca6b702f03d3b35125d88a2994",
-        "type": "github"
+        "lastModified": 1715668745,
+        "narHash": "sha256-xp62OkRkbUDNUc6VSqH02jB0FbOS+MsfMb7wL1RJOfA=",
+        "path": "/nix/store/7q4y8idjk2di380j1fxn4k7wx9y935cl-source",
+        "rev": "9ddcaffecdf098822d944d4147dd8da30b4e6843",
+        "type": "path"
       },
       "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "type": "github"
+        "id": "nixpkgs",
+        "type": "indirect"
       }
     },
     "root": {
       "inputs": {
+        "cmake-utils": "cmake-utils",
         "flake-utils": "flake-utils",
         "nix-filter": "nix-filter",
         "nixGL": "nixGL",

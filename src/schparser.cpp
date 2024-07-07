@@ -36,9 +36,9 @@ SchParser::SchParser(Data& _data) :
 //******************************************************************************
 int SchParser::run() {
 	int ret;
-	string n_sch;
-	string n_net;
-	string n_dat;
+	filesystem::path n_sch;
+	filesystem::path n_net;
+	filesystem::path n_dat;
 	ifstream f_sch;
 	ifstream f_net;
 	ifstream f_dat;
@@ -48,9 +48,14 @@ int SchParser::run() {
 
 	// Filenames processing
 	cout << endl;
-	if(regex_search(data.n_sch, r_sch)) {
-		n_net=regex_replace(data.n_sch, r_sch, ".net");
-		n_sch=regex_replace(data.n_sch, r_sch, ".tmp.sch");
+	if(data.n_sch.extension()==".sch") {
+//	if(regex_search(data.n_sch, r_sch)) {
+//		n_net=regex_replace(data.n_sch, r_sch, ".net");
+//		n_sch=regex_replace(data.n_sch, r_sch, ".tmp.sch");
+		n_net=data.n_sch;
+		n_sch=data.n_sch;
+		n_net.replace_extension(".net");
+		n_sch.replace_extension(".tmp.sch");
 	} else {
 		log_err << "ERROR : Invalid input format : " << data.n_sch << "\n";
 		return(1);
@@ -179,7 +184,7 @@ void SchParser::parse_port_size_args() {
 	}
 
 //******************************************************************************
-int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstudio) const {
+int SchParser::check_qucsstudio(ifstream& f_sch, filesystem::path& n_tmp, bool& is_qucsstudio) const {
 	string line;
 	smatch match;
 
@@ -244,9 +249,9 @@ int SchParser::check_qucsstudio(ifstream& f_sch, string& n_tmp, bool& is_qucsstu
 	}
 
 //******************************************************************************
-int SchParser::generate_netlist(string const& n_sch, string const& n_net) const {
+int SchParser::generate_netlist(filesystem::path const& n_sch, filesystem::path const& n_net) const {
 	static constexpr array<string, 2> to_try{"qucs", "qucs-s"};
-	string const args=" -n -i \""+n_sch+"\" -o \""+n_net+"\"";
+	string const args=" -n -i \""+n_sch.native()+"\" -o \""+n_net.native()+"\"";
 	bool is_done=false;
 
 	auto const run_qucs=[&](string const& binary) {
@@ -255,6 +260,7 @@ int SchParser::generate_netlist(string const& n_sch, string const& n_net) const 
 		process_qucs.startCommand(QString::fromStdString(binary + args));
 		if(!process_qucs.waitForFinished() || process_qucs.exitCode()) {
 			cout << "KO" << endl;
+			cout << "Command : "+binary+args << endl;
 			return(false);
 		} else {
 			cout << "OK" << endl;
@@ -336,7 +342,7 @@ void SchParser::parse_data(std::ifstream& f_dat, vector<pair<string, long double
 	}
 
 //******************************************************************************
-void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& is_there_eqn) const {
+void SchParser::parse_schematic_datafile(ifstream& f_sch, filesystem::path& n_dat, bool& is_there_eqn) const {
 	string line;
 	smatch match;
 
@@ -353,9 +359,17 @@ void SchParser::parse_schematic_datafile(ifstream& f_sch, string& n_dat, bool& i
 			}
 		if(regex_search(line, match, r_dat)) {
 			if(match.str(2)=="") {
+<<<<<<< Updated upstream
 				// TODO This just concat file.sch+file.dat if path is just a filename, without ./
 				// -> std::filesystem
 				n_dat=regex_replace(data.n_sch, r_path, "$1") + match.str(1);
+||||||| Stash base
+				n_dat=regex_replace(data.n_sch, r_path, "$1") + match.str(1);
+=======
+//				n_dat=regex_replace(data.n_sch, r_path, "$1") + match.str(1);
+				n_dat=data.n_sch;
+				n_dat.replace_extension("dat");
+>>>>>>> Stashed changes
 			} else {
 				n_dat=match.str(1);
 				}

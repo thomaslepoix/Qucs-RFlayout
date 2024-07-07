@@ -1,5 +1,8 @@
 #########################################################################PROJECT
-cmake_minimum_required( VERSION 3.12 )
+#cmake_minimum_required( VERSION 3.12 )
+cmake_minimum_required( VERSION 3.20 )
+cmake_policy(SET CMP0069 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
 
 project( qucsrflayout
 	LANGUAGES CXX
@@ -17,6 +20,65 @@ if( NOT CMAKE_BUILD_TYPE )
 	set( CMAKE_BUILD_TYPE "Release" )
 endif( NOT CMAKE_BUILD_TYPE )
 message( STATUS "Build type: ${CMAKE_BUILD_TYPE}" )
+
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+
+option( CPM_DISABLE "Don't use CPM to retrieve dependencies" "$ENV{CPM_DISABLE}" )
+
+if( NOT CPM_DISABLE )
+	message( STATUS "Downloading dependencies with CPM" )
+
+	list( APPEND CMAKE_MODULE_PATH
+		"${CMAKE_SOURCE_DIR}/cmake"
+		)
+
+	include( CPM )
+
+	# https://github.com/cpm-cmake/CPM.cmake/issues/428
+
+	set( QT_MODULES
+		qtbase
+		)
+
+	CPMAddPackage(
+		NAME Qt6
+		GIT_REPOSITORY https://code.qt.io/qt/qt5.git
+		VERSION 6.6.1
+		GIT_SHALLOW
+		GIT_SUBMODULES "${QT_MODULES}"
+#		DOWNLOAD_ONLY
+		)
+
+	set( Qt6_base_DIR "${Qt6_base_BINARY_DIR}" )
+
+#	CPMAddPackage(
+#		NAME cmake-utils
+#		GITHUB_REPOSITORY conformism/cmake-utils
+#		GIT_TAG main
+#		DOWNLOAD_ONLY
+#		)
+#
+#	set( CMakeUtils_DIR "${cmake-utils_SOURCE_DIR}" )
+#
+#	CPMAddPackage(
+#		NAME pugixml
+#		GITHUB_REPOSITORY zeux/pugixml
+#		VERSION 1.12.1
+#		OPTIONS
+#			"BUILD_SHARED_LIBS ON"
+#		)
+#
+#	set( pugixml_DIR "${pugixml_BINARY_DIR}" )
+#
+#	CPMAddPackage(
+#		NAME CLI11
+#		GITHUB_REPOSITORY CLIUtils/CLI11
+#		VERSION 2.3.1
+#		)
+#
+#	set( CLI11_DIR "${CLI11_BINARY_DIR}" )
+
+endif()
 
 include( FixedShell )
 
@@ -188,7 +250,7 @@ target_include_directories( ${PROJECT_NAME}
 	)
 
 target_link_libraries( ${PROJECT_NAME}
-	PRIVATE
+#	PRIVATE
 	Qt6::Core
 	Qt6::Gui
 	Qt6::OpenGLWidgets
@@ -208,6 +270,20 @@ install(
 	CONFIGURATIONS Release
 	RUNTIME DESTINATION "bin" #"${CMAKE_INSTALL_BINDIR}"
 	)
+
+include( CheckIPOSupported )
+# Optional IPO. Do not use IPO if it's not supported by compiler.
+check_ipo_supported(
+	RESULT result
+	OUTPUT output
+	)
+if( result )
+	set_property( TARGET ${PROJECT_NAME}
+		PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE
+		)
+else()
+	message( WARNING "IPO is not supported: ${output}" )
+endif()
 
 #if( WIN32 )
 #
@@ -237,3 +313,28 @@ install(
 add_subdirectory( "${CMAKE_SOURCE_DIR}/doc" )
 add_subdirectory( "${CMAKE_SOURCE_DIR}/test" )
 add_subdirectory( "${CMAKE_SOURCE_DIR}/pack" )
+
+
+find_package( CMakeUtils )
+set( CMAKE_UTILS CODECHECKER SANITIZERS )
+include( CMakeUtils )
+
+codechecker(
+	GLOBAL
+#	NO_CTU
+	SKIP
+		+${CMAKE_SOURCE_DIR}/src
+		-*
+#		+${CMAKE_SOURCE_DIR}/test/unit
+	ARGS
+		"${CMAKE_BINARY_DIR}/compile_commands.json"
+		-j 4
+		--keep-gcc-include-fixed
+		--keep-gcc-intrin
+#	ADDITIONAL_OPTIONAL_REPORTS
+#		"${CMAKE_BINARY_DIR}/src/CMakeFiles/raisin_cppcheck.dir/codechecker_reports"
+	)
+
+enable_sanitizers(
+	TARGET ${PROJECT_NAME}
+	)

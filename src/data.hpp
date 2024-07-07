@@ -19,6 +19,7 @@
 #define DATA_HPP
 
 #include <array>
+#include <filesystem>
 #include <memory>
 #include <sstream>
 #include <tuple>
@@ -75,9 +76,9 @@ public:
 
 	// Saved on reset
 	std::string qucs_binary;
-	std::string n_sch;
-	std::string n_net;
-	std::string out_dir;
+	std::filesystem::path n_sch;
+	std::filesystem::path n_net;
+	std::filesystem::path out_dir;
 	std::string out_format;
 	bool export_each_block;
 	bool export_each_subst;

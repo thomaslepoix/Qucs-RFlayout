@@ -47,23 +47,23 @@ Subst::Subst(string const _label,
 	{}
 
 //******************************************************************************
-Subst::Subst(Subst const* _subst) :
-	Element(_subst->m_label,
-		_subst->m_type,
+Subst::Subst(Subst const& _subst) :
+	Element(_subst.m_label,
+		_subst.m_type,
 		true,
-		_subst->m_mirrorx,
-		_subst->m_r,
+		_subst.m_mirrorx,
+		_subst.m_r,
 		0,
 		""),
 	m_w(0.0),
 	m_l(0.0),
-	m_er(_subst->m_er),
-	m_h(_subst->m_h),
-	m_t(_subst->m_t),
-	m_tand(_subst->m_tand),
-	m_rho(_subst->m_rho),
-	m_d(_subst->m_d),
-	m_margin(_subst->m_margin),
+	m_er(_subst.m_er),
+	m_h(_subst.m_h),
+	m_t(_subst.m_t),
+	m_tand(_subst.m_tand),
+	m_rho(_subst.m_rho),
+	m_d(_subst.m_d),
+	m_margin(_subst.m_margin),
 	substrate_boundary({ 0.0, 0.0, 0.0, 0.0 })
 	{}
 

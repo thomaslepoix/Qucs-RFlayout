@@ -51,7 +51,7 @@ public :
 			long double const _rho,
 			long double const _d,
 			unsigned int const _margin_factor);
-	Subst(Subst const* _subst);
+	Subst(Subst const& _subst);
 	~Subst()=default;
 	std::string getDescriptor() const override;
 	long double getL() const override;

@@ -22,8 +22,8 @@ using namespace std;
 
 //******************************************************************************
 Block::Block() :
-	elements(vector<shared_ptr<Element>>()),
-	subst(shared_ptr<Element>()),
+//	elements(vector<shared_ptr<Element>>()),
+//	subst(shared_ptr<Element>()),
 	metal_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	margin_boundary({ 0.0, 0.0, 0.0, 0.0 }),
 	margin(0.0)

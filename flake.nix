@@ -6,13 +6,22 @@
 #    nixpkgs.url = "flake:nixpkgs";
 
   inputs = {
+<<<<<<< Updated upstream
 #    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs";
+||||||| Stash base
+    nixpkgs.url = "github:NixOS/nixpkgs";
+=======
+#    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "flake:nixpkgs";
+#    nixpkgs.url = "github:NixOS/nixpkgs/219951b495fc2eac67b1456824cc1ec1fd2ee659";
+>>>>>>> Stashed changes
 
     flake-utils.url = "github:numtide/flake-utils";
 
     nix-filter.url = "github:numtide/nix-filter";
 
+<<<<<<< Updated upstream
 #    zicross ={
 #      url = github:flyx/Zicross;
 #      inputs.nixpkgs.follows = "nixpkgs";
@@ -20,6 +29,15 @@
 #      inputs.nix-filter.follows = "nix-filter";
 #    };
 
+||||||| Stash base
+=======
+    cmake-utils = {
+      url = "github:conformism/cmake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "flake-utils";
+    };
+
+>>>>>>> Stashed changes
     nixGL = {
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,7 +50,12 @@
   , flake-utils
   , nix-filter
   , nixGL
+<<<<<<< Updated upstream
   #, zicross
+||||||| Stash base
+=======
+  , cmake-utils
+>>>>>>> Stashed changes
   , ...
   }@args:
   flake-utils.lib.eachDefaultSystem (system:
@@ -50,6 +73,7 @@
 #    lib = (import nixpkgs-patched { inherit system; }).lib.extend nix-filter.overlays.default;
 #    pkgs = ((import nixpkgs-patched { inherit system; }).extend (final: prev: {
     lib = nixpkgs.lib.extend nix-filter.overlays.default;
+<<<<<<< Updated upstream
     pkgs = (nixpkgs.legacyPackages.${system}.extend (final: prev: {
       qucs-s = prev.qucs-s.overrideAttrs (old: rec {
         version = "d8bea98";
@@ -124,6 +148,25 @@
       };
     }));
 #    })).extend zicross.overlays.windows;
+||||||| Stash base
+    pkgs = nixpkgs.legacyPackages.${system};
+=======
+    pkgs = (nixpkgs.legacyPackages.${system}.extend (final: prev: {
+      qucs-s = prev.qucs-s.overrideAttrs (old: rec {
+        version = "d8bea98";
+        src = pkgs.fetchFromGitHub {
+          owner = "ra3xdh";
+          repo = "qucs_s";
+          rev = version;
+          hash = "sha256-fx61Vn54J2UGjGbycYwSpmJJ618WVpBAym8d/GUgepk=";
+        };
+        cmakeFlags = [
+          "-DWITH_QT6=ON"
+        ];
+        enableParallelBuilding = true;
+      });
+    }));
+>>>>>>> Stashed changes
 
     nixGLWrapper = package: pkgs.stdenvNoCC.mkDerivation {
       inherit (package) pname version meta;
@@ -181,11 +224,24 @@
       '';
     };
 
+    debWrapper = package: distro: pkgs.releaseTools.debBuild {
+      diskImage = distro {};
+      diskImageFormat = "qcow2";
+      src = package.src;
+      name = "qucsrflayout-deb";
+      buildInputs = [];
+      debRequires = [
+        "build-essentials"
+      ];
+      meta.description = "No descr";
+    };
+
     this-package = pkgs.qt6.callPackage ./default.nix { inherit lib; };
     this-package-clang = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.clangStdenv; };
     this-package-gcc = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.gccStdenv; };
     this-package-static = pkgs.pkgsStatic.qt6.callPackage ./default.nix { inherit lib; withDoc = false; };
     this-package-win = pkgs.pkgsCross.mingwW64.qt6.callPackage ./default.nix { inherit lib; inherit (pkgs) texlive; };
+#    this-package-deb12 =
 
   in {
     packages = rec {
@@ -201,12 +257,23 @@
       qucsrflayoutWine64 = wineWrapper this-package-win;
       # Bundles
       qucsrflayoutMingw64Zip = zipWrapper this-package-win;
+
+      qucsrflayoutDeb10 = debWrapper this-package pkgs.vmTools.diskImageFuns.debian10x86_64;
+      qucsrflayoutUbuntu2204 = debWrapper this-package pkgs.vmTools.diskImageFuns.ubuntu2204x86_64;
     };
 
     devShells = {
       default = pkgs.mkShell {
         inputsFrom = [
           this-package
+          (import cmake-utils { inherit pkgs; need-codechecker = true; need-cppcheck = true; })
+        ];
+        packages = [
+          pkgs.qucs-s
+          pkgs.rr
+          pkgs.gdb
+          pkgs.clang
+          (import cmake-utils { inherit pkgs; need-codechecker = true; need-cppcheck = true; })
         ];
         packages = [
           pkgs.qucs-s
