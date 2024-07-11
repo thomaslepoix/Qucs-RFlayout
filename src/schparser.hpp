@@ -18,6 +18,7 @@
 #ifndef SCHPARSER_HPP
 #define SCHPARSER_HPP
 
+#include <filesystem>
 #include <fstream>
 #include <initializer_list>
 #include <memory>
@@ -36,11 +37,11 @@ private:
 	void parse_port_shift_args();
 	void parse_port_size_args();
 
-	int check_qucsstudio(std::ifstream& f_sch, std::string& n_tmp, bool& is_qucsstudio) const;
-	int generate_netlist(std::string const& n_sch, std::string const& n_net) const;
+	int check_qucsstudio(std::ifstream& f_sch, std::filesystem::path& n_tmp, bool& is_qucsstudio) const;
+	int generate_netlist(std::filesystem::path const& n_sch, std::filesystem::path const& n_net) const;
 
 	void parse_data(std::ifstream& f_dat, std::vector<std::pair<std::string, long double>>& variables) const;
-	void parse_schematic_datafile(std::ifstream& f_sch, std::string& n_dat, bool& is_there_eqn) const;
+	void parse_schematic_datafile(std::ifstream& f_sch, std::filesystem::path& n_dat, bool& is_there_eqn) const;
 	void parse_schematic_components(std::ifstream& f_sch, std::vector<std::pair<std::string, long double>>& variables, std::vector<std::string>& unprintables);
 	void parse_netlist(std::ifstream& f_net);
 

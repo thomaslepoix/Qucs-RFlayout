@@ -39,13 +39,8 @@ LayoutWriter::LayoutWriter(Data const& _data) :
 int LayoutWriter::run(vector<string>* out_names) const {
 
 //variables
-	static regex const r_sch("\\.sch$");
-	static regex const r_basename("^.*?([^\\/]*)\\.sch$"); // g1 basename
-	static regex const r_out("(^.*?)\\/?$");
-	static regex const r_empty("^$");
-	string name=regex_replace(regex_replace(data.n_sch, r_basename, "$1"), r_sch, "");
-	string n_out=regex_replace(data.out_dir, r_empty, "./");
-	n_out=regex_replace(n_out, r_out, "$1/") + regex_replace(data.n_sch, r_basename, "$1");
+	string const name=data.n_sch.stem();
+	filesystem::path n_out=(data.out_dir.empty() ? "." : data.out_dir)/data.n_sch.stem();
 
 //check
 	int ret=0;
@@ -58,7 +53,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	if(data.export_each_block) {
 		unsigned int i=-1; // not a mistake
 		for(shared_ptr<Block> it : data.all_blocks) {
-			string out=n_out+"-b"+to_string(++i)+data.out_format;
+			filesystem::path const out=n_out.native()+"-b"+to_string(++i)+data.out_format;
 
 			Block block;
 			block.elements=it->elements;
@@ -75,14 +70,14 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	} else if(data.export_each_subst) {
 		unsigned int i=-1; // not a mistake
 		shared_ptr<Block> prev=nullptr;
-		string out;
+		filesystem::path out;
 		Block block;
 		for(shared_ptr<Block> it : data.all_blocks) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
 					// End & write
 					block.calcul_boundaries();
-					out=n_out+"-s"+to_string(++i)+data.out_format;
+					out=n_out.native()+"-s"+to_string(++i)+data.out_format;
 					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
@@ -103,7 +98,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			}
 		// Last end & write
 		block.calcul_boundaries();
-		out=n_out+"-s"+to_string(++i)+data.out_format;
+		out=n_out.native()+"-s"+to_string(++i)+data.out_format;
 		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
@@ -119,9 +114,9 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	}
 
 //******************************************************************************
-int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, string const& n_out, string const& name, vector<string>* out_names) const {
+int LayoutWriter::write(Block& block, long double const offset_x, long double const offset_y, filesystem::path const& n_out, string const& name, vector<string>* out_names) const {
 	cout << "Output layout : " << n_out << endl;
-	ofstream f_out(n_out.c_str());
+	ofstream f_out(n_out);
 	if(f_out.fail()) {
 		log_err << "ERROR : Unable to write " << n_out << "\n";
 		return(1);

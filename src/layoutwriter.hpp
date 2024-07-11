@@ -20,6 +20,7 @@
 
 #define _USE_MATH_DEFINES
 
+#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -31,7 +32,7 @@ private:
 	Data const& data;
 
 	int check_m() const;
-	int write(Block& block, long double const offset_x, long double const offset_y, std::string const& n_out, std::string const& name, std::vector<std::string>* out_names) const;
+	int write(Block& block, long double const offset_x, long double const offset_y, std::filesystem::path const& n_out, std::string const& name, std::vector<std::string>* out_names) const;
 	//TODO array<long double, 2> offset ?
 	void write_kicad_pcb(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 	void write_kicad_mod(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
