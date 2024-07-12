@@ -19,6 +19,7 @@
 #include <iostream>
 #include <iterator>
 #include <regex>
+#include <system_error>
 #include <utility>
 
 #include "layoutstrings.hpp"
@@ -125,7 +126,14 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".kicad_mod") write_kicad_mod(block, f_out, offset_x, offset_y, name);
 	else if(data.out_format==".lht") write_lht(block, f_out, offset_x, offset_y, name);
-	else if(data.out_format==".m") write_m(block, f_out, offset_x, offset_y, name);
+	else if(data.out_format==".m") {
+		write_m(block, f_out, offset_x, offset_y, name);
+		f_out.close();
+		error_code ret;
+		filesystem::permissions(n_out, filesystem::perms::owner_exec|filesystem::perms::group_exec|filesystem::perms::others_exec, filesystem::perm_options::add, ret);
+		if(ret)
+			log_err << "WARNING : Unable to set " << n_out << " as executable\n";
+		}
 	if(out_names) out_names->push_back(n_out); // Success message to stdout in GUI mode
 
 	if(f_out.fail()) {
