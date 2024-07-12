@@ -383,7 +383,7 @@ void XyCalculator::place_blocks() {
 	for(shared_ptr<Block> block : data.all_blocks) {
 		if(block->subst) {
 			Subst* subst=dynamic_cast<Subst*>(block->subst.get());
-			block->subst_local=shared_ptr<Element>(new Subst(subst));
+			block->subst_local=shared_ptr<Element>(new Subst(*subst)); //TODO
 			block->subst_local->setL(block->margin_boundary[XMAX]-block->margin_boundary[XMIN]);//+2*block->subst_local->getMargin());
 			block->subst_local->setW(block->margin_boundary[YMAX]-block->margin_boundary[YMIN]);//+2*block->subst_local->getMargin());
 			block->subst_local->setX((block->margin_boundary[XMAX]+block->margin_boundary[XMIN])/2);
@@ -403,7 +403,7 @@ void XyCalculator::place_blocks() {
 		}
 	}
 
-// Order by subst, no subst at the end.
+// Order by subst, blocks without subst at the end.
 //******************************************************************************
 void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_ptr<Element>> substs) {
 	vector<shared_ptr<Block>> tmp_blocks;

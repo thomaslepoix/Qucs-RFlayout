@@ -257,6 +257,7 @@ int SchParser::generate_netlist(filesystem::path const& n_sch, filesystem::path 
 		process_qucs.startCommand(QString::fromStdString(binary + args));
 		if(!process_qucs.waitForFinished() || process_qucs.exitCode()) {
 			cout << "KO" << endl;
+			cout << "Command : "+binary+args << endl;
 			return(false);
 		} else {
 			cout << "OK" << endl;
