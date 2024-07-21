@@ -102,6 +102,7 @@
       # Wrappers
       qucsrflayoutNixGL = nixGLWrapper this-package;
       qucsrflayoutWine64 = wineWrapper this-package-win;
+      qucsrflayoutWine64NixGL = nixGLWrapper qucsrflayoutWine64;
       # Bundles
       qucsrflayoutMingw64Zip = zipWrapper this-package-win;
     };
