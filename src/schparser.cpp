@@ -113,7 +113,7 @@ int SchParser::run() {
 	f_net.close();
 	f_dat.close();
 	// Remove QucsStudio temporary schematic and automatically generated netlist
-	rm_tmp_files({ (is_qucsstudio ? n_sch : ""), (data.n_net=="" ? n_net : "") });
+	rm_tmp_files({ (is_qucsstudio ? n_sch.generic_string() : ""), (data.n_net=="" ? n_net.generic_string() : "") });
 	return(0);
 	}
 
@@ -248,7 +248,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, filesystem::path& n_tmp, bool& 
 //******************************************************************************
 int SchParser::generate_netlist(filesystem::path const& n_sch, filesystem::path const& n_net) const {
 	static const array<string, 2> to_try{"qucs", "qucs-s"};
-	string const args=" -n -i \""+n_sch.native()+"\" -o \""+n_net.native()+"\"";
+	string const args=" -n -i \""+n_sch.generic_string()+"\" -o \""+n_net.generic_string()+"\"";
 	bool is_done=false;
 
 	auto const run_qucs=[&](string const& binary) {

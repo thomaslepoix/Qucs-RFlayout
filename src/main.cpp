@@ -15,6 +15,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifdef _WIN32
+#include <windows.h>
+#include <shellapi.h>
+#endif // _WIN32
+
 #include <QApplication>
 
 #include <iostream>
@@ -33,6 +38,15 @@ using namespace std;
 
 //******************************************************************************
 int main(int argc, char* argv[]) {
+
+#ifdef _WIN32
+	int argcw = 0;
+	LPWSTR *argvw = CommandLineToArgvW(GetCommandLineW(), &argcw);
+	if(!argvw) {
+		log_err << "ERROR : Cannot retrieve command line arguments" << "\n";
+		return(1);
+		}
+#endif // _WIN32
 
 //variables
 	bool verbose=false;
@@ -94,10 +108,25 @@ int main(int argc, char* argv[]) {
 				return(0);
 			} else if(string(argv[i])=="-i" && argv[i+1]) {
 				i++;
+#ifdef _WIN32
+				data.n_sch=filesystem::path(argvw[i]);
+#else
 				data.n_sch=filesystem::path(argv[i]);
+#endif // _WIN32
+			} else if(string(argv[i])=="-n" && argv[i+1]) {
+				i++;
+#ifdef _WIN32
+				data.n_net=filesystem::path(argvw[i]);
+#else
+				data.n_net=filesystem::path(argv[i]);
+#endif // _WIN32
 			} else if(string(argv[i])=="-o" && argv[i+1]) {
 				i++;
+#ifdef _WIN32
+				data.out_dir=filesystem::path(argvw[i]);
+#else
 				data.out_dir=filesystem::path(argv[i]);
+#endif // _WIN32
 			} else if(string(argv[i])=="-f" && argv[i+1]) {
 				i++;
 				if(string(argv[i])==".kicad_pcb"
@@ -109,9 +138,6 @@ int main(int argc, char* argv[]) {
 					log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
 					return(1);
 					}
-			} else if(string(argv[i])=="-n" && argv[i+1]) {
-				i++;
-				data.n_net=filesystem::path(argv[i]);
 			} else if((string(argv[i])=="-q" || string(argv[i])=="--qucs") && argv[i+1]) {
 				i++;
 				data.qucs_binary=string(argv[i]);

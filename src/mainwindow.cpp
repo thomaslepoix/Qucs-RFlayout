@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /***************************************************************************
- *                                    	                                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 3 of the License, or     *
@@ -30,9 +30,9 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 		converter(_data),
 		openfile_path(QDir::currentPath()) {
 	ui->setupUi(this);
-	ui->le_path_in->setText(QString::fromStdString(_data.n_sch));
-	ui->le_path_net->setText(QString::fromStdString(_data.n_net));
-	ui->le_path_out->setText(QString::fromStdString(_data.out_dir));
+	ui->le_path_in->setText(QString::fromStdString(_data.n_sch.generic_string()));
+	ui->le_path_net->setText(QString::fromStdString(_data.n_net.generic_string()));
+	ui->le_path_out->setText(QString::fromStdString(_data.out_dir.generic_string()));
 	QString out_format(QString::fromStdString(_data.out_format));
 	ui->cb_format->addItem(tr(".kicad_pcb"));
 	ui->cb_format->addItem(tr(".kicad_mod"));

@@ -40,7 +40,7 @@ LayoutWriter::LayoutWriter(Data const& _data) :
 int LayoutWriter::run(vector<string>* out_names) const {
 
 //variables
-	string const name=data.n_sch.stem();
+	string const name=data.n_sch.stem().generic_string();
 	filesystem::path n_out=(data.out_dir.empty() ? "." : data.out_dir)/data.n_sch.stem();
 
 //check
@@ -54,7 +54,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	if(data.export_each_block) {
 		unsigned int i=-1; // not a mistake
 		for(shared_ptr<Block> it : data.all_blocks) {
-			filesystem::path const out=n_out.native()+"-b"+to_string(++i)+data.out_format;
+			filesystem::path const out=n_out.generic_string()+"-b"+to_string(++i)+data.out_format;
 
 			Block block;
 			block.elements=it->elements;
@@ -78,7 +78,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 				if(prev!=nullptr) {
 					// End & write
 					block.calcul_boundaries();
-					out=n_out.native()+"-s"+to_string(++i)+data.out_format;
+					out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
 					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 					if(ret) return(ret);
 					}
@@ -99,7 +99,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			}
 		// Last end & write
 		block.calcul_boundaries();
-		out=n_out.native()+"-s"+to_string(++i)+data.out_format;
+		out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
 		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
 		if(ret) return(ret);
 	} else {
@@ -132,9 +132,9 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 		error_code ret;
 		filesystem::permissions(n_out, filesystem::perms::owner_exec|filesystem::perms::group_exec|filesystem::perms::others_exec, filesystem::perm_options::add, ret);
 		if(ret)
-			log_err << "WARNING : Unable to set " << n_out << " as executable\n";
+			log_err << "WARNING : Unable to set " << n_out.generic_string() << " as executable\n";
 		}
-	if(out_names) out_names->push_back(n_out); // Success message to stdout in GUI mode
+	if(out_names) out_names->push_back(n_out.generic_string()); // Success message to stdout in GUI mode
 
 	if(f_out.fail()) {
 		log_err << "ERROR : Error occured while writing " << n_out << "\n";
