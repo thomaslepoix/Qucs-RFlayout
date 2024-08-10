@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
 				        "  -v, --verbose   Verbose mode.\n"
 				        "  -G              GUI mode (no arguments equals to -G).\n"
 				        "  -i FILENAME     Use file as input schematic.\n"
-				        "  -o DIRNAME      Use directory as output.\n"
+				        "  -o DIRNAME      Use directory as output (default current directory).\n"
 				        "  -f FORMAT       Use format as output layout format.\n"
 				        "                  FORMAT can be:\n"
 				        "                  - .kicad_pcb    : KiCad layout (default format)\n"
@@ -79,7 +79,8 @@ int main(int argc, char* argv[]) {
 				        "  -n NETLIST      Specify a netlist to use instead of calling Qucs to create it from the schematic.\n"
 				        "                  Useful when Qucs is not installed, if you use QucsStudio for example.\n"
 				        "  -q, --qucs PATH Specify Qucs executable to call for netlist creation, otherwise qucs, then qucs-s will\n"
-				        "                  be tried regarding system PATH variable. PATH can be either a relative or absolute path.\n"
+				        "                  be tried regarding system PATH variable. PATH can be either a relative or an absolute path.\n"
+				        "                  QucsStudio cannot be used.\n"
 				        "  -s              Export each substrate in a different file.\n"
 				        "  -b              Export each block in a different file.\n"
 				        "  -k, --keep      Keep temporary files.\n"
@@ -101,7 +102,9 @@ int main(int argc, char* argv[]) {
 				        "      --oems-nf2ff-center STRING     Set the OpenEMS far field center. Must be a component label.\n"
 				        "      --oems-sort-metalresmesh       Order metal resolution mesh lines by edge coordinate.\n"
 				        "                                     Default is grouped by component label.\n"
-				        "      --oems-pkg                     Look for 'openems' and 'csxcad' Octave packages (from Debian 10 repository).\n";
+				        "      --oems-pkg                     Look for 'openems' and 'csxcad' Octave packages. Requires properly\n"
+				        "                                     packaged Octaves packages such as 'octave-openems' and 'octave-csxcad'\n"
+				        "                                     from Debian repositories.\n";
 				return(0);
 			} else if(string(argv[i])=="--version") {
 				cout << "Qucs-RFlayout " << VERSION << endl;

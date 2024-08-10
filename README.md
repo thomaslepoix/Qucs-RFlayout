@@ -134,8 +134,8 @@ qucsrflayout -i qucs-schematic.sch -o output-directory -f .output-format
 
 - Microstrip only for now, coplanar waveguide ASAP.
 - Any other component cannot be converted into a geometric shape of metal by this tool.
-- Use one wire to connect only two components ports, use apropriate components to make tees or crosses.
-- QucsStudio schematics are supported (2.x versions only) but it is closed source and there are some incompatibilities so please prefer using Qucs. If you really need to work with QucsStudio 3.x, take a look at [this converter](https://github.com/Paulo-D2000/QucsStudioConverter).
+- Use one wire to connect only two component ports, use appropriate components to make tees or crosses.
+- QucsStudio schematics are supported (2.x versions only) but it is closed source and there are some incompatibilities, so please prefer using Qucs. If you really need to work with QucsStudio 3.x, take a look at [this converter](https://github.com/Paulo-D2000/QucsStudioConverter).
 
 <br>
 

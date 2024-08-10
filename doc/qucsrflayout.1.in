@@ -1,76 +1,136 @@
-.TH Qucs-RFlayout "1" "October 2018" "Debian/GNU Linux" "User Commands"
+.TH Qucs-RFlayout "1" "October 2018" "GNU/Linux" "User Commands"
+
 .SH NAME
 Qucs-RFlayout \- A tool to produce layout from RF schematics.
+
 .SH SYNOPSIS
-.B qucsrflayout
-[\fIOPTION\fR] ...
+\fBqucsrflayout\fR [\fIOPTION\fR] ...
+.br
+\fBqucsrflayout\fR [\fB-i\fR \fIFILENAME.sch\fR] [\fB-f\fR \fI.FORMAT\fR] [\fB-o\fR \fIDIRNAME\fR] [\fIOPTION\fR] ...
+.br
+\fBqucsrflayout\fR [\fB-i\fR \fIFILENAME.sch\fR] [\fB-n\fR \fIFILENAME.net\fR] [\fB-f\fR \fI.FORMAT\fR] [\fB-o\fR \fIDIRNAME\fR] [\fIOPTION\fR] ...
+.br
+\fBqucsrflayout\fR [\fB-G\fR] [\fIOPTION\fR] ...
+
 .SH DESCRIPTION
-
-\fBQucs\fR is an integrated circuit simulator which means you will be
-able to setup a circuit with a graphical user interface (GUI) and
-simulate the large-signal, small-signal and noise behaviour of the
-circuit.  After that simulation has finished you will be able to
-present the simulation results on a presentation page or window.
-
-The software aims to support all kinds of circuit simulation types,
-e.g. DC, AC, S-parameter, harmonic balance analysis, noise analysis,
-etc.
-
-\fBQucs-RFlayout\fR is a tool for exporting your \fBQucs\fR RF schematics to a layout
-editor such as \fBPcbNew\fR (\fBKiCad\fR) or \fBpcb-rnd\fR. It also allows generating
-\fBopenEMS\fR scripts to perform more complex simulations (FDTD).
+\fBQucs-RFlayout\fR is a tool for exporting your \fBQucs\fR RF schematics to a layout editor such as \fBPcbNew\fR (\fBKiCad\fR) or \fBpcb-rnd\fR. It also allows generating \fBopenEMS\fR scripts to perform more complex simulations (FDTD).
+.PP
 You can use either text mode or graphical mode. Graphical mode features
 a preview of the generated layout.
 
-Available topologies are: Microstrip only.
-Coplanar and microstrip lange coupler are not supported.
-
-Equations and variables in component values are not supported.
-
 .SH OPTIONS
 .TP
-\fB\-h\fR, \fB\-\-help\fR
-display help and exit
+\fB-h\fR, \fB--help\fR
+Display help and exit.
 .TP
-    \fB\-\-version\fR
-display version information and exit
+    \fB--version\fR
+Display version information and exit.
 .TP
-\fB\-v\fR, \fB\-\-verbose\fR
-verbose mode
+\fB-v\fR, \fB--verbose\fR
+Verbose mode.
 .TP
-\fB\-i\fR  \fIFILENAME\fR
-use file as input schematic
+\fB-G\fR
+GUI mode (no arguments equals to \fB-G\fR)
 .TP
-\fB\-o\fR  \fIDIRNAME\fR
-use directory as output (default current directory)
+\fB-i\fR \fIFILENAME\fR
+Use file as input schematic.
 .TP
-\fB\-f\fR  \fIFORMAT\fR
-use format as output layout format (default .kicad_pcb)
+\fB-o\fR \fIDIRNAME\fR
+Use directory as output (default current directory).
+.TP
+\fB-f\fR \fIFORMAT\fR
+Use format as output layout format.
 
 FORMAT can be:
 .PD 0
 .RS
 .TP
-	.kicad_pcb	: kicad layout
+	\fB.kicad_pcb\fR    : KiCad layout (default format)
 .TP
-	.kicad_mod	: kicad module
+	\fB.kicad_mod\fR    : KiCad module
 .TP
-	.lht			: pcb-rnd layout
+	\fB.lht\fR          : pcb-rnd layout
+.TP
+	\fB.m\fR            : OpenEMS Octave script
 .RE
 .PD
 .TP
-\fB\-G\fR
-GUI mode (no arguments equals to -G)
-.SH AVAILABILITY
-The latest version of Qucs can always be obtained from
-\fB@QUCS_URL@\fR
-.SH "REPORTING BUGS"
-Known bugs are documented within the BUGS file.  Report bugs to
-\fB@QUCS_BUGREPORT@\fR
+\fB-n\fR \fINETLIST\fR
+Specify a netlist to use instead of calling Qucs to create it from the schematic. Useful when Qucs is not installed, if you use QucsStudio for example.
+.TP
+\fB-q\fR, \fB--qucs\fR \fIPATH\fR
+Specify Qucs executable to call for netlist creation, otherwise \fBqucs\fR, then \fBqucs-s\fR will be tried regarding system \fBPATH\fR variable. \fIPATH\fR can be either a relative or an absolute path. QucsStudio cannot be used.
+.TP
+\fB-s\fR
+Export each substrate in a different file.
+.TP
+\fB-b\fR
+Export each block in a different file.
+.TP
+\fB-k\fR, \fB--keep\fR
+Keep temporary files.
+
+.TP
+\fB-e\fR, \fB--exclude\fR \fISTRING\fR
+Exclude a component. Must be a component label.
+.TP
+\fB-u\fR, \fB--use\fR \fISTRING\fR
+Exclude all components except the used ones. Must be a component label.
+.TP
+    \fB--margin-factor\fR \fIINTEGER\fR
+The distance between circuits and substrate edges. Is defined as a substrate height multiple. Default is \fB10\fR.
+.TP
+    \fB--port-shift\fR \fIN\fR \fIX\fR \fIY\fR
+Translate a port. \fIX\fR grows to the right, \fIY\fR grows to the bottom.
+.TP
+    \fB--port-size\fR \fIN\fR \fIL\fR \fIW\fR
+Set a port size. \fIL\fR is in x axis, \fIW\fR in y axis. Can be used with \fB--port-shift\fR to create designs such as center fed patch antenna.
+.TP
+    \fB--oems-highres-div\fR \fIINTEGER\fR
+OpenEMS high resolution mesh lambda divisor. Default is \fB200\fR.
+.TP
+    \fB--oems-metalres-div\fR \fIINTEGER\fR
+OpenEMS metal resolution mesh lambda divisor. Default is \fB60\fR.
+.TP
+    \fB--oems-substres-div\fR \fIINTEGER\fR
+OpenEMS substrate resolution mesh lambda divisor. Default is \fB30\fR.
+.TP
+    \fB--oems-timeres\fR \fIINTEGER\fR
+Number of timesteps before OpenEMS stops simulation. Default is \fB300000\fR.
+.TP
+    \fB--oems-end-criteria\fR \fISTRING\fR
+OpenEMS stops simulation when energy decayed to this value. Should stay between \fB1e-3\fR (speed) and \fB1e-5\fR (precision). Default is \fB1e-4\fR.
+.TP
+    \fB--oems-nf2ff-center\fR \fISTRING\fR
+Set the OpenEMS far field center. Must be a component label.
+.TP
+    \fB--oems-sort-metalresmesh\fR
+Order metal resolution mesh lines by edge coordinate. Default is grouped by component label.
+.TP
+    \fB--oems-pkg\fR
+Look for 'openems' and 'csxcad' Octave packages. Requires properly packaged Octaves packages such as 'octave-openems' and 'octave-csxcad' from Debian repositories.
+
+.SH NOTES
+Microstrip components are supported except the lange coupler. Coplanar waveguide components are not yet. Any other component is not supported.
+.PP
+Use one wire to connect only two component ports, use appropriate components to make tees or crosses.
+.PP
+Detailed geometrical implementation of each component is available in \fB<install dir>/share/doc/qucsrflayout/\fR.
+." TODO Detailed geometrical implementation of each component is available in \fB@CMAKE_INSTALL_PREFIX@/share/doc/qucsrflayout/\fR.
+.PP
+A tutorial about the OpenEMS exporter is available here:
+.br
+@QRFL_OEMS_TUTORIAL@
+.PP
+Compatible with Qucs and Qucs-S. QucsStudio 2.x schematics are mostly compatible, but Qucs or Qucs-S are still required to generate a netlist, otherwise it should be generated and provided manually. Versions 3.x and latter are not supported.
+
+.SH REPORTING BUGS
+@QRFL_BUGREPORT@
+
 .SH COPYRIGHT
 Copyright \(co 2018 Thomas Lepoix <thomas.lepoix@protonmail.ch>
 .PP
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This software is distributed under the terms of the GPL-3 license.
+
 .SH AUTHORS
 Written by Thomas Lepoix <thomas.lepoix@protonmail.ch>.

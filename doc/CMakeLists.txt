@@ -2,8 +2,8 @@
 
 include( Gzip )
 
-set( QUCS_URL       "https://sf.net/p/qucs" )
-set( QUCS_BUGREPORT "qucs-bugs@lists.sourceforge.net" )
+set( QRFL_BUGREPORT     "https://github.com/thomaslepoix/Qucs-RFlayout/issues" )
+set( QRFL_OEMS_TUTORIAL "https://github.com/thomaslepoix/Qucs-RFlayout/blob/master/doc/tutorials/openems.md" )
 
 configure_file(
 	"${CMAKE_SOURCE_DIR}/doc/qucsrflayout.1.in"
