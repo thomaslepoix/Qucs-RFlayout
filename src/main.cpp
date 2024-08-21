@@ -22,6 +22,7 @@
 
 #include <QApplication>
 
+#include <cstdlib>
 #include <iostream>
 
 #include "data.hpp"
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
 	LPWSTR *argvw = CommandLineToArgvW(GetCommandLineW(), &argcw);
 	if(!argvw) {
 		log_err << "ERROR : Cannot retrieve command line arguments" << "\n";
-		return(1);
+		return(EXIT_FAILURE);
 		}
 #endif // _WIN32
 
@@ -105,10 +106,10 @@ int main(int argc, char* argv[]) {
 				        "      --oems-pkg                     Look for 'openems' and 'csxcad' Octave packages. Requires properly\n"
 				        "                                     packaged Octaves packages such as 'octave-openems' and 'octave-csxcad'\n"
 				        "                                     from Debian repositories.\n";
-				return(0);
+				return(EXIT_SUCCESS);
 			} else if(string(argv[i])=="--version") {
 				cout << "Qucs-RFlayout " << VERSION << endl;
-				return(0);
+				return(EXIT_SUCCESS);
 			} else if(string(argv[i])=="-i" && argv[i+1]) {
 				i++;
 #ifdef _WIN32
@@ -139,7 +140,7 @@ int main(int argc, char* argv[]) {
 					data.out_format=string(argv[i]);
 				} else {
 					log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
-					return(1);
+					return(EXIT_FAILURE);
 					}
 			} else if((string(argv[i])=="-q" || string(argv[i])=="--qucs") && argv[i+1]) {
 				i++;
@@ -195,7 +196,7 @@ int main(int argc, char* argv[]) {
 				gui=true;
 			} else {
 				log_err << "ERROR : Unknown argument : " << argv[i] << "\n";
-				return(1);
+				return(EXIT_FAILURE);
 				}
 			}
 		}
@@ -220,7 +221,7 @@ int main(int argc, char* argv[]) {
 
 		if(data.n_sch=="") {
 			log_err << "ERROR : Need an input file\n";
-			return(1);
+			return(EXIT_FAILURE);
 			}
 
 		Converter converter(data);
@@ -230,7 +231,7 @@ int main(int argc, char* argv[]) {
 
 		cout << endl;
 		}
-	return(0);
+	return(EXIT_SUCCESS);
 	}
 
 #ifdef QRFL_UNITTEST
