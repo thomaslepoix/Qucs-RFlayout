@@ -88,6 +88,7 @@
     this-package = pkgs.qt6.callPackage ./default.nix { inherit lib; };
     this-package-clang = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.clangStdenv; };
     this-package-gcc = pkgs.qt6.callPackage ./default.nix { inherit lib; stdenv = pkgs.gccStdenv; };
+    this-package-minimal = pkgs.qt6.callPackage ./default.nix { inherit lib; withGui = false; };
     this-package-win = pkgs.pkgsCross.mingwW64.qt6.callPackage ./default.nix { inherit lib; inherit (pkgs) texlive; };
 
   in {
@@ -97,6 +98,7 @@
       qucsrflayout = this-package;
       qucsrflayoutClang = this-package-clang;
       qucsrflayoutGcc = this-package-gcc;
+      qucsrflayoutMinimal = this-package-minimal;
       # Cross compiled
       qucsrflayoutMingw64 = this-package-win;
       # Wrappers

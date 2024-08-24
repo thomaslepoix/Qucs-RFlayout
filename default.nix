@@ -6,10 +6,14 @@
 , texlive
 , lato
 , withDoc ? true
+, withGui ? true
 }:
 
+assert lib.asserts.assertMsg (! (stdenv.hostPlatform.isWindows && withGui == false))
+  "Minimal mode is not compatible with Windows build";
+
 stdenv.mkDerivation {
-  pname = "qucsrflayout";
+  pname = "qucsrflayout" + lib.strings.optionalString (! withGui) "-minimal";
   version = "2.0.0";
 
   src = lib.nix-filter {
@@ -26,8 +30,13 @@ stdenv.mkDerivation {
     ];
   };
 
+  cmakeFlags = lib.optionals (! withGui) [
+    "-DQRFL_MINIMAL=ON"
+  ];
+
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals withGui [
     wrapQtAppsHook
   ] ++ lib.optionals withDoc [
     lato
@@ -36,7 +45,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals withGui [
     qtbase
   ];
 

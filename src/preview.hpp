@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef QRFL_MINIMAL
+
 #ifndef PREVIEW_HPP
 #define PREVIEW_HPP
 
@@ -81,3 +83,4 @@ private:
 };
 
 #endif // PREVIEW_HPP
+#endif // QRFL_MINIMAL

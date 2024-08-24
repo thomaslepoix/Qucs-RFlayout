@@ -120,6 +120,13 @@ Qucs-RFlayout $
     sudo cmake --build build --target install
 ```
 
+Supported build options (among regular CMake options):
+| option | value | default | comment
+|-|-|-|-|
+| `CMAKE_BUILD_TYPE` | `Debug`, `Release`, `Coverage` ... | `Release` | |
+| `CMAKE_CXX_COMPILER` | `g++`, `clang++` ... | |
+| `QRFL_MINIMAL` | `ON`, `OFF` | `OFF` | Disable GUI and Qt dependency |
+
 <br>
 
 ## Usage

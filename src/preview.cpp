@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef QRFL_MINIMAL
+
 #define _USE_MATH_DEFINES
 
 #include <cmath>
@@ -367,3 +369,4 @@ void Preview::drawcube() {
 	}
 
 #endif // DEADCODE
+#endif // QRFL_MINIMAL

@@ -20,7 +20,9 @@
 #include <shellapi.h>
 #endif // _WIN32
 
+#ifndef QRFL_MINIMAL
 #include <QApplication>
+#endif // QRFL_MINIMAL
 
 #include <cstdlib>
 #include <iostream>
@@ -56,19 +58,25 @@ int main(int argc, char* argv[]) {
 
 //argument parser
 	if(argc==1) {
+#ifndef QRFL_MINIMAL
 		gui=true;
+#endif // QRFL_MINIMAL
 	} else {
 		for(int i=1;i<argc;i++) {
 			if(string(argv[i])=="-h" || string(argv[i])=="--help") {
 				cout << "Usage: " << argv[0] << " -i FILENAME.sch\n"
 				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht]\n"
 				        "       " << argv[0] << " -i FILENAME.sch -f [.kicad_pcb|.kicad_mod|.lht] -o DIRNAME\n"
+#ifndef QRFL_MINIMAL
 				        "       " << argv[0] << " -G\n"
+#endif // QRFL_MINIMAL
 				        "\n"
 				        "  -h, --help      Display this help and exit.\n"
 				        "      --version   Display version information and exit.\n"
 				        "  -v, --verbose   Verbose mode.\n"
+#ifndef QRFL_MINIMAL
 				        "  -G              GUI mode (no arguments equals to -G).\n"
+#endif // QRFL_MINIMAL
 				        "  -i FILENAME     Use file as input schematic.\n"
 				        "  -o DIRNAME      Use directory as output (default current directory).\n"
 				        "  -f FORMAT       Use format as output layout format.\n"
@@ -108,7 +116,11 @@ int main(int argc, char* argv[]) {
 				        "                                     from Debian repositories.\n";
 				return(EXIT_SUCCESS);
 			} else if(string(argv[i])=="--version") {
-				cout << "Qucs-RFlayout " << VERSION << endl;
+				cout << "Qucs-RFlayout " << VERSION
+#ifdef QRFL_MINIMAL
+				                         << " minimal build"
+#endif // QRFL_MINIMAL
+				                         << endl;
 				return(EXIT_SUCCESS);
 			} else if(string(argv[i])=="-i" && argv[i+1]) {
 				i++;
@@ -192,8 +204,10 @@ int main(int argc, char* argv[]) {
 				data.oems_pkg=true;
 			} else if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 				verbose=true;
+#ifndef QRFL_MINIMAL
 			} else if(string(argv[i])=="-G") {
 				gui=true;
+#endif // QRFL_MINIMAL
 			} else {
 				log_err << "ERROR : Unknown argument : " << argv[i] << "\n";
 				return(EXIT_FAILURE);
@@ -205,6 +219,7 @@ int main(int argc, char* argv[]) {
 		cout.rdbuf(nullptr);
 		}
 
+#ifndef QRFL_MINIMAL
 	if(gui) {
 		cout << "GUI mode\n";
 		QApplication a(argc, argv);
@@ -217,7 +232,9 @@ int main(int argc, char* argv[]) {
 		w.show();
 		return(a.exec());
 
-	} else {
+	} else
+#endif // QRFL_MINIMAL
+	{
 
 		if(data.n_sch=="") {
 			log_err << "ERROR : Need an input file\n";

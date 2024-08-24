@@ -24,6 +24,12 @@ if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
 	set( HOST_LINUX TRUE )
 endif( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
 
+option( QRFL_MINIMAL "Disable GUI support and Qt dependency" OFF )
+message( STATUS "Minimal mode: ${QRFL_MINIMAL}" )
+if( WIN32 AND QRFL_MINIMAL )
+	message( FATAL_ERROR "QRFL_MINIMAL is not compatible with Windows build" )
+endif( WIN32 AND QRFL_MINIMAL )
+
 #if( MINGW AND HOST_LINUX )
 #	find_program( PELDD NAMES peldd )
 #	if( PELDD )
@@ -78,15 +84,17 @@ set( CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
 
 #######################################################################EXTERNALS
 
-find_package( OpenGL REQUIRED )
+if( NOT QRFL_MINIMAL )
+	find_package( OpenGL REQUIRED )
 
-find_package( Qt6
-	COMPONENTS
-	Core          REQUIRED
-	Gui           REQUIRED
-	OpenGLWidgets REQUIRED
-	Widgets       REQUIRED
-	)
+	find_package( Qt6
+		COMPONENTS
+		Core          REQUIRED
+		Gui           REQUIRED
+		OpenGLWidgets REQUIRED
+		Widgets       REQUIRED
+		)
+endif( NOT QRFL_MINIMAL )
 
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
@@ -116,8 +124,8 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/layoutstrings.cpp"
 	"${CMAKE_SOURCE_DIR}/src/layoutwriter.cpp"
 	"${CMAKE_SOURCE_DIR}/src/converter.cpp"
-	"${CMAKE_SOURCE_DIR}/src/preview.cpp"
-	"${CMAKE_SOURCE_DIR}/src/mainwindow.cpp"
+	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_SOURCE_DIR}/src/preview.cpp>"
+	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_SOURCE_DIR}/src/mainwindow.cpp>"
 	"${CMAKE_SOURCE_DIR}/src/main.cpp"
 	)
 
@@ -168,6 +176,7 @@ target_compile_definitions( ${PROJECT_NAME}
 	PRIVATE
 	${QT_DEPRECATED_WARNINGS}
 	QRFL_VERSION="${PROJECT_VERSION}"
+	$<$<BOOL:${QRFL_MINIMAL}>:QRFL_MINIMAL>
 	)
 
 target_compile_features( ${PROJECT_NAME}
@@ -189,19 +198,24 @@ target_include_directories( ${PROJECT_NAME}
 
 target_link_libraries( ${PROJECT_NAME}
 	PRIVATE
-	Qt6::Core
-	Qt6::Gui
-	Qt6::OpenGLWidgets
-	Qt6::Widgets
+	$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:Qt6::Core>
+	$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:Qt6::Gui>
+	$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:Qt6::OpenGLWidgets>
+	$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:Qt6::Widgets>
 	)
 
 set_target_properties( ${PROJECT_NAME} PROPERTIES
 	OUTPUT_NAME "qucsrflayout"
 #	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
-	AUTOMOC ON
-	AUTOUIC ON
 	)
+
+if( NOT QRFL_MINIMAL )
+	set_target_properties( ${PROJECT_NAME} PROPERTIES
+		AUTOMOC ON
+		AUTOUIC ON
+		)
+endif( NOT QRFL_MINIMAL )
 
 install(
 	TARGETS ${PROJECT_NAME}

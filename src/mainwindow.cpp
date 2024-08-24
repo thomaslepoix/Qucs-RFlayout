@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef QRFL_MINIMAL
+
 #include <QFileDialog>
 
 #include "logger.hpp"
@@ -385,3 +387,5 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event) {
 void MainWindow::log(stringstream& in) {
 	ui->tb_log->insertPlainText(QString::fromStdString(in.str()));
 	}
+
+#endif // QRFL_MINIMAL

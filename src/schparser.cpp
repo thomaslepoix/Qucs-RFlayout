@@ -15,7 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef QRFL_MINIMAL
 #include <QProcess>
+#endif // QRFL_MINIMAL
 
 #include <array>
 #include <iostream>
@@ -253,9 +255,13 @@ int SchParser::generate_netlist(filesystem::path const& n_sch, filesystem::path 
 
 	auto const run_qucs=[&](string const& binary) {
 		cout << "Trying " + binary + "... " ;
+#ifndef QRFL_MINIMAL
 		QProcess process_qucs;
 		process_qucs.startCommand(QString::fromStdString(binary + args));
 		if(!process_qucs.waitForFinished() || process_qucs.exitCode()) {
+#else
+		if(system((binary + args).c_str())) { //OK : exit status 0
+#endif // QRFL_MINIMAL
 			cout << "KO" << endl;
 			cout << "Command : "+binary+args << endl;
 			return(false);
@@ -863,7 +869,6 @@ void SchParser::warn_unprintable(vector<string> const& unprintables) const {
 //******************************************************************************
 void SchParser::rm_tmp_files(initializer_list<string> const args) const {
 	if(!data.keep_tmp_files) {
-		QProcess process_rm;
 		string str_cmd;
 		string str_log;
 		for(string it : args) {
@@ -873,8 +878,13 @@ void SchParser::rm_tmp_files(initializer_list<string> const args) const {
 				}
 			}
 		if(str_cmd!="") {
+#ifndef QRFL_MINIMAL
+			QProcess process_rm;
 			process_rm.startCommand(QString::fromStdString("rm"+str_cmd));
 			if(!process_rm.waitForFinished() || process_rm.exitCode()) {
+#else
+			if(system(("rm"+str_cmd).c_str())) { //OK : exit status 0
+#endif // QRFL_MINIMAL
 				log_err << "WARNING : Could not remove :" << str_log << "\n";
 			} else {
 				cout << "\nRemove temporary files :" << str_log << "\n";

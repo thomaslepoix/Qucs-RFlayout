@@ -123,6 +123,8 @@ A tutorial about the OpenEMS exporter is available here:
 @QRFL_OEMS_TUTORIAL@
 .PP
 Compatible with Qucs and Qucs-S. QucsStudio 2.x schematics are mostly compatible, but Qucs or Qucs-S are still required to generate a netlist, otherwise it should be generated and provided manually. Versions 3.x and latter are not supported.
+.PP
+The GUI (\fB-G\fR) may be completely disabled at build time, in which case \fB--version\fR will print \fBminimal mode\fR.
 
 .SH REPORTING BUGS
 @QRFL_BUGREPORT@

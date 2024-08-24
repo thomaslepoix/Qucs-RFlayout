@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef QRFL_MINIMAL
+
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
@@ -82,3 +84,4 @@ public:
 };
 
 #endif // MAINWINDOW_HPP
+#endif // QRFL_MINIMAL
