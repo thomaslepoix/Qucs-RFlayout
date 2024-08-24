@@ -2,6 +2,11 @@
 
 include( Gzip )
 
+if( WIN32 )
+	set( QRFL_INSTALL_DIR "<install-dir>" )
+else()
+	set( QRFL_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" )
+endif( WIN32 )
 set( QRFL_BUGREPORT     "https://github.com/thomaslepoix/Qucs-RFlayout/issues" )
 set( QRFL_OEMS_TUTORIAL "https://github.com/thomaslepoix/Qucs-RFlayout/blob/master/doc/tutorials/openems.md" )
 

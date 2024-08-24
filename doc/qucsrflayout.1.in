@@ -115,8 +115,9 @@ Microstrip components are supported except the lange coupler. Coplanar waveguide
 .PP
 Use one wire to connect only two component ports, use appropriate components to make tees or crosses.
 .PP
-Detailed geometrical implementation of each component is available in \fB<install dir>/share/doc/qucsrflayout/\fR.
-." TODO Detailed geometrical implementation of each component is available in \fB@CMAKE_INSTALL_PREFIX@/share/doc/qucsrflayout/\fR.
+Detailed geometrical implementation of each component is available in:
+.br
+\fB@QRFL_INSTALL_DIR@/share/doc/qucsrflayout/\fR
 .PP
 A tutorial about the OpenEMS exporter is available here:
 .br
