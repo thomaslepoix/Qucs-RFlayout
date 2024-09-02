@@ -195,7 +195,7 @@ void MainWindow::write() {
 	}
 
 //******************************************************************************
-void MainWindow::on_cb_format_currentTextChanged(const QString& out_format) {
+void MainWindow::on_cb_format_currentTextChanged(QString const& out_format) {
 	ui->gb_oems->setEnabled((out_format==".m") ? true : false);
 	data.out_format=out_format.toStdString();
 	}
@@ -234,32 +234,32 @@ void MainWindow::on_cb_oems_sort_metalresmesh_stateChanged(int const state) {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_end_criteria_textChanged(QString const oems_end_criteria) {
+void MainWindow::on_le_oems_end_criteria_textChanged(QString const& oems_end_criteria) {
 	data.oems_end_criteria=oems_end_criteria.toStdString();
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_highres_div_textChanged(QString const oems_highres_div) {
+void MainWindow::on_le_oems_highres_div_textChanged(QString const& oems_highres_div) {
 	data.oems_highres_div=(unsigned int) oems_highres_div.toFloat();
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_metalres_div_textChanged(QString const oems_metalres_div) {
+void MainWindow::on_le_oems_metalres_div_textChanged(QString const& oems_metalres_div) {
 	data.oems_metalres_div=(unsigned int) oems_metalres_div.toFloat();
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_nf2ff_center_textChanged(QString const oems_nf2ff_center) {
+void MainWindow::on_le_oems_nf2ff_center_textChanged(QString const& oems_nf2ff_center) {
 	data.oems_nf2ff_center=oems_nf2ff_center.toStdString();
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_substres_div_textChanged(QString const oems_substres_div) {
+void MainWindow::on_le_oems_substres_div_textChanged(QString const& oems_substres_div) {
 	data.oems_substres_div=(unsigned int) oems_substres_div.toFloat();
 	}
 
 //******************************************************************************
-void MainWindow::on_le_oems_timeres_textChanged(QString const oems_timeres) {
+void MainWindow::on_le_oems_timeres_textChanged(QString const& oems_timeres) {
 	data.oems_timeres=(unsigned int) oems_timeres.toFloat();
 	}
 
@@ -269,7 +269,7 @@ void MainWindow::on_le_path_in_returnPressed() {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_in_textChanged(QString const n_sch) {
+void MainWindow::on_le_path_in_textChanged(QString const& n_sch) {
 	data.n_sch=n_sch.toStdString();
 	}
 
@@ -279,7 +279,7 @@ void MainWindow::on_le_path_net_returnPressed() {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_net_textChanged(QString const n_net) {
+void MainWindow::on_le_path_net_textChanged(QString const& n_net) {
 	data.n_net=n_net.toStdString();
 	}
 
@@ -289,7 +289,7 @@ void MainWindow::on_le_path_out_returnPressed() {
 	}
 
 //******************************************************************************
-void MainWindow::on_le_path_out_textChanged(QString const out_dir) {
+void MainWindow::on_le_path_out_textChanged(QString const& out_dir) {
 	data.out_dir=out_dir.toStdString();
 	}
 
