@@ -59,7 +59,8 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			Block block;
 			block.elements=it->elements;
 			block.calcul_boundaries();
-			block.elements.emplace_back(it->subst_local);
+			if(it->subst_local)
+				block.elements.emplace_back(it->subst_local);
 			for(shared_ptr<Element> element : data.tab_all) {
 				if(element->getType()==".SP")
 					block.elements.emplace_back(element);
@@ -86,7 +87,8 @@ int LayoutWriter::run(vector<string>* out_names) const {
 				// Begin & feed
 				block.elements.clear();
 				block.elements=it->elements;
-				block.elements.emplace_back(it->subst);
+				if(it->subst)
+					block.elements.emplace_back(it->subst);
 				for(shared_ptr<Element> element : data.tab_all) {
 					if(element->getType()==".SP")
 						block.elements.emplace_back(element);
