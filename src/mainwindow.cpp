@@ -164,7 +164,7 @@ void MainWindow::read() {
 			}
 
 		converter.read();
-		ui->glw_preview->set(converter.get_tab_all(), converter.get_extrem_pos());
+		ui->glw_preview->set(converter.get_all_elements(), converter.get_extrem_pos());
 		}
 
 	}

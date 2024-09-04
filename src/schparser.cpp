@@ -97,7 +97,7 @@ int SchParser::run() {
 	parse_port_shift_args();
 	parse_port_size_args();
 
-	cout << "Number of elements : " << data.tab_all.size() << endl;
+	cout << "Number of elements : " << data.all_elements.size() << endl;
 	warn_unprintable(unprintables);
 
 	f_sch.close();
@@ -114,7 +114,7 @@ int SchParser::run() {
 void SchParser::parse_port_shift_args() {
 	for(tuple<unsigned long, string, string> arg : data.port_shift_args) {
 		bool is_port_existant=false;
-		for(shared_ptr<Element> element : data.tab_all) {
+		for(shared_ptr<Element> element : data.all_elements) {
 			if(element->getType()=="Pac") {
 				if(element->getN()==get<0>(arg)) {
 					smatch match;
@@ -144,7 +144,7 @@ void SchParser::parse_port_shift_args() {
 void SchParser::parse_port_size_args() {
 	for(tuple<unsigned long, string, string> arg : data.port_size_args) {
 		bool is_port_existant=false;
-		for(shared_ptr<Element> element : data.tab_all) {
+		for(shared_ptr<Element> element : data.all_elements) {
 			if(element->getType()=="Pac") {
 				if(element->getN()==get<0>(arg)) {
 					smatch match;
@@ -482,7 +482,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield16);
 						long double F=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tFrequency : " << F << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Pac(label, type, active, mirrorx, 0, N, Z, P, F)));
+					data.all_elements.push_back(shared_ptr<Element>(new Pac(label, type, active, mirrorx, 0, N, Z, P, F)));
 				} else if(type==".SP") {
 					//simulation type
 						regex_search(line, match, r_quotedfield10_raw);
@@ -502,7 +502,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 							regex_search(line, match, r_quotedfield16);
 							unsigned long N=(stold(check_void(match.str(6), label)))*suffix(match.str(8), match.str(9), false);
 							cout << "\tStep number : " << N << endl;
-						data.tab_all.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, 0, simtype, Fstart, Fstop, N)));
+						data.all_elements.push_back(shared_ptr<Element>(new Sp(label, type, mirrorx, 0, simtype, Fstart, Fstop, N)));
 					} else { // "list" & "const"
 						log_err << "WARNING : " << label << " : Unsupported simulation type : " << simtype << " -> Ignored\n";
 						}
@@ -531,7 +531,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield20);
 						long double D=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tMetal roughness : " << D << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D, data.subst_margin_factor)));
+					data.all_elements.push_back(shared_ptr<Element>(new Subst(label, type, mirrorx, 0, er, H, T, tand, rho, D, data.subst_margin_factor)));
 				} else if(type=="MCORN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -541,7 +541,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield12);
 						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mcorn(label, type, active, mirrorx, R, subst, W)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mcorn(label, type, active, mirrorx, R, subst, W)));
 				} else if(type=="MCROSS") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -563,7 +563,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield18);
 						long double W4=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 4 : " << W4 << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mcross(label, type, active, mirrorx, R, subst, W1, W2, W3, W4)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mcross(label, type, active, mirrorx, R, subst, W1, W2, W3, W4)));
 				} else if(type=="MCOUPLED") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -581,7 +581,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield16);
 						long double S=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tSpace : " << S << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mcoupled(label, type, active, mirrorx, R, subst, W, L, S)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mcoupled(label, type, active, mirrorx, R, subst, W, L, S)));
 				} else if(type=="MGAP") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -599,7 +599,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield16);
 						long double S=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tSpace : " << S << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mgap(label, type, active, mirrorx, R, subst, W1, W2, S)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mgap(label, type, active, mirrorx, R, subst, W1, W2, S)));
 				} else if(type=="MMBEND") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -609,7 +609,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield12);
 						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mmbend(label, type, active, mirrorx, R, subst, W)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mmbend(label, type, active, mirrorx, R, subst, W)));
 				} else if(type=="MLIN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -623,7 +623,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield14);
 						long double L=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tLength : " << L << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mlin(label, type, active, mirrorx, R, subst, W, L)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mlin(label, type, active, mirrorx, R, subst, W, L)));
 				} else if(type=="MOPEN") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -633,7 +633,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield12);
 						long double W=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth : " << W << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mopen(label, type, active, mirrorx, R, subst, W)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mopen(label, type, active, mirrorx, R, subst, W)));
 				} else if(type=="MRSTUB") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -651,7 +651,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield16);
 						long double alpha=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, false);
 						cout << "\tAlpha : " << alpha << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mrstub(label, type, active, mirrorx, R, subst, ri, ro, alpha)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mrstub(label, type, active, mirrorx, R, subst, ri, ro, alpha)));
 				} else if(type=="MSTEP") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -665,7 +665,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield14);
 						long double W2=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 2 : " << W2 << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mstep(label, type, active, mirrorx, R, subst, W1, W2)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mstep(label, type, active, mirrorx, R, subst, W1, W2)));
 				} else if(type=="MTEE") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -683,7 +683,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield16);
 						long double W3=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tWidth 3 : " << W3 << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mtee(label, type, active, mirrorx, R, subst, W1, W2, W3)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mtee(label, type, active, mirrorx, R, subst, W1, W2, W3)));
 				} else if(type=="MVIA") {
 					//substrat
 						regex_search(line, match, r_quotedfield10_raw);
@@ -693,7 +693,7 @@ void SchParser::parse_schematic_components(ifstream& f_sch, vector<pair<string, 
 						regex_search(line, match, r_quotedfield12);
 						long double D=process_field(variables, match.str(10), match.str(6), match.str(8), match.str(9), label, true);
 						cout << "\tDiameter : " << D << endl;
-					data.tab_all.push_back(shared_ptr<Element>(new Mvia(label, type, active, mirrorx, R, subst, D)));
+					data.all_elements.push_back(shared_ptr<Element>(new Mvia(label, type, active, mirrorx, R, subst, D)));
 					}
 				}
 			break;
@@ -729,7 +729,7 @@ void SchParser::parse_netlist(ifstream& f_net) {
 				string label=match.str(2);
 				cout << "\tLabel : " << label << endl;
 			//find ielem->label
-				for(shared_ptr<Element> it : data.tab_all) {
+				for(shared_ptr<Element> it : data.all_elements) {
 					if(it->getLabel()==label) {
 						if(type=="MOPEN"
 						|| type=="MRSTUB"

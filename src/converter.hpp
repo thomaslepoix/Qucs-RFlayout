@@ -33,6 +33,6 @@ public:
 	int write(std::vector<std::string>& out_names) const;
 	int size() const;
 
-	std::vector<std::shared_ptr<Element>> const& get_tab_all() const;
+	std::vector<std::shared_ptr<Element>> const& get_all_elements() const;
 	std::array<long double, 4> const& get_extrem_pos() const;
 };

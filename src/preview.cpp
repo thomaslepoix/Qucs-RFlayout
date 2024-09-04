@@ -168,9 +168,9 @@ void Preview::resetView() {
 	}
 
 //******************************************************************************
-void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double, 4> const& extrem_pos) {
-	tab_all.clear();
-	tab_all=_tab_all;
+void Preview::set(vector<shared_ptr<Element>> const& _all_elements, array<long double, 4> const& extrem_pos) {
+	all_elements.clear();
+	all_elements=_all_elements;
 	fit_factor=1/(qMax(extrem_pos[XMAX], extrem_pos[YMAX])/2);
 	fit_x_offset=-extrem_pos[XMAX]/2;
 	fit_y_offset=-extrem_pos[YMAX]/2;
@@ -180,7 +180,7 @@ void Preview::set(vector<shared_ptr<Element>> const& _tab_all, array<long double
 //******************************************************************************
 void Preview::drawAll() {
 	glScalef(factor, factor, factor);
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : all_elements) {
 		if(!it->getActive())
 			continue;
 		QString type=QString::fromStdString(it->getType());

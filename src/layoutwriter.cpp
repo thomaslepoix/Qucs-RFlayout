@@ -50,7 +50,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			block.calcul_boundaries();
 			if(it->subst_local)
 				block.elements.emplace_back(it->subst_local);
-			for(shared_ptr<Element> element : data.tab_all) {
+			for(shared_ptr<Element> element : data.all_elements) {
 				if(element->getType()==".SP")
 					block.elements.emplace_back(element);
 				}
@@ -78,7 +78,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 				block.elements=it->elements;
 				if(it->subst)
 					block.elements.emplace_back(it->subst);
-				for(shared_ptr<Element> element : data.tab_all) {
+				for(shared_ptr<Element> element : data.all_elements) {
 					if(element->getType()==".SP")
 						block.elements.emplace_back(element);
 					}
@@ -95,7 +95,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 		if(ret) return(ret);
 	} else {
 		Block block;
-		block.elements=data.tab_all;
+		block.elements=data.all_elements;
 		block.calcul_boundaries();
 
 		n_out+=data.out_format;
@@ -757,7 +757,7 @@ int LayoutWriter::check_m() const {
 		}
 
 	bool is_first_sp=true;
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : data.all_elements) {
 		if(it->getType()==".SP") {
 			if(is_first_sp==false) {
 				log_err << "ERROR : More than 1 active S parameter simulation.\n";
@@ -769,7 +769,7 @@ int LayoutWriter::check_m() const {
 
 	if(data.oems_nf2ff_center!="") {
 		bool is_nf2ff_center_valid=false;
-		for(shared_ptr<Element> it : data.tab_all) {
+		for(shared_ptr<Element> it : data.all_elements) {
 			if(it->getLabel()==data.oems_nf2ff_center) {
 				is_nf2ff_center_valid=true;
 				break;

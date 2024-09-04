@@ -52,12 +52,12 @@ int Converter::write(vector<string>& out_names) const {
 
 //******************************************************************************
 int Converter::size() const {
-	return(data.tab_all.size());
+	return(data.all_elements.size());
 	}
 
 //******************************************************************************
-vector<shared_ptr<Element>> const& Converter::get_tab_all() const {
-	return(data.tab_all);
+vector<shared_ptr<Element>> const& Converter::get_all_elements() const {
+	return(data.all_elements);
 	}
 
 //******************************************************************************

@@ -40,7 +40,7 @@ class Data {
 public:
 
 	// Discarded on reset
-	std::vector<std::shared_ptr<Element>> tab_all;
+	std::vector<std::shared_ptr<Element>> all_elements;
 	std::vector<std::shared_ptr<Block>> all_blocks;
 //	std::vector<std::shared_ptr<Substrate>> all_substrates;
 

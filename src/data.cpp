@@ -129,7 +129,7 @@ Data::Data(Data const& data) :
 
 //******************************************************************************
 Data::~Data() {
-	for(shared_ptr<Element> it : tab_all) {
+	for(shared_ptr<Element> it : all_elements) {
 		it->prev=nullptr;
 		it->setAdjacent(1, nullptr, 0);
 		it->setAdjacent(2, nullptr, 0);

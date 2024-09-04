@@ -43,7 +43,7 @@ int XyCalculator::run() {
 // Pac have no shape so they calc it from adjacent largest element
 //******************************************************************************
 void XyCalculator::resolve_pac_shapes() {
-	for(shared_ptr<Element> pac : data.tab_all) {
+	for(shared_ptr<Element> pac : data.all_elements) {
 		if(pac->getType()=="Pac" && dynamic_cast<Pac*>(pac.get())->is_size_set==false) {
 			long double edge=0;
 			short dir=0;
@@ -51,7 +51,7 @@ void XyCalculator::resolve_pac_shapes() {
 				string pac_net;
 				if(i==1) pac_net=pac->getNet1();
 				else if(i==2) pac_net=pac->getNet2();
-				for(shared_ptr<Element> element : data.tab_all) {
+				for(shared_ptr<Element> element : data.all_elements) {
 					if(element!=pac) {
 						int net=0;
 						if(element->getNet1()==pac_net) net=1;
@@ -85,11 +85,11 @@ void XyCalculator::resolve_pac_shapes() {
 
 //******************************************************************************
 void XyCalculator::place_elements() {
-	if(!data.tab_all.size())
+	if(!data.all_elements.size())
 		return;
 
 // Variables
-	vector<shared_ptr<Element>> tab_undone=data.tab_all;
+	vector<shared_ptr<Element>> tab_undone=data.all_elements;
 	stack<shared_ptr<Element>> buffer;
 	shared_ptr<Element> current=tab_undone.front();
 	shared_ptr<Element> next=nullptr;
@@ -179,7 +179,7 @@ void XyCalculator::place_blocks() {
 
 // Store all substrates
 	vector<shared_ptr<Element>> tab_subst;
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : data.all_elements) {
 		if(it->getType()=="SUBST") {
 			tab_subst.push_back(it);
 			}
@@ -441,7 +441,7 @@ int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<E
 // Check if another element with this net exists
 //******************************************************************************
 bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const net) const {
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : data.all_elements) {
 		if(it!=element) {
 			if(it->getNet1()==net) return(1);
 			if(it->getNet2()==net) return(1);
@@ -455,7 +455,7 @@ bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const ne
 // Delete unconnected nets
 //******************************************************************************
 int XyCalculator::purge_nets() {
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : data.all_elements) {
 		if(purgefind(it, it->getNet1())==false) it->setNet1("");
 		if(purgefind(it, it->getNet2())==false) it->setNet2("");
 		if(purgefind(it, it->getNet3())==false) it->setNet3("");
@@ -480,7 +480,7 @@ int XyCalculator::purge_blocks() {
 bool XyCalculator::check_onenet(string const net) const {
 	unsigned int count=0;
 	if(net!=""){
-		for(shared_ptr<Element> it : data.tab_all) {
+		for(shared_ptr<Element> it : data.all_elements) {
 			if(it->getNet1()==net) count++;
 			if(it->getNet2()==net) count++;
 			if(it->getNet3()==net) count++;
@@ -493,7 +493,7 @@ bool XyCalculator::check_onenet(string const net) const {
 // Check if there are net intersections : more than 2 times the same net
 //******************************************************************************
 bool XyCalculator::check_intersection() const {
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : data.all_elements) {
 		if(check_onenet(it->getNet1())==true) return(1);
 		if(check_onenet(it->getNet2())==true) return(1);
 		if(check_onenet(it->getNet3())==true) return(1);
@@ -523,8 +523,8 @@ int XyCalculator::netmin(shared_ptr<Element> const& element) const {
 
 //******************************************************************************
 void XyCalculator::populate_adjacents() {
-	for(shared_ptr<Element> element : data.tab_all) {
-		for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> element : data.all_elements) {
+		for(shared_ptr<Element> it : data.all_elements) {
 			if(it!=element) {
 				if(get_port(it, element->getNet1())) element->setAdjacent(1, it, get_port(it, element->getNet1()));
 				if(get_port(it, element->getNet2())) element->setAdjacent(2, it, get_port(it, element->getNet2()));
@@ -563,7 +563,7 @@ void XyCalculator::findnext(shared_ptr<Element> const& current, int& current_net
 		net=current->getNet4();
 		current->setNet4("");
 		}
-	for(shared_ptr<Element> it : data.tab_all) {
+	for(shared_ptr<Element> it : data.all_elements) {
 		if(it!=current) {
 			if(it->getNet1()==net) {
 				cout << "Next net : 1" << endl;

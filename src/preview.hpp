@@ -24,7 +24,7 @@ class Preview : public QOpenGLWidget, protected QOpenGLFunctions_2_0 {
 public :
 	explicit Preview(QWidget* parent=0);
 	~Preview()=default;
-	void set(std::vector<std::shared_ptr<Element>> const& tab_all, std::array<long double, 4> const& extrem_pos);
+	void set(std::vector<std::shared_ptr<Element>> const& all_elements, std::array<long double, 4> const& extrem_pos);
 	void resetView();
 
 	void setFCtrl(bool _flag_ctrl);
@@ -58,7 +58,7 @@ private:
     int zRot=0;
 	QPointF lastPos;
 
-	std::vector<std::shared_ptr<Element>> tab_all;
+	std::vector<std::shared_ptr<Element>> all_elements;
 	long double factor=1;
 	long double x_offset=0;
 	long double y_offset=0;
