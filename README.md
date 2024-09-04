@@ -104,19 +104,22 @@ This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-R
 
 ### Installation from sources
 
-- Nix way (non-NixOS) :
+#### Nix way (non-NixOS) :
 
 ```sh
 nix profile install --impure 'github:thomaslepoix/Qucs-RFlayout#qucsrflayoutNixGL'
 ```
 
-- Debian way : Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout/tree/debian).
+#### Debian way :
 
-- Classic way :
+Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout/tree/debian).
 
-The build-time dependencies are the following on Debian, check equivalents on your own (reports are welcome) for non Debian-based distros :
+#### Classic way :
 
-`qt6-base-dev`, `libqt6opengl6-dev`, `texlive-xetex`, `fonts-lato`
+The build-time dependencies are the following, check equivalents on your own for other distros (reports are welcome) :
+
+- Debian 12 : `qt6-base-dev`, `libqt6opengl6-dev`, `texlive-xetex`, `fonts-lato`
+- Fedora 40 : `qt6-qtbase-devel`, `texlive-xetex`, `texlive-standalone`, `lato-fonts`
 
 ```sh
 Qucs-RFlayout $
@@ -127,10 +130,10 @@ Qucs-RFlayout $
 ```
 
 Supported build options (among regular CMake options):
-| option | value | default | comment
+| option | value | default | comment |
 |-|-|-|-|
 | `CMAKE_BUILD_TYPE` | `Debug`, `Release`, `Coverage` ... | `Release` | |
-| `CMAKE_CXX_COMPILER` | `g++`, `clang++` ... | |
+| `CMAKE_CXX_COMPILER` | `g++`, `clang++` ... | | |
 | `QRFL_MINIMAL` | `ON`, `OFF` | `OFF` | Disable GUI and Qt dependency |
 
 <br>

@@ -5,28 +5,23 @@ on:
   release:
     types: published
 
-env:
-  PACKAGE_NAME: qucs-rflayout
-
 jobs:
   run:
-    strategy:
-      matrix:
-        os:
-          - name: ubuntu-20.04
-            deb: deb10
-            distro: bullseye,focal
-          - name: ubuntu-18.04
-            deb: deb9
-            distro: buster,bionic,cosmic,disco,eoan
 
-    runs-on: ${{ matrix.os.name }}
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Dependencies
       run: |
         sudo apt update
-        sudo apt install -y rpm qt5-default libqt5opengl5-dev texlive-xetex
+
+        sudo apt install -y \
+          rpm \
+          qt6-base-dev \
+          libqt6opengl6-dev \
+          libglu1-mesa-dev \
+          texlive-xetex \
+          fonts-lato
 
     - name: Checkout
       uses: actions/checkout@v4
@@ -51,7 +46,6 @@ jobs:
         echo "upload_url=$(curl -sL https://api.github.com/repos/thomaslepoix/Qucs-RFlayout/releases/tags/${GITHUB_REF##*/} | jq -r '.upload_url')" >> $GITHUB_OUTPUT
 
     - name: Deploy .tar.xz on Github
-      if: matrix.os.name == 'ubuntu-20.04'
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,7 +56,6 @@ jobs:
         asset_content_type: application/x-xz-compressed-tar
 
     - name: Deploy .rpm on Github
-      if: matrix.os.name == 'ubuntu-20.04'
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
