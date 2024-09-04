@@ -15,10 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QRFL_MINIMAL
+#pragma once
 
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#ifndef QRFL_MINIMAL
 
 #include <QMainWindow>
 #include <QObject>
@@ -83,5 +82,4 @@ public:
 	~MainWindow()=default;
 };
 
-#endif // MAINWINDOW_HPP
 #endif // QRFL_MINIMAL

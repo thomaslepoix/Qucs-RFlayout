@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MRSTUB_HPP
-#define MRSTUB_HPP
+#pragma once
 
 #define _USE_MATH_DEFINES
 
@@ -61,5 +60,3 @@ public :
 	int setNet1(std::string const _net1) override;
 	int setP() override;
 };
-
-#endif // MRSTUB_HPP

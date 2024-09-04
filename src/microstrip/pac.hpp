@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PAC_HPP
-#define PAC_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -69,5 +68,3 @@ public :
 	int setR(short const _r) override;
 	int setP() override;
 };
-
-#endif // PAC_HPP

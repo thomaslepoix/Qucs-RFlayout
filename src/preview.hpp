@@ -15,10 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QRFL_MINIMAL
+#pragma once
 
-#ifndef PREVIEW_HPP
-#define PREVIEW_HPP
+#ifndef QRFL_MINIMAL
 
 #include <QtWidgets>
 #include <QOpenGLWidget>
@@ -82,5 +81,4 @@ private:
 	bool flag_shift=0;
 };
 
-#endif // PREVIEW_HPP
 #endif // QRFL_MINIMAL

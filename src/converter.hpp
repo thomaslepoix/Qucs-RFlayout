@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CONVERTER_HPP
-#define CONVERTER_HPP
+#pragma once
 
 #include <array>
 #include <memory>
@@ -48,5 +47,3 @@ public:
 	std::vector<std::shared_ptr<Element>> const& get_tab_all() const;
 	std::array<long double, 4> const& get_extrem_pos() const;
 };
-
-#endif // CONVERTER_HPP

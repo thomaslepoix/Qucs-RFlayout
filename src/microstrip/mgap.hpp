@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MGAP_HPP
-#define MGAP_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -52,5 +51,3 @@ public :
 	int setNet1(std::string const _net1) override;
 	int setNet2(std::string const _net2) override;
 };
-
-#endif // MGAP_HPP

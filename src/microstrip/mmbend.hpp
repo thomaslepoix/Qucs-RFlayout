@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MMBEND_HPP
-#define MMBEND_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -53,5 +52,3 @@ public :
 	int setNet2(std::string const _net2) override;
 	int setP() override;
 };
-
-#endif // MMBEND_HPP

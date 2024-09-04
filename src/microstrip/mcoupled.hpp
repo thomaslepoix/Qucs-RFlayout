@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MCOUPLED_HPP
-#define MCOUPLED_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -73,5 +72,3 @@ public :
 	int setNet4(std::string const _net4) override;
 	int setP() override;
 };
-
-#endif // MCOUPLED_HPP

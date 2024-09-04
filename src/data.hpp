@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DATA_HPP
-#define DATA_HPP
+#pragma once
 
 #include <array>
 #include <filesystem>
@@ -102,5 +101,3 @@ public:
 	Data& operator=(Data const&)=default;
 	~Data();
 };
-
-#endif // DATA_HPP

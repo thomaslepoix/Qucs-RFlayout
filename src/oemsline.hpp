@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OEMSLINE_HPP
-#define OEMSLINE_HPP
+#pragma once
 
 #include <memory>
 #include <string>
@@ -37,5 +36,3 @@ struct OemsLine {
 
 //******************************************************************************
 bool operator<(OemsLine const& a, OemsLine const& b);
-
-#endif // OEMSLINE_HPP

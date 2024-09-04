@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SUBST_HPP
-#define SUBST_HPP
+#pragma once
 
 #include <array>
 
@@ -69,5 +68,3 @@ public :
 	int setL(long double const _l) override;
 	int setP() override;
 };
-
-#endif // SUBST_HPP

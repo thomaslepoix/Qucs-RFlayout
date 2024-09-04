@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ELEMENT_HPP
-#define ELEMENT_HPP
+#pragma once
 
 #include <memory>
 #include <string>
@@ -119,5 +118,3 @@ public:
 	virtual int setNet4(std::string const _net4);
 	virtual int setP();
 };
-
-#endif // ELEMENT_HPP

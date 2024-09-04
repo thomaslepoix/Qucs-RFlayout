@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYCALCULATOR_HPP
-#define XYCALCULATOR_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -56,5 +55,3 @@ public:
 	// Interface functions
 	int run();
 };
-
-#endif // XYCALCULATOR_HPP

@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAYOUTWRITER_HPP
-#define LAYOUTWRITER_HPP
+#pragma once
 
 #define _USE_MATH_DEFINES
 
@@ -45,5 +44,3 @@ public:
 	~LayoutWriter()=default;
 	int run(std::vector<std::string>* out_names=nullptr) const;
 };
-
-#endif // LAYOUTWRITER_HPP

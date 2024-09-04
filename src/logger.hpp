@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
+#pragma once
 
 #include <sstream>
 
@@ -66,5 +65,3 @@ Logger& operator<<(Logger& logger, T const& in) {
 	logger.print(ss);
 	return(logger);
 	}
-
-#endif // LOGGER_HPP

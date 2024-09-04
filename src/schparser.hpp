@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SCHPARSER_HPP
-#define SCHPARSER_HPP
+#pragma once
 
 #include <filesystem>
 #include <fstream>
@@ -62,5 +61,3 @@ public:
 #ifdef QRFL_UNITTEST
 #undef private
 #endif // QRFL_UNITTEST
-
-#endif // SCHPARSER_HPP

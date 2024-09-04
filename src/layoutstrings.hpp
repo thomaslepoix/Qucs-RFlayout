@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAYOUTSTRINGS_HPP
-#define LAYOUTSTRINGS_HPP
+#pragma once
 
 #include <string>
 
@@ -42,5 +41,3 @@ struct pcbrnd_lht {
 	pcbrnd_lht()=delete;
 	static std::string const fonts;
 };
-
-#endif // LAYOUTSTRINGS_HPP

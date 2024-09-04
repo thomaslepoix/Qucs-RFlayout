@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MICROSTRIP_HPP
-#define MICROSTRIP_HPP
+#pragma once
 
 #include "pac.hpp"
 #include "sp.hpp"
@@ -32,5 +31,3 @@
 #include "mstep.hpp"
 #include "mtee.hpp"
 #include "mvia.hpp"
-
-#endif // MICROSTRIP_HPP

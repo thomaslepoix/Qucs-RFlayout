@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OEMSMESH_HPP
-#define OEMSMESH_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -36,5 +35,3 @@ public:
 	OemsMesh(std::vector<std::shared_ptr<Element>>& elements, bool const _sort);
 	~OemsMesh()=default;
 };
-
-#endif // OEMSMESH_HPP

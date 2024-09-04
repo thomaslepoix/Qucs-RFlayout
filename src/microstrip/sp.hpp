@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SP_HPP
-#define SP_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -44,5 +43,3 @@ public :
 	std::string getSimtype() const override;
 	unsigned long getN() const override;
 };
-
-#endif // SP_HPP

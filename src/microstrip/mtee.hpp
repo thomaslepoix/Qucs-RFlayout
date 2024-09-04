@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MTEE_HPP
-#define MTEE_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -69,5 +68,3 @@ public :
 	int setNet3(std::string const _net3) override;
 	int setP() override;
 };
-
-#endif // MTEE_HPP

@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MCROSS_HPP
-#define MCROSS_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -76,5 +75,3 @@ public :
 	int setNet4(std::string const _net4) override;
 	int setP() override;
 };
-
-#endif // MCROSS_HPP

@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MOPEN_HPP
-#define MOPEN_HPP
+#pragma once
 
 #include "element.hpp"
 
@@ -46,5 +45,3 @@ public :
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
 	int setNet1(std::string const _net1) override;
 };
-
-#endif // MOPEN_HPP
