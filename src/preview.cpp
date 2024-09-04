@@ -1,19 +1,8 @@
-/***************************************************************************
-                               preview.cpp
-                             ------------------
-    begin                : Thu Oct 25 2018
-    copyright            : (C) 2018 by Thomas Lepoix
-    email                : thomas.lepoix@protonmail.ch
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+///*****************************************************************************
+/// @date Oct 2018
+/// @copyright GPL-3.0-or-later
+/// @author Thomas Lepoix <thomas.lepoix@protonmail.ch>
+///*****************************************************************************
 
 #ifndef QRFL_MINIMAL
 
@@ -236,7 +225,7 @@ void Preview::drawAll() {
 //******************************************************************************
 void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], enum t_color color) {
 	glClear(GL_STENCIL_BUFFER_BIT);
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glStencilFunc(GL_ALWAYS, 0x1, 0x1);
 	glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 //	qglColor(Qt::red);
@@ -249,8 +238,8 @@ void Preview::drawShape(int npoint, long double tab_x[], long double tab_y[], en
 			}
 	glEnd();
 
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
-	glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glStencilFunc(GL_EQUAL, 0x1, 0x1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 	glBegin(GL_POLYGON);
@@ -287,7 +276,7 @@ void Preview::drawtriangle() {
 
 //glEnable(GL_STENCIL_TEST);
 glClear(GL_STENCIL_BUFFER_BIT);
-glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 glStencilFunc(GL_ALWAYS, 0x1, 0x1);
 glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 
@@ -301,8 +290,8 @@ glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
 		glVertex3f(-1.0f, 0.0f, 0.0f);
 	glEnd();
 
-glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
-glStencilFunc(GL_EQUAL, 0x1, 0x1);                  
+glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+glStencilFunc(GL_EQUAL, 0x1, 0x1);
 glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 	glBegin(GL_POLYGON);
@@ -321,7 +310,7 @@ glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 void Preview::drawcube() {
    glLoadIdentity();                 // Reset the model-view matrix
 //   glTranslatef(1.5f, 0.0f, -7.0f);  // Move right and into the screen
- 
+
    glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
       // Top face (y = 1.0f)
       // Define vertices in counter-clockwise (CCW) order with normal pointing out
@@ -330,35 +319,35 @@ void Preview::drawcube() {
       glVertex3f(-1.0f, 1.0f, -1.0f);
       glVertex3f(-1.0f, 1.0f,  1.0f);
       glVertex3f( 1.0f, 1.0f,  1.0f);
- 
+
       // Bottom face (y = -1.0f)
       glColor3f(1.0f, 0.5f, 0.0f);     // Orange
       glVertex3f( 1.0f, -1.0f,  1.0f);
       glVertex3f(-1.0f, -1.0f,  1.0f);
       glVertex3f(-1.0f, -1.0f, -1.0f);
       glVertex3f( 1.0f, -1.0f, -1.0f);
- 
+
       // Front face  (z = 1.0f)
       glColor3f(1.0f, 0.0f, 0.0f);     // Red
       glVertex3f( 1.0f,  1.0f, 1.0f);
       glVertex3f(-1.0f,  1.0f, 1.0f);
       glVertex3f(-1.0f, -1.0f, 1.0f);
       glVertex3f( 1.0f, -1.0f, 1.0f);
- 
+
       // Back face (z = -1.0f)
       glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
       glVertex3f( 1.0f, -1.0f, -1.0f);
       glVertex3f(-1.0f, -1.0f, -1.0f);
       glVertex3f(-1.0f,  1.0f, -1.0f);
       glVertex3f( 1.0f,  1.0f, -1.0f);
- 
+
       // Left face (x = -1.0f)
       glColor3f(0.0f, 0.0f, 1.0f);     // Blue
       glVertex3f(-1.0f,  1.0f,  1.0f);
       glVertex3f(-1.0f,  1.0f, -1.0f);
       glVertex3f(-1.0f, -1.0f, -1.0f);
       glVertex3f(-1.0f, -1.0f,  1.0f);
- 
+
       // Right face (x = 1.0f)
       glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
       glVertex3f(1.0f,  1.0f, -1.0f);
