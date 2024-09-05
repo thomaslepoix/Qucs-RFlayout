@@ -1,29 +1,57 @@
+qucsrflayout (2.1.0-1) unstable; urgency=medium
+
+  [ Removed ]
+  * Qmake.
+
+  [ Fixed ]
+  * Crash when exporting by block / substrate a block without a substrate.
+
+  [ Changed ]
+  * Switches from C++14 to C++23.
+  * Switches from Qt5 to Qt6.
+  * Switches to C++ platform-defined exit status.
+  * Adapt to recent Octave versions. (Closes: #34)
+  * Update abandoned man page.
+  * Set executable permission to openEMS Octave script on POSIX.
+  * Various refactorings.
+
+  [ Added ]
+  * Supports Qucs-S.
+  * Supports Nix.
+  * Supports Unicode path arguments on Windows.
+  * Supports CLI only mode with minimal dependencies.
+  * Supports editorconfig.
+  * Supports output formats :
+    * .svg : SVG image (Julien Colafrancesco <https://github.com/jcolafrancesco>)
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Thu, 5 Sep 2024 00:00:00 +0100
+
 qucsrflayout (2.0.1-1) unstable; urgency=medium
 
   [ Changed ]
-  * Fix unittest build flag
+  * Switches from C++11 to C++14.
 
  -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Mon, 31 May 2021 00:00:00 +0100
 
 qucsrflayout (2.0.0-1) unstable; urgency=medium
 
   [ Fixed ]
-  * Various fixes and improvements
+  * Various fixes and improvements.
     (Dominik Eyerly <https://github.com/dom11990>)
     (natsfr <https://github.com/natsfr>)
 
   [ Changed ]
   * License is now GPL-3.0
-  * QucsStudio support dropped on 3.x.x versions
+  * QucsStudio support dropped on 3.x.x versions.
 
   [ Added ]
   * Supports output formats :
     * .m : openEMS Octave script
-  * Supports moving and resizing ports
-  * Supports excluding or chosing components
-  * Supports using a specified netlist
-  * Supports export by block and substrate
-  * Supports XDG desktop launcher
+  * Supports moving and resizing ports.
+  * Supports excluding or chosing components.
+  * Supports using a specified netlist.
+  * Supports export by block and substrate.
+  * Supports XDG desktop launcher.
 
  -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Mon, 11 Jan 2021 00:00:00 +0100
 
@@ -33,7 +61,7 @@ qucsrflayout (1.0.1-1) unstable; urgency=medium
   * Truncated decimal values in graphic mode only. (Closes: #4)
 
   [ Added ]
-  * Changelog
+  * Changelog.
 
  -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Fri, 17 Apr 2020 00:00:00 +0100
 

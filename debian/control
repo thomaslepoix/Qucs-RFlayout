@@ -9,8 +9,9 @@ Vcs-Browser: https://github.com/thomaslepoix/Qucs-RFlayout
 Build-Depends:
  debhelper,
  cmake,
- qt5-default,
- libqt5opengl5-dev,
+ qt6-base-dev,
+ libqt6opengl6-dev,
+ libglu1-mesa-dev,
  texlive-xetex,
  fonts-lato
 
