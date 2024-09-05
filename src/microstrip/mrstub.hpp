@@ -6,7 +6,7 @@
 
 #pragma once
 
-#define _USE_MATH_DEFINES
+#include <array>
 
 #include "element.hpp"
 
@@ -21,7 +21,7 @@ private :
 	long double const m_alpha;
 	std::string m_net1;
 	static int constexpr m_npoint=53;
-	long double tab_p[m_npoint][2]={};
+	std::array<std::array<long double, 2>, m_npoint> tab_p={};
 public :
 	Mrstub(std::string _label,
 			std::string _type,

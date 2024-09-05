@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <array>
+
 #include "element.hpp"
 
 //******************************************************************************
@@ -16,7 +18,7 @@ private :
 	std::string m_net1;
 	std::string m_net2;
 	static int constexpr m_npoint=3;
-	long double tab_p[m_npoint][2]={};
+	std::array<std::array<long double, 2>, m_npoint> tab_p={};
 public :
 	Mmbend(std::string _label,
 			std::string _type,

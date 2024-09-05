@@ -4,6 +4,8 @@
 /// @author Thomas Lepoix <thomas.lepoix@protonmail.ch>
 ///*****************************************************************************
 
+#define _USE_MATH_DEFINES
+
 #include <cmath>
 
 #include "mrstub.hpp"

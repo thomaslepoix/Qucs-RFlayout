@@ -24,7 +24,7 @@ private :
 	long double const m_d;
 	long double const m_margin;
 	static const int m_npoint=4;
-	long double tab_p[m_npoint][2]={};
+	std::array<std::array<long double, 2>, m_npoint> tab_p={};
 public :
 	std::array<long double, 4> substrate_boundary;
 

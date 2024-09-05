@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <array>
+
 #include "element.hpp"
 
 //******************************************************************************
@@ -19,7 +21,7 @@ private :
 	std::string m_net2;
 	std::string m_net3;
 	static int constexpr m_npoint=6;
-	long double tab_p[m_npoint][2]={};
+	std::array<std::array<long double, 2>, m_npoint> tab_p={};
 
 	// first : element, second : element's port
 	std::pair<std::shared_ptr<Element>, int> adjacent1;

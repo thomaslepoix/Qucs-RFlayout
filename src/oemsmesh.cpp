@@ -11,8 +11,8 @@
 using namespace std;
 
 //******************************************************************************
-OemsMesh::OemsMesh(vector<shared_ptr<Element>>& elements, bool const _sort) {
-	for(shared_ptr<Element> element : elements) {
+OemsMesh::OemsMesh(vector<shared_ptr<Element>> const& elements, bool const _sort) {
+	for(shared_ptr<Element> const element : elements) {
 		for(int i=0;i<element->getOemsNcorelines();i++) {
 			OemsLine line;
 			if(!element->getOemsMeshCore(i, line)) {

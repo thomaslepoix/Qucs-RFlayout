@@ -21,6 +21,6 @@ public:
 	std::vector<OemsLine> x;
 	std::vector<OemsLine> y;
 
-	OemsMesh(std::vector<std::shared_ptr<Element>>& elements, bool const _sort);
+	OemsMesh(std::vector<std::shared_ptr<Element>> const& elements, bool const _sort);
 	~OemsMesh()=default;
 };
