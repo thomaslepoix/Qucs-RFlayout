@@ -1,12 +1,22 @@
 #########################################################################PROJECT
-cmake_minimum_required( VERSION 3.12 )
+cmake_minimum_required( VERSION 3.23 )
+
+file( STRINGS "${CMAKE_SOURCE_DIR}/CHANGELOG" PROJECT_VERSION
+	LIMIT_COUNT 1
+	)
+
+string( REGEX REPLACE
+	"^qucsrflayout \\((.*)\\)$" "\\1"
+	PROJECT_VERSION "${PROJECT_VERSION}"
+	)
 
 project( qucsrflayout
 	LANGUAGES CXX
-	VERSION 2.0.1
+	VERSION "${PROJECT_VERSION}"
 	DESCRIPTION "A tool to produce layout from qucs RF schematics (microstrip only for now)"
-#	HOMEPAGE_URL "https://github.com/thomaslepoix/Qucs-RFlayout"
+	HOMEPAGE_URL "https://github.com/thomaslepoix/Qucs-RFlayout"
 	)
+message( STATUS "Version: ${PROJECT_VERSION}" )
 
 set( CMAKE_MODULE_PATH
 	${CMAKE_MODULE_PATH}

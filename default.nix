@@ -14,7 +14,10 @@ assert lib.asserts.assertMsg (! (stdenv.hostPlatform.isWindows && withGui == fal
 
 stdenv.mkDerivation {
   pname = "qucsrflayout" + lib.strings.optionalString (! withGui) "-minimal";
-  version = "2.0.0";
+  version =
+  let
+    firstLine = builtins.elemAt (lib.strings.split "\n" (builtins.readFile ./CHANGELOG)) 0;
+  in builtins.elemAt (builtins.match "^qucsrflayout \\((.*)\\)$" firstLine) 0;
 
   src = lib.nix-filter {
     root = ./.;
