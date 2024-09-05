@@ -11,8 +11,8 @@ using namespace std;
 string const Pac::m_descriptor("ac_port");
 
 //******************************************************************************
-Pac::Pac(string const _label,
-			string const _type,
+Pac::Pac(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
@@ -20,7 +20,7 @@ Pac::Pac(string const _label,
 			long double const _z,
 			long double const _p,
 			long double const _f) :
-	Element(_label, _type, _active, _mirrorx, _r, 2, ""),
+	Element(std::move(_label), std::move(_type), _active, _mirrorx, _r, 2, ""),
 	m_n(_n),
 	m_z(_z),
 	m_p(_p),
@@ -112,19 +112,19 @@ void Pac::getEdge(int const _net, long double& edge, short& dir) const {
 	}
 
 //******************************************************************************
-int Pac::setNet1(string const _net1) {
+int Pac::setNet1(string const& _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Pac::setNet2(string const _net2) {
+int Pac::setNet2(string const& _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Pac::setSubst(string const _subst) {
+int Pac::setSubst(string const& _subst) {
 	m_subst=_subst;
 	return(0);
 	}

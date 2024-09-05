@@ -33,9 +33,10 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	filesystem::path n_out=(data.out_dir.empty() ? "." : data.out_dir)/data.n_sch.stem();
 
 //check
-	int ret=0;
-	if(data.out_format==".m") ret=check_m();
-	if(ret) return(ret);
+	if(data.out_format==".m") {
+		if(int ret=check_m(); ret)
+			return(ret);
+		}
 
 	cout << endl;
 	cout << "Input schematic : " << data.n_sch << endl;
@@ -43,11 +44,9 @@ int LayoutWriter::run(vector<string>* out_names) const {
 	if(data.export_each_block) {
 		unsigned int i=-1; // not a mistake
 		for(shared_ptr<Block> it : data.all_blocks) {
-			filesystem::path const out=n_out.generic_string()+"-b"+to_string(++i)+data.out_format;
 
 			Block block;
 			block.elements=it->elements;
-			block.calcul_boundaries();
 			if(it->subst_local)
 				block.elements.emplace_back(it->subst_local);
 			for(shared_ptr<Element> element : data.all_elements) {
@@ -55,22 +54,25 @@ int LayoutWriter::run(vector<string>* out_names) const {
 					block.elements.emplace_back(element);
 				}
 
-			int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-b"+to_string(i), out_names);
-			if(ret) return(ret);
+			block.calcul_boundaries();
+			filesystem::path const out=n_out.generic_string()+"-b"+to_string(++i)+data.out_format;
+			if(int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-b"+to_string(i), out_names)
+			; ret)
+				return(ret);
 			}
 	} else if(data.export_each_subst) {
 		unsigned int i=-1; // not a mistake
 		shared_ptr<Block> prev=nullptr;
-		filesystem::path out;
 		Block block;
 		for(shared_ptr<Block> it : data.all_blocks) {
 			if(prev==nullptr || it->subst!=prev->subst) {
 				if(prev!=nullptr) {
 					// End & write
 					block.calcul_boundaries();
-					out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
-					int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
-					if(ret) return(ret);
+					filesystem::path const out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
+					if(int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names)
+					; ret)
+						return(ret);
 					}
 
 				// Begin & feed
@@ -90,9 +92,10 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			}
 		// Last end & write
 		block.calcul_boundaries();
-		out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
-		int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names);
-		if(ret) return(ret);
+		filesystem::path const out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
+		if(int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names)
+		; ret)
+			return(ret);
 	} else {
 		Block block;
 		block.elements=data.all_elements;
@@ -126,6 +129,7 @@ int LayoutWriter::write(Block& block, long double const offset_x, long double co
 			log_err << "WARNING : Unable to set " << n_out.generic_string() << " as executable\n";
 		}
 	else if(data.out_format==".svg") write_svg(block, f_out, offset_x, offset_y, name);
+
 	if(out_names) out_names->push_back(n_out.generic_string()); // Success message to stdout in GUI mode
 
 	if(f_out.fail()) {
@@ -321,7 +325,7 @@ void LayoutWriter::write_kicad_mod(Block& block, ofstream& f_out, long double co
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
 			label=it->getLabel();
-			Pac* pac=dynamic_cast<Pac*>(it.get());
+			auto pac=dynamic_cast<Pac*>(it.get());
 			regex_search(label, match, r_pac);
 			f_out << "    (pad \"" << match.str(1) << "\" smd rect (at " << it->getX()+offset_x << " " << it->getY()+offset_y
 			      << " " << it->getR() << ") (size " << (pac->is_size_set ? it->getW() : 0.01) << " " << (pac->is_size_set ? it->getL() : 0.01) << ") (layers F.Cu))\n";
@@ -1459,7 +1463,7 @@ void LayoutWriter::write_svg(Block& block, ofstream& f_out, long double const of
 		if(type=="SUBST" || type=="MGAP" || type=="MOPEN" || type=="MSTEP") {
 			//nothing to do
 		} else if(type=="Pac") {////////////////////////////////////////////////
-			Pac* pac=dynamic_cast<Pac*>(it.get());
+			auto pac=dynamic_cast<Pac*>(it.get());
 			f_out << "    <rect "
 			         "id=\"" << it->getLabel() << "\" "
 			         "x=\"" << it->getX()+offset_x - ((pac->is_size_set ? it->getW() : 0.01) / 2) << "\" "

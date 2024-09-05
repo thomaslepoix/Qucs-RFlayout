@@ -32,8 +32,8 @@ void Preview::initializeGL() {
 	glDepthFunc(GL_ALWAYS);    // Set the type of depth-test
 //	glShadeModel(GL_SMOOTH);   // Enable smooth shading
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
-    static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+	static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	}
 
 //******************************************************************************
@@ -44,9 +44,9 @@ void Preview::paintGL() {
 	glLoadIdentity();
 	glScalef(0.5, 0.5, 0.5);
 	glTranslatef(0.0, 0.0, 2.0);
-    glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
-    glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
-    glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);
+	glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
+	glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
+	glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);
 
 	drawAll();
 //	drawtriangle();
@@ -54,13 +54,13 @@ void Preview::paintGL() {
 
 //******************************************************************************
 void Preview::resizeGL(int width, int height) {
-    int side = qMax(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
+	int side = qMax(width, height);
+	glViewport((width - side) / 2, (height - side) / 2, side, side);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-1, +1, -1, +1, -15.0, 15.0);
-    glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-1, +1, -1, +1, -15.0, 15.0);
+	glMatrixMode(GL_MODELVIEW);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,28 +75,28 @@ static void qNormalizeAngle(int& angle) {
 
 //******************************************************************************
 void Preview::setXRotation(int angle) {
-    qNormalizeAngle(angle);
-    if (angle != xRot) {
-        xRot = angle;
-        update();
+	qNormalizeAngle(angle);
+	if (angle != xRot) {
+		xRot = angle;
+		update();
 		}
 	}
 
 //******************************************************************************
 void Preview::setYRotation(int angle) {
-    qNormalizeAngle(angle);
-    if (angle != yRot) {
-        yRot = angle;
-        update();
+	qNormalizeAngle(angle);
+	if (angle != yRot) {
+		yRot = angle;
+		update();
 		}
 	}
 
 //******************************************************************************
 void Preview::setZRotation(int angle) {
-    qNormalizeAngle(angle);
-    if (angle != zRot) {
-        zRot = angle;
-        update();
+	qNormalizeAngle(angle);
+	if (angle != zRot) {
+		zRot = angle;
+		update();
 		}
 	}
 

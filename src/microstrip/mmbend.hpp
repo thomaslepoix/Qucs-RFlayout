@@ -18,12 +18,12 @@ private :
 	static int constexpr m_npoint=3;
 	long double tab_p[m_npoint][2]={};
 public :
-	Mmbend(std::string const _label,
-			std::string const _type,
+	Mmbend(std::string _label,
+			std::string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			std::string const _subst,
+			std::string _subst,
 			long double const _w);
 	~Mmbend()=default;
 	std::string getDescriptor() const override;
@@ -37,7 +37,7 @@ public :
 	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
-	int setNet1(std::string const _net1) override;
-	int setNet2(std::string const _net2) override;
+	int setNet1(std::string const& _net1) override;
+	int setNet2(std::string const& _net2) override;
 	int setP() override;
 };

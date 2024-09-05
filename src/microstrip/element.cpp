@@ -12,20 +12,20 @@
 using namespace std;
 
 //******************************************************************************
-Element::Element(string const _label,
-			string const _type,
+Element::Element(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
 			short const _nport,
-			string const _subst) :
-	m_label(_label),
-	m_type(_type),
+			string _subst) :
+	m_label(std::move(_label)),
+	m_type(std::move(_type)),
 	m_active(_active),
 	m_mirrorx(_mirrorx),
 	m_r(_r),
 	m_nport(_nport),
-	m_subst(_subst),
+	m_subst(std::move(_subst)),
 	m_x(NAN),
 	m_y(NAN),
 	m_shift_x(0.0),
@@ -322,27 +322,27 @@ int Element::setR(short const /*_r*/) {
 	}
 
 //******************************************************************************
-int Element::setSubst(string const /*_subst*/) {
+int Element::setSubst(string const& /*_subst*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet1(string const /*_net1*/) {
+int Element::setNet1(string const& /*_net1*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet2(string const /*_net2*/) {
+int Element::setNet2(string const& /*_net2*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet3(string const /*_net3*/) {
+int Element::setNet3(string const& /*_net3*/) {
 	return(1);
 	}
 
 //******************************************************************************
-int Element::setNet4(string const /*_net4*/) {
+int Element::setNet4(string const& /*_net4*/) {
 	return(1);
 	}
 

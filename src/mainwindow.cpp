@@ -291,7 +291,7 @@ void MainWindow::on_pb_add_clicked() {
 void MainWindow::on_pb_browse_in_clicked() {
 	QString n_sch=QFileDialog::getOpenFileName(this, tr("Open schematic"), openfile_path, tr("Qucs schematic (*.sch)"));
 
-	if(!n_sch.length()) {
+	if(n_sch.isEmpty()) {
 		ui->le_path_in->setText("");
 		return;
 		}
@@ -305,7 +305,7 @@ void MainWindow::on_pb_browse_in_clicked() {
 void MainWindow::on_pb_browse_net_clicked() {
 	QString n_net=QFileDialog::getOpenFileName(this, tr("Open netlist"), openfile_path, tr("Qucs netlist (*.net)"));
 
-	if(!n_net.length()) {
+	if(n_net.isEmpty()) {
 		ui->le_path_net->setText("");
 		return;
 		}

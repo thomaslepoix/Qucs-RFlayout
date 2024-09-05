@@ -18,12 +18,12 @@ private :
 	std::string m_net1;
 	std::string m_net2;
 public :
-	Mgap(std::string const _label,
-			std::string const _type,
+	Mgap(std::string _label,
+			std::string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			std::string const _subst,
+			std::string _subst,
 			long double const _w1,
 			long double const _w2,
 			long double const _s);
@@ -37,6 +37,6 @@ public :
 	void getStep(int const _net, long double& xstep, long double& ystep) const override;
 	void getEdge(int const _net, long double& edge, short& dir) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
-	int setNet1(std::string const _net1) override;
-	int setNet2(std::string const _net2) override;
+	int setNet1(std::string const& _net1) override;
+	int setNet2(std::string const& _net2) override;
 };

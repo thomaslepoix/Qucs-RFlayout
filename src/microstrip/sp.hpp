@@ -17,8 +17,8 @@ private :
 	long double const m_fstop;
 	unsigned long const m_n;
 public :
-	Sp(std::string const _label,
-			std::string const _type,
+	Sp(std::string _label,
+			std::string _type,
 			bool const _mirrorx,
 			short const _r,
 			std::string const _simtype,

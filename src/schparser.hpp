@@ -42,7 +42,7 @@ private:
 	std::string mstub_shift(bool const xy, std::string const str, std::string const r) const;
 
 public:
-	SchParser(Data& _data);
+	explicit SchParser(Data& _data);
 	~SchParser()=default;
 	int run();
 };

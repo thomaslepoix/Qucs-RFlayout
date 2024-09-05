@@ -11,14 +11,14 @@ using namespace std;
 string const Mmbend::m_descriptor("microstrip_mittered_bend");
 
 //******************************************************************************
-Mmbend::Mmbend(string const _label,
-			string const _type,
+Mmbend::Mmbend(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			string const _subst,
+			string _subst,
 			long double const _w) :
-	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
+	Element(std::move(_label), std::move(_type), _active, _mirrorx, _r, 2, std::move(_subst)),
 	m_w(_w)
 	{}
 
@@ -60,13 +60,13 @@ long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r,
 	}
 
 //******************************************************************************
-int Mmbend::setNet1(string const _net1) {
+int Mmbend::setNet1(string const& _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mmbend::setNet2(string const _net2) {
+int Mmbend::setNet2(string const& _net2) {
 	m_net2=_net2;
 	return(0);
 	}

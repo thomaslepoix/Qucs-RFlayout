@@ -87,6 +87,5 @@ public:
 
 	Data();
 	Data(Data const& data);
-	Data& operator=(Data const&)=default;
 	~Data();
 };

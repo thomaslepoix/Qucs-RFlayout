@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 
 //variables
 	bool verbose=false;
-	bool gui=false;
+	[[maybe_unused]] bool gui=false;
 	Data data;
 
 //argument parser

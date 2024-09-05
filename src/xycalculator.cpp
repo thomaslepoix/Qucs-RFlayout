@@ -85,7 +85,7 @@ void XyCalculator::resolve_pac_shapes() {
 
 //******************************************************************************
 void XyCalculator::place_elements() {
-	if(!data.all_elements.size())
+	if(data.all_elements.empty())
 		return;
 
 // Variables
@@ -184,7 +184,7 @@ void XyCalculator::place_blocks() {
 			tab_subst.push_back(it);
 			}
 		}
-	if(!tab_subst.size()) {
+	if(tab_subst.empty()) {
 		data.is_volume_error=true;
 		data.volume_error += "ERROR : No substrate in the schematic.\n";
 		}
@@ -342,7 +342,7 @@ void XyCalculator::place_blocks() {
 		}
 
 	for(shared_ptr<Element> it : tab_subst) {
-		Subst* subst=dynamic_cast<Subst*>(it.get());
+		auto subst=dynamic_cast<Subst*>(it.get());
 		if(subst->substrate_boundary[XMIN]-subst->getMargin()<data.margin_boundary[XMIN]) data.margin_boundary[XMIN]=subst->substrate_boundary[XMIN]-subst->getMargin();
 		if(subst->substrate_boundary[XMAX]+subst->getMargin()>data.margin_boundary[XMAX]) data.margin_boundary[XMAX]=subst->substrate_boundary[XMAX]+subst->getMargin();
 		if(subst->substrate_boundary[YMIN]-subst->getMargin()<data.margin_boundary[YMIN]) data.margin_boundary[YMIN]=subst->substrate_boundary[YMIN]-subst->getMargin();
@@ -371,7 +371,7 @@ void XyCalculator::place_blocks() {
 	cout << endl << "Calculating local substrates positons... ";
 	for(shared_ptr<Block> block : data.all_blocks) {
 		if(block->subst) {
-			Subst* subst=dynamic_cast<Subst*>(block->subst.get());
+			auto subst=dynamic_cast<Subst*>(block->subst.get());
 			block->subst_local=shared_ptr<Element>(new Subst(*subst)); //TODO
 			block->subst_local->setL(block->margin_boundary[XMAX]-block->margin_boundary[XMIN]);//+2*block->subst_local->getMargin());
 			block->subst_local->setW(block->margin_boundary[YMAX]-block->margin_boundary[YMIN]);//+2*block->subst_local->getMargin());

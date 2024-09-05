@@ -11,17 +11,17 @@ using namespace std;
 string const Mcross::m_descriptor("microstrip_cross");
 
 //******************************************************************************
-Mcross::Mcross(string const _label,
-			string const _type,
+Mcross::Mcross(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			string const _subst,
+			string _subst,
 			long double const _w1,
 			long double const _w2,
 			long double const _w3,
 			long double const _w4) :
-	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
+	Element(std::move(_label), std::move(_type), _active, _mirrorx, _r, 4, std::move(_subst)),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_w3(_w3),
@@ -90,22 +90,22 @@ long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r,
 	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
 	}
 
-int Mcross::setNet1(string const _net1) {
+int Mcross::setNet1(string const& _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
-int Mcross::setNet2(string const _net2) {
+int Mcross::setNet2(string const& _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
-int Mcross::setNet3(string const _net3) {
+int Mcross::setNet3(string const& _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
-int Mcross::setNet4(string const _net4) {
+int Mcross::setNet4(string const& _net4) {
 	m_net4=_net4;
 	return(0);
 	}

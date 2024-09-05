@@ -11,8 +11,8 @@ using namespace std;
 string const Subst::m_descriptor("substrat");
 
 //******************************************************************************
-Subst::Subst(string const _label,
-			string const _type,
+Subst::Subst(string _label,
+			string _type,
 			bool const _mirrorx,
 			short const _r,
 			long double const _er,
@@ -22,7 +22,7 @@ Subst::Subst(string const _label,
 			long double const _rho,
 			long double const _d,
 			unsigned int const _margin_factor) :
-	Element(_label, _type, true, _mirrorx, _r, 0, ""),
+	Element(std::move(_label), std::move(_type), true, _mirrorx, _r, 0, ""),
 	m_w(0.0),
 	m_l(0.0),
 	m_er(_er),

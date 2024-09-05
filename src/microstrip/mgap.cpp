@@ -11,16 +11,16 @@ using namespace std;
 string const Mgap::m_descriptor("microstrip_gap");
 
 //******************************************************************************
-Mgap::Mgap(string const _label,
-			string const _type,
+Mgap::Mgap(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			string const _subst,
+			string _subst,
 			long double const _w1,
 			long double const _w2,
 			long double const _s) :
-	Element(_label, _type, _active, _mirrorx, _r, 2, _subst),
+	Element(std::move(_label), std::move(_type), _active, _mirrorx, _r, 2, std::move(_subst)),
 	m_w1(_w1),
 	m_w2(_w2),
 	m_s(_s)
@@ -57,13 +57,13 @@ string Mgap::getNet2() const {
 	}
 
 //******************************************************************************
-int Mgap::setNet1(string const _net1) {
+int Mgap::setNet1(string const& _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mgap::setNet2(string const _net2) {
+int Mgap::setNet2(string const& _net2) {
 	m_net2=_net2;
 	return(0);
 	}

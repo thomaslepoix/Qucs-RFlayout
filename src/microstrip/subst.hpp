@@ -28,8 +28,8 @@ private :
 public :
 	std::array<long double, 4> substrate_boundary;
 
-	Subst(std::string const _label,
-			std::string const _type,
+	Subst(std::string _label,
+			std::string _type,
 			bool const _mirrorx,
 			short const _r,
 			long double const _er,

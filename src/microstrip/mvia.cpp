@@ -11,14 +11,14 @@ using namespace std;
 string const Mvia::m_descriptor("microstrip_via");
 
 //******************************************************************************
-Mvia::Mvia(string const _label,
-			string const _type,
+Mvia::Mvia(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			string const _subst,
+			string _subst,
 			long double const _d) :
-	Element(_label, _type, _active, _mirrorx, _r, 1, _subst),
+	Element(std::move(_label), std::move(_type), _active, _mirrorx, _r, 1, std::move(_subst)),
 	m_d(_d)
 	{}
 
@@ -38,7 +38,7 @@ string Mvia::getNet1() const {
 	}
 
 //******************************************************************************
-int Mvia::setNet1(string const _net1) {
+int Mvia::setNet1(string const& _net1) {
 	m_net1=_net1;
 	return(0);
 	}

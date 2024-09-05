@@ -34,13 +34,13 @@ protected:
 	long double rotateX(long double const _x, long double const _y) const;
 	long double rotateY(long double const _x, long double const _y) const;
 public:
-	Element(std::string const _label,
-			std::string const _type,
+	Element(std::string _label,
+			std::string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
 			short const _nport,
-			std::string const _subst);
+			std::string _subst);
 	virtual ~Element()=default;
 	std::shared_ptr<Element> prev;
 	std::string getLabel() const;
@@ -100,10 +100,10 @@ public:
 	virtual int setW(long double const _w);
 	virtual int setL(long double const _l);
 	virtual int setR(short const _r);
-	virtual int setSubst(std::string const _subst);
-	virtual int setNet1(std::string const _net1);
-	virtual int setNet2(std::string const _net2);
-	virtual int setNet3(std::string const _net3);
-	virtual int setNet4(std::string const _net4);
+	virtual int setSubst(std::string const& _subst);
+	virtual int setNet1(std::string const& _net1);
+	virtual int setNet2(std::string const& _net2);
+	virtual int setNet3(std::string const& _net3);
+	virtual int setNet4(std::string const& _net4);
 	virtual int setP();
 };

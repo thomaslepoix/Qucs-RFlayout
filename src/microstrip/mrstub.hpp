@@ -23,12 +23,12 @@ private :
 	static int constexpr m_npoint=53;
 	long double tab_p[m_npoint][2]={};
 public :
-	Mrstub(std::string const _label,
-			std::string const _type,
+	Mrstub(std::string _label,
+			std::string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			std::string const _subst,
+			std::string _subst,
 			long double const _ri,
 			long double const _ro,
 			long double const _alpha);
@@ -46,6 +46,6 @@ public :
 	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
-	int setNet1(std::string const _net1) override;
+	int setNet1(std::string const& _net1) override;
 	int setP() override;
 };

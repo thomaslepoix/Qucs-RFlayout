@@ -38,7 +38,7 @@ private:
 	void findnext(std::shared_ptr<Element> const& current, int& current_net, std::shared_ptr<Element>& next);
 
 public:
-	XyCalculator(Data& _data);
+	explicit XyCalculator(Data& _data);
 	~XyCalculator()=default;
 
 	// Interface functions

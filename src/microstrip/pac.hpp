@@ -25,8 +25,8 @@ private :
 public :
 	bool is_size_set=false;
 
-	Pac(std::string const _label,
-			std::string const _type,
+	Pac(std::string _label,
+			std::string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
@@ -49,9 +49,9 @@ public :
 	void getEdge(int const _net, long double& edge, short& dir) const override;
 	int getOemsNcorelines() const override;
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
-	int setNet1(std::string const _net1) override;
-	int setNet2(std::string const _net2) override;
-	int setSubst(std::string const _subst) override;
+	int setNet1(std::string const& _net1) override;
+	int setNet2(std::string const& _net2) override;
+	int setSubst(std::string const& _subst) override;
 	int setW(long double const _w) override;
 	int setL(long double const _l) override;
 	int setR(short const _r) override;

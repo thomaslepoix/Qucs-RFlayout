@@ -24,7 +24,7 @@ private:
 	LayoutWriter const layoutwriter;
 
 public:
-	Converter(Data& data);
+	explicit Converter(Data& data);
 	~Converter()=default;
 
 	void reset();

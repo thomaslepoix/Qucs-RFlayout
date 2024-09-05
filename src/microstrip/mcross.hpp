@@ -29,12 +29,12 @@ private :
 	std::pair<std::shared_ptr<Element>, int> adjacent3;
 	std::pair<std::shared_ptr<Element>, int> adjacent4;
 public :
-	Mcross(std::string const _label,
-			std::string const _type,
+	Mcross(std::string _label,
+			std::string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			std::string const _subst,
+			std::string _subst,
 			long double const _w1,
 			long double const _w2,
 			long double const _w3,
@@ -58,9 +58,9 @@ public :
 	int getOemsMeshInterface(int const _net, OemsLine& line) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
 	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
-	int setNet1(std::string const _net1) override;
-	int setNet2(std::string const _net2) override;
-	int setNet3(std::string const _net3) override;
-	int setNet4(std::string const _net4) override;
+	int setNet1(std::string const& _net1) override;
+	int setNet2(std::string const& _net2) override;
+	int setNet3(std::string const& _net3) override;
+	int setNet4(std::string const& _net4) override;
 	int setP() override;
 };

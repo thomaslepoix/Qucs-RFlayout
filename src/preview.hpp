@@ -49,13 +49,13 @@ private:
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void wheelEvent(QWheelEvent* event) override;
 
-    void setXRotation(int angle);
-    void setYRotation(int angle);
-    void setZRotation(int angle);
+	void setXRotation(int angle);
+	void setYRotation(int angle);
+	void setZRotation(int angle);
 
-    int xRot=0;
-    int yRot=0;
-    int zRot=0;
+	int xRot=0;
+	int yRot=0;
+	int zRot=0;
 	QPointF lastPos;
 
 	std::vector<std::shared_ptr<Element>> all_elements;

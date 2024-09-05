@@ -11,16 +11,16 @@ using namespace std;
 string const Mcoupled::m_descriptor("microstrip_coupled_lines");
 
 //******************************************************************************
-Mcoupled::Mcoupled(string const _label,
-			string const _type,
+Mcoupled::Mcoupled(string _label,
+			string _type,
 			bool const _active,
 			bool const _mirrorx,
 			short const _r,
-			string const _subst,
+			string _subst,
 			long double const _w,
 			long double const _l,
 			long double const _s) :
-	Element(_label, _type, _active, _mirrorx, _r, 4, _subst),
+	Element(std::move(_label), std::move(_type), _active, _mirrorx, _r, 4, std::move(_subst)),
 	m_w(_w),
 	m_l(_l),
 	m_s(_s)
@@ -84,25 +84,25 @@ long double Mcoupled::getP(int const _n, axis_t const _xy, orientation_t const _
 	}
 
 //******************************************************************************
-int Mcoupled::setNet1(string const _net1) {
+int Mcoupled::setNet1(string const& _net1) {
 	m_net1=_net1;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet2(string const _net2) {
+int Mcoupled::setNet2(string const& _net2) {
 	m_net2=_net2;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet3(string const _net3) {
+int Mcoupled::setNet3(string const& _net3) {
 	m_net3=_net3;
 	return(0);
 	}
 
 //******************************************************************************
-int Mcoupled::setNet4(string const _net4) {
+int Mcoupled::setNet4(string const& _net4) {
 	m_net4=_net4;
 	return(0);
 	}

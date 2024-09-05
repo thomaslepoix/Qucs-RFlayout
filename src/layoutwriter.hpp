@@ -29,7 +29,7 @@ private:
 	void write_svg(Block& block, std::ofstream& f_out, long double const offset_x, long double const offset_y, std::string const& name) const;
 
 public:
-	LayoutWriter(Data const& _data);
+	explicit LayoutWriter(Data const& _data);
 	~LayoutWriter()=default;
 	int run(std::vector<std::string>* out_names=nullptr) const;
 };
