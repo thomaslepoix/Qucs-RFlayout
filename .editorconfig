@@ -10,6 +10,6 @@ indent_size = 4
 indent_style = tab
 tab_width = 4
 
-[*.{json,nix,yml}]
+[*.{json,nix,qrc,yml}]
 indent_size = 2
 indent_style = space

@@ -136,6 +136,8 @@ set( QUCS-RF-LAYOUT_SRCS
 	"${CMAKE_SOURCE_DIR}/src/converter.cpp"
 	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_SOURCE_DIR}/src/preview.cpp>"
 	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_SOURCE_DIR}/src/mainwindow.cpp>"
+	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_SOURCE_DIR}/src/resources.qrc>"
+	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_SOURCE_DIR}/pack/qucsrflayout.rc>"
 	"${CMAKE_SOURCE_DIR}/src/main.cpp"
 	)
 
@@ -223,6 +225,7 @@ set_target_properties( ${PROJECT_NAME} PROPERTIES
 if( NOT QRFL_MINIMAL )
 	set_target_properties( ${PROJECT_NAME} PROPERTIES
 		AUTOMOC ON
+		AUTORCC ON
 		AUTOUIC ON
 		)
 endif( NOT QRFL_MINIMAL )

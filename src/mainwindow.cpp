@@ -63,6 +63,10 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 	for(std::string used : data.used_elements) {
 		add_action("Use", QString::fromStdString(used));
 		}
+
+#ifndef __APPLE__
+	setWindowIcon(QPixmap(":/qucsrflayout.ico"));
+#endif // __APPLE__
 	}
 
 //******************************************************************************
