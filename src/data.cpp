@@ -101,32 +101,6 @@ Data::Data() :
 	oems_pkg(false)
 	{}
 
-// Copy an object to a new object with all parameters set but no elements.
-//******************************************************************************
-Data::Data(Data const& data) :
-	metal_boundary({ 0.0, 0.0, 0.0, 0.0 }),
-	margin_boundary({ 0.0, 0.0, 0.0, 0.0 }),
-	is_volume_error(false),
-	qucs_binary(data.qucs_binary),
-	n_sch(data.n_sch),
-	n_net(data.n_net),
-	out_dir(data.out_dir),
-	out_format(data.out_format),
-	export_each_block(data.export_each_block),
-	export_each_subst(data.export_each_subst),
-	keep_tmp_files(data.keep_tmp_files),
-	subst_margin_factor(data.subst_margin_factor),
-	port_default_l(data.port_default_l),
-	oems_boundary_factor(data.oems_boundary_factor),
-	oems_highres_div(data.oems_highres_div),
-	oems_metalres_div(data.oems_metalres_div),
-	oems_substres_div(data.oems_substres_div),
-	oems_timeres(data.oems_timeres),
-	oems_end_criteria(data.oems_end_criteria),
-	oems_sort_metalresmesh(data.oems_sort_metalresmesh),
-	oems_pkg(data.oems_pkg)
-	{}
-
 //******************************************************************************
 Data::~Data() {
 	for(shared_ptr<Element> it : all_elements) {
@@ -136,4 +110,22 @@ Data::~Data() {
 		it->setAdjacent(3, nullptr, 0);
 		it->setAdjacent(4, nullptr, 0);
 		}
+	}
+
+// Reset elements but not parameters
+//******************************************************************************
+void Data::reset() {
+	for(shared_ptr<Element> it : all_elements) {
+		it->prev=nullptr;
+		it->setAdjacent(1, nullptr, 0);
+		it->setAdjacent(2, nullptr, 0);
+		it->setAdjacent(3, nullptr, 0);
+		it->setAdjacent(4, nullptr, 0);
+		}
+	all_elements.clear();
+	all_blocks.clear();
+	volume_error.clear();
+	margin_boundary={};
+	metal_boundary={};
+	is_volume_error=false;
 	}
