@@ -302,7 +302,7 @@ bool Element::isOemsMeshInterface(int const /*_port*/, long double const /*_w*/)
 	}
 
 //******************************************************************************
-int Element::setAdjacent(int const /*_port*/, shared_ptr<Element> const& /*element*/, int const /*adjacent_port*/) {
+int Element::setAdjacent(int const /*_port*/, Element* /*element*/, int const /*adjacent_port*/) {
 	return(1);
 	}
 

@@ -7,6 +7,7 @@
 #pragma once
 
 #include <array>
+#include <utility>
 
 #include "element.hpp"
 
@@ -25,10 +26,10 @@ private :
 	std::array<std::array<long double, 2>, m_npoint> tab_p={};
 
 	// first : element, second : element's port
-	std::pair<std::shared_ptr<Element>, int> adjacent1;
-	std::pair<std::shared_ptr<Element>, int> adjacent2;
-	std::pair<std::shared_ptr<Element>, int> adjacent3;
-	std::pair<std::shared_ptr<Element>, int> adjacent4;
+	std::pair<Element*, int> adjacent1;
+	std::pair<Element*, int> adjacent2;
+	std::pair<Element*, int> adjacent3;
+	std::pair<Element*, int> adjacent4;
 public :
 	Mcoupled(std::string _label,
 			std::string _type,
@@ -56,7 +57,7 @@ public :
 	int getOemsMeshCore(int const _n, OemsLine& line) const override;
 	int getOemsMeshInterface(int const _net, OemsLine& line) const override;
 	bool isOemsMeshInterface(int const _port, long double const _w) const override;
-	int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port) override;
+	int setAdjacent(int const _port, Element* adjacent, int const adjacent_port) override;
 	int setNet1(std::string const& _net1) override;
 	int setNet2(std::string const& _net2) override;
 	int setNet3(std::string const& _net3) override;

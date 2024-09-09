@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
 
 #include "oemsline.hpp"
@@ -95,7 +94,7 @@ public:
 	virtual int getOemsMeshCore(int const _n, OemsLine& line) const;
 	virtual int getOemsMeshInterface(int const _net, OemsLine& line) const;
 	virtual bool isOemsMeshInterface(int const _port, long double const _w) const;
-	virtual int setAdjacent(int const _port, std::shared_ptr<Element> const& element, int const adjacent_port);
+	virtual int setAdjacent(int const _port, Element* adjacent, int const adjacent_port);
 
 	virtual int setW(long double const _w);
 	virtual int setL(long double const _l);

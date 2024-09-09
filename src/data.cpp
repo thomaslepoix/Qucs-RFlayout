@@ -101,27 +101,9 @@ Data::Data() :
 	oems_pkg(false)
 	{}
 
-//******************************************************************************
-Data::~Data() {
-	for(shared_ptr<Element> it : all_elements) {
-		it->prev=nullptr;
-		it->setAdjacent(1, nullptr, 0);
-		it->setAdjacent(2, nullptr, 0);
-		it->setAdjacent(3, nullptr, 0);
-		it->setAdjacent(4, nullptr, 0);
-		}
-	}
-
 // Reset elements but not parameters
 //******************************************************************************
 void Data::reset() {
-	for(shared_ptr<Element> it : all_elements) {
-		it->prev=nullptr;
-		it->setAdjacent(1, nullptr, 0);
-		it->setAdjacent(2, nullptr, 0);
-		it->setAdjacent(3, nullptr, 0);
-		it->setAdjacent(4, nullptr, 0);
-		}
 	all_elements.clear();
 	all_blocks.clear();
 	volume_error.clear();

@@ -86,7 +86,6 @@ public:
 	bool oems_pkg;
 
 	Data();
-	~Data();
 
 	void reset();
 };

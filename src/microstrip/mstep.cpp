@@ -130,7 +130,7 @@ int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	}
 
 //******************************************************************************
-int Mstep::setAdjacent(int const _port, shared_ptr<Element> const& adjacent, int const adjacent_port) {
+int Mstep::setAdjacent(int const _port, Element* adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1: adjacent1={ adjacent, adjacent_port }; break;
 		case 2: adjacent2={ adjacent, adjacent_port }; break;

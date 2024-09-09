@@ -526,10 +526,10 @@ void XyCalculator::populate_adjacents() {
 	for(shared_ptr<Element> element : data.all_elements) {
 		for(shared_ptr<Element> it : data.all_elements) {
 			if(it!=element) {
-				if(get_port(it, element->getNet1())) element->setAdjacent(1, it, get_port(it, element->getNet1()));
-				if(get_port(it, element->getNet2())) element->setAdjacent(2, it, get_port(it, element->getNet2()));
-				if(get_port(it, element->getNet3())) element->setAdjacent(3, it, get_port(it, element->getNet3()));
-				if(get_port(it, element->getNet4())) element->setAdjacent(4, it, get_port(it, element->getNet4()));
+				if(get_port(it, element->getNet1())) element->setAdjacent(1, it.get(), get_port(it, element->getNet1()));
+				if(get_port(it, element->getNet2())) element->setAdjacent(2, it.get(), get_port(it, element->getNet2()));
+				if(get_port(it, element->getNet3())) element->setAdjacent(3, it.get(), get_port(it, element->getNet3()));
+				if(get_port(it, element->getNet4())) element->setAdjacent(4, it.get(), get_port(it, element->getNet4()));
 				}
 			}
 		}
