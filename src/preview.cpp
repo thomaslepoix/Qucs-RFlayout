@@ -122,14 +122,14 @@ void Preview::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 
-//qucs		SHIFT _	CTRL +	NONE |	<-
-//altium	SHIFT _	CTRL +	NONE |
-//inkscape	SHIFT _	CTRL +	NONE |
-//gimp		SHIFT _	CTRL +	NONE |
-//kicad		SHIFT |	CTRL _	NONE +
-//pcb-rnd	SHIFT |	CTRL _	NONE +
-//openems					NONE +
-//this		SHIFT _	CTRL +	NONE |
+//qucs        SHIFT _ CTRL + NONE | <-
+//altium      SHIFT _ CTRL + NONE |
+//inkscape    SHIFT _ CTRL + NONE |
+//gimp        SHIFT _ CTRL + NONE |
+//kicad       SHIFT | CTRL _ NONE +
+//pcb-rnd     SHIFT | CTRL _ NONE +
+//openems                    NONE +
+//this        SHIFT _ CTRL + NONE |
 
 //******************************************************************************
 void Preview::wheelEvent(QWheelEvent* event) {

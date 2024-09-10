@@ -4,6 +4,8 @@
 /// @author Thomas Lepoix <thomas.lepoix@protonmail.ch>
 ///*****************************************************************************
 
+#include <cmath>
+
 #include "mtee.hpp"
 using namespace std;
 
@@ -98,28 +100,38 @@ int Mtee::setNet3(string const& _net3) {
 
 //******************************************************************************
 int Mtee::setP() {
-	signed short s1; //= m_mirror ? -1 :  1;
-	signed short s2; //= m_mirror ?  1 : -1;
-	long double Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
-	if(m_mirrorx) {
-		s1=-1;
-		s2= 1;
+	signed short const s1= m_mirrorx ? -1 :  1;
+	signed short const s2= m_mirrorx ?  1 : -1;
+	if(m_w1==m_w2) {
+		//shape is a square
+		m_npoint=4;
+		tab_p[0][X]=  -m_w3/2;
+		tab_p[0][Y]=s1*m_w1/2;
+		tab_p[1][X]=   m_w3/2;
+		tab_p[1][Y]=s1*m_w2/2;
+		tab_p[2][X]=   m_w3/2;
+		tab_p[2][Y]=s2*m_w2/2;
+		tab_p[3][X]=  -m_w3/2;
+		tab_p[3][Y]=s2*m_w1/2;
+		tab_p[4][X]=NAN;
+		tab_p[4][Y]=NAN;
+		tab_p[5][X]=NAN;
+		tab_p[5][Y]=NAN;
 	} else {
-		s1= 1;
-		s2=-1;
+		long double const Wlong= (m_w1>m_w2) ? m_w1 : m_w2;
+		tab_p[0][X]=-m_w3/2;
+		tab_p[0][Y]=s1*Wlong/2;
+		tab_p[1][X]= m_w3/2;
+		tab_p[1][Y]=s1*Wlong/2;
+		tab_p[2][X]= m_w3/2;
+		tab_p[2][Y]=s2*m_w2/2;
+		tab_p[3][X]=0;
+		tab_p[3][Y]=s2*m_w2/2;
+		tab_p[4][X]=0;
+		tab_p[4][Y]=s2*m_w1/2;
+		tab_p[5][X]=-m_w3/2;
+		tab_p[5][Y]=s2*m_w1/2;
 		}
-	tab_p[0][X]=-m_w3/2;
-	tab_p[0][Y]=s1*Wlong/2;
-	tab_p[1][X]= m_w3/2;
-	tab_p[1][Y]=s1*Wlong/2;
-	tab_p[2][X]= m_w3/2;
-	tab_p[2][Y]=s2*m_w2/2;
-	tab_p[3][X]=0;
-	tab_p[3][Y]=s2*m_w2/2;
-	tab_p[4][X]=0;
-	tab_p[4][Y]=s2*m_w1/2;
-	tab_p[5][X]=-m_w3/2;
-	tab_p[5][Y]=s2*m_w1/2;
 	return(0);
 	}
 

@@ -94,10 +94,10 @@ int Mrstub::setNet1(string const& _net1) {
 int Mrstub::setP() {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at bottom right, clockwise
-	int div=m_npoint-5; // -4 fixed points, -1 number -> index
-	long double n=m_alpha/div;
+	int const div=m_npoint-5; // -4 fixed points, -1 number -> index
+	long double const n=m_alpha/div;
 	long double u=-(m_npoint-2)/2*n+n;
-	signed short s= m_mirrorx ? -1 : 1;
+	signed short const s= m_mirrorx ? -1 : 1;
 
 	tab_p[0][X]= m_w/2;
 	tab_p[0][Y]=0;

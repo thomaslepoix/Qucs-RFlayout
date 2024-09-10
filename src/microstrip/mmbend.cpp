@@ -73,15 +73,8 @@ int Mmbend::setNet2(string const& _net2) {
 
 //******************************************************************************
 int Mmbend::setP() {
-	signed short s1; //= m_mirror ? -1 :  1;
-	signed short s2; //= m_mirror ?  1 : -1;
-	if(m_mirrorx) {
-		s1=-1;
-		s2= 1;
-	} else {
-		s1= 1;
-		s2=-1;
-		}
+	signed short const s1= m_mirrorx ? -1 :  1;
+	signed short const s2= m_mirrorx ?  1 : -1;
 	tab_p[0][X]=  -m_w/2;
 	tab_p[0][Y]=s1*m_w/2;
 	tab_p[1][X]=   m_w/2;

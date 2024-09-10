@@ -4,6 +4,8 @@
 /// @author Thomas Lepoix <thomas.lepoix@protonmail.ch>
 ///*****************************************************************************
 
+#include <cmath>
+
 #include "mcross.hpp"
 using namespace std;
 
@@ -114,17 +116,10 @@ int Mcross::setNet4(string const& _net4) {
 int Mcross::setP() {
 // TODO 0 at bottom left, counter clockwise
 // instead of 0 at top left, clockwise
-	signed short s1;
-	signed short s2;
-	long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
-	long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
-	if(m_mirrorx) {
-		s1= 1;
-		s2=-1;
-	} else {
-		s1=-1;
-		s2= 1;
-		}
+	signed short const s1= m_mirrorx ?  1 : -1;
+	signed short const s2= m_mirrorx ? -1 :  1;
+	long double const Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
+	long double const Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
 	if(m_w1==m_w3 || m_w2==m_w4) {
 		//shape is a square
 		//shape
@@ -139,6 +134,10 @@ int Mcross::setP() {
 		tab_p[2][Y]=s2*Wlong13/2;
 		tab_p[3][X]=  -Wlong24/2;
 		tab_p[3][Y]=s2*Wlong13/2;
+		tab_p[4][X]=NAN;
+		tab_p[4][Y]=NAN;
+		tab_p[5][X]=NAN;
+		tab_p[5][Y]=NAN;
 	} else {
 		if(Wlong13==m_w1 && Wlong24==m_w2) {
 			//shape

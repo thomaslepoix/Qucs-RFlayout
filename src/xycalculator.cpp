@@ -5,6 +5,7 @@
 ///*****************************************************************************
 
 #include <array>
+#include <cmath>
 #include <iostream>
 #include <stack>
 #include <utility>
@@ -132,7 +133,7 @@ void XyCalculator::place_elements() {
 					cout << endl;
 					cout << "Current label : " << current->getLabel() << endl;
 					}
-				if(current->getX(false)!=current->getX(false) || current->getY(false)!=current->getY(false)) {
+				if(isnan(current->getX(false)) || isnan(current->getY(false))) {
 					// Reset position
 					current->setX(0);
 					current->setY(0);
@@ -157,7 +158,7 @@ void XyCalculator::place_elements() {
 			next=nullptr;
 			cout << endl;
 			cout << "Current label : " << current->getLabel() << endl;
-			if(current->getX(false)!=current->getX(false) || current->getY(false)!=current->getY(false)) { // If position is -NaN
+			if(isnan(current->getX(false)) || isnan(current->getY(false))) {
 				current->getStep(current_net, current_xstep, current_ystep);
 				cout << "Previous Xstep : " << prev_xstep << endl;
 				cout << "Previous Ystep : " << prev_ystep << endl;

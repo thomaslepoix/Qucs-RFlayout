@@ -21,8 +21,8 @@ private :
 	std::string m_net1;
 	std::string m_net2;
 	std::string m_net3;
-	static int constexpr m_npoint=6;
-	std::array<std::array<long double, 2>, m_npoint> tab_p={};
+	int m_npoint=6;
+	std::array<std::array<long double, 2>, 6> tab_p={};
 
 	// first : element, second : element's port
 	std::pair<Element*, int> adjacent1;
