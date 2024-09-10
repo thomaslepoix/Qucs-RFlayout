@@ -27,7 +27,7 @@ int XyCalculator::run() {
 	if(check_intersection()) {
 		log_err << "ERROR : A wire is used to connect more than two connection points.\n"
 		           "\tPlease use a component like a tee or a cross to avoid this.\n";
-		return(3);
+		return 3;
 		}
 
 	// Delete unconnected nets
@@ -38,7 +38,7 @@ int XyCalculator::run() {
 	purge_blocks();
 	place_blocks();
 
-	return(0);
+	return 0;
 	}
 
 // Pac have no shape so they calc it from adjacent largest element
@@ -417,15 +417,15 @@ void XyCalculator::sort_blocks(vector<shared_ptr<Block>> blocks, vector<shared_p
 int XyCalculator::add_to_block(shared_ptr<Block>& block, shared_ptr<Element> const& element) {
 	if(element->getType()=="SUBST"
 	|| element->getType()==".SP") {
-		return(1);
+		return 1;
 		}
 	for(shared_ptr<Element> it : block->elements) {
 		if(it==element) {
-			return(1);
+			return 1;
 			}
 		}
 	block->elements.push_back(element);
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -436,7 +436,7 @@ int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<E
 			break;
 			}
 		}
-	return(0);
+	return 0;
 	}
 
 // Check if another element with this net exists
@@ -444,13 +444,13 @@ int XyCalculator::tab_remove(vector<shared_ptr<Element>>& elements, shared_ptr<E
 bool XyCalculator::purgefind(shared_ptr<Element> const& element, string const net) const {
 	for(shared_ptr<Element> it : data.all_elements) {
 		if(it!=element) {
-			if(it->getNet1()==net) return(1);
-			if(it->getNet2()==net) return(1);
-			if(it->getNet3()==net) return(1);
-			if(it->getNet4()==net) return(1);
+			if(it->getNet1()==net) return 1;
+			if(it->getNet2()==net) return 1;
+			if(it->getNet3()==net) return 1;
+			if(it->getNet4()==net) return 1;
 			}
 		}
-	return(0);
+	return 0;
 	}
 
 // Delete unconnected nets
@@ -462,7 +462,7 @@ int XyCalculator::purge_nets() {
 		if(purgefind(it, it->getNet3())==false) it->setNet3("");
 		if(purgefind(it, it->getNet4())==false) it->setNet4("");
 		}
-	return(0);
+	return 0;
 	}
 
 // Delete blocks with only a non geometric element inside
@@ -474,7 +474,7 @@ int XyCalculator::purge_blocks() {
 			i--;
 			}
 		}
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -488,19 +488,19 @@ bool XyCalculator::check_onenet(string const net) const {
 			if(it->getNet4()==net) count++;
 			}
 		}
-	return(count>2 ? 1 : 0);
+	return count>2 ? 1 : 0;
 	}
 
 // Check if there are net intersections : more than 2 times the same net
 //******************************************************************************
 bool XyCalculator::check_intersection() const {
 	for(shared_ptr<Element> it : data.all_elements) {
-		if(check_onenet(it->getNet1())==true) return(1);
-		if(check_onenet(it->getNet2())==true) return(1);
-		if(check_onenet(it->getNet3())==true) return(1);
-		if(check_onenet(it->getNet4())==true) return(1);
+		if(check_onenet(it->getNet1())==true) return 1;
+		if(check_onenet(it->getNet2())==true) return 1;
+		if(check_onenet(it->getNet3())==true) return 1;
+		if(check_onenet(it->getNet4())==true) return 1;
 		}
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -510,16 +510,16 @@ int XyCalculator::activenets(shared_ptr<Element> const& element) const {
 	if(element->getNet2()!="") nlinks++;
 	if(element->getNet3()!="") nlinks++;
 	if(element->getNet4()!="") nlinks++;
-	return(nlinks);
+	return nlinks;
 	}
 
 //******************************************************************************
 int XyCalculator::netmin(shared_ptr<Element> const& element) const {
-	if(element->getNet1()!="") return(1);
-	if(element->getNet2()!="") return(2);
-	if(element->getNet3()!="") return(3);
-	if(element->getNet4()!="") return(4);
-	return(0);
+	if(element->getNet1()!="") return 1;
+	if(element->getNet2()!="") return 2;
+	if(element->getNet3()!="") return 3;
+	if(element->getNet4()!="") return 4;
+	return 0;
 	}
 
 //******************************************************************************
@@ -539,12 +539,12 @@ void XyCalculator::populate_adjacents() {
 //******************************************************************************
 int XyCalculator::get_port(shared_ptr<Element> const& element, string const net) const {
 	if(net!="") {
-		if(element->getNet1()==net) return(1);
-		if(element->getNet2()==net) return(2);
-		if(element->getNet3()==net) return(3);
-		if(element->getNet4()==net) return(4);
+		if(element->getNet1()==net) return 1;
+		if(element->getNet2()==net) return 2;
+		if(element->getNet3()==net) return 3;
+		if(element->getNet4()==net) return 4;
 		}
-	return(0);
+	return 0;
 	}
 
 // Find next element and delete link

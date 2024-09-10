@@ -52,5 +52,5 @@ Logger& operator<<(Logger& logger, T const& in) {
 	std::stringstream ss;
 	ss << in;
 	logger.print(ss);
-	return(logger);
+	return logger;
 	}

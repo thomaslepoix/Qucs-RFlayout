@@ -34,42 +34,42 @@ Mrstub::Mrstub(string _label,
 
 //******************************************************************************
 string Mrstub::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mrstub::getW() const {
-	return(m_w);
+	return m_w;
 	}
 
 //******************************************************************************
 long double Mrstub::getL() const {
-	return(m_l);
+	return m_l;
 	}
 
 //******************************************************************************
 long double Mrstub::getRi() const {
-	return(m_ri);
+	return m_ri;
 	}
 
 //******************************************************************************
 long double Mrstub::getRo() const {
-	return(m_ro);
+	return m_ro;
 	}
 
 //******************************************************************************
 long double Mrstub::getAlpha() const {
-	return(m_alpha);
+	return m_alpha;
 	}
 
 //******************************************************************************
 string Mrstub::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 int Mrstub::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -87,7 +87,7 @@ long double Mrstub::getP(int const _n, axis_t const _xy, orientation_t const _r,
 //******************************************************************************
 int Mrstub::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -112,7 +112,7 @@ int Mrstub::setP() {
 		}
 	tab_p[m_npoint-1][X]=-m_ro*sin((M_PI/180)*(-m_alpha/2));
 	tab_p[m_npoint-1][Y]=s*((-m_ro*cos((M_PI/180)*(-m_alpha/2)))+m_l);
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -137,7 +137,7 @@ void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 
 //******************************************************************************
 int Mrstub::getOemsNcorelines() const {
-	return(4);
+	return 4;
 	}
 
 //******************************************************************************
@@ -191,14 +191,14 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 270: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
 	line.high_res=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -206,6 +206,6 @@ bool Mrstub::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_w ? true : false);
 	} else {
-		return(false);
+		return false;
 		}
 	}

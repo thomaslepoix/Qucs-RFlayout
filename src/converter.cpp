@@ -27,10 +27,10 @@ int Converter::run() {
 	|| xycalculator.run()
 	|| layoutwriter.run()
 	))) {
-		return(ret);
+		return ret;
 		}
 
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -39,28 +39,28 @@ int Converter::read() {
 	if((ret=(parser.run()
 	|| xycalculator.run()
 	))) {
-		return(ret);
+		return ret;
 		}
 
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Converter::write(vector<string>& out_names) const {
-	return(layoutwriter.run(&out_names));
+	return layoutwriter.run(&out_names);
 	}
 
 //******************************************************************************
 int Converter::size() const {
-	return(data.all_elements.size());
+	return data.all_elements.size();
 	}
 
 //******************************************************************************
 vector<shared_ptr<Element>> const& Converter::get_all_elements() const {
-	return(data.all_elements);
+	return data.all_elements;
 	}
 
 //******************************************************************************
 array<long double, 4> const& Converter::get_extrem_pos() const {
-	return(data.margin_boundary);
+	return data.margin_boundary;
 	}

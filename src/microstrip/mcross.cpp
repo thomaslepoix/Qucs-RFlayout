@@ -32,52 +32,52 @@ Mcross::Mcross(string _label,
 
 //******************************************************************************
 string Mcross::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mcross::getW1() const {
-	return(m_w1);
+	return m_w1;
 	}
 
 //******************************************************************************
 long double Mcross::getW2() const {
-	return(m_w2);
+	return m_w2;
 	}
 
 //******************************************************************************
 long double Mcross::getW3() const {
-	return(m_w3);
+	return m_w3;
 	}
 
 //******************************************************************************
 long double Mcross::getW4() const {
-	return(m_w4);
+	return m_w4;
 	}
 
 //******************************************************************************
 string Mcross::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Mcross::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 string Mcross::getNet3() const {
-	return(m_net3);
+	return m_net3;
 	}
 
 //******************************************************************************
 string Mcross::getNet4() const {
-	return(m_net4);
+	return m_net4;
 	}
 
 //******************************************************************************
 int Mcross::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -94,22 +94,22 @@ long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r,
 
 int Mcross::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 int Mcross::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 int Mcross::setNet3(string const& _net3) {
 	m_net3=_net3;
-	return(0);
+	return 0;
 	}
 
 int Mcross::setNet4(string const& _net4) {
 	m_net4=_net4;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -205,7 +205,7 @@ int Mcross::setP() {
 			tab_p[5][Y]=s2*m_w1/2;
 			}
 		}
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -416,9 +416,9 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 //******************************************************************************
 int Mcross::getOemsNcorelines() const {
 	if(m_w1==m_w3 || m_w2==m_w4){
-		return(0);
+		return 0;
 	} else {
-		return(2);
+		return 2;
 		}
 	}
 
@@ -472,7 +472,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 270: line.position=getP(4, Y, R, ABS); line.direction=YMIN; break;
 				}
 		} else {
-			return(1);
+			return 1;
 			}
 	} else if(_n==1) {
 		if(m_w1>m_w3 && m_w2>m_w4) {
@@ -522,16 +522,16 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					}
 				}
 		} else {
-			return(1);
+			return 1;
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -606,13 +606,13 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				}
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -623,7 +623,7 @@ bool Mcross::isOemsMeshInterface(int const _port, long double const _w) const {
 		switch(_port) {
 			case 1: case 3: return(_w>Wlong13 ? true : false);
 			case 2: case 4: return(_w>Wlong24 ? true : false);
-			default : return(false);
+			default : return false;
 			}
 	} else {
 		switch(_port) {
@@ -631,7 +631,7 @@ bool Mcross::isOemsMeshInterface(int const _port, long double const _w) const {
 			case 2: return(_w>m_w2 ? true : false);
 			case 3: return(_w>m_w3 ? true : false);
 			case 4: return(_w>m_w4 ? true : false);
-			default: return(false);
+			default: return false;
 			}
 		}
 	}
@@ -643,7 +643,7 @@ int Mcross::setAdjacent(int const _port, Element* adjacent, int const adjacent_p
 		case 2: adjacent2={ adjacent, adjacent_port }; break;
 		case 3: adjacent3={ adjacent, adjacent_port }; break;
 		case 4: adjacent4={ adjacent, adjacent_port }; break;
-		default: return(1);
+		default: return 1;
 		}
-	return(0);
+	return 0;
 	}

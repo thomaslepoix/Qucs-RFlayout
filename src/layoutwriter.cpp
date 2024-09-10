@@ -35,7 +35,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 //check
 	if(data.out_format==".m") {
 		if(int ret=check_m(); ret)
-			return(ret);
+			return ret;
 		}
 
 	cout << endl;
@@ -58,7 +58,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 			filesystem::path const out=n_out.generic_string()+"-b"+to_string(++i)+data.out_format;
 			if(int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-b"+to_string(i), out_names)
 			; ret)
-				return(ret);
+				return ret;
 			}
 	} else if(data.export_each_subst) {
 		unsigned int i=-1; // not a mistake
@@ -72,7 +72,7 @@ int LayoutWriter::run(vector<string>* out_names) const {
 					filesystem::path const out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
 					if(int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names)
 					; ret)
-						return(ret);
+						return ret;
 					}
 
 				// Begin & feed
@@ -95,17 +95,17 @@ int LayoutWriter::run(vector<string>* out_names) const {
 		filesystem::path const out=n_out.generic_string()+"-s"+to_string(++i)+data.out_format;
 		if(int ret=write(block, -block.margin_boundary[XMIN], -block.margin_boundary[YMIN], out, name+"-s"+to_string(i), out_names)
 		; ret)
-			return(ret);
+			return ret;
 	} else {
 		Block block;
 		block.elements=data.all_elements;
 		block.calcul_boundaries();
 
 		n_out+=data.out_format;
-		return(write(block, 0, 0, n_out, name, out_names));
+		return write(block, 0, 0, n_out, name, out_names);
 		}
 
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -114,7 +114,7 @@ int LayoutWriter::write(Block const& block, long double const offset_x, long dou
 	ofstream f_out(n_out);
 	if(f_out.fail()) {
 		log_err << "ERROR : Unable to write " << n_out << "\n";
-		return(1);
+		return 1;
 		}
 
 	if(data.out_format==".kicad_pcb") write_kicad_pcb(block, f_out, offset_x, offset_y, name);
@@ -134,10 +134,10 @@ int LayoutWriter::write(Block const& block, long double const offset_x, long dou
 
 	if(f_out.fail()) {
 		log_err << "ERROR : Error occured while writing " << n_out << "\n";
-		return(1);
+		return 1;
 		}
 
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -757,7 +757,7 @@ void LayoutWriter::write_lht(Block const& block, ofstream& f_out, long double co
 int LayoutWriter::check_m() const {
 	if(data.is_volume_error) {
 		log_err << data.volume_error;
-		return(1);
+		return 1;
 		}
 
 	bool is_first_sp=true;
@@ -765,7 +765,7 @@ int LayoutWriter::check_m() const {
 		if(it->getType()==".SP") {
 			if(is_first_sp==false) {
 				log_err << "ERROR : More than 1 active S parameter simulation.\n";
-				return(1);
+				return 1;
 				}
 			is_first_sp=false;
 			}
@@ -781,11 +781,11 @@ int LayoutWriter::check_m() const {
 			}
 		if(!is_nf2ff_center_valid) {
 			log_err << "ERROR : Invalid NF2FF center : " << data.oems_nf2ff_center << ".\n";
-			return(1);
+			return 1;
 			}
 		}
 
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************

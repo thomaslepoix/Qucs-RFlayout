@@ -24,27 +24,27 @@ Mcorn::Mcorn(string _label,
 
 //******************************************************************************
 string Mcorn::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mcorn::getW() const {
-	return(m_w);
+	return m_w;
 	}
 
 //******************************************************************************
 string Mcorn::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Mcorn::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 int Mcorn::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -55,13 +55,13 @@ long double Mcorn::getP(int const _n, axis_t const _xy, orientation_t const /*_r
 //******************************************************************************
 int Mcorn::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Mcorn::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -74,7 +74,7 @@ int Mcorn::setP() {
 	tab_p[2][Y]=-m_w/2;
 	tab_p[3][X]=-m_w/2;
 	tab_p[3][Y]=-m_w/2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -177,7 +177,7 @@ void Mcorn::getEdge(int const _net, long double& edge, short& dir) const {
 
 //******************************************************************************
 int Mcorn::getOemsNcorelines() const {
-	return(2);
+	return 2;
 	}
 
 //******************************************************************************
@@ -206,13 +206,13 @@ int Mcorn::getOemsMeshCore(int const _n, OemsLine& line) const {
 				}
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -245,13 +245,13 @@ int Mcorn::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				}
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -259,7 +259,7 @@ bool Mcorn::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
 	} else {
-		return(false);
+		return false;
 		}
 	}
 
@@ -268,7 +268,7 @@ int Mcorn::setAdjacent(int const _port, Element* adjacent, int const adjacent_po
 	switch(_port) {
 		case 1: adjacent1={ adjacent, adjacent_port }; break;
 		case 2: adjacent2={ adjacent, adjacent_port }; break;
-		default: return(1);
+		default: return 1;
 		}
-	return(0);
+	return 0;
 	}

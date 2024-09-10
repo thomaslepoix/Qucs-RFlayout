@@ -26,39 +26,39 @@ Mstep::Mstep(string _label,
 
 //******************************************************************************
 string Mstep::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mstep::getW1() const {
-	return(m_w1);
+	return m_w1;
 	}
 
 //******************************************************************************
 long double Mstep::getW2() const {
-	return(m_w2);
+	return m_w2;
 	}
 
 //******************************************************************************
 string Mstep::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Mstep::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 int Mstep::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Mstep::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -84,13 +84,13 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) const {
 
 //******************************************************************************
 int Mstep::getOemsNcorelines() const {
-	return(1);
+	return 1;
 	}
 
 //******************************************************************************
 int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	if(_n!=0 || m_w1==m_w2)
-		return(1);
+		return 1;
 
 	bool is_w1_longer;
 	if(adjacent1.first!=nullptr
@@ -126,7 +126,7 @@ int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -134,7 +134,7 @@ int Mstep::setAdjacent(int const _port, Element* adjacent, int const adjacent_po
 	switch(_port) {
 		case 1: adjacent1={ adjacent, adjacent_port }; break;
 		case 2: adjacent2={ adjacent, adjacent_port }; break;
-		default: return(1);
+		default: return 1;
 		}
-	return(0);
+	return 0;
 	}

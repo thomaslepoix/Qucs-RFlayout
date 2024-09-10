@@ -28,44 +28,44 @@ Mgap::Mgap(string _label,
 
 //******************************************************************************
 string Mgap::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mgap::getW1() const {
-	return(m_w1);
+	return m_w1;
 	}
 
 //******************************************************************************
 long double Mgap::getW2() const {
-	return(m_w2);
+	return m_w2;
 	}
 
 //******************************************************************************
 long double Mgap::getS() const {
-	return(m_s);
+	return m_s;
 	}
 
 //******************************************************************************
 string Mgap::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Mgap::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 int Mgap::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Mgap::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -129,8 +129,8 @@ void Mgap::getEdge(int const _net, long double& edge, short& dir) const {
 //******************************************************************************
 bool Mgap::isOemsMeshInterface(int const _port, long double const /*_w*/) const {
 	if(_port==1 || _port==2) {
-		return(true);
+		return true;
 	} else {
-		return(false);
+		return false;
 		}
 	}

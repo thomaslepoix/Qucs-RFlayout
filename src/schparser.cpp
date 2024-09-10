@@ -46,25 +46,25 @@ int SchParser::run() {
 		n_sch.replace_extension(".tmp.sch");
 	} else {
 		log_err << "ERROR : Invalid input format : " << data.n_sch << "\n";
-		return(1);
+		return 1;
 		}
 
 	cout << "Schematic file : " << data.n_sch << endl;
 	f_sch.open(data.n_sch.c_str());
 	if(f_sch.fail()) {
 		log_err << "ERROR : Cannot open " << data.n_sch << "\n";
-		return(1);
+		return 1;
 		}
 
 	bool is_qucsstudio=false;
 	ret=check_qucsstudio(f_sch, n_sch, is_qucsstudio);
 	if(ret)
-		return(ret);
+		return ret;
 
 	if(data.n_net=="") {
 		ret=generate_netlist(n_sch, n_net);
 		if(ret)
-			return(ret);
+			return ret;
 	} else {
 		n_net=data.n_net;
 		}
@@ -73,7 +73,7 @@ int SchParser::run() {
 	f_net.open(n_net.c_str());
 	if(f_net.fail()) {
 		log_err << "ERROR : Cannot open " << n_net << "\n";
-		return(1);
+		return 1;
 		}
 
 	bool is_there_eqn;
@@ -105,7 +105,7 @@ int SchParser::run() {
 	f_dat.close();
 	// Remove QucsStudio temporary schematic and automatically generated netlist
 	rm_tmp_files({ (is_qucsstudio ? n_sch.generic_string() : ""), (data.n_net=="" ? n_net.generic_string() : "") });
-	return(0);
+	return 0;
 	}
 
 // Uncomplete feature. Could be usable on every elements
@@ -190,7 +190,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, filesystem::path& n_tmp, bool& 
 	} else if(match.str(1)=="QucsStudio") {
 		if(stoi(match.str(2))>=3) {
 			log_err << "ERROR : QucsStudio 3.x and newer are not supported.\n";
-			return(1);
+			return 1;
 			}
 
 		// QucsStudio does not provide command line to produce netlist
@@ -203,7 +203,7 @@ int SchParser::check_qucsstudio(ifstream& f_sch, filesystem::path& n_tmp, bool& 
 		ofstream f_tmp(n_tmp.c_str());
 		if(f_tmp.fail()) {
 			log_err << "ERROR : Cannot open " << n_tmp << "\n";
-			return(1);
+			return 1;
 			}
 
 		f_tmp << "<Qucs Schematic 0.0.0>" << endl;
@@ -227,13 +227,13 @@ int SchParser::check_qucsstudio(ifstream& f_sch, filesystem::path& n_tmp, bool& 
 		f_sch.open(n_tmp.c_str());
 		if(f_sch.fail()) {
 			log_err << "ERROR : Cannot open " << n_tmp << "\n";
-			return(1);
+			return 1;
 			}
 	} else {
 		log_err << "ERROR : " << data.n_sch << " appears to be neither a Qucs nor a QucsStudio schematic\n";
-		return(1);
+		return 1;
 		}
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -253,11 +253,11 @@ int SchParser::generate_netlist(filesystem::path const& n_sch, filesystem::path 
 #endif // QRFL_MINIMAL
 			cout << "KO" << endl;
 			cout << "Command : "+binary+args << endl;
-			return(false);
+			return false;
 		} else {
 			cout << "OK" << endl;
 			is_done=true;
-			return(true);
+			return true;
 			}
 		};
 
@@ -273,11 +273,11 @@ int SchParser::generate_netlist(filesystem::path const& n_sch, filesystem::path 
 
 	if(is_done) {
 		cout << "Generating netlist... OK" << endl;
-		return(0);
+		return 0;
 	}
 
 	log_err << "ERROR : Problem calling Qucs for generating netlist\n";
-	return(2);
+	return 2;
 	}
 
 //******************************************************************************
@@ -285,13 +285,13 @@ long double SchParser::process_field(vector<pair<string, long double>> const& va
 	if(variable!="") {
 		for(pair<string, long double> it : variables) {
 			if(it.first==variable) {
-				return(it.second*(is_length ? 1000 : 1));
+				return it.second*(is_length ? 1000 : 1);
 				}
 			}
 		log_err << "WARNING : Variable not found in component " << label << " : " << variable << " -> Assigned to 0. Try to start a simulation.\n";
-		return(0);
+		return 0;
 	} else {
-		return(stold(check_void(value, label))*suffix(s_sci, s_eng, is_length));
+		return stold(check_void(value, label))*suffix(s_sci, s_eng, is_length);
 		}
 	}
 
@@ -935,7 +935,7 @@ long double SchParser::suffix(string const s_sci, string const s_eng, bool const
 	if(is_length)
 		multiplicator*=1000; //reference unit = mm
 
-	return(multiplicator);
+	return multiplicator;
 	}
 
 //******************************************************************************
@@ -944,9 +944,9 @@ string SchParser::check_void(string const match, string const label) const {
 		if(label!="") {
 			log_err << "WARNING : Void field in component " << label << " -> Assigned to 0\n";
 			}
-		return("0");
+		return "0";
 	} else {
-		return(match);
+		return match;
 		}
 	}
 
@@ -956,5 +956,5 @@ string SchParser::mstub_shift(bool const xy, string const str, string const r) c
 	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
 	else if(r=="2") return(xy ? to_string(stoi(str)+10) : str);
 	else if(r=="3") return(xy ? str : to_string(stoi(str)+10));
-	else return(str); // Never happens
+	else return str; // Never happens
 	}

@@ -24,23 +24,23 @@ Mvia::Mvia(string _label,
 
 //******************************************************************************
 string Mvia::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mvia::getD() const {
-	return(m_d);
+	return m_d;
 	}
 
 //******************************************************************************
 string Mvia::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 int Mvia::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -56,7 +56,7 @@ void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 
 //******************************************************************************
 int Mvia::getOemsNcorelines() const {
-	return(3);
+	return 3;
 	}
 
 //******************************************************************************
@@ -83,13 +83,13 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 270: line.position=m_x+m_d/2; line.direction=XMAX; break;
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -104,13 +104,13 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 270: line.position=m_y-m_d/2; line.direction=YMIN; break;
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -118,7 +118,7 @@ bool Mvia::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1) {
 		return(_w>m_d ? true : false);
 	} else {
-		return(false);
+		return false;
 		}
 	}
 
@@ -126,7 +126,7 @@ bool Mvia::isOemsMeshInterface(int const _port, long double const _w) const {
 int Mvia::setAdjacent(int const _port, Element* adjacent, int const adjacent_port) {
 	switch(_port) {
 		case 1: adjacent1={ adjacent, adjacent_port }; break;
-		default: return(1);
+		default: return 1;
 		}
-	return(0);
+	return 0;
 	}

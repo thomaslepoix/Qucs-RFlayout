@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 	LPWSTR *argvw = CommandLineToArgvW(GetCommandLineW(), &argcw);
 	if(!argvw) {
 		log_err << "ERROR : Cannot retrieve command line arguments" << "\n";
-		return(EXIT_FAILURE);
+		return EXIT_FAILURE;
 		}
 #endif // _WIN32
 
@@ -104,14 +104,14 @@ int main(int argc, char* argv[]) {
 				        "      --oems-pkg                     Look for 'openems' and 'csxcad' Octave packages. Requires properly\n"
 				        "                                     packaged Octaves packages such as 'octave-openems' and 'octave-csxcad'\n"
 				        "                                     from Debian repositories.\n";
-				return(EXIT_SUCCESS);
+				return EXIT_SUCCESS;
 			} else if(string(argv[i])=="--version") {
 				cout << "Qucs-RFlayout " << VERSION
 #ifdef QRFL_MINIMAL
 				                         << " minimal build"
 #endif // QRFL_MINIMAL
 				                         << endl;
-				return(EXIT_SUCCESS);
+				return EXIT_SUCCESS;
 			} else if(string(argv[i])=="-i" && argv[i+1]) {
 				i++;
 #ifdef _WIN32
@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
 					data.out_format=string(argv[i]);
 				} else {
 					log_err << "ERROR : Invalid output format : " << argv[i] << "\n";
-					return(EXIT_FAILURE);
+					return EXIT_FAILURE;
 					}
 			} else if((string(argv[i])=="-q" || string(argv[i])=="--qucs") && argv[i+1]) {
 				i++;
@@ -201,7 +201,7 @@ int main(int argc, char* argv[]) {
 #endif // QRFL_MINIMAL
 			} else {
 				log_err << "ERROR : Unknown argument : " << argv[i] << "\n";
-				return(EXIT_FAILURE);
+				return EXIT_FAILURE;
 				}
 			}
 		}
@@ -221,7 +221,7 @@ int main(int argc, char* argv[]) {
 		log_err.set_mode(gui);
 		// log_err << "WARNING : GUI and circuit preview are not up to date yet, take a look at the command line. ;)\n";
 		w.show();
-		return(a.exec());
+		return a.exec();
 
 	} else
 #endif // QRFL_MINIMAL
@@ -229,17 +229,17 @@ int main(int argc, char* argv[]) {
 
 		if(data.n_sch=="") {
 			log_err << "ERROR : Need an input file\n";
-			return(EXIT_FAILURE);
+			return EXIT_FAILURE;
 			}
 
 		Converter converter(data);
 
 		int ret=converter.run();
-		if(ret) return(ret);
+		if(ret) return ret;
 
 		cout << endl;
 		}
-	return(EXIT_SUCCESS);
+	return EXIT_SUCCESS;
 	}
 
 #ifdef QRFL_UNITTEST

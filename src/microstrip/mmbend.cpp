@@ -24,27 +24,27 @@ Mmbend::Mmbend(string _label,
 
 //******************************************************************************
 string Mmbend::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mmbend::getW() const {
-	return(m_w);
+	return m_w;
 	}
 
 //******************************************************************************
 string Mmbend::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Mmbend::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 int Mmbend::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -62,13 +62,13 @@ long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r,
 //******************************************************************************
 int Mmbend::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Mmbend::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -81,7 +81,7 @@ int Mmbend::setP() {
 	tab_p[1][Y]=s1*m_w/2;
 	tab_p[2][X]=  -m_w/2;
 	tab_p[2][Y]=s2*m_w/2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -184,7 +184,7 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 
 //******************************************************************************
 int Mmbend::getOemsNcorelines() const {
-	return(4);
+	return 4;
 	}
 
 //******************************************************************************
@@ -236,14 +236,14 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
 	line.high_res=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -251,6 +251,6 @@ bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) const {
 	if(_port==1 || _port==2) {
 		return(_w>m_w ? true : false);
 	} else {
-		return(false);
+		return false;
 		}
 	}

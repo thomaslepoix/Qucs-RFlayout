@@ -8,5 +8,5 @@
 
 //******************************************************************************
 bool operator<(OemsLine const& a, OemsLine const& b) {
-	return(a.position<b.position ? true : false);
+	return a.position<b.position ? true : false;
 	}

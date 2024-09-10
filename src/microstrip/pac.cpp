@@ -31,52 +31,52 @@ Pac::Pac(string _label,
 
 //******************************************************************************
 string Pac::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Pac::getW() const {
-	return(m_w);
+	return m_w;
 	}
 
 //******************************************************************************
 long double Pac::getL() const {
-	return(m_l);
+	return m_l;
 	}
 
 //******************************************************************************
 long double Pac::getZ() const {
-	return(m_z);
+	return m_z;
 	}
 
 //******************************************************************************
 long double Pac::getDbm() const {
-	return(m_p);
+	return m_p;
 	}
 
 //******************************************************************************
 long double Pac::getF() const {
-	return(m_f);
+	return m_f;
 	}
 
 //******************************************************************************
 unsigned long Pac::getN() const {
-	return(m_n);
+	return m_n;
 	}
 
 //******************************************************************************
 string Pac::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Pac::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 int Pac::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -114,37 +114,37 @@ void Pac::getEdge(int const _net, long double& edge, short& dir) const {
 //******************************************************************************
 int Pac::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Pac::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Pac::setSubst(string const& _subst) {
 	m_subst=_subst;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Pac::setW(long double const _w) {
 	m_w=_w;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Pac::setL(long double const _l) {
 	m_l=_l;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Pac::setR(short const _r) {
 	m_r=_r;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -157,12 +157,12 @@ int Pac::setP() {
 	tab_p[2][Y]=-m_w/2;
 	tab_p[3][X]=-m_l/2;
 	tab_p[3][Y]=-m_w/2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Pac::getOemsNcorelines() const {
-	return(2);
+	return 2;
 	}
 
 //******************************************************************************
@@ -178,5 +178,5 @@ int Pac::getOemsMeshCore(int const _n, OemsLine& line) const {
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=false;
-	return(0);
+	return 0;
 	}

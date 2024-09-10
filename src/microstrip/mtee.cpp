@@ -30,42 +30,42 @@ Mtee::Mtee(string _label,
 
 //******************************************************************************
 string Mtee::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Mtee::getW1() const {
-	return(m_w1);
+	return m_w1;
 	}
 
 //******************************************************************************
 long double Mtee::getW2() const {
-	return(m_w2);
+	return m_w2;
 	}
 
 //******************************************************************************
 long double Mtee::getW3() const {
-	return(m_w3);
+	return m_w3;
 	}
 
 //******************************************************************************
 string Mtee::getNet1() const {
-	return(m_net1);
+	return m_net1;
 	}
 
 //******************************************************************************
 string Mtee::getNet2() const {
-	return(m_net2);
+	return m_net2;
 	}
 
 //******************************************************************************
 string Mtee::getNet3() const {
-	return(m_net3);
+	return m_net3;
 	}
 
 //******************************************************************************
 int Mtee::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -83,19 +83,19 @@ long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, o
 //******************************************************************************
 int Mtee::setNet1(string const& _net1) {
 	m_net1=_net1;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Mtee::setNet2(string const& _net2) {
 	m_net2=_net2;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Mtee::setNet3(string const& _net3) {
 	m_net3=_net3;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -132,7 +132,7 @@ int Mtee::setP() {
 		tab_p[5][X]=-m_w3/2;
 		tab_p[5][Y]=s2*m_w1/2;
 		}
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -278,9 +278,9 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 //******************************************************************************
 int Mtee::getOemsNcorelines() const {
 	if(m_w1==m_w2){
-		return(1);
+		return 1;
 	} else {
-		return(3);
+		return 3;
 		}
 	}
 
@@ -326,13 +326,13 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 				}
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -374,13 +374,13 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				}
 			}
 	} else {
-		return(1);
+		return 1;
 		}
 
 	line.label=m_label;
 	line.type=m_type;
 	line.third_rule=true;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -392,7 +392,7 @@ bool Mtee::isOemsMeshInterface(int const _port, long double const _w) const {
 	} else if(_port==3) {
 		return(_w>m_w3 ? true : false);
 	} else {
-		return(false);
+		return false;
 		}
 	}
 
@@ -402,7 +402,7 @@ int Mtee::setAdjacent(int const _port, Element* adjacent, int const adjacent_por
 		case 1: adjacent1={ adjacent, adjacent_port }; break;
 		case 2: adjacent2={ adjacent, adjacent_port }; break;
 		case 3: adjacent3={ adjacent, adjacent_port }; break;
-		default: return(1);
+		default: return 1;
 		}
-	return(0);
+	return 0;
 	}

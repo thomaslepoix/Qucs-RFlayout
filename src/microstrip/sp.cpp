@@ -28,25 +28,25 @@ Sp::Sp(string _label,
 
 //******************************************************************************
 string Sp::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Sp::getFstart() const {
-	return(m_fstart);
+	return m_fstart;
 	}
 
 //******************************************************************************
 long double Sp::getFstop() const {
-	return(m_fstop);
+	return m_fstop;
 	}
 
 //******************************************************************************
 string Sp::getSimtype() const {
-	return(m_simtype);
+	return m_simtype;
 	}
 
 //******************************************************************************
 unsigned long Sp::getN() const {
-	return(m_n);
+	return m_n;
 	}

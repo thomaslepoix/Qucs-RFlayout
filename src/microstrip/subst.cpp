@@ -58,57 +58,57 @@ Subst::Subst(Subst const& _subst) :
 
 //******************************************************************************
 string Subst::getDescriptor() const {
-	return(m_descriptor);
+	return m_descriptor;
 	}
 
 //******************************************************************************
 long double Subst::getL() const {
-	return(m_l);
+	return m_l;
 	}
 
 //******************************************************************************
 long double Subst::getW() const {
-	return(m_w);
+	return m_w;
 	}
 
 //******************************************************************************
 long double Subst::getEr() const {
-	return(m_er);
+	return m_er;
 	}
 
 //******************************************************************************
 long double Subst::getH() const {
-	return(m_h);
+	return m_h;
 	}
 
 //******************************************************************************
 long double Subst::getT() const {
-	return(m_t);
+	return m_t;
 	}
 
 //******************************************************************************
 long double Subst::getTand() const {
-	return(m_tand);
+	return m_tand;
 	}
 
 //******************************************************************************
 long double Subst::getRho() const {
-	return(m_rho);
+	return m_rho;
 	}
 
 //******************************************************************************
 long double Subst::getD() const {
-	return(m_d);
+	return m_d;
 	}
 
 //******************************************************************************
 long double Subst::getMargin() const {
-	return(m_margin);
+	return m_margin;
 	}
 
 //******************************************************************************
 int Subst::getNpoint() const {
-	return(m_npoint);
+	return m_npoint;
 	}
 
 //******************************************************************************
@@ -125,13 +125,13 @@ long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, 
 //******************************************************************************
 int Subst::setW(long double const _w) {
 	m_w=_w;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
 int Subst::setL(long double const _l) {
 	m_l=_l;
-	return(0);
+	return 0;
 	}
 
 //******************************************************************************
@@ -148,5 +148,5 @@ int Subst::setP() {
 	substrate_boundary[XMAX]=getP(1, X, R, ABS);
 	substrate_boundary[YMIN]=getP(2, Y, R, ABS);
 	substrate_boundary[YMAX]=getP(0, Y, R, ABS);
-	return(0);
+	return 0;
 	}
