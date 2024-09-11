@@ -102,6 +102,8 @@ int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	} else if(adjacent1.first==nullptr
 	       && adjacent2.first!=nullptr) {
 		is_w1_longer=false;
+	} else {
+		return 1; // Unreachable
 		}
 
 	switch(m_r) {
