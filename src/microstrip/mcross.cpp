@@ -82,14 +82,16 @@ int Mcross::getNpoint() const {
 
 //******************************************************************************
 long double Mcross::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
-		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	long double const coord= [&]() {
+		switch(_r) {
+			case NOR: return tab_p[_n][_xy];
+			case R: return _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+			                   : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? m_y : m_x)
+	            : coord;
 	}
 
 int Mcross::setNet1(string const& _net1) {
@@ -203,6 +205,8 @@ int Mcross::setP() {
 			tab_p[4][Y]=s2*m_w1/2;
 			tab_p[5][X]=  -m_w2/2;
 			tab_p[5][Y]=s2*m_w1/2;
+		} else {
+			unreachable();
 			}
 		}
 	return 0;
@@ -355,6 +359,8 @@ void Mcross::getStep(int const _net, long double& xstep, long double& ystep) con
 			ystep=0;
 			xstep= + (Wlong)/2;
 			}
+	} else {
+		unreachable();
 		}
 	}
 
@@ -367,6 +373,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMAX; break;
 			case 180: dir=XMAX; break;
 			case 270: dir=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2) {
 		edge=m_w2;
@@ -376,6 +383,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMIN; break;
 				case 180: dir=YMAX; break;
 				case 270: dir=XMAX; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -383,7 +391,10 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMAX; break;
 				case 180: dir=YMIN; break;
 				case 270: dir=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_net==3) {
 		edge=m_w3;
@@ -392,6 +403,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMIN; break;
 			case 180: dir=XMIN; break;
 			case 270: dir=YMAX; break;
+			default: unreachable();
 			}
 	} else if(_net==4) {
 		edge=m_w4;
@@ -401,6 +413,7 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMAX; break;
 				case 180: dir=YMIN; break;
 				case 270: dir=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -408,7 +421,10 @@ void Mcross::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMIN; break;
 				case 180: dir=YMAX; break;
 				case 270: dir=XMAX; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 		}
 	}
@@ -432,6 +448,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(3, X, R, ABS); line.direction=XMAX; break;
 					case 180: line.position=getP(3, Y, R, ABS); line.direction=YMIN; break;
 					case 270: line.position=getP(3, X, R, ABS); line.direction=XMIN; break;
+					default: unreachable();
 					}
 			} else if(m_mirrorx==1) {
 				switch(m_r) {
@@ -439,7 +456,10 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(3, X, R, ABS); line.direction=XMIN; break;
 					case 180: line.position=getP(3, Y, R, ABS); line.direction=YMAX; break;
 					case 270: line.position=getP(3, X, R, ABS); line.direction=XMAX; break;
+					default: unreachable();
 					}
+			} else {
+				unreachable();
 				}
 		} else if(m_w1>m_w3 && m_w2<m_w4) {
 			switch(m_r) {
@@ -447,6 +467,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
 				case 180: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 				case 270: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+				default: unreachable();
 				}
 		} else if(m_w1<m_w3 && m_w2<m_w4) {
 			if(m_mirrorx==0) {
@@ -455,6 +476,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
 					case 180: line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
 					case 270: line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
+					default: unreachable();
 					}
 			} else if(m_mirrorx==1) {
 				switch(m_r) {
@@ -462,7 +484,10 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
 					case 180: line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
 					case 270: line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
+					default: unreachable();
 					}
+			} else {
+				unreachable();
 				}
 		} else if(m_w1<m_w3 && m_w2>m_w4) {
 			switch(m_r) {
@@ -470,6 +495,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(4, Y, R, ABS); line.direction=YMAX; break;
 				case 180: line.position=getP(4, X, R, ABS); line.direction=XMAX; break;
 				case 270: line.position=getP(4, Y, R, ABS); line.direction=YMIN; break;
+				default: unreachable();
 				}
 		} else {
 			return 1;
@@ -481,6 +507,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(3, Y, R, ABS); line.direction=YMIN; break;
 				case 180: line.position=getP(3, X, R, ABS); line.direction=XMIN; break;
 				case 270: line.position=getP(3, Y, R, ABS); line.direction=YMAX; break;
+				default: unreachable();
 				}
 		} else if(m_w1>m_w3 && m_w2<m_w4) {
 			if(m_mirrorx==0) {
@@ -489,6 +516,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 					case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
 					case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+					default: unreachable();
 					}
 			} else if(m_mirrorx==1) {
 				switch(m_r) {
@@ -496,7 +524,10 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
 					case 180: line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
 					case 270: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+					default: unreachable();
 					}
+			} else {
+				unreachable();
 				}
 		} else if(m_w1<m_w3 && m_w2<m_w4) {
 			switch(m_r) {
@@ -504,6 +535,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
 				case 180: line.position=getP(1, X, R, ABS); line.direction=XMAX; break;
 				case 270: line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
+				default: unreachable();
 				}
 		} else if(m_w1<m_w3 && m_w2>m_w4) {
 			if(m_mirrorx==0) {
@@ -512,6 +544,7 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(4, X, R, ABS); line.direction=XMAX; break;
 					case 180: line.position=getP(4, Y, R, ABS); line.direction=YMIN; break;
 					case 270: line.position=getP(4, X, R, ABS); line.direction=XMIN; break;
+					default: unreachable();
 					}
 			} else if(m_mirrorx==1) {
 				switch(m_r) {
@@ -519,7 +552,10 @@ int Mcross::getOemsMeshCore(int const _n, OemsLine& line) const {
 					case 90:  line.position=getP(4, X, R, ABS); line.direction=XMIN; break;
 					case 180: line.position=getP(4, Y, R, ABS); line.direction=YMAX; break;
 					case 270: line.position=getP(4, X, R, ABS); line.direction=XMAX; break;
+					default: unreachable();
 					}
+			} else {
+				unreachable();
 				}
 		} else {
 			return 1;
@@ -548,6 +584,7 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
 			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2
 	       &&(adjacent2.first==nullptr
@@ -560,6 +597,7 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -567,7 +605,10 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_net==3
 	       &&(adjacent3.first==nullptr
@@ -581,6 +622,7 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
 			case 180: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
 			case 270: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+			default: unreachable();
 			}
 	} else if(_net==4
 	       &&(adjacent4.first==nullptr
@@ -596,6 +638,7 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -603,7 +646,10 @@ int Mcross::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else {
 		return 1;
@@ -621,16 +667,16 @@ bool Mcross::isOemsMeshInterface(int const _port, long double const _w) const {
 		long double Wlong13= (m_w1>m_w3) ? m_w1 : m_w3;
 		long double Wlong24= (m_w2>m_w4) ? m_w2 : m_w4;
 		switch(_port) {
-			case 1: case 3: return(_w>Wlong13 ? true : false);
-			case 2: case 4: return(_w>Wlong24 ? true : false);
+			case 1: case 3: return _w>Wlong13 ? true : false;
+			case 2: case 4: return _w>Wlong24 ? true : false;
 			default : return false;
 			}
 	} else {
 		switch(_port) {
-			case 1: return(_w>m_w1 ? true : false);
-			case 2: return(_w>m_w2 ? true : false);
-			case 3: return(_w>m_w3 ? true : false);
-			case 4: return(_w>m_w4 ? true : false);
+			case 1: return _w>m_w1 ? true : false;
+			case 2: return _w>m_w2 ? true : false;
+			case 3: return _w>m_w3 ? true : false;
+			case 4: return _w>m_w4 ? true : false;
 			default: return false;
 			}
 		}

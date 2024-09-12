@@ -51,6 +51,7 @@ void Mvia::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 		case 90: dir=YMAX; break;
 		case 180: dir=XMAX; break;
 		case 270: dir=YMIN; break;
+		default: unreachable();
 		}
 	}
 
@@ -67,6 +68,7 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=m_x+m_d/2; line.direction=XMAX; break;
 			case 180: line.position=m_y-m_d/2; line.direction=YMIN; break;
 			case 270: line.position=m_x-m_d/2; line.direction=XMIN; break;
+			default: unreachable();
 			}
 	} else if(_n==1) {
 		switch(m_r) {
@@ -74,6 +76,7 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=m_y-m_d/2; line.direction=YMIN; break;
 			case 180: line.position=m_x-m_d/2; line.direction=XMIN; break;
 			case 270: line.position=m_y+m_d/2; line.direction=YMAX; break;
+			default: unreachable();
 			}
 	} else if(_n==2) {
 		switch(m_r) {
@@ -81,6 +84,7 @@ int Mvia::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=m_x-m_d/2; line.direction=XMIN; break;
 			case 180: line.position=m_y+m_d/2; line.direction=YMAX; break;
 			case 270: line.position=m_x+m_d/2; line.direction=XMAX; break;
+			default: unreachable();
 			}
 	} else {
 		return 1;
@@ -102,6 +106,7 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=m_y+m_d/2; line.direction=YMAX; break;
 			case 180: line.position=m_x+m_d/2; line.direction=XMAX; break;
 			case 270: line.position=m_y-m_d/2; line.direction=YMIN; break;
+			default: unreachable();
 			}
 	} else {
 		return 1;
@@ -115,10 +120,9 @@ int Mvia::getOemsMeshInterface(int const _net, OemsLine& line) const {
 
 //******************************************************************************
 bool Mvia::isOemsMeshInterface(int const _port, long double const _w) const {
-	if(_port==1) {
-		return(_w>m_d ? true : false);
-	} else {
-		return false;
+	switch(_port) {
+		case 1: return _w>m_d ? true : false;
+		default: return false;
 		}
 	}
 

@@ -51,15 +51,15 @@ void Mopen::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 		case 90: dir=YMAX; break;
 		case 180: dir=XMAX; break;
 		case 270: dir=YMIN; break;
+		default: unreachable();
 		}
 	}
 
 //******************************************************************************
 bool Mopen::isOemsMeshInterface(int const _port, long double const /*_w*/) const {
-	if(_port==1) {
-		return true;
-	} else {
-		return false;
+	switch(_port) {
+		case 1: return true;
+		default: return false;
 		}
 	}
 

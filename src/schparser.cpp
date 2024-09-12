@@ -952,9 +952,9 @@ string SchParser::check_void(string const match, string const label) const {
 
 //******************************************************************************
 string SchParser::mstub_shift(bool const xy, string const str, string const r) const {
-	if(r=="0")      return(xy ? to_string(stoi(str)-10) : str);
-	else if(r=="1") return(xy ? str : to_string(stoi(str)-10));
-	else if(r=="2") return(xy ? to_string(stoi(str)+10) : str);
-	else if(r=="3") return(xy ? str : to_string(stoi(str)+10));
+	if(r=="0")      return xy ? to_string(stoi(str)-10) : str;
+	else if(r=="1") return xy ? str : to_string(stoi(str)-10);
+	else if(r=="2") return xy ? to_string(stoi(str)+10) : str;
+	else if(r=="3") return xy ? str : to_string(stoi(str)+10);
 	else return str; // Never happens
 	}

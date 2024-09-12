@@ -56,14 +56,16 @@ int Mlin::getNpoint() const {
 
 //******************************************************************************
 long double Mlin::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
-		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	long double const coord= [&]() {
+		switch(_r) {
+			case NOR: return tab_p[_n][_xy];
+			case R: return _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+			                   : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? m_y : m_x)
+	            : coord;
 	}
 
 //******************************************************************************
@@ -125,6 +127,8 @@ void Mlin::getStep(int const _net, long double& xstep, long double& ystep) const
 			xstep=0;
 			ystep= + m_l/2;
 			}
+	} else {
+		unreachable();
 		}
 	}
 
@@ -137,6 +141,7 @@ void Mlin::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMAX; break;
 			case 180: dir=XMAX; break;
 			case 270: dir=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2) {
 		switch(m_r) {
@@ -144,6 +149,7 @@ void Mlin::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMIN; break;
 			case 180: dir=XMIN; break;
 			case 270: dir=YMAX; break;
+			default: unreachable();
 			}
 		}
 	}
@@ -169,6 +175,7 @@ int Mlin::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 			case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
 			case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+			default: unreachable();
 			}
 	} else if(_n==1) {
 //		line.position=getP(2, axis, R, ABS);
@@ -177,6 +184,7 @@ int Mlin::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 			case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
 			case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+			default: unreachable();
 			}
 	} else {
 		return 1;
@@ -206,6 +214,7 @@ int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
 			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2
 	       &&(adjacent2.first==nullptr
@@ -216,6 +225,7 @@ int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
 			case 180: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 			case 270: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+			default: unreachable();
 			}
 	} else {
 		return 1;
@@ -229,10 +239,10 @@ int Mlin::getOemsMeshInterface(int const _net, OemsLine& line) const {
 
 //******************************************************************************
 bool Mlin::isOemsMeshInterface(int const _port, long double const _w) const {
-	if(_port==1 || _port==2) {
-		return(_w>m_w ? true : false);
-	} else {
-		return false;
+	switch(_port) {
+		case 1: [[fallthrough]];
+		case 2: return _w>m_w ? true : false;
+		default: return false;
 		}
 	}
 

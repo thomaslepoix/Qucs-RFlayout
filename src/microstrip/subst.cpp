@@ -4,6 +4,8 @@
 /// @author Thomas Lepoix <thomas.lepoix@protonmail.ch>
 ///*****************************************************************************
 
+#include <utility>
+
 #include "subst.hpp"
 using namespace std;
 
@@ -113,13 +115,16 @@ int Subst::getNpoint() const {
 
 //******************************************************************************
 long double Subst::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y]) : rotateX(tab_p[_n][X], tab_p[_n][Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	long double const coord= [&]() {
+		switch(_r) {
+			case NOR: return tab_p[_n][_xy];
+			case R: return _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+			                   : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? m_y : m_x)
+	            : coord;
 	}
 
 //******************************************************************************

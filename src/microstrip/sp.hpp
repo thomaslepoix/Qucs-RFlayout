@@ -21,7 +21,7 @@ public :
 			std::string _type,
 			bool const _mirrorx,
 			short const _r,
-			std::string const _simtype,
+			std::string _simtype,
 			long double const _fstart,
 			long double const _fstop,
 			unsigned long const _n);

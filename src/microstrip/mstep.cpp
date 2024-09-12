@@ -70,6 +70,7 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMAX; break;
 			case 180: dir=XMAX; break;
 			case 270: dir=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2) {
 		edge=m_w2;
@@ -78,6 +79,7 @@ void Mstep::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMIN; break;
 			case 180: dir=XMIN; break;
 			case 270: dir=YMAX; break;
+			default: unreachable();
 			}
 		}
 	}
@@ -103,26 +105,15 @@ int Mstep::getOemsMeshCore(int const _n, OemsLine& line) const {
 	       && adjacent2.first!=nullptr) {
 		is_w1_longer=false;
 	} else {
-		return 1; // Unreachable
+		unreachable();
 		}
 
 	switch(m_r) {
-		case 0:
-			line.position=m_x;
-			line.direction=(is_w1_longer ? XMAX : XMIN);
-			break;
-		case 90:
-			line.position=m_y;
-			line.direction=(is_w1_longer ? YMIN : YMAX);
-			break;
-		case 180:
-			line.position=m_x;
-			line.direction=(is_w1_longer ? XMIN : XMAX);
-			break;
-		case 270:
-			line.position=m_y;
-			line.direction=(is_w1_longer ? YMAX : YMIN);
-			break;
+		case 0:   line.position=m_x; line.direction=(is_w1_longer ? XMAX : XMIN); break;
+		case 90:  line.position=m_y; line.direction=(is_w1_longer ? YMIN : YMAX); break;
+		case 180: line.position=m_x; line.direction=(is_w1_longer ? XMIN : XMAX); break;
+		case 270: line.position=m_y; line.direction=(is_w1_longer ? YMAX : YMIN); break;
+		default: unreachable();
 		}
 
 	line.label=m_label;

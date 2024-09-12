@@ -7,6 +7,7 @@
 #define _USE_MATH_DEFINES
 
 #include <cmath>
+#include <utility>
 
 #include "mrstub.hpp"
 using namespace std;
@@ -74,14 +75,16 @@ int Mrstub::getNpoint() const {
 
 //******************************************************************************
 long double Mrstub::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
-		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	long double const coord= [&]() {
+		switch(_r) {
+			case NOR: return tab_p[_n][_xy];
+			case R: return _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+			                   : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? m_y : m_x)
+	            : coord;
 	}
 
 //******************************************************************************
@@ -124,6 +127,7 @@ void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 			case 90: dir=XMAX; break;
 			case 180: dir=YMIN; break;
 			case 270: dir=XMIN; break;
+			default: unreachable();
 			}
 	} else if(m_mirrorx==1) {
 		switch(m_r) {
@@ -131,7 +135,10 @@ void Mrstub::getEdge(int const /*_net*/, long double& edge, short& dir) const {
 			case 90: dir=XMIN; break;
 			case 180: dir=YMAX; break;
 			case 270: dir=XMAX; break;
+			default: unreachable();
 			}
+	} else {
+		unreachable();
 		}
 	}
 
@@ -149,6 +156,7 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -156,7 +164,10 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_n==1) {
 		switch(m_r) {
@@ -164,6 +175,7 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
 			case 180: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
 			case 270: line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_n==2) {
 		int p=(m_npoint-5)/2+3;
@@ -173,14 +185,18 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
-		} else {
+		} else if(m_mirrorx==1) {
 			switch(m_r) {
 				case 0:   line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
 				case 90:  line.position=getP(p, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_n==3) {
 		int p=m_npoint-1;
@@ -189,6 +205,7 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(p, Y, R, ABS); line.direction=YMIN; break;
 			case 180: line.position=getP(p, X, R, ABS); line.direction=XMIN; break;
 			case 270: line.position=getP(p, Y, R, ABS); line.direction=YMAX; break;
+			default: unreachable();
 			}
 	} else {
 		return 1;
@@ -203,9 +220,8 @@ int Mrstub::getOemsMeshCore(int const _n, OemsLine& line) const {
 
 //******************************************************************************
 bool Mrstub::isOemsMeshInterface(int const _port, long double const _w) const {
-	if(_port==1) {
-		return(_w>m_w ? true : false);
-	} else {
-		return false;
+	switch(_port) {
+		case 1: return _w>m_w ? true : false;
+		default: return false;
 		}
 	}

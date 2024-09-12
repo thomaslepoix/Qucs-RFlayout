@@ -79,6 +79,7 @@ void XyCalculator::resolve_pac_shapes() {
 				// Only axis matters
 				case XMIN: case XMAX: pac->setR(0); break;
 				case YMIN: case YMAX: pac->setR(90); break;
+				default: unreachable();
 				}
 			}
 		}
@@ -288,6 +289,8 @@ void XyCalculator::place_blocks() {
 				if(is_new_subst) shift_y+=prev->margin+block->margin;
 				shift_y+=prev->margin+block->margin;
 				} break;
+			default:
+				unreachable();
 				}
 			//shift=set_margin(prev, block, data);
 			cout << "Xshift : " << shift_x << endl;

@@ -70,12 +70,12 @@ string Element::getSubst() const {
 
 //******************************************************************************
 long double Element::getX(bool const apply_shift) const {
-	return(m_shift_x && apply_shift ? m_x+m_shift_x : m_x); // Avoid useless float calcul.
+	return m_shift_x && apply_shift ? m_x+m_shift_x : m_x;
 	}
 
 //******************************************************************************
 long double Element::getY(bool const apply_shift) const {
-	return(m_shift_y && apply_shift ? m_y+m_shift_y : m_y); // Avoid useless float calcul.
+	return m_shift_y && apply_shift ? m_y+m_shift_y : m_y;
 	}
 
 //******************************************************************************

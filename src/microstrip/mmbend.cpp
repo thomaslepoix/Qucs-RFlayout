@@ -49,14 +49,16 @@ int Mmbend::getNpoint() const {
 
 //******************************************************************************
 long double Mmbend::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
-		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	long double const coord= [&]() {
+		switch(_r) {
+			case R: return _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+			                   : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+			case NOR: return tab_p[_n][_xy];
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? m_y : m_x)
+	            : coord;
 	}
 
 //******************************************************************************
@@ -150,6 +152,8 @@ void Mmbend::getStep(int const _net, long double& xstep, long double& ystep) con
 			xstep= + m_w/2;
 			ystep=0;
 			}
+	} else {
+		unreachable();
 		}
 	}
 
@@ -162,6 +166,7 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMAX; break;
 			case 180: dir=XMAX; break;
 			case 270: dir=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2) {
 		if(m_mirrorx==0) {
@@ -170,6 +175,7 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMAX; break;
 				case 180: dir=YMIN; break;
 				case 270: dir=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -177,7 +183,10 @@ void Mmbend::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMIN; break;
 				case 180: dir=YMAX; break;
 				case 270: dir=XMAX; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 		}
 	}
@@ -196,6 +205,7 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -203,7 +213,10 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_n==1) {
 		switch(m_r) {
@@ -211,6 +224,7 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(1, Y, R, ABS); line.direction=YMIN; break;
 			case 180: line.position=getP(1, X, R, ABS); line.direction=XMIN; break;
 			case 270: line.position=getP(1, Y, R, ABS); line.direction=YMAX; break;
+			default: unreachable();
 			}
 	} else if(_n==2) {
 		if(m_mirrorx==0) {
@@ -219,14 +233,18 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
-		} else {
+		} else if(m_mirrorx==1) {
 			switch(m_r) {
 				case 0:   line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
 				case 90:  line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_n==3) {
 		switch(m_r) {
@@ -234,6 +252,7 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
 			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			default: unreachable();
 			}
 	} else {
 		return 1;
@@ -248,9 +267,9 @@ int Mmbend::getOemsMeshCore(int const _n, OemsLine& line) const {
 
 //******************************************************************************
 bool Mmbend::isOemsMeshInterface(int const _port, long double const _w) const {
-	if(_port==1 || _port==2) {
-		return(_w>m_w ? true : false);
-	} else {
-		return false;
+	switch(_port) {
+		case 1: [[fallthrough]];
+		case 2: return _w>m_w ? true : false;
+		default: return false;
 		}
 	}

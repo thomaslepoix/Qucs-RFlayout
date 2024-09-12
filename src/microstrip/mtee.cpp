@@ -70,14 +70,16 @@ int Mtee::getNpoint() const {
 
 //******************************************************************************
 long double Mtee::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const /*apply_shift*/) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][0], tab_p[_n][1])
-		           : rotateX(tab_p[_n][0], tab_p[_n][1]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? m_y : m_x) : coord);
+	long double const coord= [&]() {
+		switch(_r) {
+			case NOR: return tab_p[_n][_xy];
+			case R: return _xy ? rotateY(tab_p[_n][0], tab_p[_n][1])
+			                   : rotateX(tab_p[_n][0], tab_p[_n][1]);
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? m_y : m_x)
+	            : coord;
 	}
 
 //******************************************************************************
@@ -234,6 +236,8 @@ void Mtee::getStep(int const _net, long double& xstep, long double& ystep) const
 			xstep= + (Wlong)/2;
 			ystep=0;
 			}
+	} else {
+		unreachable();
 		}
 	}
 
@@ -246,6 +250,7 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMAX; break;
 			case 180: dir=XMAX; break;
 			case 270: dir=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2) {
 		edge=m_w2;
@@ -254,6 +259,7 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMIN; break;
 			case 180: dir=XMIN; break;
 			case 270: dir=YMAX; break;
+			default: unreachable();
 			}
 	} else if(_net==3) {
 		edge=m_w3;
@@ -263,6 +269,7 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMAX; break;
 				case 180: dir=YMIN; break;
 				case 270: dir=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -270,7 +277,10 @@ void Mtee::getEdge(int const _net, long double& edge, short& dir) const {
 				case 90: dir=XMIN; break;
 				case 180: dir=YMAX; break;
 				case 270: dir=XMAX; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 		}
 	}
@@ -293,6 +303,7 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -300,7 +311,10 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(2, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else if(_n==1) {
 		switch(m_r) {
@@ -308,6 +322,7 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 			case 90:  line.position=getP(4, Y, R, ABS); line.direction=(m_w1>m_w2 ? YMIN : YMAX); break;
 			case 180: line.position=getP(4, X, R, ABS); line.direction=(m_w1>m_w2 ? XMIN : XMAX); break;
 			case 270: line.position=getP(4, Y, R, ABS); line.direction=(m_w1>m_w2 ? YMAX : YMIN); break;
+			default: unreachable();
 			}
 	} else if(_n==2) {
 		if(m_mirrorx==0) {
@@ -316,6 +331,7 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(5, X, R, ABS); line.direction=XMIN; break;
 				case 180: line.position=getP(5, Y, R, ABS); line.direction=YMAX; break;
 				case 270: line.position=getP(5, X, R, ABS); line.direction=XMAX; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -323,7 +339,10 @@ int Mtee::getOemsMeshCore(int const _n, OemsLine& line) const {
 				case 90:  line.position=getP(5, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(5, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(5, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else {
 		return 1;
@@ -345,6 +364,7 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=getP(0, Y, R, ABS); line.direction=YMAX; break;
 			case 180: line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 			case 270: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2
 	       &&(adjacent2.first==nullptr
@@ -354,6 +374,7 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 			case 90:  line.position=getP(2, Y, R, ABS); line.direction=YMIN; break;
 			case 180: line.position=getP(2, X, R, ABS); line.direction=XMIN; break;
 			case 270: line.position=getP(2, Y, R, ABS); line.direction=YMAX; break;
+			default: unreachable();
 			}
 	} else if(_net==3
 	       &&(adjacent3.first==nullptr
@@ -364,6 +385,7 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
 		} else if(m_mirrorx==1) {
 			switch(m_r) {
@@ -371,7 +393,10 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 				case 90:  line.position=getP(0, X, R, ABS); line.direction=XMAX; break;
 				case 180: line.position=getP(0, Y, R, ABS); line.direction=YMIN; break;
 				case 270: line.position=getP(0, X, R, ABS); line.direction=XMIN; break;
+				default: unreachable();
 				}
+		} else {
+			unreachable();
 			}
 	} else {
 		return 1;
@@ -385,14 +410,11 @@ int Mtee::getOemsMeshInterface(int const _net, OemsLine& line) const {
 
 //******************************************************************************
 bool Mtee::isOemsMeshInterface(int const _port, long double const _w) const {
-	if(_port==1) {
-		return(_w>m_w1 ? true : false);
-	} else if(_port==2) {
-		return(_w>m_w2 ? true : false);
-	} else if(_port==3) {
-		return(_w>m_w3 ? true : false);
-	} else {
-		return false;
+	switch(_port) {
+		case 1: return _w>m_w1 ? true : false;
+		case 2: return _w>m_w2 ? true : false;
+		case 3: return _w>m_w3 ? true : false;
+		default: return false;
 		}
 	}
 

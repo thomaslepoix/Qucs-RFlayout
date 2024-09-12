@@ -81,14 +81,16 @@ int Pac::getNpoint() const {
 
 //******************************************************************************
 long double Pac::getP(int const _n, axis_t const _xy, orientation_t const _r, origin_t const _abs, bool const apply_shift) const {
-	long double coord;
-	if(_r) {
-		coord= _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
-		           : rotateX(tab_p[_n][X], tab_p[_n][Y]);
-	} else {
-		coord=tab_p[_n][_xy];
-		}
-	return(_abs ? coord+(_xy ? getY(apply_shift) : getX(apply_shift)) : coord);
+	long double const coord = [&](){
+		switch(_r) {
+			case NOR: return tab_p[_n][_xy];
+			case R: return _xy ? rotateY(tab_p[_n][X], tab_p[_n][Y])
+			                   : rotateX(tab_p[_n][X], tab_p[_n][Y]);
+			default: unreachable();
+			}
+		} ();
+	return _abs ? coord+(_xy ? getY(apply_shift) : getX(apply_shift))
+	            : coord;
 	}
 
 //******************************************************************************
@@ -100,6 +102,7 @@ void Pac::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMAX; break;
 			case 180: dir=XMAX; break;
 			case 270: dir=YMIN; break;
+			default: unreachable();
 			}
 	} else if(_net==2) {
 		switch(m_r) {
@@ -107,6 +110,7 @@ void Pac::getEdge(int const _net, long double& edge, short& dir) const {
 			case 90: dir=YMIN; break;
 			case 180: dir=XMIN; break;
 			case 270: dir=YMAX; break;
+			default: unreachable();
 			}
 		}
 	}
