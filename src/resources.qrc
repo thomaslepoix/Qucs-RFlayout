@@ -1,15 +1,16 @@
 <RCC>
   <qresource prefix="/">
     <!--
+       # Order seems to matter, also 512 seems to block ImageMagick and may be useless.
        convert \
-       qucsrflayout.16x16.png \
-       qucsrflayout.22x22.png \
-       qucsrflayout.32x32.png \
-       qucsrflayout.48x48.png \
-       qucsrflayout.64x64.png \
-       qucsrflayout.128x128.png \
-       qucsrflayout.256x256.png \
        qucsrflayout.512x512.png \
+       qucsrflayout.256x256.png \
+       qucsrflayout.128x128.png \
+       qucsrflayout.64x64.png \
+       qucsrflayout.48x48.png \
+       qucsrflayout.32x32.png \
+       qucsrflayout.22x22.png \
+       qucsrflayout.16x16.png \
        qucsrflayout.ico
     -->
     <file alias="qucsrflayout.ico">../pack/icons/qucsrflayout.ico</file>
