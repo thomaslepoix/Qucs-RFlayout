@@ -41,7 +41,7 @@ Use directory as output (default current directory).
 \fB-f\fR \fIFORMAT\fR
 Use format as output layout format.
 
-FORMAT can be:
+\fIFORMAT\fR can be:
 .PD 0
 .RS
 .TP
@@ -111,6 +111,31 @@ Order metal resolution mesh lines by edge coordinate. Default is grouped by comp
 .TP
     \fB--oems-pkg\fR
 Look for 'openems' and 'csxcad' Octave packages. Requires properly packaged Octaves packages such as 'octave-openems' and 'octave-csxcad' from Debian repositories.
+.TP
+    \fB--gui-theme\fR \fITHEME\fR
+Choose GUI color theme.
+
+\fITHEME\fR can be:
+.PD 0
+.RS
+.TP
+	\fBFlashy\fR (default theme)
+.".TP
+."	\fBCAD\fR
+.TP
+	\fBHighContrast\fR
+.TP
+	\fBHighContrast2\fR
+.TP
+	\fBQucsGUI\fR
+.TP
+	\fBQucsIcon\fR
+.TP
+	\fBSolvespace\fR
+.TP
+	\fBTranscalc\fR
+.RE
+.PD
 
 .SH NOTES
 Microstrip components are supported except the lange coupler. Coplanar waveguide components are not yet. Any other component is not supported.

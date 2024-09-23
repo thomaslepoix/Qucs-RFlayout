@@ -103,7 +103,19 @@ int main(int argc, char* argv[]) {
 				        "                                     Default is grouped by component label.\n"
 				        "      --oems-pkg                     Look for 'openems' and 'csxcad' Octave packages. Requires properly\n"
 				        "                                     packaged Octaves packages such as 'octave-openems' and 'octave-csxcad'\n"
-				        "                                     from Debian repositories.\n";
+				        "                                     from Debian repositories.\n"
+#ifndef QRFL_MINIMAL
+				        "      --gui-theme THEME              Choose GUI color theme.\n"
+				        "                                     THEME can be:\n"
+				        "                                     - Flashy (default theme)\n"
+				        "                                     - HighContrast\n"
+				        "                                     - HighContrast2\n"
+				        "                                     - QucsGUI\n"
+				        "                                     - QucsIcon\n"
+				        "                                     - Solvespace\n"
+				        "                                     - Transcalc\n"
+#endif // QRFL_MINIMAL
+				        ;
 				return EXIT_SUCCESS;
 			} else if(string(argv[i])=="--version") {
 				cout << "Qucs-RFlayout " << VERSION
@@ -193,6 +205,11 @@ int main(int argc, char* argv[]) {
 				data.oems_sort_metalresmesh=true;
 			} else if(string(argv[i])=="--oems-pkg") {
 				data.oems_pkg=true;
+#ifndef QRFL_MINIMAL
+			} else if(string(argv[i])=="--gui-theme" && argv[i+1]) {
+				i++;
+				data.gui_theme=string(argv[i]);
+#endif // QRFL_MINIMAL
 			} else if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 				verbose=true;
 #ifndef QRFL_MINIMAL

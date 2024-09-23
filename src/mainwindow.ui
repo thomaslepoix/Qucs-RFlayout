@@ -239,9 +239,39 @@ Should be a component label</string>
       </property>
      </widget>
     </item>
+
     <item row="2" column="0" rowspan="16" colspan="2">
-     <widget class="Preview" name="glw_preview" native="true"/>
+     <widget class="QFrame" name="f_preview">
+      <layout class="QGridLayout" name="gl_preview">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0" rowspan="1" colspan="1">
+        <widget class="QCheckBox" name="cb_transparency">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Transparency</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" rowspan="15" colspan="2">
+        <widget class="Preview" name="glw_preview" native="true"/>
+       </item>
+      </layout>
+     </widget>
     </item>
+
     <item row="0" column="2" colspan="2">
      <widget class="QPushButton" name="pb_browse_in">
       <property name="text">

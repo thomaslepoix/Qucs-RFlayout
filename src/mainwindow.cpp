@@ -43,6 +43,8 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 	ui->le_oems_timeres->setText(QString::number(data.oems_timeres));
 	ui->cb_oems_pkg->setCheckState(_data.oems_pkg ? Qt::Checked : Qt::Unchecked);
 	ui->cb_oems_sort_metalresmesh->setCheckState(_data.oems_sort_metalresmesh ? Qt::Checked : Qt::Unchecked);
+	ui->cb_transparency->setCheckState(Qt::Unchecked);
+	ui->glw_preview->setTheme(_data.gui_theme);
 	ui->tw_actions->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
 	for(std::tuple<unsigned long, std::string, std::string> arg : data.port_shift_args) {
@@ -190,6 +192,12 @@ void MainWindow::write() {
 //******************************************************************************
 void MainWindow::on_cb_format_currentTextChanged(QString const& out_format) {
 	ui->gb_oems->setEnabled((out_format==".m") ? true : false);
+	ui->glw_preview->setF2D((out_format==".kicad_pcb"
+	                       ||out_format==".kicad_mod"
+	                       ||out_format==".lht"
+	                       ||out_format==".svg")
+	                       ? true : false);
+	ui->glw_preview->resetView();
 	data.out_format=out_format.toStdString();
 	}
 
@@ -205,6 +213,15 @@ void MainWindow::on_cb_specify_netlist_stateChanged(int const state) {
 		ui->le_path_net->setEnabled(true);
 		ui->pb_browse_net->setEnabled(true);
 		data.n_net=ui->le_path_net->text().toStdString();
+		}
+	}
+
+//******************************************************************************
+void MainWindow::on_cb_transparency_stateChanged(int const state) {
+	if(state==Qt::Unchecked) {
+		ui->glw_preview->setTransparency(false);
+	} else if(state==Qt::Checked) {
+		ui->glw_preview->setTransparency(true);
 		}
 	}
 

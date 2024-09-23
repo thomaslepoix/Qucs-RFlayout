@@ -85,6 +85,9 @@ public:
 	bool oems_sort_metalresmesh;
 	bool oems_pkg;
 
+#ifndef QRFL_MINIMAL
+	std::string gui_theme;
+#endif // QRFL_MINIMAL
 	Data();
 
 	void reset();

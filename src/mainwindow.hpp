@@ -41,6 +41,7 @@ private:
 private slots:
 	void on_cb_format_currentTextChanged(QString const& out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
+	void on_cb_transparency_stateChanged(int const state);
 	void on_cb_oems_pkg_stateChanged(int const state);
 	void on_cb_oems_sort_metalresmesh_stateChanged(int const state);
 	void on_le_oems_end_criteria_textChanged(QString const& oems_end_criteria);
