@@ -14,5 +14,18 @@
        qucsrflayout.ico
     -->
     <file alias="qucsrflayout.ico">../pack/icons/qucsrflayout.ico</file>
+    <file alias="mcorn.png">./icons/mcorn.png</file>
+    <file alias="mcoupled.png">./icons/mcoupled.png</file>
+    <file alias="mcross.png">./icons/mcross.png</file>
+    <file alias="mgap.png">./icons/mgap.png</file>
+    <file alias="mlin.png">./icons/mlin.png</file>
+    <file alias="mmbend.png">./icons/mmbend.png</file>
+    <file alias="mopen.png">./icons/mopen.png</file>
+    <file alias="mrstub.png">./icons/mrstub.png</file>
+    <file alias="mstep.png">./icons/mstep.png</file>
+    <file alias="mtee.png">./icons/mtee.png</file>
+    <file alias="mvia.png">./icons/mvia.png</file>
+    <file alias="pac.png">./icons/pac.png</file>
+    <file alias="subst.png">./icons/subst.png</file>
   </qresource>
 </RCC>

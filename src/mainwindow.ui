@@ -390,8 +390,338 @@ Should be a component label</string>
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="m_help">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <widget class="QMenu" name="m_detail">
+     <property name="title">
+      <string>Detail</string>
+     </property>
+     <addaction name="a_detail_mcorn"/>
+     <addaction name="a_detail_mcoupled"/>
+     <addaction name="a_detail_mcross"/>
+     <addaction name="a_detail_mlin"/>
+     <addaction name="a_detail_mmbend"/>
+     <addaction name="a_detail_mrstub"/>
+     <addaction name="a_detail_mtee"/>
+    </widget>
+    <widget class="QMenu" name="m_oems_mesh">
+     <property name="title">
+      <string>OpenEMS mesh</string>
+     </property>
+     <addaction name="a_oems_mesh_mcorn"/>
+     <addaction name="a_oems_mesh_mcoupled"/>
+     <addaction name="a_oems_mesh_mcross"/>
+     <addaction name="a_oems_mesh_mgap"/>
+     <addaction name="a_oems_mesh_mlin"/>
+     <addaction name="a_oems_mesh_mmbend"/>
+     <addaction name="a_oems_mesh_mopen"/>
+     <addaction name="a_oems_mesh_mrstub"/>
+     <addaction name="a_oems_mesh_mstep"/>
+     <addaction name="a_oems_mesh_mtee"/>
+     <addaction name="a_oems_mesh_mvia"/>
+     <addaction name="a_oems_mesh_pac"/>
+    </widget>
+    <widget class="QMenu" name="m_topology">
+     <property name="title">
+      <string>Topology</string>
+     </property>
+     <addaction name="a_topology_mcorn"/>
+     <addaction name="a_topology_mcoupled"/>
+     <addaction name="a_topology_mcross"/>
+     <addaction name="a_topology_mgap"/>
+     <addaction name="a_topology_mlin"/>
+     <addaction name="a_topology_mmbend"/>
+     <addaction name="a_topology_mopen"/>
+     <addaction name="a_topology_mrstub"/>
+     <addaction name="a_topology_mstep"/>
+     <addaction name="a_topology_mtee"/>
+     <addaction name="a_topology_mvia"/>
+    </widget>
+    <addaction name="m_topology"/>
+    <addaction name="m_detail"/>
+    <addaction name="m_oems_mesh"/>
+    <addaction name="a_table_orientation"/>
+   </widget>
+   <addaction name="m_help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="a_detail_mcorn">
+   <property name="text">
+    <string>MCORN - Microstrip corner</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcorn.png</normaloff>:/mcorn.png</iconset>
+   </property>
+  </action>
+  <action name="a_detail_mcoupled">
+   <property name="text">
+    <string>MCOUPLED - Microstrip coupled lines</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcoupled.png</normaloff>:/mcoupled.png</iconset>
+   </property>
+  </action>
+  <action name="a_detail_mcross">
+   <property name="text">
+    <string>MCROSS - Microstrip cross</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcross.png</normaloff>:/mcross.png</iconset>
+   </property>
+  </action>
+  <action name="a_detail_mlin">
+   <property name="text">
+    <string>MLIN - Microstrip line</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mlin.png</normaloff>:/mlin.png</iconset>
+   </property>
+  </action>
+  <action name="a_detail_mmbend">
+   <property name="text">
+    <string>MMBEND - Microstrip mitered bend</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mmbend.png</normaloff>:/mmbend.png</iconset>
+   </property>
+  </action>
+  <action name="a_detail_mrstub">
+   <property name="text">
+    <string>MRSTUB - Microstrip radial stub</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mrstub.png</normaloff>:/mrstub.png</iconset>
+   </property>
+  </action>
+  <action name="a_detail_mtee">
+   <property name="text">
+    <string>MTEE - Microstrip tee</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mtee.png</normaloff>:/mtee.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mcorn">
+   <property name="text">
+    <string>MCORN - Microstrip corner</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcorn.png</normaloff>:/mcorn.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mcoupled">
+   <property name="text">
+    <string>MCOUPLED - Microstrip coupled lines</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcoupled.png</normaloff>:/mcoupled.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mcross">
+   <property name="text">
+    <string>MCROSS - Microstrip cross</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcross.png</normaloff>:/mcross.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mgap">
+   <property name="text">
+    <string>MGAP - Microstrip gap</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mgap.png</normaloff>:/mgap.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mlin">
+   <property name="text">
+    <string>MLIN - Microstrip line</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mlin.png</normaloff>:/mlin.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mmbend">
+   <property name="text">
+    <string>MMBEND - Microstrip mitered bend</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mmbend.png</normaloff>:/mmbend.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mopen">
+   <property name="text">
+    <string>MOPEN - Microstrip open</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mopen.png</normaloff>:/mopen.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mrstub">
+   <property name="text">
+    <string>MRSTUB - Microstrip radial stub</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mrstub.png</normaloff>:/mrstub.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mstep">
+   <property name="text">
+    <string>MSTEP - Microstrip step</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mstep.png</normaloff>:/mstep.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mtee">
+   <property name="text">
+    <string>MTEE - Microstrip tee</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mtee.png</normaloff>:/mtee.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_mvia">
+   <property name="text">
+    <string>MVIA - Microstrip via</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mvia.png</normaloff>:/mvia.png</iconset>
+   </property>
+  </action>
+  <action name="a_oems_mesh_pac">
+   <property name="text">
+    <string>Pac - AC power</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/pac.png</normaloff>:/pac.png</iconset>
+   </property>
+  </action>
+  <action name="a_table_orientation">
+   <property name="text">
+    <string>Orientation table</string>
+   </property>
+  </action>
+  <action name="a_topology_mcorn">
+   <property name="text">
+    <string>MCORN - Microstrip corner</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcorn.png</normaloff>:/mcorn.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mcoupled">
+   <property name="text">
+    <string>MCOUPLED - Microstrip coupled lines</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcoupled.png</normaloff>:/mcoupled.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mcross">
+   <property name="text">
+    <string>MCROSS - Microstrip cross</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mcross.png</normaloff>:/mcross.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mgap">
+   <property name="text">
+    <string>MGAP - Microstrip gap</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mgap.png</normaloff>:/mgap.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mlin">
+   <property name="text">
+    <string>MLIN - Microstrip line</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mlin.png</normaloff>:/mlin.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mmbend">
+   <property name="text">
+    <string>MMBEND - Microstrip mitered bend</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mmbend.png</normaloff>:/mmbend.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mopen">
+   <property name="text">
+    <string>MOPEN - Microstrip open</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mopen.png</normaloff>:/mopen.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mrstub">
+   <property name="text">
+    <string>MRSTUB - Microstrip radial stub</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mrstub.png</normaloff>:/mrstub.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mstep">
+   <property name="text">
+    <string>MSTEP - Microstrip step</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mstep.png</normaloff>:/mstep.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mtee">
+   <property name="text">
+    <string>MTEE - Microstrip tee</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mtee.png</normaloff>:/mtee.png</iconset>
+   </property>
+  </action>
+  <action name="a_topology_mvia">
+   <property name="text">
+    <string>MVIA - Microstrip via</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/mvia.png</normaloff>:/mvia.png</iconset>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -401,6 +731,8 @@ Should be a component label</string>
    <header>preview.hpp</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

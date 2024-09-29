@@ -6,7 +6,12 @@
 
 #ifndef QRFL_MINIMAL
 
+#include <QCoreApplication>
+#include <QDesktopServices>
+#include <QDir>
 #include <QFileDialog>
+#include <QString>
+#include <QUrl>
 
 #include "logger.hpp"
 #include "preview.hpp"
@@ -188,6 +193,45 @@ void MainWindow::write() {
 		log_err << "ERROR : Nothing to write.\n";
 		}
 	}
+
+//******************************************************************************
+static void open_doc_file(QString const& name) {
+	static QString const docdir = QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../share/doc/qucsrflayout");
+	QDesktopServices::openUrl(QUrl(docdir + "/" + name + ".pdf"));
+	}
+
+//******************************************************************************
+void MainWindow::on_a_detail_mcorn_triggered() { open_doc_file("detail_mcorn"); }
+void MainWindow::on_a_detail_mcoupled_triggered() { open_doc_file("detail_mcoupled"); }
+void MainWindow::on_a_detail_mcross_triggered() { open_doc_file("detail_mcross"); }
+void MainWindow::on_a_detail_mlin_triggered() { open_doc_file("detail_mlin"); }
+void MainWindow::on_a_detail_mmbend_triggered() { open_doc_file("detail_mmbend"); }
+void MainWindow::on_a_detail_mrstub_triggered() { open_doc_file("detail_mrstub"); }
+void MainWindow::on_a_detail_mtee_triggered() { open_doc_file("detail_mtee"); }
+void MainWindow::on_a_oems_mesh_mcorn_triggered() { open_doc_file("oems_mesh_mcorn"); }
+void MainWindow::on_a_oems_mesh_mcoupled_triggered() { open_doc_file("oems_mesh_mcoupled"); }
+void MainWindow::on_a_oems_mesh_mcross_triggered() { open_doc_file("oems_mesh_mcross"); }
+void MainWindow::on_a_oems_mesh_mgap_triggered() { open_doc_file("oems_mesh_mgap"); }
+void MainWindow::on_a_oems_mesh_mlin_triggered() { open_doc_file("oems_mesh_mlin"); }
+void MainWindow::on_a_oems_mesh_mmbend_triggered() { open_doc_file("oems_mesh_mmbend"); }
+void MainWindow::on_a_oems_mesh_mopen_triggered() { open_doc_file("oems_mesh_mopen"); }
+void MainWindow::on_a_oems_mesh_mrstub_triggered() { open_doc_file("oems_mesh_mrstub"); }
+void MainWindow::on_a_oems_mesh_mstep_triggered() { open_doc_file("oems_mesh_mstep"); }
+void MainWindow::on_a_oems_mesh_mtee_triggered() { open_doc_file("oems_mesh_mtee"); }
+void MainWindow::on_a_oems_mesh_mvia_triggered() { open_doc_file("oems_mesh_mvia"); }
+void MainWindow::on_a_oems_mesh_pac_triggered() { open_doc_file("oems_mesh_pac"); }
+void MainWindow::on_a_table_orientation_triggered() { open_doc_file("table_orientation"); }
+void MainWindow::on_a_topology_mcorn_triggered() { open_doc_file("topology_mcorn"); }
+void MainWindow::on_a_topology_mcoupled_triggered() { open_doc_file("topology_mcoupled"); }
+void MainWindow::on_a_topology_mcross_triggered() { open_doc_file("topology_mcross"); }
+void MainWindow::on_a_topology_mgap_triggered() { open_doc_file("topology_mgap"); }
+void MainWindow::on_a_topology_mlin_triggered() { open_doc_file("topology_mlin"); }
+void MainWindow::on_a_topology_mmbend_triggered() { open_doc_file("topology_mmbend"); }
+void MainWindow::on_a_topology_mopen_triggered() { open_doc_file("topology_mopen"); }
+void MainWindow::on_a_topology_mrstub_triggered() { open_doc_file("topology_mrstub"); }
+void MainWindow::on_a_topology_mstep_triggered() { open_doc_file("topology_mstep"); }
+void MainWindow::on_a_topology_mtee_triggered() { open_doc_file("topology_mtee"); }
+void MainWindow::on_a_topology_mvia_triggered() { open_doc_file("topology_mvia"); }
 
 //******************************************************************************
 void MainWindow::on_cb_format_currentTextChanged(QString const& out_format) {

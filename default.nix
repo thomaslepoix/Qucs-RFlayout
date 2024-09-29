@@ -9,6 +9,9 @@
 , withGui ? true
 }:
 
+assert lib.asserts.assertMsg (withGui -> withDoc)
+  "withGui implies withDoc";
+
 assert lib.asserts.assertMsg (! (stdenv.hostPlatform.isWindows && withGui == false))
   "Minimal mode is not compatible with Windows build";
 

@@ -39,6 +39,37 @@ private:
 	void log(std::stringstream& in) override;
 
 private slots:
+	void on_a_detail_mcorn_triggered();
+	void on_a_detail_mcoupled_triggered();
+	void on_a_detail_mcross_triggered();
+	void on_a_detail_mlin_triggered();
+	void on_a_detail_mmbend_triggered();
+	void on_a_detail_mrstub_triggered();
+	void on_a_detail_mtee_triggered();
+	void on_a_oems_mesh_mcorn_triggered();
+	void on_a_oems_mesh_mcoupled_triggered();
+	void on_a_oems_mesh_mcross_triggered();
+	void on_a_oems_mesh_mgap_triggered();
+	void on_a_oems_mesh_mlin_triggered();
+	void on_a_oems_mesh_mmbend_triggered();
+	void on_a_oems_mesh_mopen_triggered();
+	void on_a_oems_mesh_mrstub_triggered();
+	void on_a_oems_mesh_mstep_triggered();
+	void on_a_oems_mesh_mtee_triggered();
+	void on_a_oems_mesh_mvia_triggered();
+	void on_a_oems_mesh_pac_triggered();
+	void on_a_table_orientation_triggered();
+	void on_a_topology_mcorn_triggered();
+	void on_a_topology_mcoupled_triggered();
+	void on_a_topology_mcross_triggered();
+	void on_a_topology_mgap_triggered();
+	void on_a_topology_mlin_triggered();
+	void on_a_topology_mmbend_triggered();
+	void on_a_topology_mopen_triggered();
+	void on_a_topology_mrstub_triggered();
+	void on_a_topology_mstep_triggered();
+	void on_a_topology_mtee_triggered();
+	void on_a_topology_mvia_triggered();
 	void on_cb_format_currentTextChanged(QString const& out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
 	void on_cb_transparency_stateChanged(int const state);
