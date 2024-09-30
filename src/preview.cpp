@@ -8,7 +8,9 @@
 
 #define _USE_MATH_DEFINES
 
+#include <algorithm>
 #include <cmath>
+#include <optional>
 
 #include "preview.hpp"
 using namespace std;
@@ -45,64 +47,72 @@ struct Preview::Colors {
 };
 
 //******************************************************************************
-map<string const, Preview::Theme const> const Preview::Themes {
-	{ "QucsIcon", { // not much contrast when transparent
-		.background = Colors::QUCS_GUI_CREAM_BACKGROUND,
-		.substrate = Colors::QUCS_LOGO_ORANGE_DARK,
-		.track = Colors::QUCS_LOGO_ORANGE_MAIN,
-		.port = Colors::QUCS_GUI_DARK_BLUE,
-		.via = Colors::QUCS_LOGO_ORANGE_BACK
-	}},
-	{ "QucsGUI", {
+vector<Preview::Theme> const Preview::themes {
+	{
+		.name = "Flashy",
+		.background = Colors::GREY_DARK,
+		.substrate = Colors::SLVS_GUI_GREEN,
+		.track = Colors::YELLOW,
+		.port = Colors::BLACK,
+		.via = Colors::ORANGE
+	},
+	{
+		.name = "HighContrast", // Not much contrast when transparent
+		.background = Colors::GREY_MID,
+		.substrate = Colors::BLACK,
+		.track = Colors::WHITE,
+		.port = Colors::BLUE,
+		.via = Colors::GREEN
+	},
+	{
+		.name = "HighContrast2",
+		.background = Colors::BLACK,
+		.substrate = Colors::GREY_MID,
+		.track = Colors::WHITE,
+		.port = Colors::BLUE,
+		.via = Colors::GREEN
+	},
+	{
+		.name = "QucsGUI",
 		.background = Colors::QUCS_GUI_CREAM_BACKGROUND,
 		.substrate = Colors::BLACK,
 		.track = Colors::QUCS_GUI_DARK_BLUE,
 		.port = Colors::RED,
 //		.via = Colors::QUCS_LOGO_ORANGE_MAIN
 		.via = Colors::QUCS_GUI_DARK_RED
-	}},
-//	{ "CAD", {
+	},
+	{
+		.name = "QucsIcon", // not much contrast when transparent
+		.background = Colors::QUCS_GUI_CREAM_BACKGROUND,
+		.substrate = Colors::QUCS_LOGO_ORANGE_DARK,
+		.track = Colors::QUCS_LOGO_ORANGE_MAIN,
+		.port = Colors::QUCS_GUI_DARK_BLUE,
+		.via = Colors::QUCS_LOGO_ORANGE_BACK
+	},
+//	{
+//		.name = "CAD",
 //		.background = Colors::GREY_DARK,
 //		.substrate = Colors::GREEN_DARK,
 //		.track = Colors::QRFL_DOC_ORANGE,
 ////		.port = Colors::,
 //		.via = Colors::QUCS_LOGO_ORANGE_BACK
-//	}},
-	{ "Solvespace", {
+//	},
+	{
+		.name = "Solvespace",
 		.background = Colors::BLACK,
 		.substrate = Colors::SLVS_GUI_GREY,
 		.track = Colors::SLVS_LOGO_PINK,
 		.port = Colors::SLVS_LOGO_GREEN,
 		.via = Colors::SLVS_GUI_TEAL
-	}},
-	{ "Transcalc", { // Not much contrast when transparent
+	},
+	{
+		.name = "Transcalc", // Not much contrast when transparent
 		.background = Colors::WHITE,
 		.substrate = Colors::QUCS_TRANSCALC_GREY,
 		.track = Colors::QUCS_TRANSCALC_ORANGE,
 		.port = Colors::BLUE,
 		.via = Colors::BLACK
-	}},
-	{ "Flashy", {
-		.background = Colors::GREY_DARK,
-		.substrate = Colors::SLVS_GUI_GREEN,
-		.track = Colors::YELLOW,
-		.port = Colors::BLACK,
-		.via = Colors::ORANGE
-	}},
-	{ "HighContrast", { // Not much contrast when transparent
-		.background = Colors::GREY_MID,
-		.substrate = Colors::BLACK,
-		.track = Colors::WHITE,
-		.port = Colors::BLUE,
-		.via = Colors::GREEN
-	}},
-	{ "HighContrast2", {
-		.background = Colors::BLACK,
-		.substrate = Colors::GREY_MID,
-		.track = Colors::WHITE,
-		.port = Colors::BLUE,
-		.via = Colors::GREEN
-	}}
+	}
 };
 
 //******************************************************************************
@@ -113,7 +123,6 @@ Preview::Preview(QWidget* parent) : QOpenGLWidget(parent), QOpenGLFunctions_2_0(
 void Preview::initializeGL() {
 	initializeOpenGLFunctions();
 
-	glClearColor(theme.background.r, theme.background.g, theme.background.b, 1.0f);
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
@@ -131,6 +140,7 @@ void Preview::initializeGL() {
 
 //******************************************************************************
 void Preview::paintGL() {
+	glClearColor(theme.background.r, theme.background.g, theme.background.b, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
@@ -275,11 +285,27 @@ void Preview::setTransparency(bool _flag_transparent) {
 
 //******************************************************************************
 void Preview::setTheme(string const& _theme) {
-	if(Themes.contains(_theme)) {
-		theme=Themes.at(_theme);
+	auto const find_theme = [](string const& name) -> optional<Theme> {
+		auto const& it = find_if(begin(themes), end(themes),
+			[&name](Theme const& theme) {
+				return (theme.name == name);
+				});
+		if(it != end(themes))
+			return *it;
+		else
+			return nullopt;
+		};
+
+	if(auto const t = find_theme(_theme); t) {
+		theme=t.value();
 	} else {
-		theme=Themes.at("Flashy");
+		theme=find_theme("Flashy").value();
 		}
+	}
+
+//******************************************************************************
+string_view Preview::getTheme() {
+	return theme.name;
 	}
 
 //******************************************************************************

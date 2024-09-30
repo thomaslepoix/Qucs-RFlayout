@@ -19,12 +19,12 @@
 using namespace std;
 
 //******************************************************************************
-MainWindow::MainWindow(Data& _data, QWidget* parent) :
-		QMainWindow(parent),
-		ui(std::make_unique<Ui::MainWindow>()),
-		data(_data),
-		converter(_data),
-		openfile_path(QDir::currentPath()) {
+MainWindow::MainWindow(Data& _data, string const& gui_theme, QWidget* parent)
+: QMainWindow(parent)
+, ui(std::make_unique<Ui::MainWindow>())
+, data(_data)
+, converter(_data)
+, openfile_path(QDir::currentPath()) {
 	ui->setupUi(this);
 	ui->le_path_in->setText(QString::fromStdString(_data.n_sch.generic_string()));
 	ui->le_path_net->setText(QString::fromStdString(_data.n_net.generic_string()));
@@ -49,8 +49,15 @@ MainWindow::MainWindow(Data& _data, QWidget* parent) :
 	ui->cb_oems_pkg->setCheckState(_data.oems_pkg ? Qt::Checked : Qt::Unchecked);
 	ui->cb_oems_sort_metalresmesh->setCheckState(_data.oems_sort_metalresmesh ? Qt::Checked : Qt::Unchecked);
 	ui->cb_transparency->setCheckState(Qt::Unchecked);
-	ui->glw_preview->setTheme(_data.gui_theme);
 	ui->tw_actions->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+
+	ui->glw_preview->setTheme(gui_theme);
+	for(auto const& theme : ui->glw_preview->themes) {
+		auto* const action = a_themes.emplace_back(make_unique<QAction>(QString::fromStdString(string(theme.name)), ui->ag_themes)).get();
+		action->setCheckable(true);
+		action->setChecked((theme.name==ui->glw_preview->getTheme()) ? true : false);
+		ui->m_theme->addAction(action);
+		}
 
 	for(std::tuple<unsigned long, std::string, std::string> arg : data.port_shift_args) {
 		add_action("Shift port",
@@ -232,6 +239,12 @@ void MainWindow::on_a_topology_mrstub_triggered() { open_doc_file("topology_mrst
 void MainWindow::on_a_topology_mstep_triggered() { open_doc_file("topology_mstep"); }
 void MainWindow::on_a_topology_mtee_triggered() { open_doc_file("topology_mtee"); }
 void MainWindow::on_a_topology_mvia_triggered() { open_doc_file("topology_mvia"); }
+
+//******************************************************************************
+void MainWindow::on_ag_themes_triggered(QAction* const action) {
+	ui->glw_preview->setTheme(action->text().toStdString());
+	ui->glw_preview->update();
+	}
 
 //******************************************************************************
 void MainWindow::on_cb_format_currentTextChanged(QString const& out_format) {

@@ -13,7 +13,6 @@
 #include <QOpenGLFunctions_2_0>
 
 #include <array>
-#include <map>
 #include <memory>
 #include <vector>
 
@@ -23,21 +22,10 @@
 class Preview : public QOpenGLWidget, protected QOpenGLFunctions_2_0 {
 	Q_OBJECT
 public :
-	explicit Preview(QWidget* parent=0);
-	~Preview()=default;
-	void set(std::vector<std::shared_ptr<Element>> const& all_elements, std::array<long double, 4> const& extrem_pos);
-	void resetView();
-
-	void setTheme(std::string const& _theme);
-	void setTransparency(bool _flag_transparent);
-	void setF2D(bool _flag_2d);
-	void setFCtrl(bool _flag_ctrl);
-	void setFShift(bool _flag_shift);
-
-private:
 	struct Color { double r=0.0, g=0.0, b=0.0; };
 	struct Colors;
 	struct Theme {
+		std::string_view name;
 		Color background;
 		Color substrate;
 		Color track;
@@ -45,6 +33,21 @@ private:
 		Color via;
 	};
 
+	explicit Preview(QWidget* parent=0);
+	~Preview()=default;
+	void set(std::vector<std::shared_ptr<Element>> const& all_elements, std::array<long double, 4> const& extrem_pos);
+	void resetView();
+
+	std::string_view getTheme();
+	void setTheme(std::string const& _theme);
+	void setTransparency(bool _flag_transparent);
+	void setF2D(bool _flag_2d);
+	void setFCtrl(bool _flag_ctrl);
+	void setFShift(bool _flag_shift);
+
+	static std::vector<Theme> const themes;
+
+private:
 	void drawAll();
 	void drawShape3D(int npoint, long double tab_x[], long double tab_y[], long double z_min, long double z_max, Color color);
 	void drawShape(int npoint, long double tab_x[], long double tab_y[], long double z);
@@ -63,7 +66,6 @@ private:
 	void setYRotation(int angle);
 	void setZRotation(int angle);
 
-	static std::map<std::string const, Theme const> const Themes;
 	Theme theme;
 
 	int xRot=0;

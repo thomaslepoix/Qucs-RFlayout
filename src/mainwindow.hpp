@@ -8,11 +8,13 @@
 
 #ifndef QRFL_MINIMAL
 
+#include <QAction>
 #include <QMainWindow>
 #include <QObject>
 
 #include <memory>
 #include <sstream>
+#include <vector>
 
 #include "converter.hpp"
 #include "data.hpp"
@@ -28,6 +30,7 @@ private:
 	Converter converter;
 
 	QString openfile_path;
+	std::vector<std::unique_ptr<QAction>> a_themes;
 
 	void add_action(QString const action_str="Shift port", QString const val1="", QString const val2="", QString const val3="");
 	void read();
@@ -70,6 +73,7 @@ private slots:
 	void on_a_topology_mstep_triggered();
 	void on_a_topology_mtee_triggered();
 	void on_a_topology_mvia_triggered();
+	void on_ag_themes_triggered(QAction* const action);
 	void on_cb_format_currentTextChanged(QString const& out_format);
 	void on_cb_specify_netlist_stateChanged(int const state);
 	void on_cb_transparency_stateChanged(int const state);
@@ -99,7 +103,7 @@ private slots:
 	void on_rb_export_whole_toggled(bool const is_checked);
 
 public:
-	explicit MainWindow(Data& _data, QWidget* parent=0);
+	explicit MainWindow(Data& _data, std::string const& gui_theme, QWidget* parent=0);
 	~MainWindow()=default;
 };
 

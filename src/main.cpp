@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
 //variables
 	bool verbose=false;
 	[[maybe_unused]] bool gui=false;
+	[[maybe_unused]] string gui_theme;
 	Data data;
 
 //argument parser
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
 				        "                  - .kicad_mod    : KiCad module\n"
 				        "                  - .lht          : pcb-rnd layout\n"
 				        "                  - .m            : OpenEMS Octave script\n"
-						"                  - .svg          : SVG image\n"
+				        "                  - .svg          : SVG image\n"
 				        "  -n NETLIST      Specify a netlist to use instead of calling Qucs to create it from the schematic.\n"
 				        "                  Useful when Qucs is not installed, if you use QucsStudio for example.\n"
 				        "  -q, --qucs PATH Specify Qucs executable to call for netlist creation, otherwise qucs, then qucs-s will\n"
@@ -208,7 +209,7 @@ int main(int argc, char* argv[]) {
 #ifndef QRFL_MINIMAL
 			} else if(string(argv[i])=="--gui-theme" && argv[i+1]) {
 				i++;
-				data.gui_theme=string(argv[i]);
+				gui_theme=string(argv[i]);
 #endif // QRFL_MINIMAL
 			} else if(string(argv[i])=="-v" || string(argv[i])=="--verbose") {
 				verbose=true;
@@ -233,7 +234,7 @@ int main(int argc, char* argv[]) {
 		QApplication a(argc, argv);
 		// Avoid a stold() bug introduced by QApplication() performing setlocale(LC_ALL, "")
 		setlocale(LC_NUMERIC, "C");
-		MainWindow w(data);
+		MainWindow w(data, gui_theme);
 		log_err.obj=&w;
 		log_err.set_mode(gui);
 		// log_err << "WARNING : GUI and circuit preview are not up to date yet, take a look at the command line. ;)\n";

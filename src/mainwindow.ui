@@ -444,6 +444,19 @@ Should be a component label</string>
     <addaction name="m_oems_mesh"/>
     <addaction name="a_table_orientation"/>
    </widget>
+   <widget class="QMenu" name="m_view">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="m_theme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <widget class="QActionGroup" name="ag_themes"/>
+    </widget>
+    <addaction name="m_theme"/>
+   </widget>
+   <addaction name="m_view"/>
    <addaction name="m_help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
