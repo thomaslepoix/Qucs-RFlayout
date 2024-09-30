@@ -16,7 +16,7 @@ assert lib.asserts.assertMsg (! (stdenv.hostPlatform.isWindows && withGui == fal
   "Minimal mode is not compatible with Windows build";
 
 stdenv.mkDerivation {
-  pname = "qucsrflayout" + lib.strings.optionalString (! withGui) "-minimal";
+  pname = "qucsrflayout" + lib.strings.optionalString (!withGui) "-minimal";
   version =
   let
     firstLine = builtins.elemAt (lib.strings.split "\n" (builtins.readFile ./CHANGELOG)) 0;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     ];
   };
 
-  cmakeFlags = lib.optionals (! withGui) [
+  cmakeFlags = lib.optionals (!withGui) [
     "-DQRFL_MINIMAL=ON"
   ];
 
@@ -55,7 +55,12 @@ stdenv.mkDerivation {
     qtbase
   ];
 
-  postBuild = lib.optionals withDoc ''
+  # Default target depends on doc when QRFL_MINIMAL=OFF
+  preBuild = lib.optionals (withDoc && withGui) ''
+    export XDG_CACHE_HOME=$TMPDIR
+  '';
+
+  postBuild = lib.optionals (withDoc && !withGui) ''
     export XDG_CACHE_HOME=$TMPDIR
     make doc
   '';
