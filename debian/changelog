@@ -1,3 +1,28 @@
+qucsrflayout (2.1.1-1) unstable; urgency=medium
+
+  [ Fixed ]
+  * Various code smells and technical dept.
+
+  [ Changed ]
+  * GUI mode requires documentation to be built
+
+  [ Added ]
+  * Taskbar / Titlebar icon.
+  * Supports opening documentation from GUI.
+  * Supports substrate in preview.
+  * Supports transparency in preview.
+  * Preview awareness of 2D / 3D output format.
+  * Supports preview themes :
+    * Flashy
+    * HighContrast
+    * HighContrast2
+    * QucsGUI
+    * QucsIcon
+    * Solvespace
+    * Transcalc
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Tue, 1 Oct 2024 00:00:00 +0100
+
 qucsrflayout (2.1.0-1) unstable; urgency=medium
 
   [ Removed ]
@@ -48,7 +73,7 @@ qucsrflayout (2.0.0-1) unstable; urgency=medium
   * Supports output formats :
     * .m : openEMS Octave script
   * Supports moving and resizing ports.
-  * Supports excluding or chosing components.
+  * Supports excluding or choosing components.
   * Supports using a specified netlist.
   * Supports export by block and substrate.
   * Supports XDG desktop launcher.
