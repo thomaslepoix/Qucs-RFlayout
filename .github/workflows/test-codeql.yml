@@ -11,7 +11,7 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       actions: read
@@ -30,7 +30,9 @@ jobs:
         sudo apt install -y \
           qt6-base-dev \
           libqt6opengl6-dev \
-          libglu1-mesa-dev
+          libglu1-mesa-dev \
+          texlive-xetex \
+          fonts-lato
 
     - name: Checkout
       uses: actions/checkout@v4
