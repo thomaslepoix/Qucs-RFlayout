@@ -1,3 +1,10 @@
+qucsrflayout (2.1.2-1) unstable; urgency=medium
+
+  [ Added ]
+  * About tab in GUI
+
+ -- Thomas Lepoix <thomas.lepoix@protonmail.ch>  Sun, 3 Nov 2024 00:00:00 +0100
+
 qucsrflayout (2.1.1-1) unstable; urgency=medium
 
   [ Fixed ]
