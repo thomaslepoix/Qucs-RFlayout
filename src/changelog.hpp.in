@@ -1,0 +1,10 @@
+///*****************************************************************************
+/// @date Oct 2018
+/// @copyright GPL-3.0-or-later
+/// @author Thomas Lepoix <thomas.lepoix@protonmail.ch>
+///*****************************************************************************
+
+#include <string>
+
+// Workaround CPP not providing C23 #embed : use CMake configure step instead.
+inline std::string_view constexpr changelog = R"(@QRFL_CHANGELOG@)";

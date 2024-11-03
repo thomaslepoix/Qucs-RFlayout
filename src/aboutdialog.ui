@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AboutDialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="windowTitle">
+   <string>About Qucs-RFlayout</string>
+  </property>
+  <layout class="QVBoxLayout" name="vb_main">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetFixedSize</enum>
+   </property>
+
+   <item>
+    <layout class="QHBoxLayout" name="hb_about">
+     <property name="leftMargin">
+      <number>20</number>
+     </property>
+     <property name="topMargin">
+      <number>20</number>
+     </property>
+     <property name="rightMargin">
+      <number>20</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="l_icon">
+       <property name="pixmap">
+        <pixmap>:/qucsrflayout.128.png</pixmap>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+
+     <item>
+      <layout class="QVBoxLayout" name="vb_about_text">
+       <property name="leftMargin">
+        <number>40</number>
+       </property>
+       <property name="rightMargin">
+        <number>40</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="l_title">
+         <property name="text">
+          <string>Radio Frequency Layout</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-weight:bold;</string>
+          <!--string notr="true">font-size:20px; font-weight:bold;</string-->
+          <!--string notr="true">font-size:x-large; font-weight:bold;</string-->
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_version">
+         <property name="text">
+          <string>Version </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_copyright">
+         <property name="text">
+          <string>Copyright © 2018 Thomas Lepoix</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+
+   <item>
+    <widget class="QLabel" name="l_disclaimer">
+     <property name="text">
+      <string>This software is distributed under the terms of
+the GPL license version 3 or later.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>20</number>
+     </property>
+    </widget>
+   </item>
+
+   <item>
+    <widget class="QTabWidget" name="tw_more">
+     <widget class="QTextBrowser" name="tb_changelog">
+      <attribute name="title">
+       <string>Changelog</string>
+      </attribute>
+      <property name="openExternalLinks">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QTextBrowser" name="tb_contact">
+      <attribute name="title">
+       <string>Contact</string>
+      </attribute>
+      <property name="openExternalLinks">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </item>
+
+   <item>
+    <layout class="QHBoxLayout" name="hb_ok">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_ok">
+       <property name="text">
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+  </layout>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

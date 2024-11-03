@@ -17,6 +17,10 @@ project( qucsrflayout
 	)
 message( STATUS "Version: ${PROJECT_VERSION}" )
 
+set( QRFL_BUGREPORT     "https://github.com/thomaslepoix/Qucs-RFlayout/issues" )
+set( QRFL_FUNDING       "https://liberapay.com/thomaslepoix" )
+file( READ "${CMAKE_SOURCE_DIR}/CHANGELOG" QRFL_CHANGELOG )
+
 set( CMAKE_MODULE_PATH
 	${CMAKE_MODULE_PATH}
 	"${CMAKE_SOURCE_DIR}/cmake"

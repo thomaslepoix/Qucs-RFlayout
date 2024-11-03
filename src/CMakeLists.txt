@@ -1,4 +1,10 @@
 
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/changelog.hpp.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/generated/changelog.hpp"
+	@ONLY
+	)
+
 add_executable( ${PROJECT_NAME} WIN32 )
 
 target_sources( ${PROJECT_NAME}
@@ -27,6 +33,7 @@ target_sources( ${PROJECT_NAME}
 	"${CMAKE_CURRENT_SOURCE_DIR}/layoutstrings.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/layoutwriter.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/converter.cpp"
+	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_CURRENT_SOURCE_DIR}/aboutdialog.cpp>"
 	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_CURRENT_SOURCE_DIR}/preview.cpp>"
 	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp>"
 	"$<$<NOT:$<BOOL:${QRFL_MINIMAL}>>:${CMAKE_CURRENT_SOURCE_DIR}/resources.qrc>"
@@ -38,6 +45,9 @@ target_compile_definitions( ${PROJECT_NAME}
 	PRIVATE
 	${QT_DEPRECATED_WARNINGS}
 	QRFL_VERSION="${PROJECT_VERSION}"
+	QRFL_HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
+	QRFL_FUNDING="${QRFL_FUNDING}"
+	QRFL_BUGREPORT="${QRFL_BUGREPORT}"
 	$<$<BOOL:${QRFL_MINIMAL}>:QRFL_MINIMAL>
 	)
 
@@ -58,6 +68,7 @@ target_compile_options( ${PROJECT_NAME}
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}"
+	"${CMAKE_CURRENT_BINARY_DIR}/generated"
 	)
 
 target_link_libraries( ${PROJECT_NAME}

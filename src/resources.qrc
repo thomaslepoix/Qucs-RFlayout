@@ -13,6 +13,7 @@
        qucsrflayout.16x16.png \
        qucsrflayout.ico
     -->
+    <file alias="qucsrflayout.128.png">../pack/icons/qucsrflayout.128x128.png</file>
     <file alias="qucsrflayout.ico">../pack/icons/qucsrflayout.ico</file>
     <file alias="mcorn.png">./icons/mcorn.png</file>
     <file alias="mcoupled.png">./icons/mcoupled.png</file>

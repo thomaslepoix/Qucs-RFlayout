@@ -15,6 +15,7 @@
 
 #include "logger.hpp"
 #include "preview.hpp"
+#include "aboutdialog.hpp"
 #include "mainwindow.hpp"
 using namespace std;
 
@@ -199,6 +200,12 @@ void MainWindow::write() {
 	} else {
 		log_err << "ERROR : Nothing to write.\n";
 		}
+	}
+
+//******************************************************************************
+void MainWindow::on_a_about_triggered() {
+	AboutDialog about(this);
+	about.exec();
 	}
 
 //******************************************************************************

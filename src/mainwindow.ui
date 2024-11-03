@@ -458,8 +458,14 @@ Should be a component label</string>
    </widget>
    <addaction name="m_view"/>
    <addaction name="m_help"/>
+   <addaction name="a_about"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="a_about">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
   <action name="a_detail_mcorn">
    <property name="text">
     <string>MCORN - Microstrip corner</string>

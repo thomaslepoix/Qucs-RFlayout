@@ -157,6 +157,9 @@ The GUI (\fB-G\fR) may be completely disabled at build time, in which case \fB--
 .SH REPORTING BUGS
 @QRFL_BUGREPORT@
 
+.SH FUNDING
+@QRFL_FUNDING@
+
 .SH COPYRIGHT
 Copyright \(co 2018 Thomas Lepoix <thomas.lepoix@protonmail.ch>
 .PP

@@ -42,6 +42,7 @@ private:
 	void log(std::stringstream& in) override;
 
 private slots:
+	void on_a_about_triggered();
 	void on_a_detail_mcorn_triggered();
 	void on_a_detail_mcoupled_triggered();
 	void on_a_detail_mcross_triggered();
@@ -103,7 +104,7 @@ private slots:
 	void on_rb_export_whole_toggled(bool const is_checked);
 
 public:
-	explicit MainWindow(Data& _data, std::string const& gui_theme, QWidget* parent=0);
+	MainWindow(Data& _data, std::string const& gui_theme, QWidget* parent=0);
 	~MainWindow()=default;
 };
 
