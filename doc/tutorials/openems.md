@@ -1,5 +1,7 @@
 # OpenEMS exporter
 
+<a href="https://openems.de"><img src="https://raw.githubusercontent.com/thliebig/openEMS-Project/refs/heads/master/other/openEMS.svg" align="right" style="float:right;" width="20%" title="OpenEMS"/></a>
+
 - [Basic usage](#Basic_usage)
   - [First conversion](#First_conversion)
   - [Control flags](#Control_flags)
@@ -48,16 +50,16 @@ octave lpf.m -h
 
 ### Control flags <a name="Control_flags"></a>
 
-The control flags let you chose what to execute in the script. There is three principal parts :
+The control flags let you chose what to execute in the script. There are three principal parts :
 
 - Preprocessing : Structure and mesh construction.
 - Processing : FDTD simulation.
-- Postprocessing : Far field computation & human readable results plotting.
+- Postprocessing : Far field computation & human-readable results plotting.
 
 It is totally possible to run parts one by one, running the script for each one (may be useful for very long simulations). Most useful flags are :
 
 - `--only-preprocess` : To check the circuit and its mesh before starting a simulation.
-- `--only-postprocess` : To rerun postprocessing with different options or simply to vizualize results.
+- `--only-postprocess` : To rerun postprocessing with different options or simply to visualize results.
 - `--no-gui` : Not to pop the AppCSXCAD window showing the circuit.
 
 ### Mesh check <a name="Mesh_check"></a>
@@ -66,23 +68,23 @@ Before talking about mesh considerations, you must understand [how the OpenEMS m
 
 To sum up, remember that :
 
-- The mesh is orthogonal and inhomogenous.
+- The mesh is orthogonal and inhomogeneous.
 - A mesh resolution is used for metal tracks, an other is used for substrate.
-- Each metal edge should be meshed with a inner line at `mres*1/3` and a outer line at `mres*2/3`. This is called the "thirds rule".
+- Each metal edge should be meshed with an inner line at `mres*1/3` and an outer line at `mres*2/3`. This is called the "thirds rule".
 
 ![oems_mesh](res/oems_mesh.png)
 
 ---
 
-The first step after a conversion is to check the produced mesh, as default mesh resolutions are arbitraries.
+The first step after a conversion is to check the produced mesh, as default mesh resolutions are arbitrary.
 
 There are three resolutions :
 
-- `highres` : Used for non-orthogolal components such as `MMBEND` and `MRSTUB` that need a tighter mesh.
+- `highres` : Used for non-orthogonal components such as `MMBEND` and `MRSTUB` that need a tighter mesh.
 - `metalres` : Used for other components.
 - `substres` : Used everywhere else.
 
-All of these resolutions are exprimed as wavelength fractions. You can set the divisors.
+All of these resolutions are expressed as wavelength fractions. You can set the divisors.
 
 ---
 
@@ -111,7 +113,7 @@ octave lpf.m --only-postprocess
 
 <img src="res/lpf_03.png" width="49%" title="lpf_03"/> <img src="res/lpf_04.png" width="49%" title="lpf_04"/>
 
-To deal with more complicated circuits and difficult meshs, take a look [to this chapter](#Deal_with_too_close_mesh_lines_Stub_filter_example).
+To deal with more complicated circuits and difficult meshes, take a look [to this chapter](#Deal_with_too_close_mesh_lines_Stub_filter_example).
 
 ### Run the simulation <a name="Run_the_simulation"></a>
 
@@ -121,7 +123,7 @@ Once the mesh is good, you can run processing and postprocessing steps.
 octave lpf.m
 ```
 
-You can also chose the ports you want to excite during the simulation. By default the first port is the only one activated. Keep in mind that two things :
+You can also choose the ports you want to excite during the simulation. By default, the first port is the only one activated. Keep in mind that two things :
 
 - In the case of a two-ports circuit like this filter, if only the port 1 is activated, only S11 and S21 will be calculated.
 - Activating multiple ports will cause the results to be totally wrong in most of the case. Be careful.
@@ -142,7 +144,7 @@ You may want to configure the frequencies to place markers and compute far field
 octave lpf.m --only-postprocess --f 1.8e9
 ```
 
-You can also watch extremums of a S parameter `--f-min s11` or watch the frequency at which a S parameter match (approach) a value in dB `--f-equal s21 -10`. All these arguments are cumulable.
+You can also watch extremums of an S parameter `--f-min s11` or watch the frequency at which an S parameter match (approach) a value in dB `--f-equal s21 -10`. All these arguments are cumulative.
 
 ### NF2FF basics <a name="NF2FF_basics"></a>
 
@@ -154,10 +156,10 @@ Each time you rerun far field processing after changed some postprocessing optio
 
 ```
 CalcNF2FF: Reading nf2ff data only...
-error: data mismatch between read and requested data --> recalculate nf2ff --> Set Mode to 1 
+error: data mismatch between read and requested data --> recalculate nf2ff --> Set Mode to 1
 ```
 
-It is because the already present NF2FF datas from previous computation does not correspond with the new options. So you have to force a new far field computation `--nf2ff-force`.
+It is because the already present NF2FF data from previous computation does not correspond with the new options. So you have to force a new far field computation `--nf2ff-force`.
 
 ---
 
@@ -167,7 +169,7 @@ To understand the results, keep in mind this schematic and that the angles grow 
 
 ### NF2FF center <a name="NF2FF_center"></a>
 
-OpenEMS documentation say that the far field center should be placed at the center of the radiating element. By default it is placed at the simulation box center. This placement is good in a CEM context or while designing a device like a filter. But if you design an antenna, be careful with it.
+OpenEMS documentation say that the far field center should be placed at the center of the radiating element. By default, it is placed at the simulation box center. This placement is good in a CEM context or while designing a device like a filter. But if you design an antenna, be careful with it.
 
 You can use the center of any component as the far field center by rerunning qucsrflayout. For example if you want to use the microstrip line `MS2` of this filter as NF2FF center, just do :
 
@@ -190,7 +192,7 @@ nf2ff.center = MS2.center .+ [1.2345, -6.7890, 0];
 
 You can enable 3D far field representation with `--nf2ff-3d`. It will represent it for each watched frequency.
 
-You can also create an animated representation (`.gif`) of the far field evoluting through the frequency range with a unique color scale a unique size scale. You just have to specify how many frames you want between the start frequency and the end frequency. The delay between each frame is 30ms but you can change it, for example reduce it if you have many frames :
+You can also create an animated representation (`.gif`) of the far field evolving through the frequency range with a unique color scale a unique size scale. You just have to specify how many frames you want between the start frequency and the end frequency. The delay between each frame is 30ms but you can change it, for example reduce it if you have many frames :
 
 ```sh
 octave lpf.m --only-postprocess --nf2ff-3d --nf2ff-frames 50 --nf2ff-delay 10
@@ -200,7 +202,7 @@ octave lpf.m --only-postprocess --nf2ff-3d --nf2ff-frames 50 --nf2ff-delay 10
 
 ---
 
-You can also modify the angles step (in degree), reduce it to produce better diagrams or grow it to speed the NF2FF computation. 
+You can also modify the angles step (in degree), reduce it to produce better diagrams or grow it to speed the NF2FF computation.
 
 ```sh
 octave lpf.m --only-postprocess --nf2ff-force --nf2ff-3d --nf2ff-anglestep 1
@@ -229,15 +231,15 @@ Qucs-RFlayout internally knows three entities :
 
 When exporting to a layout tool such as KiCad PcbNew, there is no substrate considerations so there is no problem if a block is compounded of elements using none or multiple different `SUBST` elements.
 
-But in OpenEMS that would be a nonsense, so all elements of a block have to be assossiated to the same one `SUBST` element.
+But in OpenEMS that would be a nonsense, so all elements of a block have to be associated to the same one `SUBST` element.
 
 ---
 
-Qucs schematics used in this tutorial does not contain just a circuit simulation, those are whole comparaison dashboards.
+Qucs schematics used in this tutorial does not contain just a circuit simulation, those are whole comparison dashboards.
 
 ![lpf_sch_full](res/lpf_sch_full.svg)
 
-The following errors come from the `P3`, `P4`, `P5` and `P6` `Pac` components forming four individual blocks without being assosiated with any `SUBST` component (The `Pac` component does not have a `substrate` field).
+The following errors come from the `P3`, `P4`, `P5` and `P6` `Pac` components forming four individual blocks without being associated with any `SUBST` component (The `Pac` component does not have a `substrate` field).
 
 ```
 ERROR : No substrate used in a block
@@ -275,7 +277,7 @@ octave stub.m --only-preprocess
 
 ![stub_01](res/stub_01.png)
 
-The mesh produce some `warning: division by zero` and looks totally wrong. What happens?
+The mesh produces some `warning: division by zero` and looks totally wrong. What happens?
 
 First, you must display only particular mesh lines :
 
@@ -288,11 +290,11 @@ octave stub.m --only-preprocess --no-smoothmesh
 Different problems here :
 
 - Too large mesh resolution. No difficulty, just try some different divisors. But be careful, to solve the second problem, you will have to edit the script so do it manually, not to overwrite the script with `qucsrflayout --oems-*res-div`. `100` looks good to understand from which edge each line comes.
-- Some really close parallel edges produce really close mesh lines that conflict during the smoothmesh generation. To solve this problem, you will have to manually remove some mesh lines and eventually add some. It is painful but not so much and not so much error prone.
+- Some really close parallel edges produce really close mesh lines that conflict during the smoothmesh generation. To solve this problem, you will have to manually remove some mesh lines and eventually add some. It is painful but not so much and not so much error-prone.
 
 ---
 
-- The central stub `MS9` is slightly longer than it two adjacent stubs `MS7` and `MS8`. To fix the extremity horizontal lines problem, it looks safer to remove `MS9` lines :
+- The central stub `MS9` is slightly longer than it two adjacent stubs `MS7` and `MS8`. To fix the extremity horizontal lines' problem, it looks safer to remove `MS9` lines :
   ```matlab
   mesh.y = [mesh.y, ...
   	(-33.2952 + 2*metal_res/3), (-33.2952 - metal_res/3), ... % MS7 : MLIN
@@ -323,7 +325,7 @@ Different problems here :
 ![stub_05](res/stub_05.png)
 ![stub_06](res/stub_06.png)
 
-- Complicated part beacause of the `MS3` and `MS4` thin stubs. First let's remove the vertical lines of the `MS12` and `MS16` tees. Then a possibility is to reduce a little the mesh resolution to center the inner stubs vertical mesh lines. `110` instead of `100` looks good.
+- Complicated part because of the `MS3` and `MS4` thin stubs. First let's remove the vertical lines of the `MS12` and `MS16` tees. Then a possibility is to reduce a little the mesh resolution to center the inner stubs vertical mesh lines. `110` instead of `100` looks good.
 
   ```matlab
   mesh.x = [mesh.x, ...
@@ -338,7 +340,7 @@ Different problems here :
 
 ---
 
-Now it's time to reenable smoothmesh and see the result :
+Now it's time to re-enable smoothmesh and see the result :
 
 ```sh
 octave stub.m --only-preprocess
@@ -348,7 +350,7 @@ octave stub.m --only-preprocess
 ![stub_11](res/stub_11.png)
 ![stub_12](res/stub_12.png)
 
-This mesh is not perfect, some edges does not respect the thirds rule and the smoothmesh is not totally symetric. But it is correct and enough to get good results. However you can try to modify the mesh resolution divisor 1 by 1 expecting a better smoothmesh but the results will be probably quite similar. For example `112` looks a little better than `110`.
+This mesh is not perfect, some edges does not respect the thirds rule and the smoothmesh is not totally symmetric. But it is correct and enough to get good results. However, you can try to modify the mesh resolution divisor 1 by 1 expecting a better smoothmesh, but the results will be probably quite similar. For example `112` looks a little better than `110`.
 
 ---
 
@@ -356,7 +358,7 @@ This mesh is not perfect, some edges does not respect the thirds rule and the sm
 octave stub.m
 ```
 
-Here are the results comparaison Qucs / OpenEMS / Measure :
+Here are the results' comparison Qucs / OpenEMS / Measure :
 
 ![stub_dpl](res/stub_dpl.svg)
 
