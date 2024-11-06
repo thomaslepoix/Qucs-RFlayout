@@ -19,6 +19,7 @@ message( STATUS "Version: ${PROJECT_VERSION}" )
 
 set( QRFL_BUGREPORT     "https://github.com/thomaslepoix/Qucs-RFlayout/issues" )
 set( QRFL_FUNDING       "https://liberapay.com/thomaslepoix" )
+set( QRFL_OEMS_TUTORIAL "https://github.com/thomaslepoix/Qucs-RFlayout/blob/master/doc/tutorials/openems.md" )
 file( READ "${CMAKE_SOURCE_DIR}/CHANGELOG" QRFL_CHANGELOG )
 
 set( CMAKE_MODULE_PATH

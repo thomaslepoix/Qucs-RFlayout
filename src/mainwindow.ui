@@ -439,10 +439,17 @@ Should be a component label</string>
      <addaction name="a_topology_mtee"/>
      <addaction name="a_topology_mvia"/>
     </widget>
+    <widget class="QMenu" name="m_tutorials">
+     <property name="title">
+      <string>Tutorials</string>
+     </property>
+     <addaction name="a_tutorial_oems"/>
+    </widget>
     <addaction name="m_topology"/>
     <addaction name="m_detail"/>
     <addaction name="m_oems_mesh"/>
     <addaction name="a_table_orientation"/>
+    <addaction name="m_tutorials"/>
    </widget>
    <widget class="QMenu" name="m_view">
     <property name="title">
@@ -739,6 +746,11 @@ Should be a component label</string>
    <property name="icon">
     <iconset>
      <normaloff>:/mvia.png</normaloff>:/mvia.png</iconset>
+   </property>
+  </action>
+  <action name="a_tutorial_oems">
+   <property name="text">
+    <string>OpenEMS exporter</string>
    </property>
   </action>
  </widget>

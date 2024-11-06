@@ -7,7 +7,6 @@ if( WIN32 )
 else()
 	set( QRFL_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" )
 endif( WIN32 )
-set( QRFL_OEMS_TUTORIAL "https://github.com/thomaslepoix/Qucs-RFlayout/blob/master/doc/tutorials/openems.md" )
 
 configure_file(
 	"${CMAKE_SOURCE_DIR}/doc/qucsrflayout.1.in"
