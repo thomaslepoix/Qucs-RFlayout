@@ -248,6 +248,11 @@ void MainWindow::on_a_topology_mtee_triggered() { open_doc_file("topology_mtee")
 void MainWindow::on_a_topology_mvia_triggered() { open_doc_file("topology_mvia"); }
 
 //******************************************************************************
+void MainWindow::on_a_tutorial_oems_triggered() {
+	QDesktopServices::openUrl(QUrl(QRFL_OEMS_TUTORIAL));
+	}
+
+//******************************************************************************
 void MainWindow::on_ag_themes_triggered(QAction* const action) {
 	ui->glw_preview->setTheme(action->text().toStdString());
 	ui->glw_preview->update();

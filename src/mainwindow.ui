@@ -741,6 +741,11 @@ Should be a component label</string>
      <normaloff>:/mvia.png</normaloff>:/mvia.png</iconset>
    </property>
   </action>
+  <action name="a_tutorial_oems">
+   <property name="text">
+    <string>OpenEMS exporter</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
