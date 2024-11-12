@@ -116,6 +116,7 @@ Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout
 
 #### Classic way :
 
+Be sure to use a compiler that [supports C++23](https://en.cppreference.com/w/cpp/compiler_support/23).
 The build-time dependencies are the following, check equivalents on your own for other distros (reports are welcome) :
 
 - Debian 12 : `qt6-base-dev`, `libqt6opengl6-dev`, `texlive-xetex`, `fonts-lato`
