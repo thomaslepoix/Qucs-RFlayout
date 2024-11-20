@@ -121,6 +121,7 @@ The build-time dependencies are the following, check equivalents on your own for
 
 - Debian 12 : `qt6-base-dev`, `libqt6opengl6-dev`, `texlive-xetex`, `fonts-lato`
 - Fedora 40 : `qt6-qtbase-devel`, `texlive-xetex`, `texlive-standalone`, `lato-fonts`
+- MacOS + Homebrew : `qt`, `texlive`, `font-lato` (cask)
 
 ```sh
 Qucs-RFlayout $
