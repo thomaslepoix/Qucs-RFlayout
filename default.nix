@@ -36,6 +36,10 @@ stdenv.mkDerivation {
     ];
   };
 
+  shellHook = ''
+    unset NIX_HARDENING_ENABLE
+  '';
+
   cmakeFlags = lib.optionals (!withGui) [
     "-DQRFL_MINIMAL=ON"
   ];
