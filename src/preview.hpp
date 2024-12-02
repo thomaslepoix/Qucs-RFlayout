@@ -33,7 +33,7 @@ public :
 		Color via;
 	};
 
-	explicit Preview(QWidget* parent=0);
+	explicit Preview(QWidget* parent=nullptr);
 	~Preview()=default;
 	void set(std::vector<std::shared_ptr<Element>> const& all_elements, std::array<long double, 4> const& extrem_pos);
 	void resetView();

@@ -42,7 +42,7 @@ OemsMesh::OemsMesh(vector<shared_ptr<Element>> const& elements, bool const _sort
 
 // Sort no high_res lines and put high_res ones at the end.
 //******************************************************************************
-void OemsMesh::sort(vector<OemsLine>& a) {
+void OemsMesh::sort(vector<OemsLine>& a) const {
 	vector<OemsLine> tmp;
 	for(OemsLine& it : a) {
 		if(!it.high_res) {

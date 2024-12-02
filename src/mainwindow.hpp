@@ -105,7 +105,7 @@ private slots:
 	void on_rb_export_whole_toggled(bool const is_checked);
 
 public:
-	MainWindow(Data& _data, std::string const& gui_theme, QWidget* parent=0);
+	MainWindow(Data& _data, std::string const& gui_theme, QWidget* parent=nullptr);
 	~MainWindow()=default;
 };
 

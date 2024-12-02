@@ -15,7 +15,7 @@
 //******************************************************************************
 class OemsMesh {
 private:
-	void sort(std::vector<OemsLine>& a);
+	void sort(std::vector<OemsLine>& a) const;
 
 public:
 	std::vector<OemsLine> x;
