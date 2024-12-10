@@ -98,6 +98,8 @@ This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-R
 
 ### Package installation
 
+- For Arch based distributions, a repository is available [here](https://aur.archlinux.org/packages/qucs-rflayout).
+
 - For Debian based distributions, a repository is available [here](https://software.opensuse.org/download.html?project=home:thomaslepoix:open-rflab&package=qucsrflayout).
 
 - For RPM based distributions and Windows, you can download packages [here](https://github.com/thomaslepoix/Qucs-RFlayout/releases).
@@ -110,6 +112,12 @@ This software is a part of the [Open-RFlab](https://github.com/Open-RFlab/Open-R
 nix profile install --impure 'github:thomaslepoix/Qucs-RFlayout#qucsrflayoutNixGL'
 ```
 
+#### Arch way :
+
+```bash
+yay -Syu qucs-rflayout
+```
+
 #### Debian way :
 
 Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout/tree/debian).
@@ -119,6 +127,7 @@ Take a look [on the debian branch](https://github.com/thomaslepoix/Qucs-RFlayout
 Be sure to use a compiler that [supports C++23](https://en.cppreference.com/w/cpp/compiler_support/23).
 The build-time dependencies are the following, check equivalents on your own for other distros (reports are welcome) :
 
+- Arch : `qt6-base`, `qt6-tools`, `texlive-meta`, `ttf-lato`
 - Debian 12 : `qt6-base-dev`, `libqt6opengl6-dev`, `texlive-xetex`, `fonts-lato`
 - Fedora 40 : `qt6-qtbase-devel`, `texlive-xetex`, `texlive-standalone`, `lato-fonts`
 - MacOS + Homebrew : `qt`, `texlive`, `font-lato` (cask)
