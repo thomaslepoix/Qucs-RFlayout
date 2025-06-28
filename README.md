@@ -146,6 +146,7 @@ Supported build options (among regular CMake options):
 | `CMAKE_BUILD_TYPE` | `Debug`, `Release`, `Coverage` ... | `Release` | |
 | `CMAKE_CXX_COMPILER` | `g++`, `clang++` ... | | |
 | `QRFL_MINIMAL` | `ON`, `OFF` | `OFF` | Disable GUI and Qt dependency |
+| `QRFL_PORTABILITY_TWEAKS` | `ON`, `OFF` | `OFF` | Disable usage of platform native dialogs ([Qt doc](https://doc.qt.io/qt-6/qt.html#ApplicationAttribute-enum)) |
 
 <br>
 

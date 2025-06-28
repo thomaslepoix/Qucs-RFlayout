@@ -7,6 +7,7 @@
 , lato
 , withDoc ? true
 , withGui ? true
+, withPortabilityTweaks ? false
 }:
 
 assert lib.asserts.assertMsg (withGui -> withDoc)
@@ -40,8 +41,9 @@ stdenv.mkDerivation {
     unset NIX_HARDENING_ENABLE
   '';
 
-  cmakeFlags = lib.optionals (!withGui) [
-    "-DQRFL_MINIMAL=ON"
+  cmakeFlags = [
+    (lib.cmakeBool "QRFL_MINIMAL" (!withGui))
+    (lib.cmakeBool "QRFL_PORTABILITY_TWEAKS" withPortabilityTweaks)
   ];
 
   nativeBuildInputs = [

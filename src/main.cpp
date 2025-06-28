@@ -232,6 +232,11 @@ int main(int argc, char* argv[]) {
 	if(gui) {
 		cout << "GUI mode\n";
 		QApplication a(argc, argv);
+
+#ifdef QRFL_PORTABILITY_TWEAKS
+		a.setAttribute(Qt::AA_DontUseNativeDialogs);
+#endif // QRFL_PORTABILITY_TWEAKS
+
 		// Avoid a stold() bug introduced by QApplication() performing setlocale(LC_ALL, "")
 		setlocale(LC_NUMERIC, "C");
 		MainWindow w(data, gui_theme);
