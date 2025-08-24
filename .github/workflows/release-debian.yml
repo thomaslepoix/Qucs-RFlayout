@@ -111,6 +111,7 @@ jobs:
         FILES+=${{ env.PACKAGE }}_${{ steps.extract.outputs.version }}.orig.tar.gz
         FILES+=}
         curl \
+          --fail-with-body \
           --user ${{ env.OBS_USER }}:${{ secrets.OBS_PASSWORD }} \
           https://api.opensuse.org/source/${{ env.OBS_PROJECT }}/${{ env.PACKAGE }}/ \
           -T "${FILES}"
